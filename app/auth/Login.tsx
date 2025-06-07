@@ -3,6 +3,7 @@ import InputBox from "@/assets/components/InputBox";
 import SampleLoading from "@/assets/components/SampleLoading";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Keyboard,
@@ -40,6 +41,25 @@ const Login = () => {
   // Function to open the failed login modal
   const openFailedLogin = () => {
     setFailedLogin(false);
+  };
+  // Function to check if the user exists and redirect to the home page
+  const checkLogin = () => {
+    const user = users.find(
+      (user) => user.username === username && user.password === password
+    );
+
+    // If user exists, redirect to home page after 2 seconds
+
+    if (user) {
+      setLoading(true);
+      setTimeout(() => {
+        router.push("/home");
+        setLoading(false);
+      }, 2000);
+    } else {
+      // If user does not exist, show the failed login modal
+      setFailedLogin(true);
+    }
   };
 
   return (
@@ -87,7 +107,10 @@ const Login = () => {
           </View>
           {/*  Login Button Container */}
           <View className="flex-[.5]  justify-center items-center ">
-            <TouchableOpacity className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full ">
+            <TouchableOpacity
+              className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full "
+              onPress={checkLogin}
+            >
               <Text
                 className="color-white text-lg "
                 style={{ fontFamily: fontFamily.ExoBold }}
