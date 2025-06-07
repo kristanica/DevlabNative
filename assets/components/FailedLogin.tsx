@@ -12,10 +12,11 @@ type failedLoginProps = {
   show: boolean;
   closeModal: () => void;
 };
-
+// Will show after failed login attempt
 const FailedLogin = ({ show, closeModal }: failedLoginProps) => {
   return (
     <Modal transparent={true} animationType="slide" visible={show}>
+      {/* Pressing outside will close the modal */}
       <TouchableWithoutFeedback onPress={closeModal}>
         <View className="justify-end items-end flex-1">
           <View className="justify-evenly items-center  bg-[#E53935] w-full h-[80px] flex-row">

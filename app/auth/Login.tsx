@@ -45,6 +45,7 @@ const Login = () => {
   };
 
   // Function to check if the user exists and redirect to the home page
+
   const checkLogin = () => {
     const user = users.find(
       (user) => user.username === username && user.password === password
@@ -54,6 +55,7 @@ const Login = () => {
 
     if (user) {
       setLoading(true);
+      Keyboard.dismiss();
       setTimeout(() => {
         router.push("/home");
         setLoading(false);

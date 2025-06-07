@@ -17,22 +17,28 @@ import {
   TextInput,
   TouchableNativeFeedback,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 const Register = () => {
   // State to manage the visibility of the DateTimePicker
   const [dateVisible, isDateVisible] = useState(false);
 
+  //Toucablewithoutfeedback function to close modal
+  const setDateVisibility = () => {
+    isDateVisible(false);
+  };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
-
   const [date, setDate] = useState(new Date());
 
+  //set date
   const onChange = (
     event: DateTimePickerEvent,
-    selectedDate?: Date | undefined
+    selectedDate: Date | undefined
   ) => {
     if (selectedDate) {
       setDate(selectedDate);
@@ -129,28 +135,31 @@ const Register = () => {
               {/* Modal to display the DateTimePicker */}
               {dateVisible && (
                 <Modal animationType="slide" visible={true} transparent={true}>
-                  <View className="justify-end items-end flex-1 rounded-t-2xl">
-                    <View className="bg-background  w-full h-[320px] justify-center items-center text-white order-white rounded-2xl">
-                      <Pressable
-                        onPress={() => isDateVisible(false)}
-                        className="absolute top-2 right-2 mt-2"
-                      >
-                        <Ionicons
-                          name="close-outline"
-                          color={"#FFFFFE"}
-                          size={30}
+                  {/* Close date modal when press outside */}
+                  <TouchableWithoutFeedback onPress={setDateVisibility}>
+                    <View className="justify-end items-end flex-1 rounded-t-2xl">
+                      <View className="bg-background  w-full h-[320px] justify-center items-center text-white order-white rounded-2xl">
+                        <Pressable
+                          onPress={() => isDateVisible(false)}
+                          className="absolute top-2 right-2 mt-2"
+                        >
+                          <Ionicons
+                            name="close-outline"
+                            color={"#FFFFFE"}
+                            size={30}
+                          />
+                        </Pressable>
+                        <DateTimePicker
+                          mode="date"
+                          display="spinner"
+                          textColor="white"
+                          value={date}
+                          onChange={onChange}
+                          maximumDate={new Date()}
                         />
-                      </Pressable>
-                      <DateTimePicker
-                        mode="date"
-                        display="spinner"
-                        textColor="white"
-                        value={date}
-                        onChange={onChange}
-                        maximumDate={new Date()}
-                      />
+                      </View>
                     </View>
-                  </View>
+                  </TouchableWithoutFeedback>
                 </Modal>
               )}
             </View>

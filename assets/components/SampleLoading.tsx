@@ -4,6 +4,7 @@ import React from "react";
 
 import { Modal, StyleSheet, Text, View } from "react-native";
 
+//Will show after succesful login attempt
 const SampleLoading = () => {
   return (
     <Modal animationType="fade" visible={true} transparent={true}>
