@@ -129,7 +129,7 @@ const Login = () => {
               Don't have an account?
             </Text>
             {/* // TouchableOpacity to navigate to the Register page */}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/auth/Register")}>
               <Text
                 className="color-[#4F80C5] mt-2"
                 style={{ fontFamily: fontFamily.ExoRegular }}
