@@ -1,10 +1,13 @@
-import FailedLogin from "@/assets/components/FailedLogin";
 import InputBox from "@/assets/components/InputBox";
 import SampleLoading from "@/assets/components/SampleLoading";
+import { FIREBASE_AUTH } from "@/firebaseConfig";
+
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
+
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -16,54 +19,30 @@ import {
   View,
 } from "react-native";
 const Login = () => {
-  // Mock user data for demonstration purposes
-  const users = [
-    {
-      id: 1,
-      username: "1",
-      password: "1",
-      role: "admin",
-    },
-    {
-      id: 2,
-      username: "devlabuser",
-      password: "learn2code",
-      role: "student",
-    },
-  ];
-
   // State variables to manage login state
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [failedLogin, setFailedLogin] = useState(false);
-
+  const auth = FIREBASE_AUTH;
   // Function to open the failed login modal
+
+  const signIn = async () => {
+    setLoading(true);
+
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      Keyboard.dismiss;
+      router.push("/(tabs)/home");
+    } catch (error) {
+      alert("Something happened idk");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openFailedLogin = () => {
     setFailedLogin(false);
-  };
-
-  // Function to check if the user exists and redirect to the home page
-
-  const checkLogin = () => {
-    const user = users.find(
-      (user) => user.username === username && user.password === password
-    );
-
-    // If user exists, redirect to home page after 2 seconds
-
-    if (user) {
-      setLoading(true);
-      Keyboard.dismiss();
-      setTimeout(() => {
-        router.push("/home");
-        setLoading(false);
-      }, 2000);
-    } else {
-      // If user does not exist, show the failed login modal
-      setFailedLogin(true);
-    }
   };
 
   return (
@@ -97,8 +76,8 @@ const Login = () => {
             <InputBox
               icon={"person"}
               placeHolder={"Username"}
-              value={username}
-              setValue={setUsername}
+              value={email}
+              setValue={setEmail}
             />
             {/* Password */}
             <InputBox
@@ -113,7 +92,7 @@ const Login = () => {
           <View className="flex-[.5]  justify-center items-center ">
             <TouchableOpacity
               className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full "
-              onPress={checkLogin}
+              onPress={signIn}
             >
               <Text
                 className="color-white text-lg "
@@ -146,9 +125,9 @@ const Login = () => {
           {/* This will show a loading spinner when the user is logging in */}
           {loading && <SampleLoading />}
           {/* This will show the FailedLogin modal when the user fails to login */}
-          {failedLogin && (
+          {/* {failedLogin && (
             <FailedLogin show={failedLogin} closeModal={openFailedLogin} />
-          )}
+          )} */}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

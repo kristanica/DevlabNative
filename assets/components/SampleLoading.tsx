@@ -19,7 +19,7 @@ const SampleLoading = () => {
               className="text-white"
               style={{ fontFamily: fontFamily.ExoBold }}
             >
-              Sucessfully log in!
+              Contents are Loading.....
             </Text>
           </View>
         </View>
