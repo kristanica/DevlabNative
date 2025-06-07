@@ -1,0 +1,55 @@
+import { fontFamily } from '@/fontFamily/fontFamily'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { LinearGradient } from 'expo-linear-gradient'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+
+type HomeLessonProps = {
+
+
+  color1: string;
+  color2: string;
+
+}
+
+const LessonsContainer = ({color1, color2}: HomeLessonProps) => {
+  return (
+ <View className = 'bg-accentContainer h-[300px] p-2 rounded-xl my-2'>
+ <LinearGradient colors = {[color1, color2]}  locations={[.1, .8]} start = {{x: 0, y: 0}} end = {{x: 0, y: 1}} style = {styles.container} >
+ <Ionicons name = 'logo-html5' size = {50} color = {'white'} />
+</LinearGradient>
+
+
+<View className = 'flex-1 p-2 justify-between items-center '>
+  <Text className = 'text-white text-xl text-center' style = {{fontFamily:fontFamily.ExoBold}}>HTML: The Gateway to Web Adventure</Text>
+  <Text className = 'text-white  text-center text-xs'>Every great structure needs a solid foundation—HTML is the skeleton that holds the web together! Without it, web pages would collapse into chaos</Text>
+</View>
+
+<View className = 'flex-[.5] justify-evenly items-center flex-row flex-wrap'>
+  <View className = 'w-[80%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs '>
+        <View className = 'w-[80%] bg-[#32FF99] h-4 rounded-xl'></View>
+    
+      </View>
+
+          <Text className = 'text-white'>85%</Text>
+  </View>
+
+</View>
+  )
+}
+
+export default LessonsContainer
+
+
+const styles = StyleSheet.create({
+
+        container:{
+                borderRadius:10,
+                padding: 1,
+                height: 200,
+                marginVertical: 10,
+                flex:2,
+                justifyContent: 'center',
+                alignItems: 'center',
+        }
+})
