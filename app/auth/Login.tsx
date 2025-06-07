@@ -39,9 +39,11 @@ const Login = () => {
   const [failedLogin, setFailedLogin] = useState(false);
 
   // Function to open the failed login modal
+
   const openFailedLogin = () => {
     setFailedLogin(false);
   };
+
   // Function to check if the user exists and redirect to the home page
   const checkLogin = () => {
     const user = users.find(

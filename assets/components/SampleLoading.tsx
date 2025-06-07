@@ -1,18 +1,26 @@
 import { fontFamily } from "@/fontFamily/fontFamily";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
+
 import { Modal, StyleSheet, Text, View } from "react-native";
 
 const SampleLoading = () => {
   return (
     <Modal animationType="fade" visible={true} transparent={true}>
-      <View className="h-[350px] w-1/2  absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-transparent">
-        <View className=" flex-1  bg-accentContainer justify-center items-center">
-          <Text
-            className="text-white"
-            style={{ fontFamily: fontFamily.ExoBold }}
-          >
-            You shit is loading
-          </Text>
+      <View className="justify-end items-end flex-1">
+        <View className="justify-evenly items-center  bg-[#43A047] w-full h-[80px] flex-row">
+          <View>
+            <Ionicons name="happy" size={30} color={"#FFFFFE"}></Ionicons>
+          </View>
+
+          <View>
+            <Text
+              className="text-white"
+              style={{ fontFamily: fontFamily.ExoBold }}
+            >
+              Sucessfully log in!
+            </Text>
+          </View>
         </View>
       </View>
     </Modal>
