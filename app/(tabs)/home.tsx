@@ -1,11 +1,23 @@
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { router } from "expo-router";
+import { signOut } from "firebase/auth";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 import HomeLesson from "../../assets/components/HomeLesson";
 
 export default function Home() {
+  const auth = FIREBASE_AUTH;
+
+  const out = async () => {
+    try {
+      await signOut(auth);
+      alert("Log out!");
+    } catch {
+      alert("Something went wrong....");
+    }
+  };
+
   return (
     <ProtectedRoutes>
       <SafeAreaView className="flex-1 bg-background ">
@@ -61,7 +73,6 @@ export default function Home() {
             className="text-white ml-2 text-xl mt-3"
             style={{ fontFamily: fontFamily.ExoBold }}
           >
-            {" "}
             JUMP BACK IN
           </Text>
 
@@ -93,7 +104,6 @@ export default function Home() {
             className="text-white ml-2 text-xl mt-3"
             style={{ fontFamily: fontFamily.ExoBold }}
           >
-            {" "}
             VIEW YOUR PROGRESS
           </Text>
 
@@ -107,9 +117,8 @@ export default function Home() {
             />
             <HomeLesson name="Database" color="#388E3C" icon="albums" />
           </View>
-
-          <Pressable onPress={() => router.push("/")}>
-            <Text className="text-white">Go back</Text>
+          <Pressable onPress={out}>
+            <Text className="text-white">Sign out</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

@@ -27,7 +27,7 @@ export default function RootLayout() {
 
   return (
     <AuthChecker>
-      <Stack screenOptions={{ headerShown: false }}></Stack>
+      <Stack screenOptions={{ headerShown: false, animation: "none" }}></Stack>
     </AuthChecker>
   );
 }

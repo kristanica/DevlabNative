@@ -20,6 +20,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+//
 const Register = () => {
   // State to manage the visibility of the DateTimePicker
   const [dateVisible, isDateVisible] = useState(false);

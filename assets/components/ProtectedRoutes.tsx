@@ -10,16 +10,12 @@ type childrenProps = {
 const ProtectedRoutes: React.FC<childrenProps> = ({ children }) => {
   const { user, loaded } = useAuth();
 
+  console.log("Auth loaded:", loaded, "User:", user);
+
   if (!loaded) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text className="text-black text-3xl">Hello</Text>
+      <View className="bg-red-300 flex-1">
+        <Text className="text-black text-3xl">Loading...</Text>
       </View>
     );
   }
@@ -29,7 +25,7 @@ const ProtectedRoutes: React.FC<childrenProps> = ({ children }) => {
   }
 
   if (user && loaded) {
-    return <View className="flex-1"> {children}</View>;
+    return <View className="flex-1">{children}</View>;
   }
 };
 

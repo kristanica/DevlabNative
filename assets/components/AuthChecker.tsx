@@ -28,7 +28,6 @@ export const AuthChecker = ({ children }: childrenShit) => {
     const user = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       isLoaded(true);
-      console.log(loaded);
     });
     return user;
   }, []);

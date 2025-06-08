@@ -33,7 +33,7 @@ const Login = () => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       Keyboard.dismiss;
-      router.push("/(tabs)/Home");
+      router.replace("/Home");
     } catch (error) {
       alert("Something happened idk");
     } finally {
@@ -128,9 +128,6 @@ const Login = () => {
           {/* {failedLogin && (
             <FailedLogin show={failedLogin} closeModal={openFailedLogin} />
           )} */}
-          <TouchableOpacity onPress={() => router.push("/(tabs)/Home")}>
-            <Text>sad</Text>
-          </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
