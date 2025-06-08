@@ -1,17 +1,18 @@
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import React from "react";
-import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const settings = () => {
+const achivements = () => {
   return (
     <ProtectedRoutes>
       <SafeAreaView className="bg-background flex-1">
-        <Text>Settings</Text>
+        <Text>achivements</Text>
       </SafeAreaView>
     </ProtectedRoutes>
   );
 };
 
-export default settings;
+export default achivements;
 
 const styles = StyleSheet.create({});

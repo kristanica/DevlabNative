@@ -1,3 +1,4 @@
+import { AuthChecker } from "@/assets/components/AuthChecker";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
@@ -23,5 +24,10 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  return <Stack screenOptions={{ headerShown: false }}></Stack>;
+
+  return (
+    <AuthChecker>
+      <Stack screenOptions={{ headerShown: false }}></Stack>
+    </AuthChecker>
+  );
 }
