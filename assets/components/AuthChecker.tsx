@@ -43,6 +43,5 @@ export const useAuth = (): authRouteProps => {
   if (!useAuth) {
     throw new Error("null");
   }
-
   return useAuth;
 };

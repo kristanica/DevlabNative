@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "871275485475",
+    "project_id": "devlab-b8a1e",
+    "storage_bucket": "devlab-b8a1e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871275485475:android:cf1f18b9e9374401a41496",
+        "android_client_info": {
+          "package_name": "com.devlab.devlabNative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7cVIwaWJdwaHVAfikAD6tZ5vE8WXSoz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

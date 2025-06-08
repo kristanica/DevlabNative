@@ -12,7 +12,6 @@ import {
   Modal,
   Platform,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   TouchableNativeFeedback,
@@ -20,8 +19,15 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+
+import SampleLoading from "@/assets/components/SampleLoading";
+import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 //
 const Register = () => {
+  const auth = FIREBASE_AUTH;
+  const db = FIREBASE_STORE;
   // State to manage the visibility of the DateTimePicker
   const [dateVisible, isDateVisible] = useState(false);
 
@@ -34,7 +40,28 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [age, setAge] = useState("");
+  const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(new Date());
+
+  const handleRegister = async () => {
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      const user = auth.currentUser;
+      if (user) {
+        setDoc(doc(db, "Users", user.uid), {
+          email: user.email,
+          username: username,
+          age: age,
+        });
+        setLoading(false);
+        alert("Test");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //set date
   const onChange = (
@@ -109,6 +136,12 @@ const Register = () => {
               setValue={setUsername}
               icon={"person"}
             />
+            <InputBox
+              placeHolder={"Age"}
+              value={age}
+              setValue={setAge}
+              icon={"person"}
+            />
             {/* Input field for date of birth */}
             <View className="flex-row  border-2 border-solid  p-2 rounded-3xl mt-2">
               <Ionicons
@@ -170,7 +203,7 @@ const Register = () => {
           <View className="flex-[.5]  justify-center items-center ">
             <TouchableOpacity
               className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full "
-              onPress={() => router.push("/")}
+              onPress={handleRegister}
             >
               <Text
                 className="color-white text-lg "
@@ -189,7 +222,7 @@ const Register = () => {
             >
               Already have an Account?
             </Text>
-            <TouchableOpacity onPress={() => router.push("/")}>
+            <TouchableOpacity onPress={() => router.replace("/")}>
               <Text
                 className="color-[#4F80C5] mt-2"
                 style={{ fontFamily: fontFamily.ExoRegular }}
@@ -198,6 +231,7 @@ const Register = () => {
               </Text>
             </TouchableOpacity>
           </View>
+          {loading && <SampleLoading />}
         </View>
       </TouchableNativeFeedback>
     </KeyboardAvoidingView>
@@ -205,5 +239,3 @@ const Register = () => {
 };
 
 export default Register;
-
-const styles = StyleSheet.create({});

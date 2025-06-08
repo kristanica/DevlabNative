@@ -7,7 +7,7 @@ import { Modal, StyleSheet, Text, View } from "react-native";
 //Will show after succesful login attempt
 const SampleLoading = () => {
   return (
-    <Modal animationType="fade" visible={true} transparent={true}>
+    <Modal animationType="slide" visible={true} transparent={true}>
       <View className="justify-end items-end flex-1">
         <View className="justify-evenly items-center  bg-[#43A047] w-full h-[80px] flex-row">
           <View>

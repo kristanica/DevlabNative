@@ -10,8 +10,6 @@ type childrenProps = {
 const ProtectedRoutes: React.FC<childrenProps> = ({ children }) => {
   const { user, loaded } = useAuth();
 
-  console.log("Auth loaded:", loaded, "User:", user);
-
   if (!loaded) {
     return (
       <View className="bg-red-300 flex-1">
