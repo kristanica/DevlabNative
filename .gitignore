@@ -30,6 +30,8 @@ yarn-error.*
 .DS_Store
 *.pem
 
+
+
 # local env files
 .env*.local
 
@@ -37,3 +39,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+fireBaseConfig.ts
+
