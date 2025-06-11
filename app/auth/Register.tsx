@@ -1,22 +1,15 @@
 import InputBox from "@/assets/components/InputBox";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Modal,
   Platform,
-  Pressable,
   Text,
-  TextInput,
   TouchableNativeFeedback,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -42,7 +35,6 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [age, setAge] = useState("");
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState(new Date());
 
   const handleRegister = async () => {
     setLoading(true);
@@ -63,15 +55,6 @@ const Register = () => {
     }
   };
 
-  //set date
-  const onChange = (
-    event: DateTimePickerEvent,
-    selectedDate: Date | undefined
-  ) => {
-    if (selectedDate) {
-      setDate(selectedDate);
-    }
-  };
   return (
     <KeyboardAvoidingView
       className="flex-1 bg-background justify-center items-center"
@@ -140,63 +123,8 @@ const Register = () => {
               placeHolder={"Age"}
               value={age}
               setValue={setAge}
-              icon={"person"}
+              icon={"calendar-outline"}
             />
-            {/* Input field for date of birth */}
-            <View className="flex-row  border-2 border-solid  p-2 rounded-3xl mt-2">
-              <Ionicons
-                name="calendar-outline"
-                size={20}
-                className="mx-3 border-r-2 pr-2 border-black"
-                color={"#FFFFFE"}
-              />
-
-              {/* Pressable to open the DateTimePicker */}
-              <Pressable
-                onPress={() => isDateVisible(true)}
-                className=" flex-row items-center justify-between"
-              >
-                <TextInput
-                  editable={false}
-                  placeholder="00/00/0000"
-                  value={date.toLocaleDateString("en-GB")}
-                  className="text-offwhite w-[240px]"
-                  onPressIn={() => isDateVisible(true)}
-                  style={{ fontFamily: fontFamily.ExoLight }}
-                />
-              </Pressable>
-
-              {/* Modal to display the DateTimePicker */}
-              {dateVisible && (
-                <Modal animationType="slide" visible={true} transparent={true}>
-                  {/* Close date modal when press outside */}
-                  <TouchableWithoutFeedback onPress={setDateVisibility}>
-                    <View className="justify-end items-end flex-1 rounded-t-2xl">
-                      <View className="bg-background  w-full h-[320px] justify-center items-center text-white order-white rounded-2xl">
-                        <Pressable
-                          onPress={() => isDateVisible(false)}
-                          className="absolute top-2 right-2 mt-2"
-                        >
-                          <Ionicons
-                            name="close-outline"
-                            color={"#FFFFFE"}
-                            size={30}
-                          />
-                        </Pressable>
-                        <DateTimePicker
-                          mode="date"
-                          display="spinner"
-                          textColor="white"
-                          value={date}
-                          onChange={onChange}
-                          maximumDate={new Date()}
-                        />
-                      </View>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </Modal>
-              )}
-            </View>
           </View>
 
           {/* Button to register */}
@@ -239,3 +167,68 @@ const Register = () => {
 };
 
 export default Register;
+
+// const onChange = (
+//   event: DateTimePickerEvent,
+//   selectedDate: Date | undefined
+// ) => {
+//   if (selectedDate) {
+//     setDate(selectedDate);
+//   }
+// };
+
+//  {/* Input field for date of birth */}
+//       <View className="flex-row  border-2 border-solid  p-2 rounded-3xl mt-2">
+//         <Ionicons
+//           name="calendar-outline"
+//           size={20}
+//           className="mx-3 border-r-2 pr-2 border-black"
+//           color={"#FFFFFE"}
+//         />
+
+//         {/* Pressable to open the DateTimePicker */}
+//         <Pressable
+//           onPress={() => isDateVisible(true)}
+//           className=" flex-row items-center justify-between"
+//         >
+//           <TextInput
+//             editable={false}
+//             placeholder="00/00/0000"
+//             value={date.toLocaleDateString("en-GB")}
+//             className="text-offwhite w-[240px]"
+//             onPressIn={() => isDateVisible(true)}
+//             style={{ fontFamily: fontFamily.ExoLight }}
+//           />
+//         </Pressable>
+
+//         {/* Modal to display the DateTimePicker */}
+//         {dateVisible && (
+//           <Modal animationType="slide" visible={true} transparent={true}>
+//             {/* Close date modal when press outside */}
+//             <TouchableWithoutFeedback onPress={setDateVisibility}>
+//               <View className="justify-end items-end flex-1 rounded-t-2xl">
+//                 <View className="bg-background  w-full h-[320px] justify-center items-center text-white order-white rounded-2xl">
+//                   <Pressable
+//                     onPress={() => isDateVisible(false)}
+//                     className="absolute top-2 right-2 mt-2"
+//                   >
+//                     <Ionicons
+//                       name="close-outline"
+//                       color={"#FFFFFE"}
+//                       size={30}
+//                     />
+//                   </Pressable>
+//                   <DateTimePicker
+//                     mode="date"
+//                     display="spinner"
+//                     textColor="white"
+//                     value={date}
+//                     onChange={onChange}
+//                     maximumDate={new Date()}
+//                   />
+//                 </View>
+//               </View>
+//             </TouchableWithoutFeedback>
+//           </Modal>
+//         )}
+//       </View>
