@@ -38,6 +38,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2aceafcd-8273-4c1a-ba4c-a24bb40e9ae8"
+      }
+    },
+    "owner": "kristanica"
   }
 }

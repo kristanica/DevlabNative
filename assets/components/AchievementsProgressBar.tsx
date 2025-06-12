@@ -1,10 +1,19 @@
-import React from "react";
+import { fontFamily } from "@/fontFamily/fontFamily";
+import React, { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 
-const AchievementsProgressBar = () => {
+type AchievementContainerProps = {
+  name: string;
+  id?: number;
+};
+
+const AchievementsProgressBar = ({ name, id }: AchievementContainerProps) => {
   return (
-    <View className="flex-[1] flex-col justify-center items-center mx-2 rounded-sm">
+    <View
+      key={id}
+      className="flex-[1] bg-shopAccent flex-col justify-center items-center mx-2 rounded-xl"
+    >
       <CircularProgress
         value={20}
         radius={20}
@@ -13,13 +22,23 @@ const AchievementsProgressBar = () => {
       />
 
       <View className="justify-center items-center">
-        <Text className="text-sm">HTML</Text>
-        <Text className="text-sm">Achievements</Text>
+        <Text
+          className="text-sm text-white"
+          style={{ fontFamily: fontFamily.ExoLight }}
+        >
+          {name}
+        </Text>
+        <Text
+          className="text-sm text-white"
+          style={{ fontFamily: fontFamily.ExoLight }}
+        >
+          Achievements
+        </Text>
       </View>
     </View>
   );
 };
 
-export default AchievementsProgressBar;
+export default memo(AchievementsProgressBar);
 
 const styles = StyleSheet.create({});

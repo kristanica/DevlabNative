@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 bg-background ">
-      <View className="flex-row flex-1 bg-red-500 m-3 rounded-[10px]">
+      <View className="flex-row flex-1 bg-accent m-3 rounded-[10px]">
         <View className="flex-[2]  justify-center items-center">
           <Ionicons name="person-circle" size={50} color={"#314A70"} />
           <Text

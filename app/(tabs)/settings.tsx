@@ -1,13 +1,17 @@
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 import { signOut } from "firebase/auth";
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -19,6 +23,33 @@ import {
 
 const Settings = () => {
   const auth = FIREBASE_AUTH;
+  const [imageBackground, setImageBackground] = useState<string>("");
+  const [profilePicture, setProfilePicture] = useState<string>("");
+
+  const pickImage = async (
+    setImage: (val: string) => void,
+    keyStorage: string
+  ) => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [2, 3],
+        quality: 1,
+      });
+      if (result.canceled) {
+        console.log("canceled");
+      }
+
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
+        setImage(uri);
+        await AsyncStorage.setItem(keyStorage, uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const out = async () => {
     try {
@@ -29,6 +60,24 @@ const Settings = () => {
     }
   };
 
+  useEffect(() => {
+    const loadStorage = async () => {
+      try {
+        const backgroundVal = await AsyncStorage.getItem("imageUri");
+        const profileVal = await AsyncStorage.getItem("profileUri");
+
+        if (backgroundVal && profileVal) {
+          setImageBackground(backgroundVal);
+          setProfilePicture(profileVal);
+          console.log("loaded!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    loadStorage();
+  }, []);
+
   return (
     <KeyboardAvoidingView
       className="flex-1"
@@ -37,23 +86,37 @@ const Settings = () => {
       <SafeAreaView className="bg-background flex-1 flex-row justify-center items-center">
         <View className="flex-1 bg-accent m-[10px] rounded-[10px]">
           <View className=" justify-center items-center flex-[1] ">
-            <Image
-              source={require("@/assets/images/profile.png")}
-              className="flex-[1] w-[220px]"
-            />
+            <Pressable
+              onPress={() => pickImage(setProfilePicture, "profileUri")}
+            >
+              {profilePicture && (
+                <Image
+                  source={{ uri: profilePicture }}
+                  className="flex-[1] w-[220px] rounded-[50%]"
+                />
+              )}
+            </Pressable>
           </View>
 
-          <View className="flex-[.3] bg-blue-100 m-3 rounded-[10px]"></View>
+          {imageBackground && (
+            <Image
+              source={{ uri: imageBackground }}
+              style={{ flex: 0.3, margin: 3, borderRadius: 10 }}
+            />
+          )}
 
           <View className="justify-center items-center flex-[.1]">
-            <Text
-              className="text-white text-2xl"
-              style={{ fontFamily: fontFamily.ExoBold }}
+            <Pressable
+              onPress={() => pickImage(setImageBackground, "imageUri")}
             >
-              Update profile picture
-            </Text>
+              <Text
+                className="text-white text-2xl"
+                style={{ fontFamily: fontFamily.ExoBold }}
+              >
+                Update profile picture
+              </Text>
+            </Pressable>
           </View>
-
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View className=" flex-[1] justify-evenly">
               <View className="">
@@ -86,7 +149,6 @@ const Settings = () => {
               </View>
             </View>
           </TouchableWithoutFeedback>
-
           <View className="flex-[.5]  items-center justify-evenly flex-col">
             <TouchableOpacity className="bg-button flex-[.5] w-[15rem] rounded-full justify-center items-center">
               <Text
