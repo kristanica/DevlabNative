@@ -3,6 +3,8 @@ import AchievementsProgressBar from "@/assets/components/AchievementsProgressBar
 import { fontFamily } from "@/fontFamily/fontFamily";
 import React, { useState } from "react";
 
+import { useBackground } from "@/assets/components/BackgroundProvider";
+import { useProfile } from "@/assets/components/ProfileProvider";
 import {
   cssMockUp,
   databaseMockUp,
@@ -12,6 +14,7 @@ import {
 import {
   FlatList,
   Image,
+  ImageBackground,
   SafeAreaView,
   Text,
   TouchableOpacity,
@@ -47,14 +50,26 @@ const Achievements = () => {
       { name: string; description: string; id: number; complete: boolean }[]
     >(htmlMockUp);
 
+  const { backgroundVal } = useBackground();
+  const { profileVal } = useProfile();
+
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="bg-accent flex-[1] m-3 rounded-[10px] ">
+      <ImageBackground
+        source={
+          backgroundVal
+            ? { uri: backgroundVal } // ✅ only use when it's not null
+            : require("@/assets/images/profile.png") // ✅ fallback image
+        }
+        className="bg-accent flex-[1] m-3 rounded-[10px] "
+      >
         <View className="flex-[1] justify-center items-center ">
-          <Image
-            source={require("@/assets/images/profile.png")}
-            style={{ height: 100, width: 100 }}
-          />
+          {profileVal && (
+            <Image
+              source={{ uri: profileVal }}
+              className="w-[100px] h-[100px]"
+            />
+          )}
         </View>
 
         <View className="justify-center items-center flex-[.5] ">
@@ -78,7 +93,7 @@ const Achievements = () => {
             <AchievementsProgressBar key={item.id} name={item.name} />
           ))}
         </View>
-      </View>
+      </ImageBackground>
 
       <View className="bg-accent flex-[2] m-3 mt-0 rounded-[10px]">
         <View className="flex-[.1] mb-0 flex-row justify-evenly items-center border-b-2 border-accentContainer">

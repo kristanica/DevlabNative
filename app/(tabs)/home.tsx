@@ -1,11 +1,23 @@
+import { useBackground } from "@/assets/components/BackgroundProvider";
 import HomeLesson from "@/assets/components/HomeLesson";
+import { useProfile } from "@/assets/components/ProfileProvider";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { signOut } from "firebase/auth";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function Home() {
+  const { backgroundVal } = useBackground();
+  const { profileVal } = useProfile();
+
   const auth = FIREBASE_AUTH;
 
   const out = async () => {
@@ -19,9 +31,22 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 bg-background ">
-      <View className="flex-row flex-1 bg-accent m-3 rounded-[10px]">
+      <ImageBackground
+        source={
+          backgroundVal
+            ? { uri: backgroundVal } // ✅ only use when it's not null
+            : require("@/assets/images/profile.png") // ✅ fallback image
+        }
+        className="flex-row flex-1 bg-accent m-3 rounded-[10px]"
+      >
         <View className="flex-[2]  justify-center items-center">
-          <Ionicons name="person-circle" size={50} color={"#314A70"} />
+          {profileVal && (
+            <Image
+              source={{ uri: profileVal }}
+              className="w-[100px] h-[100px]"
+            />
+          )}
+
           <Text
             className="text-xs text-white"
             style={{ fontFamily: fontFamily.ExoLight }}
@@ -60,7 +85,7 @@ export default function Home() {
             100/200 XP
           </Text>
         </View>
-      </View>
+      </ImageBackground>
 
       <ScrollView
         bounces={true}
