@@ -1,9 +1,11 @@
+import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
 import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { signOut } from "firebase/auth";
 import React from "react";
 
 import {
@@ -73,103 +75,117 @@ const Settings = () => {
     }
   };
 
+  const out = async () => {
+    try {
+      await signOut(auth);
+      alert("Log out!");
+    } catch {
+      alert("Something went wrong....");
+    }
+  };
+
   return (
-    <SafeAreaView className="bg-background flex-1">
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className="flex-[1] bg-accent m-[10px] rounded-[10px] ">
-            <View className="flex-[.7] justify-center items-center py-2">
-              <Pressable onPress={pickImageProfile}>
-                {profileVal && (
-                  <Image
-                    source={{ uri: profileVal }}
-                    className="flex-[1] rounded-full w-[180px]"
-                  />
-                )}
-              </Pressable>
-            </View>
-            {/* Container */}
-            <View className="flex-[2] bg-shopAccent m-[20px] rounded-2xl">
-              <Pressable className="flex-[1]" onPress={pickImageBackground}>
-                {/* Background image of user */}
-                {backgroundVal && (
-                  <ImageBackground
-                    className="flex-[1] rounded-2xl overflow-hidden rounded-br-none rounded-bl-none"
-                    source={{ uri: backgroundVal }}
-                  ></ImageBackground>
-                )}
-              </Pressable>
-
-              <View className="flex-[.5] items-center justify-center">
-                <Text
-                  className="text-white text-center text-2xl"
-                  style={{ fontFamily: fontFamily.ExoExtraBold }}
-                >
-                  UPDATE PROFILE INFORMATION
-                </Text>
-              </View>
-
-              <View className="flex-[2]">
-                <View>
-                  {/* Username Textinput */}
-                  <Text className="text-white mx-5 mb-2">Username</Text>
-                  <View className="flex-row bg-[#1E212F] mx-5 p-3 rounded-[10px]">
-                    <TextInput
-                      placeholder={"Username goes here..."}
-                      className="text-white bg-[#1E212F] flex-[1]"
+    <ProtectedRoutes>
+      <SafeAreaView className="bg-background flex-1">
+        <KeyboardAvoidingView
+          className="flex-1"
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View className="flex-[1] bg-accent m-[10px] rounded-[10px] ">
+              <View className="flex-[.7] justify-center items-center py-2">
+                <Pressable onPress={pickImageProfile}>
+                  {profileVal && (
+                    <Image
+                      source={{ uri: profileVal }}
+                      className="flex-[1] rounded-full w-[180px]"
                     />
+                  )}
+                </Pressable>
+              </View>
+              {/* Container */}
+              <View className="flex-[2] bg-shopAccent m-[20px] rounded-2xl">
+                <Pressable className="flex-[1]" onPress={pickImageBackground}>
+                  {/* Background image of user */}
+                  {backgroundVal && (
+                    <ImageBackground
+                      className="flex-[1] rounded-2xl overflow-hidden rounded-br-none rounded-bl-none"
+                      source={{ uri: backgroundVal }}
+                    ></ImageBackground>
+                  )}
+                </Pressable>
+
+                <View className="flex-[.5] items-center justify-center">
+                  <Text
+                    className="text-white text-center text-2xl"
+                    style={{ fontFamily: fontFamily.ExoExtraBold }}
+                  >
+                    UPDATE PROFILE INFORMATION
+                  </Text>
+                </View>
+
+                <View className="flex-[2]">
+                  <View>
+                    {/* Username Textinput */}
+                    <Text className="text-white mx-5 mb-2">Username</Text>
+                    <View className="flex-row bg-[#1E212F] mx-5 p-3 rounded-[10px]">
+                      <TextInput
+                        placeholder={"Username goes here..."}
+                        className="text-white bg-[#1E212F] flex-[1]"
+                      />
+                    </View>
+                  </View>
+
+                  {/* Bio textinput */}
+                  <View className="mt-3">
+                    <Text className="text-white mx-5 mb-2">Bio</Text>
+
+                    <View className="flex-row bg-[#1E212F] mx-5 p-3 rounded-[10px]">
+                      <TextInput
+                        placeholder={"Bio goes here...."}
+                        className="text-white flex-[1]"
+                      />
+                    </View>
                   </View>
                 </View>
 
-                {/* Bio textinput */}
-                <View className="mt-3">
-                  <Text className="text-white mx-5 mb-2">Bio</Text>
+                <View className="flex-[2]  items-center pt-10   ">
+                  <TouchableOpacity className="bg-button flex-[.5] w-[15rem] rounded-full justify-center items-center">
+                    <Text
+                      className="text-white"
+                      style={{ fontFamily: fontFamily.ExoBold }}
+                    >
+                      Save Changes
+                    </Text>
+                  </TouchableOpacity>
 
-                  <View className="flex-row bg-[#1E212F] mx-5 p-3 rounded-[10px]">
-                    <TextInput
-                      placeholder={"Bio goes here...."}
-                      className="text-white flex-[1]"
-                    />
-                  </View>
+                  <TouchableOpacity
+                    onPress={out}
+                    className="bg-[#FF6166] flex-[.5] my-2 w-[15rem] rounded-full justify-center items-center"
+                  >
+                    <Text
+                      className="text-white"
+                      style={{ fontFamily: fontFamily.ExoBold }}
+                    >
+                      Logout
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity className="flex-[.5]">
+                    <Text
+                      className="text-white"
+                      style={{ fontFamily: fontFamily.ExoLight }}
+                    >
+                      Login as Administrator
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-
-              <View className="flex-[2]  items-center pt-10   ">
-                <TouchableOpacity className="bg-button flex-[.5] w-[15rem] rounded-full justify-center items-center">
-                  <Text
-                    className="text-white"
-                    style={{ fontFamily: fontFamily.ExoBold }}
-                  >
-                    Save Changes
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity className="bg-[#FF6166] flex-[.5] my-2 w-[15rem] rounded-full justify-center items-center">
-                  <Text
-                    className="text-white"
-                    style={{ fontFamily: fontFamily.ExoBold }}
-                  >
-                    Logout
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity className="flex-[.5]">
-                  <Text
-                    className="text-white"
-                    style={{ fontFamily: fontFamily.ExoLight }}
-                  >
-                    Login as Administrator
-                  </Text>
-                </TouchableOpacity>
-              </View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ProtectedRoutes>
   );
 };
 

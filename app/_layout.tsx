@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/assets/Provider/AuthProvider";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
@@ -26,9 +27,9 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <AuthProvider>
       <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false, animation: "none" }}></Stack>
-    </>
+      <Stack screenOptions={{ headerShown: false, animation: "none" }} />
+    </AuthProvider>
   );
 }
