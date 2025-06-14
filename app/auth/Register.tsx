@@ -13,22 +13,17 @@ import {
   View,
 } from "react-native";
 
-import SampleLoading from "@/assets/components/SampleLoading";
+import Loading from "@/assets/components/Loading";
 import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-//
+
 const Register = () => {
+  // Firebase
   const auth = FIREBASE_AUTH;
   const db = FIREBASE_STORE;
-  // State to manage the visibility of the DateTimePicker
-  const [dateVisible, isDateVisible] = useState(false);
 
-  //Toucablewithoutfeedback function to close modal
-  const setDateVisibility = () => {
-    isDateVisible(false);
-  };
-
+  // useStates
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -36,6 +31,7 @@ const Register = () => {
   const [age, setAge] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Handle account registration
   const handleRegister = async () => {
     setLoading(true);
     try {
@@ -69,11 +65,11 @@ const Register = () => {
           DEVLAB
         </Text>
       </View>
+      {/* Dismisses keyboard */}
       <TouchableNativeFeedback onPress={Keyboard.dismiss}>
         {/* Container itself */}
         <View className="h-[590px] rounded-3xl  w-[25rem]  bg-accent flex-col">
           {/* Icon for the user profile */}
-
           <View className="flex-[1] justify-center items-center">
             <Ionicons
               name="person-circle"
@@ -82,7 +78,6 @@ const Register = () => {
               className="mx-auto my-2"
             />
           </View>
-
           {/* Input fields for registration */}
           <View className="flex-[2] justify-center items-center">
             {/*Input field for email */}
@@ -93,9 +88,7 @@ const Register = () => {
               setValue={setEmail}
               icon={"mail"}
             />
-
             {/* Input field for password */}
-
             <InputBox
               placeHolder={"Password"}
               value={password}
@@ -103,7 +96,6 @@ const Register = () => {
               icon={"lock-closed"}
               isPassword={true}
             />
-
             {/* Input field for confirm password */}
             <InputBox
               placeHolder={"ConfirmPassword"}
@@ -126,7 +118,6 @@ const Register = () => {
               icon={"calendar-outline"}
             />
           </View>
-
           {/* Button to register */}
           <View className="flex-[.5]  justify-center items-center ">
             <TouchableOpacity
@@ -142,7 +133,6 @@ const Register = () => {
             </TouchableOpacity>
           </View>
           {/* Text to navigate to login page */}
-
           <View className="flex-[1]  justify-center items-center">
             <Text
               className="mt-7 color-[#FFFFFE]"
@@ -150,6 +140,7 @@ const Register = () => {
             >
               Already have an Account?
             </Text>
+            {/* Routes user to login (index) */}
             <TouchableOpacity onPress={() => router.replace("/")}>
               <Text
                 className="color-[#4F80C5] mt-2"
@@ -159,7 +150,7 @@ const Register = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          {loading && <SampleLoading />}
+          {loading && <Loading />}
         </View>
       </TouchableNativeFeedback>
     </KeyboardAvoidingView>
@@ -168,6 +159,13 @@ const Register = () => {
 
 export default Register;
 
+// // State to manage the visibility of the DateTimePicker
+// const [dateVisible, isDateVisible] = useState(false);
+
+// //Toucablewithoutfeedback function to close modal
+// const setDateVisibility = () => {
+//   isDateVisible(false);
+// };
 // const onChange = (
 //   event: DateTimePickerEvent,
 //   selectedDate: Date | undefined

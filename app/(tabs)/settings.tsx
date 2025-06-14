@@ -1,5 +1,5 @@
-import { useBackground } from "@/assets/components/BackgroundProvider";
-import { useProfile } from "@/assets/components/ProfileProvider";
+import { useBackground } from "@/assets/Provider/BackgroundProvider";
+import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,7 +34,7 @@ const Settings = () => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
         allowsEditing: true,
-        aspect: [2, 3],
+        aspect: [16, 9],
         quality: 1,
       });
       if (result.canceled) {

@@ -2,8 +2,8 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { BackgroundProvider } from "@/assets/components/BackgroundProvider";
-import { ProfileProvider } from "@/assets/components/ProfileProvider";
+import { BackgroundProvider } from "@/assets/Provider/BackgroundProvider";
+import { ProfileProvider } from "@/assets/Provider/ProfileProvider";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const TabsLayout = () => {

@@ -7,8 +7,10 @@ import { StyleSheet, Text, View } from "react-native";
 type HomeLessonProps = {
   name: string;
   color: string;
+  // Recieves icon for <Ionicons>
   icon: keyof typeof Ionicons.glyphMap;
 };
+// HomeLesson component for (Tabs)/Home.tsx
 const HomeLesson = ({ name, color, icon }: HomeLessonProps) => {
   return (
     <View className=" w-[40%] h-[200px] bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden p-2 border-black border-[2px]">
@@ -18,10 +20,10 @@ const HomeLesson = ({ name, color, icon }: HomeLessonProps) => {
       >
         <Ionicons name={icon} size={50} color={"white"} />
       </View>
-
+      {/* Render's Name */}
       <View className="flex-[.5] justify-center items-center text-center">
         <Text className="text-white" style={{ fontFamily: fontFamily.ExoBold }}>
-          {name}{" "}
+          {name}
         </Text>
       </View>
     </View>

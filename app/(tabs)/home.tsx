@@ -1,6 +1,6 @@
-import { useBackground } from "@/assets/components/BackgroundProvider";
 import HomeLesson from "@/assets/components/HomeLesson";
-import { useProfile } from "@/assets/components/ProfileProvider";
+import { useBackground } from "@/assets/Provider/BackgroundProvider";
+import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -15,11 +15,14 @@ import {
 } from "react-native";
 
 export default function Home() {
+  // Recieves background and profile images
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
 
+  //firebase
   const auth = FIREBASE_AUTH;
 
+  // Handle user signout
   const out = async () => {
     try {
       await signOut(auth);
@@ -33,17 +36,26 @@ export default function Home() {
     <SafeAreaView className="flex-1 bg-background ">
       <ImageBackground
         source={
+          // backgroundVal context usage
           backgroundVal
-            ? { uri: backgroundVal } // ✅ only use when it's not null
-            : require("@/assets/images/profile.png") // ✅ fallback image
+            ? { uri: backgroundVal }
+            : // Default val if backgroundVal is false
+              require("@/assets/images/profile.png")
         }
-        className="flex-row flex-1 bg-accent m-3 rounded-[10px]"
+        className="flex-row flex-1 bg-accent m-3 rounded-[10px] overflow-hidden"
       >
+        {/* Renders left side user information */}
         <View className="flex-[2]  justify-center items-center">
           {profileVal && (
             <Image
-              source={{ uri: profileVal }}
-              className="w-[100px] h-[100px]"
+              // profileVal context usage
+              source={
+                profileVal
+                  ? { uri: profileVal }
+                  : // Default val if profileVal is false
+                    require("@/assets/images/profile.png")
+              }
+              className="w-[100px] h-[100px] rounded-full overflow-hidden border-black border-[1px]"
             />
           )}
 
@@ -54,7 +66,7 @@ export default function Home() {
             This is an awesome bio
           </Text>
         </View>
-
+        {/* Renders right side user information */}
         <View className="flex-[3] justify-center items-star ">
           <Text
             className="text-white"
@@ -74,7 +86,7 @@ export default function Home() {
           >
             LEVEL 91
           </Text>
-
+          {/* EXP bar */}
           <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
             <View className="w-[80%] bg-[#32FF99] h-4 rounded-xl"></View>
           </View>
@@ -87,6 +99,7 @@ export default function Home() {
         </View>
       </ImageBackground>
 
+      {/* Renders rest  */}
       <ScrollView
         bounces={true}
         showsVerticalScrollIndicator={false}
@@ -99,6 +112,7 @@ export default function Home() {
           JUMP BACK IN
         </Text>
 
+        {/* Routes to last  lesson viewed */}
         <View className="bg-accentContainer mx-3 my-2 flex-row rounded-2xl overflow-hidden">
           <View className="flex-[.5] justify-center items-center bg-[#070606] rounded-2xl">
             <Ionicons name="logo-html5" size={50} color={"white"} />
@@ -129,7 +143,7 @@ export default function Home() {
         >
           VIEW YOUR PROGRESS
         </Text>
-
+        {/* Renders HomeLesson component */}
         <View className="flex-row flex-wrap justify-center">
           <HomeLesson name="HTML" color="#FFC300" icon="logo-html5" />
           <HomeLesson name="CSS" color="#00BFFF" icon="logo-css3" />

@@ -13,12 +13,12 @@ type authRouteProps = {
   loaded: boolean;
 };
 
-const authRoute = createContext<authRouteProps | undefined>(undefined);
-type childrenShit = {
+const authRouteContext = createContext<authRouteProps | undefined>(undefined);
+type childrenProps = {
   children: ReactNode;
 };
 
-export const AuthChecker = ({ children }: childrenShit) => {
+export const AuthProvider = ({ children }: childrenProps) => {
   const auth = FIREBASE_AUTH;
 
   const [user, setUser] = useState<User | null>(null);
@@ -33,12 +33,14 @@ export const AuthChecker = ({ children }: childrenShit) => {
   }, []);
 
   return (
-    <authRoute.Provider value={{ user, loaded }}>{children}</authRoute.Provider>
+    <authRouteContext.Provider value={{ user, loaded }}>
+      {children}
+    </authRouteContext.Provider>
   );
 };
 
-export const useAuth = (): authRouteProps => {
-  const useAuth = useContext(authRoute);
+export const useAuth = () => {
+  const useAuth = useContext(authRouteContext);
 
   if (!useAuth) {
     throw new Error("null");

@@ -13,11 +13,11 @@ const shop = () => {
             className="text-4xl text-white"
             style={{ fontFamily: fontFamily.ExoExtraBold }}
           >
-            DEVSHOP{" "}
+            DEVLAB
           </Text>
           <Ionicons name="cart" size={50} color={"#FFFFFF"} />
         </View>
-
+        {/* Renders shop description */}
         <View className="flex-[.7] ">
           <Text className="text-white text-justify">
             Welcome to the DevLab Shop, where learning meets gamification! Earn
@@ -26,6 +26,7 @@ const shop = () => {
           </Text>
         </View>
 
+        {/* Renders shop item */}
         <ScrollView
           bounces={true}
           showsVerticalScrollIndicator={false}

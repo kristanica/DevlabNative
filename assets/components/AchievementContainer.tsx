@@ -10,6 +10,7 @@ type AchievementContainerProps = {
   complete: boolean;
 };
 
+//Achievement Container for (Tabs)/Achievements.tsx
 const AchievementContainer = ({
   name,
   description,
@@ -18,6 +19,7 @@ const AchievementContainer = ({
 }: AchievementContainerProps) => {
   return (
     <View key={id}>
+      {/* Border gradient for completed achievements*/}
       <LinearGradient
         colors={["#00FFE0", "#8C52FF"]}
         locations={[0.1, 1]}
@@ -25,44 +27,57 @@ const AchievementContainer = ({
         end={{ x: 0, y: 1 }}
         style={styles.container}
       >
-        <View className="bg-[#111827] rounded-3xl m-[1px] flex-col flex-1  ">
-          <View className="flex-[2] justify-center items-center">
-            <Image
-              source={require("@/assets/images/success.png")}
-              style={{ height: 75, width: 75 }}
-            />
-          </View>
-
-          <View className="flex-[.5] justify-center items-center border-t-2 b-black mx-5">
-            <Text
-              className="text-white"
-              style={{ fontFamily: fontFamily.ExoExtraBold }}
-            >
-              {name}
-            </Text>
-          </View>
-
-          <View className="flex-[.5] justify-center items-center">
-            <Text
-              className="text-[#94A1B2] text-center"
-              style={{ fontFamily: fontFamily.ExoLight }}
-            >
-              {description}
-            </Text>
-          </View>
-
+        {/* If Achievement is incomplete, will render background color as black */}
+        <View
+          className=" h-full w-full absolute"
+          style={{ backgroundColor: complete ? undefined : "black" }}
+        >
+          {/* The whole container for an Achievement */}
           <View
-            style={{
-              backgroundColor: complete ? "#1ABC9C" : "#FF6166",
-            }}
-            className="flex-[.5] justify-center items-center mx-10 my-2 rounded-3xl"
+            className="bg-[#111827] rounded-3xl m-[1px] flex-col flex-1 "
+            // If Achievement is incomplete, will render opacity color as 0.5 to darken. If not, will render it normally
+            style={{ opacity: complete ? 1 : 0.5 }}
           >
-            <Text
-              className="text-white text-center"
-              style={{ fontFamily: fontFamily.ExoBold }}
+            <View className="flex-[2] justify-center items-center">
+              <Image
+                source={require("@/assets/images/success.png")}
+                style={{ height: 75, width: 75 }}
+              />
+            </View>
+            {/* Render the name of Achievement */}
+            <View className="flex-[.5] justify-center items-center border-t-2 b-black mx-5">
+              <Text
+                className="text-white"
+                style={{ fontFamily: fontFamily.ExoExtraBold }}
+              >
+                {name}
+              </Text>
+            </View>
+            {/* Render the Description of Achievement */}
+            <View className="flex-[.5] justify-center items-center">
+              <Text
+                className="text-[#94A1B2] text-center"
+                style={{ fontFamily: fontFamily.ExoLight }}
+              >
+                {description}
+              </Text>
+            </View>
+
+            {/* Renders Incomplete or Complete and also background color */}
+            <View
+              // If complete, will render green. If not, will render red
+              style={{
+                backgroundColor: complete ? "#1ABC9C" : "#FF6166",
+              }}
+              className="flex-[.5] justify-center items-center mx-10 my-2 rounded-3xl"
             >
-              {complete ? "Completed" : "Inprogress"}
-            </Text>
+              <Text
+                className="text-white text-center"
+                style={{ fontFamily: fontFamily.ExoBold }}
+              >
+                {complete ? "Completed" : "Inprogress"}
+              </Text>
+            </View>
           </View>
         </View>
       </LinearGradient>
@@ -71,6 +86,7 @@ const AchievementContainer = ({
 };
 
 export default memo(AchievementContainer);
+// Style for linear Gradient
 const styles = StyleSheet.create({
   container: {
     borderRadius: 20,

@@ -3,8 +3,8 @@ import AchievementsProgressBar from "@/assets/components/AchievementsProgressBar
 import { fontFamily } from "@/fontFamily/fontFamily";
 import React, { useState } from "react";
 
-import { useBackground } from "@/assets/components/BackgroundProvider";
-import { useProfile } from "@/assets/components/ProfileProvider";
+import { useBackground } from "@/assets/Provider/BackgroundProvider";
+import { useProfile } from "@/assets/Provider/ProfileProvider";
 import {
   cssMockUp,
   databaseMockUp,
@@ -50,28 +50,38 @@ const Achievements = () => {
       { name: string; description: string; id: number; complete: boolean }[]
     >(htmlMockUp);
 
+  // Recieves background and profile images
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ImageBackground
+        // backgroundVal context usage
         source={
           backgroundVal
-            ? { uri: backgroundVal } // ✅ only use when it's not null
-            : require("@/assets/images/profile.png") // ✅ fallback image
+            ? { uri: backgroundVal }
+            : // Default val if backgroundVal is false
+              require("@/assets/images/pink-background-sample.jpg")
         }
-        className="bg-accent flex-[1] m-3 rounded-[10px] "
+        className="bg-accent flex-[1] m-3 rounded-[10px] overflow-hidden"
+        style={{ borderRadius: 20 }}
       >
-        <View className="flex-[1] justify-center items-center ">
+        <View className="flex-[1] justify-center items-center mt-3 ">
           {profileVal && (
             <Image
-              source={{ uri: profileVal }}
-              className="w-[100px] h-[100px]"
+              // profileVal context usage
+              source={
+                profileVal
+                  ? { uri: profileVal }
+                  : // Default val if profileVal is false
+                    require("@/assets/images/profile.png")
+              }
+              className="w-[100px] h-[100px] overflow-hidden rounded-[10px]"
             />
           )}
         </View>
-
+        {/* Renders name */}
         <View className="justify-center items-center flex-[.5] ">
           <Text
             className="text-white"
@@ -88,6 +98,7 @@ const Achievements = () => {
           </Text>
         </View>
 
+        {/* Renders AchivementsProgressBar component */}
         <View className="flex-[1]  flex-row justify-center items-center">
           {mockData.map((item) => (
             <AchievementsProgressBar key={item.id} name={item.name} />
@@ -96,6 +107,7 @@ const Achievements = () => {
       </ImageBackground>
 
       <View className="bg-accent flex-[2] m-3 mt-0 rounded-[10px]">
+        {/* Renders navugation buttons to switch achivements tab (CSS, JS, DB, HTML) */}
         <View className="flex-[.1] mb-0 flex-row justify-evenly items-center border-b-2 border-accentContainer">
           {mockData.map((item) => (
             <TouchableOpacity
@@ -112,6 +124,7 @@ const Achievements = () => {
           ))}
         </View>
 
+        {/* Renders AchievementsContainer component */}
         <View className="flex-[1] m-3 mt-0">
           <FlatList
             showsVerticalScrollIndicator={false}

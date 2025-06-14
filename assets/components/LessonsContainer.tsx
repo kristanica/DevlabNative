@@ -9,9 +9,12 @@ type HomeLessonProps = {
   color2: string;
 };
 
+// Lesson container component for (tabs)/Lesson.tsx
 const LessonsContainer = ({ color1, color2 }: HomeLessonProps) => {
   return (
+    // Container iteself
     <View className="bg-accentContainer h-[300px] p-2 rounded-xl my-2">
+      {/* Gradient background */}
       <LinearGradient
         colors={[color1, color2]}
         locations={[0.1, 0.8]}
@@ -19,23 +22,26 @@ const LessonsContainer = ({ color1, color2 }: HomeLessonProps) => {
         end={{ x: 0, y: 1 }}
         style={styles.container}
       >
+        {/* The icon itself */}
         <Ionicons name="logo-html5" size={50} color={"white"} />
       </LinearGradient>
 
       <View className="flex-1 p-2 justify-between items-center ">
+        {/* Renders name */}
         <Text
           className="text-white text-xl text-center"
           style={{ fontFamily: fontFamily.ExoBold }}
         >
           HTML: The Gateway to Web Adventure
         </Text>
+        {/* Renders Description */}
         <Text className="text-white  text-center text-xs">
           Every great structure needs a solid foundation—HTML is the skeleton
           that holds the web together! Without it, web pages would collapse into
           chaos
         </Text>
       </View>
-
+      {/* Renders progress bar */}
       <View className="flex-[.5] justify-evenly items-center flex-row flex-wrap">
         <View className="w-[80%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
           <View className="w-[80%] bg-[#32FF99] h-4 rounded-xl"></View>

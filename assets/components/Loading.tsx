@@ -4,8 +4,7 @@ import React from "react";
 
 import { Modal, StyleSheet, Text, View } from "react-native";
 
-//Will show after succesful login attempt
-const SampleLoading = () => {
+const Loading = () => {
   return (
     <Modal animationType="slide" visible={true} transparent={true}>
       <View className="justify-end items-end flex-1">
@@ -28,6 +27,6 @@ const SampleLoading = () => {
   );
 };
 
-export default SampleLoading;
+export default Loading;
 
 const styles = StyleSheet.create({});

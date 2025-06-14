@@ -9,6 +9,7 @@ const Lessons = () => {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 bg-accent m-3  p-5 rounded-[10px]">
+        {/* Renders tab information */}
         <View className="justify-evenly items-center flex-1">
           <Text
             className="text-white text-4xl"
@@ -26,6 +27,7 @@ const Lessons = () => {
 
         <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
           <View className="bg-accentContainer  w-[40%] h-[200px] p-2 rounded-xl border-black border-2">
+            {/* Gradient background */}
             <LinearGradient
               colors={["#009DFF", "#4B33FF"]}
               locations={[0.1, 0.8]}
@@ -36,6 +38,7 @@ const Lessons = () => {
               <Ionicons name="logo-html5" size={50} color={"white"} />
             </LinearGradient>
 
+            {/* Routes to Coding playground */}
             <View className="flex-1 justify-center items-center ">
               <Text
                 className="text-white"
@@ -46,6 +49,7 @@ const Lessons = () => {
             </View>
           </View>
           <View className="bg-accentContainer  w-[40%] h-[200px] p-2 rounded-xl border-black border-2">
+            {/* Gradient background */}
             <LinearGradient
               colors={["#4CAF50", "#388E3C"]}
               locations={[0.1, 0.8]}
@@ -55,7 +59,7 @@ const Lessons = () => {
             >
               <Ionicons name="albums" size={50} color={"white"} />
             </LinearGradient>
-
+            {/* Routes to Database playground */}
             <View className="flex-1 justify-center items-center">
               <Text
                 className="text-white text-center"
@@ -66,7 +70,7 @@ const Lessons = () => {
             </View>
           </View>
         </View>
-
+        {/* Renders lessonContainer component */}
         <ScrollView className="flex-[3] border-[#36334B] border-2 rounded-[10px] p-3">
           <LessonsContainer color1="#FFC300" color2="#FF5733" />
           <LessonsContainer color1="#00BFFF" color2="#1E90FF" />
