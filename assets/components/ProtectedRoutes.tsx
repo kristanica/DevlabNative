@@ -1,6 +1,6 @@
 import { Redirect } from "expo-router";
 import React, { ReactNode } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { useAuth } from "../Provider/AuthProvider";
 
 type childrenProps = {
@@ -14,8 +14,8 @@ const ProtectedRoutes = ({ children }: childrenProps) => {
   // If still loading
   if (!loaded) {
     return (
-      <View className="bg-red-300 flex-1">
-        <Text className="text-black text-3xl">Loading...</Text>
+      <View className="flex-[1] bg-red-200">
+        <ActivityIndicator size="large" color="red" />
       </View>
     );
   }

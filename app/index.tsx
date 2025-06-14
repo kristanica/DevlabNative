@@ -3,11 +3,10 @@ import Loading from "@/assets/components/Loading";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -18,20 +17,28 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 const Login = () => {
   // State variables to manage login state
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [failedLogin, setFailedLogin] = useState(false);
+  const [keepSign, setKeepSign] = useState(false);
   const auth = FIREBASE_AUTH;
   // Function to open the failed login modal
 
   const signIn = async () => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       Keyboard.dismiss;
+      // Determine wheter to keep sign in or not
+      if (keepSign) {
+        await AsyncStorage.setItem("isLoggin", "true");
+      } else {
+        await AsyncStorage.removeItem("isLoggin");
+      }
       router.replace("/Home");
     } catch (error) {
       alert("Something happened idk");
@@ -39,6 +46,20 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Redirects user to (tabs)/Home.tsx if keepSign is true
+  useEffect(() => {
+    const keepSignIn = async () => {
+      try {
+        const val = await AsyncStorage.getItem("isLoggin");
+        if (val === "true") {
+          router.replace("/Home");
+        }
+      } catch (error) {}
+    };
+
+    keepSignIn();
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -65,6 +86,7 @@ const Login = () => {
           <View className="flex-[2]   justify-center items-center">
             <Ionicons name="person-circle" size={200} color={"#314A70"} />
           </View>
+
           {/*  This container holds the input fields for username and password */}
           <View className="flex-[1] justify-center items-center  ">
             {/* Username */}
@@ -83,8 +105,28 @@ const Login = () => {
               isPassword={true}
             />
           </View>
+          <View className="flex-row m-auto flex-[.3] ">
+            <BouncyCheckbox
+              size={20}
+              fillColor="#00FFBF"
+              unFillColor="#111827"
+              iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 1 }}
+              textStyle={{
+                fontFamily: fontFamily.ExoLight,
+                textDecorationLine: "none",
+              }}
+              onPress={() => {
+                setKeepSign(!keepSign);
+                console.log(keepSign);
+              }}
+            />
+            <Text className="py-[6px] text-white opacity-20 text-sm">
+              Keep me signed in
+            </Text>
+          </View>
           {/*  Login Button Container */}
-          <View className="flex-[.5]  justify-center items-center ">
+          <View className="flex-[.5] justify-center items-center ">
             <TouchableOpacity
               className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full "
               onPress={signIn}

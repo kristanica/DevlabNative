@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }: childrenProps) => {
       setUser(firebaseUser);
       isLoaded(true);
     });
+
     return user;
   }, []);
 

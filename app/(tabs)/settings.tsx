@@ -5,6 +5,7 @@ import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import React from "react";
 
@@ -77,6 +78,7 @@ const Settings = () => {
 
   const out = async () => {
     try {
+      await AsyncStorage.removeItem("isLoggin");
       await signOut(auth);
       alert("Log out!");
     } catch {
@@ -114,7 +116,9 @@ const Settings = () => {
                     ></ImageBackground>
                   )}
                 </Pressable>
-
+                <Pressable onPress={() => router.replace("/Home")}>
+                  <Text>asda</Text>
+                </Pressable>
                 <View className="flex-[.5] items-center justify-center">
                   <Text
                     className="text-white text-center text-2xl"
