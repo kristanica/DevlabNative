@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Editor with Run</title>
+
+    <!-- CodeMirror CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"
+    />
+
+    <!-- CodeMirror JS + Modes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        font-family: sans-serif;
+      }
+
+      #editor {
+        flex: 1;
+      }
+
+      .CodeMirror {
+        height: 100%;
+        font-size: 14px;
+      }
+
+      #controls {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background: #222;
+        color: white;
+      }
+
+      button {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: none;
+        background-color: #4caf50;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      iframe {
+        height: 40vh;
+        border: none;
+        width: 100%;
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <span>Code Editor</span>
+      <button onclick="runCode()">Run</button>
+    </div>
+
+    <textarea id="editor">
+<!-- HTML + CSS + JS -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #f0f0f0;
+        color: #333;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hello from CodeasdsadMirror!</h1>
+    <script>
+      console.log("JS is working!");
+    </script>
+  </body>
+</html>
+    </textarea>
+
+    <iframe id="output"></iframe>
+
+    <script>
+      const editor = CodeMirror.fromTextArea(
+        document.getElementById("editor"),
+        {
+          mode: "htmlmixed",
+          lineNumbers: true,
+          theme: "default",
+        }
+      );
+
+      function runCode() {
+        const code = editor.getValue();
+
+        // Run code in iframe
+        const iframe = document.getElementById("output");
+        const iframeDoc =
+          iframe.contentDocument || iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(code);
+        iframeDoc.close();
+
+        // Send code to React Native WebView if available
+        if (
+          window.ReactNativeWebView &&
+          window.ReactNativeWebView.postMessage
+        ) {
+          window.ReactNativeWebView.postMessage(code);
+        } else {
+          console.log("Simulated WebView message:", code);
+        }
+      }
+    </script>
+  </body>
+</html>

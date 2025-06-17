@@ -21,7 +21,7 @@ const ProtectedRoutes = ({ children }: childrenProps) => {
   }
   // If thre is no user, redirect to index (login)
   if (!user) {
-    return <Redirect href="/" />;
+    return <Redirect href="/auth/Login" />;
   }
   // If user is login and loaded, will render
   if (user && loaded) {

@@ -2,6 +2,7 @@ import { fontFamily } from "@/fontFamily/fontFamily";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { memo } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { boxShadow } from "../styles/ContainerStyles";
 
 type AchievementContainerProps = {
   name: string;
@@ -25,18 +26,21 @@ const AchievementContainer = ({
         locations={[0.1, 1]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
-        style={styles.container}
+        style={[boxShadow.shadow, styles.container]}
       >
         {/* If Achievement is incomplete, will render background color as black */}
         <View
-          className=" h-full w-full absolute"
-          style={{ backgroundColor: complete ? undefined : "black" }}
+          className=" h-full w-full absolute "
+          style={{
+            backgroundColor: complete ? undefined : "black",
+            borderRadius: 20,
+          }}
         >
           {/* The whole container for an Achievement */}
           <View
             className="bg-[#111827] rounded-3xl m-[1px] flex-col flex-1 "
             // If Achievement is incomplete, will render opacity color as 0.5 to darken. If not, will render it normally
-            style={{ opacity: complete ? 1 : 0.5 }}
+            style={[{ opacity: complete ? 1 : 0.5 }]}
           >
             <View className="flex-[2] justify-center items-center">
               <Image

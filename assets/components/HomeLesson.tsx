@@ -3,6 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 
 import { StyleSheet, Text, View } from "react-native";
+import { boxShadow } from "../styles/ContainerStyles";
 
 type HomeLessonProps = {
   name: string;
@@ -13,7 +14,10 @@ type HomeLessonProps = {
 // HomeLesson component for (Tabs)/Home.tsx
 const HomeLesson = ({ name, color, icon }: HomeLessonProps) => {
   return (
-    <View className=" w-[40%] h-[200px] bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden p-2 border-black border-[2px]">
+    <View
+      style={[{}, boxShadow.shadow2]}
+      className=" w-[40%] h-[200px] bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden p-2 border-black border-[2px]"
+    >
       <View
         style={{ backgroundColor: color }}
         className="flex-1 justify-center items-center rounded-xl"
