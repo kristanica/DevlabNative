@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -8,10 +8,10 @@ import Animated, {
 
 type buttonProps = {
   children: ReactNode;
-  backgroundColor: string;
+  backgroundColor?: string;
   onPressAction?: (comp?: any) => void;
-  height: number;
-  width: number;
+  height?: number;
+  width?: number;
 };
 
 const ButtonAnimated = ({
@@ -37,7 +37,7 @@ const ButtonAnimated = ({
   };
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPressIn={scaleIn}
       onPressOut={scaleOut}
       onPress={onPressAction}
@@ -48,7 +48,7 @@ const ButtonAnimated = ({
       >
         {children}
       </AnimatedView>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

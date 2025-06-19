@@ -4,7 +4,14 @@ import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const Lessons = () => {
   return (
@@ -28,49 +35,54 @@ const Lessons = () => {
           </View>
 
           <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
-            <View className="bg-accentContainer  w-[40%] h-[200px] p-2 rounded-xl border-black border-2">
-              {/* Gradient background */}
-              <LinearGradient
-                colors={["#009DFF", "#4B33FF"]}
-                locations={[0.1, 0.8]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.container}
-              >
-                <Ionicons name="logo-html5" size={50} color={"white"} />
-              </LinearGradient>
+            <TouchableOpacity className=" w-[40%] h-[200px]">
+              <View className="bg-accentContainer h-full w-full p-2 rounded-xl border-black border-2">
+                {/* Gradient background */}
+                <LinearGradient
+                  colors={["#009DFF", "#4B33FF"]}
+                  locations={[0.1, 0.8]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.container}
+                >
+                  <Ionicons name="logo-html5" size={50} color={"white"} />
+                </LinearGradient>
 
-              {/* Routes to Coding playground */}
-              <View className="flex-1 justify-center items-center ">
-                <Text
-                  className="text-white"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
-                  Coding Playground
-                </Text>
+                {/* Routes to Coding playground */}
+
+                <View className="flex-1 justify-center items-center ">
+                  <Text
+                    className="text-white"
+                    style={{ fontFamily: fontFamily.ExoBold }}
+                  >
+                    Coding Playground
+                  </Text>
+                </View>
               </View>
-            </View>
-            <View className="bg-accentContainer  w-[40%] h-[200px] p-2 rounded-xl border-black border-2">
-              {/* Gradient background */}
-              <LinearGradient
-                colors={["#4CAF50", "#388E3C"]}
-                locations={[0.1, 0.8]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.container}
-              >
-                <Ionicons name="albums" size={50} color={"white"} />
-              </LinearGradient>
-              {/* Routes to Database playground */}
-              <View className="flex-1 justify-center items-center">
-                <Text
-                  className="text-white text-center"
-                  style={{ fontFamily: fontFamily.ExoBold }}
+            </TouchableOpacity>
+            <TouchableOpacity className=" w-[40%] h-[200px]">
+              <View className="bg-accentContainer h-full w-full  p-2 rounded-xl border-black border-2">
+                {/* Gradient background */}
+                <LinearGradient
+                  colors={["#4CAF50", "#388E3C"]}
+                  locations={[0.1, 0.8]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.container}
                 >
-                  Database Playground
-                </Text>
+                  <Ionicons name="albums" size={50} color={"white"} />
+                </LinearGradient>
+                {/* Routes to Database playground */}
+                <View className="flex-1 justify-center items-center">
+                  <Text
+                    className="text-white text-center"
+                    style={{ fontFamily: fontFamily.ExoBold }}
+                  >
+                    Database Playground
+                  </Text>
+                </View>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
           {/* Renders lessonContainer component */}
           <ScrollView className="flex-[3] border-[#36334B] border-2 rounded-[10px] p-3">

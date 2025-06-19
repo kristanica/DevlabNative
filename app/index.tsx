@@ -57,7 +57,7 @@ const Login = () => {
       try {
         const val = await AsyncStorage.getItem("isLoggin");
         if (val === "true") {
-          router.replace("/Home");
+          router.replace("/test");
         }
       } catch (error) {}
     };
