@@ -7,8 +7,14 @@ import { boxShadow } from "@/assets/styles/ContainerStyles";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, ImageBackground, SafeAreaView, Text, View } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import {
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function Home() {
   // Recieves background and profile images
@@ -17,8 +23,6 @@ export default function Home() {
 
   //firebase
   const auth = FIREBASE_AUTH;
-
-  // Handle user signout
 
   return (
     <ProtectedRoutes>
@@ -110,8 +114,7 @@ export default function Home() {
         </ImageBackground>
 
         {/* Renders rest  */}
-        <Animated.ScrollView
-          entering={FadeIn.duration(500)}
+        <ScrollView
           bounces={true}
           showsVerticalScrollIndicator={false}
           className="flex-[3] rounded-[10px] bg-accent m-3 mt-0 "
@@ -173,7 +176,7 @@ export default function Home() {
             />
             <HomeLesson name="Database" color="#388E3C" icon="albums" />
           </View>
-        </Animated.ScrollView>
+        </ScrollView>
       </SafeAreaView>
     </ProtectedRoutes>
   );

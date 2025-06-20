@@ -57,9 +57,11 @@ const Login = () => {
       try {
         const val = await AsyncStorage.getItem("isLoggin");
         if (val === "true") {
-          router.replace("/test");
+          router.replace("/Home");
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     keepSignIn();

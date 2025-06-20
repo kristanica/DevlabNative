@@ -3,6 +3,7 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
 import {
   SafeAreaView,
@@ -35,7 +36,10 @@ const Lessons = () => {
           </View>
 
           <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
-            <TouchableOpacity className=" w-[40%] h-[200px]">
+            <TouchableOpacity
+              className=" w-[40%] h-[200px]"
+              onPress={() => router.replace("/Playground/Coding")}
+            >
               <View className="bg-accentContainer h-full w-full p-2 rounded-xl border-black border-2">
                 {/* Gradient background */}
                 <LinearGradient
