@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <meta charset="UTF-8" />
+  <head>
+    <script type="importmap">
+      {
+        "imports": {
+          "codemirror/view": "https://esm.sh/@codemirror/view",
+          "codemirror/state": "https://esm.sh/@codemirror/state",
+          "codemirror/theme-one-dark": "https://esm.sh/@codemirror/theme-one-dark",
+          "@ddietr/codemirror-theme-tokyo-night": "https://esm.sh/@ddietr/codemirror-themes/tokyo-night",
+          "codemirror/autocomplete": "https://esm.sh/@codemirror/autocomplete",
+          "@codemirror/lang-sql": "https://esm.sh/@codemirror/lang-sql"
+        }
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <style>
+      .run {
+        position: absolute;
+        z-index: 1;
+        bottom: 5%;
+        right: 15px;
+        font-size: 0.8rem;
+        color: white;
+        background-color: #9333ea;
+        border-radius: 10px;
+        height: 30px;
+        width: 80px;
+        font-weight: bolder;
+        border-color: #9333ea;
+      }
+      .cm-editor {
+        width: 100%;
+        height: 97vh;
+      }
+      .switch {
+        width: 100px;
+        height: 30px;
+        background-color: #111827;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        font-weight: bolder;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="run">RUN</button>
+    <div id="editor"></div>
+
+    <script type="module">
+      import { EditorView, lineNumbers } from "codemirror/view";
+      import { EditorState } from "codemirror/state";
+      import { tokyoNight } from "@ddietr/codemirror-theme-tokyo-night";
+
+      import { autocompletion } from "codemirror/autocomplete";
+      import { sql } from "@codemirror/lang-sql";
+
+      const runButton = document.querySelector(".run");
+      const previewArea = document.querySelector(".display");
+
+      const extensionList = [lineNumbers(), autocompletion(), tokyoNight];
+
+      let editor;
+      let val;
+      let db;
+      let result;
+
+      const fetchSQL = async () => {
+        try {
+          val = await initSqlJs({
+            locateFile: (file) =>
+              `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/${file}`,
+          });
+          db = new val.Database();
+          db.exec(
+            "CREATE TABLE orders (id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER, name TEXT, product TEXT,amount REAL,order_date TEXT,FOREIGN KEY (user_id) REFERENCES users(id));"
+          );
+          db.run(
+            "INSERT INTO orders (user_id, name, product, amount, order_date) VALUES (1, 'JOSEPH', 'DILDO', 69, '2025-06-01'),(1, 'Alice', 'Mouse', 19.99, '2025-06-02'),(2, 'Bob', 'Monitor', 199.99, '2025-06-05'),(3, 'Charlie', 'Desk Lamp', 29.99, '2025-06-03'),(3, 'Charlie', 'USB Hub', 14.99, '2025-06-04'),(5, 'Eve', 'Webcam', 89.99, '2025-06-06');"
+          );
+          const query = "SELECT * FROM orders";
+          const result = displaySQLAsTable(query);
+          window.ReactNativeWebView.postMessage(result);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchSQL();
+
+      document.querySelector(".run").addEventListener("click", () => {
+        const query = editor.state.doc.toString();
+        const val = displaySQLAsTable(query);
+        window.ReactNativeWebView.postMessage(val);
+      });
+
+      function displaySQLAsTable(query) {
+        const result = db.exec(query);
+
+        let html = `<table><tr>`;
+
+        if (!result.length) {
+          return console.log("NO RESULT QUERY");
+        }
+        let { columns, values } = result[0];
+        html += columns.map((e) => `<th>${e}</th>`).join("");
+        html += `</tr>`;
+        html += values
+          .map(
+            (e) =>
+              `<tr>` + e.map((event) => `<td>${event}</td>`).join("") + "</tr>"
+          )
+          .join("");
+        html += `</table>`;
+        return html;
+      }
+
+      newEditor(sql());
+      function newEditor(language) {
+        editor = new EditorView({
+          state: EditorState.create({
+            doc: "",
+            extensions: [language, extensionList],
+          }),
+          parent: document.getElementById("editor"),
+        });
+      }
+    </script>
+  </body>
+</html>

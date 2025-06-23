@@ -18,7 +18,9 @@ const Coding = () => {
     <ProtectedRoutes>
       <SafeAreaView className="bg-background flex-[1]">
         <View className="flex-row justify-between">
-          <Pressable onPress={() => router.replace("/Lessons")}>
+          <Pressable
+            onPress={() => router.replace("/(auth)/home/(Lessons)/Lesson")}
+          >
             <Text
               className="text-white ml-3 text-2xl"
               style={{ fontFamily: fontFamily.ExoExtraBold }}
@@ -27,7 +29,7 @@ const Coding = () => {
             </Text>
           </Pressable>
           <Pressable
-            onPress={() => router.replace("/Home")}
+            onPress={() => router.replace("/home/playground/Database")}
             className="justify-center"
           >
             <Text

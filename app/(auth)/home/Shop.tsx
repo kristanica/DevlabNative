@@ -1,9 +1,9 @@
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import ShopItem from "@/assets/components/ShopItem";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import ShopItem from "../../assets/components/ShopItem";
 
 const shop = () => {
   return (

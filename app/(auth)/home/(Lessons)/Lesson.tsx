@@ -38,7 +38,9 @@ const Lessons = () => {
           <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
             <TouchableOpacity
               className=" w-[40%] h-[200px]"
-              onPress={() => router.replace("/Playground/Coding")}
+              onPress={() =>
+                router.replace("/(auth)/home/(Lessons)/playground/Coding")
+              }
             >
               <View className="bg-accentContainer h-full w-full p-2 rounded-xl border-black border-2">
                 {/* Gradient background */}

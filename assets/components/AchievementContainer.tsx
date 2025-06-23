@@ -1,8 +1,13 @@
 import { fontFamily } from "@/fontFamily/fontFamily";
-import { LinearGradient } from "expo-linear-gradient";
-import React, { memo } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { boxShadow } from "../styles/ContainerStyles";
+import React, { memo, useEffect } from "react";
+import { Image, Text, View } from "react-native";
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 
 type AchievementContainerProps = {
   name: string;
@@ -18,15 +23,25 @@ const AchievementContainer = ({
   id,
   complete,
 }: AchievementContainerProps) => {
+  const val = useSharedValue(0);
+
+  const changeBackground = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      val.value,
+      [0, 0.33, 0.66, 1],
+      ["#00FFE0", "#8C52FF", "#FF52A2", "#FFD700"]
+    ),
+  }));
+
+  useEffect(() => {
+    val.value = withRepeat(withTiming(1, { duration: 3000 }), -1, true);
+  }, []);
   return (
     <View key={id}>
       {/* Border gradient for completed achievements*/}
-      <LinearGradient
-        colors={["#00FFE0", "#8C52FF"]}
-        locations={[0.1, 1]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={[boxShadow.shadow, styles.container]}
+      <Animated.View
+        style={changeBackground}
+        className="w-[170px] h-[250px] rounded-[20px] mb-[10px] m-[3px] "
       >
         {/* If Achievement is incomplete, will render background color as black */}
         <View
@@ -84,19 +99,10 @@ const AchievementContainer = ({
             </View>
           </View>
         </View>
-      </LinearGradient>
+      </Animated.View>
     </View>
   );
 };
 
 export default memo(AchievementContainer);
 // Style for linear Gradient
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 20,
-    width: 170,
-    height: 250,
-    marginBottom: 10,
-    margin: 5,
-  },
-});

@@ -26,24 +26,22 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [failedLogin, setFailedLogin] = useState(false);
   const [keepSign, setKeepSign] = useState(false);
   const [splash, setSplash] = useState(true);
   const auth = FIREBASE_AUTH;
-  // Function to open the failed login modal
 
   const signIn = async () => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      Keyboard.dismiss;
+      Keyboard.dismiss();
       // Determine wheter to keep sign in or not
       if (keepSign) {
         await AsyncStorage.setItem("isLoggin", "true");
       } else {
         await AsyncStorage.removeItem("isLoggin");
       }
-      router.replace("/Home");
+      router.replace("/(auth)/home/Home");
     } catch (error) {
       alert("Something happened idk");
     } finally {
@@ -57,7 +55,7 @@ const Login = () => {
       try {
         const val = await AsyncStorage.getItem("isLoggin");
         if (val === "true") {
-          router.replace("/Home");
+          router.replace("/(auth)/home/Home");
         }
       } catch (error) {
         console.log(error);
@@ -160,9 +158,7 @@ const Login = () => {
                   Don't have an account?
                 </Text>
                 {/* // TouchableOpacity to navigate to the Register page */}
-                <TouchableOpacity
-                  onPress={() => router.replace("/auth/Register")}
-                >
+                <TouchableOpacity onPress={() => router.replace("/Register")}>
                   <Text
                     className="color-[#4F80C5] mt-2"
                     style={{ fontFamily: fontFamily.ExoRegular }}
