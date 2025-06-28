@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -53,5 +53,3 @@ const ButtonAnimated = ({
 };
 
 export default ButtonAnimated;
-
-const styles = StyleSheet.create({});
