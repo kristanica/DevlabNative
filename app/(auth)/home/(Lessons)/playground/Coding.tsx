@@ -3,7 +3,7 @@ import { fontFamily } from "@/fontFamily/fontFamily";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useRef, useState } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 
 const Coding = () => {
@@ -16,7 +16,7 @@ const Coding = () => {
 
   return (
     <ProtectedRoutes>
-      <SafeAreaView className="bg-background flex-[1]">
+      <View className="bg-background flex-[1]">
         <View className="flex-row justify-between">
           <Pressable
             onPress={() => router.replace("/(auth)/home/(Lessons)/Lesson")}
@@ -107,7 +107,7 @@ const Coding = () => {
             />
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     </ProtectedRoutes>
   );
 };

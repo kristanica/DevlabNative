@@ -1,3 +1,5 @@
+import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
+import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LessonsContainer from "@/assets/components/LessonsContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { fontFamily } from "@/fontFamily/fontFamily";
@@ -6,7 +8,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,88 +18,90 @@ import {
 const Lessons = () => {
   return (
     <ProtectedRoutes>
-      <SafeAreaView className="flex-1 bg-background">
-        <View className="flex-1 bg-accent m-3  p-5 rounded-[10px]">
-          {/* Renders tab information */}
-          <View className="justify-evenly items-center flex-1">
-            <Text
-              className="text-white text-4xl"
-              style={{ fontFamily: fontFamily.ExoExtraBold }}
-            >
-              LESSONS
-            </Text>
-            <Text
-              className="text-white"
-              style={{ fontFamily: fontFamily.ExoRegular }}
-            >
-              Delve into the realm of web development!{" "}
-            </Text>
-          </View>
+      <View className="flex-1 bg-accent">
+        <AnimatedViewContainer>
+          <CustomGeneralContainer>
+            {/* Renders tab information */}
+            <View className="justify-evenly items-center flex-1">
+              <Text
+                className="text-white text-4xl"
+                style={{ fontFamily: fontFamily.ExoExtraBold }}
+              >
+                LESSONS
+              </Text>
+              <Text
+                className="text-white"
+                style={{ fontFamily: fontFamily.ExoRegular }}
+              >
+                Delve into the realm of web development!{" "}
+              </Text>
+            </View>
 
-          <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
-            <TouchableOpacity
-              className=" w-[40%] h-[200px]"
-              onPress={() =>
-                router.replace("/(auth)/home/(Lessons)/playground/Coding")
-              }
-            >
-              <View className="bg-accentContainer h-full w-full p-2 rounded-xl border-black border-2">
-                {/* Gradient background */}
-                <LinearGradient
-                  colors={["#009DFF", "#4B33FF"]}
-                  locations={[0.1, 0.8]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.container}
-                >
-                  <Ionicons name="logo-html5" size={50} color={"white"} />
-                </LinearGradient>
-
-                {/* Routes to Coding playground */}
-
-                <View className="flex-1 justify-center items-center ">
-                  <Text
-                    className="text-white"
-                    style={{ fontFamily: fontFamily.ExoBold }}
+            <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
+              <TouchableOpacity
+                className=" w-[40%] h-[200px]"
+                onPress={() =>
+                  router.replace("/(auth)/home/(Lessons)/playground/Coding")
+                }
+              >
+                <View className="bg-accentContainer h-full w-full p-2 rounded-xl border-black border-2">
+                  {/* Gradient background */}
+                  <LinearGradient
+                    colors={["#009DFF", "#4B33FF"]}
+                    locations={[0.1, 0.8]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.container}
                   >
-                    Coding Playground
-                  </Text>
+                    <Ionicons name="logo-html5" size={50} color={"white"} />
+                  </LinearGradient>
+
+                  {/* Routes to Coding playground */}
+
+                  <View className="flex-1 justify-center items-center ">
+                    <Text
+                      className="text-white"
+                      style={{ fontFamily: fontFamily.ExoBold }}
+                    >
+                      Coding Playground
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity className=" w-[40%] h-[200px]">
-              <View className="bg-accentContainer h-full w-full  p-2 rounded-xl border-black border-2">
-                {/* Gradient background */}
-                <LinearGradient
-                  colors={["#4CAF50", "#388E3C"]}
-                  locations={[0.1, 0.8]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.container}
-                >
-                  <Ionicons name="albums" size={50} color={"white"} />
-                </LinearGradient>
-                {/* Routes to Database playground */}
-                <View className="flex-1 justify-center items-center">
-                  <Text
-                    className="text-white text-center"
-                    style={{ fontFamily: fontFamily.ExoBold }}
+              </TouchableOpacity>
+              <TouchableOpacity className=" w-[40%] h-[200px]">
+                <View className="bg-accentContainer h-full w-full  p-2 rounded-xl border-black border-2">
+                  {/* Gradient background */}
+                  <LinearGradient
+                    colors={["#4CAF50", "#388E3C"]}
+                    locations={[0.1, 0.8]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.container}
                   >
-                    Database Playground
-                  </Text>
+                    <Ionicons name="albums" size={50} color={"white"} />
+                  </LinearGradient>
+                  {/* Routes to Database playground */}
+                  <View className="flex-1 justify-center items-center">
+                    <Text
+                      className="text-white text-center"
+                      style={{ fontFamily: fontFamily.ExoBold }}
+                    >
+                      Database Playground
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-          {/* Renders lessonContainer component */}
-          <ScrollView className="flex-[3] border-[#36334B] border-2 rounded-[10px] p-3">
-            <LessonsContainer color1="#FFC300" color2="#FF5733" />
-            <LessonsContainer color1="#00BFFF" color2="#1E90FF" />
-            <LessonsContainer color1="#F7DF1E" color2="#FF8C00" />
-            <LessonsContainer color1="#4CAF50" color2="#388E3C" />
-          </ScrollView>
-        </View>
-      </SafeAreaView>
+              </TouchableOpacity>
+            </View>
+            {/* Renders lessonContainer component */}
+            <ScrollView className="flex-[3] border-[#36334B] border-2 rounded-[10px] p-3">
+              <LessonsContainer color1="#FFC300" color2="#FF5733" />
+              <LessonsContainer color1="#00BFFF" color2="#1E90FF" />
+              <LessonsContainer color1="#F7DF1E" color2="#FF8C00" />
+              <LessonsContainer color1="#4CAF50" color2="#388E3C" />
+            </ScrollView>
+          </CustomGeneralContainer>
+        </AnimatedViewContainer>
+      </View>
     </ProtectedRoutes>
   );
 };
