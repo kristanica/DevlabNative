@@ -1,3 +1,62 @@
+//GENERAL CONSTANTS
+
+import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
+import { Dimensions } from "react-native";
+
+export const { width } = Dimensions.get("screen");
+
+//FIREBASE
+export const auth = FIREBASE_AUTH;
+export const db = FIREBASE_STORE;
+
+//Onboarding Constants
+export const onboardingData = [
+  {
+    id: 1,
+    lottie: require("@/assets/Lottie/onboarding/onBoardingScreen1.json"),
+    title: "🧙‍♂️ Welcome to DevLab",
+    subtitle: "You’re the chosen one.",
+    description:
+      "Train as a full-stack dev. Complete quests. Earn XP. Break the code curse.",
+    background: "#1e1b4b",
+  },
+  {
+    id: 2,
+    lottie: require("@/assets/Lottie/onboarding/onBoardingScreen2.json"),
+    title: "⚔️ Master Your Arsenal",
+    subtitle: "HTML. CSS. JavaScript. Databases.",
+    description:
+      "Each skill is a weapon. Each bug is a battle. Learn by fighting real dev challenges.",
+    background: "#0f172a",
+  },
+  {
+    id: 3,
+    lottie: require("@/assets/Lottie/onboarding/onBoardingScreen3.json"),
+    title: "🧩 Quests, Levels, Loot",
+    subtitle: "Defeat challenges. Gain XP. Unlock achievements.",
+    description: "Progress isn’t a number. It’s a badge of honor.",
+    background: "#212121",
+  },
+  {
+    id: 4,
+    lottie: require("@/assets/Lottie/onboarding/onBoardingScreen4.json"),
+    title: "🚪 Enter the Lab",
+    subtitle: "Your first mission awaits.",
+    description:
+      "Code bravely, break things gloriously, and become the full-stack hero you were born to be.",
+    background: "#2c0e37",
+  },
+];
+// Home Constatns
+export const lessons = [
+  { id: 1, name: "HTML", color: "#FFC300", icon: "logo-html5" },
+  { id: 2, name: "CSS", color: "#00BFFF", icon: "logo-css3" },
+  { id: 3, name: "JavaScript", color: "#FF8C00", icon: "logo-javascript" },
+  { id: 4, name: "Database", color: "#388E3C", icon: "albums" },
+];
+
+// Achievements Constants
+
 export const htmlMockUp = [
   {
     id: 1,
@@ -183,5 +242,28 @@ export const databaseMockUp = [
     name: "Index Initiator",
     description: "Improve performance by creating indexes.",
     complete: false,
+  },
+];
+
+export const mockData = [
+  {
+    id: 1,
+    name: "HTML",
+    data: htmlMockUp,
+  },
+  {
+    id: 2,
+    name: "CSS",
+    data: cssMockUp,
+  },
+  {
+    id: 3,
+    name: "JavaScript",
+    data: jsMockUp,
+  },
+  {
+    id: 4,
+    name: "Database",
+    data: databaseMockUp,
   },
 ];

@@ -1,18 +1,18 @@
-import AdminModal from "@/assets/components/AdminModal";
+import AdminModal from "@/assets/components/SettingsComponents/AdminModal";
+
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import SignOutModal from "@/assets/components/SignOutModal";
+import useModal from "@/assets/Hooks/useModal";
+import usePickImage from "@/assets/Hooks/usePickImage";
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
 import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
-import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as ImagePicker from "expo-image-picker";
-import React, { useState } from "react";
+import React from "react";
 
+import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 import {
   Image,
   ImageBackground,
@@ -28,57 +28,12 @@ import {
 } from "react-native";
 
 const Settings = () => {
-  const auth = FIREBASE_AUTH;
+  const { backgroundVal } = useBackground();
+  const { profileVal } = useProfile();
+  const logOutModal = useModal();
+  const adminModal = useModal();
 
-  const { backgroundVal, setBackground } = useBackground();
-  const { profileVal, setProfile } = useProfile();
-  const [logOutVisibility, setLogOutVisibility] = useState<boolean>(false);
-  const [adminVisibility, setAdminVisibility] = useState<boolean>(false);
-
-  // pick user background
-  const pickImageBackground = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 1,
-      });
-      if (result.canceled) {
-        console.log("canceled");
-      }
-
-      if (!result.canceled) {
-        const uri = result.assets[0].uri;
-        setBackground(uri);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //pick user profile
-  const pickImageProfile = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: true,
-        aspect: [2, 3],
-        quality: 1,
-      });
-      if (result.canceled) {
-        console.log("canceled");
-      }
-
-      if (!result.canceled) {
-        const uri = result.assets[0].uri;
-        await AsyncStorage.setItem("profileUri", uri);
-        setProfile(uri);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { pickImageProfile, pickImageBackground } = usePickImage();
 
   return (
     <ProtectedRoutes>
@@ -157,13 +112,9 @@ const Settings = () => {
                     </View>
 
                     <View className="flex-[2] items-center pt-10   ">
-                      <ButtonAnimated
-                        height={40}
-                        width={170}
-                        backgroundColor="#7F5AF0"
-                      >
+                      <ButtonAnimated backgroundColor="#7F5AF0">
                         <Text
-                          className="text-white"
+                          className="text-white py-4 px-16"
                           style={{ fontFamily: fontFamily.ExoBold }}
                         >
                           Save Changes
@@ -171,13 +122,11 @@ const Settings = () => {
                       </ButtonAnimated>
 
                       <ButtonAnimated
-                        height={40}
-                        width={170}
                         backgroundColor="#FF6166"
-                        onPressAction={() => setLogOutVisibility(true)}
+                        onPressAction={() => logOutModal.setVisibility(true)}
                       >
                         <Text
-                          className="text-white"
+                          className="text-white py-4 px-20"
                           style={{ fontFamily: fontFamily.ExoBold }}
                         >
                           Log out
@@ -185,10 +134,8 @@ const Settings = () => {
                       </ButtonAnimated>
 
                       <ButtonAnimated
-                        height={20}
-                        width={150}
                         backgroundColor="transparent"
-                        onPressAction={() => setAdminVisibility(true)}
+                        onPressAction={() => adminModal.setVisibility(true)}
                       >
                         <Text
                           className="text-white"
@@ -202,11 +149,19 @@ const Settings = () => {
                 </View>
               </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-            {adminVisibility && (
-              <AdminModal setVisibility={setAdminVisibility} />
+            {adminModal.visibility && (
+              <AdminModal
+                visibility={adminModal.visibility}
+                scaleStyle={adminModal.scaleStyle}
+                closeModal={adminModal.closeModal}
+              />
             )}
-            {logOutVisibility && (
-              <SignOutModal setVisibility={setLogOutVisibility} />
+            {logOutModal.visibility && (
+              <SignOutModal
+                visibility={logOutModal.visibility}
+                scaleStyle={logOutModal.scaleStyle}
+                closeModal={logOutModal.closeModal}
+              />
             )}
           </CustomGeneralContainer>
         </AnimatedViewContainer>

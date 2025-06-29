@@ -1,3 +1,4 @@
+import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import React, { memo, useEffect } from "react";
 import { Image, Text, View } from "react-native";
@@ -5,9 +6,7 @@ import Animated, {
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
-  withDelay,
   withRepeat,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 
@@ -30,7 +29,11 @@ const AchievementContainer = ({
   selectedCategory,
 }: AchievementContainerProps) => {
   const interpolateVal = useSharedValue(0);
-  const scaleVal = useSharedValue(0);
+
+  const { onScale } = useSequentialAppearAnim({
+    indicator: selectedCategory,
+    id: id,
+  });
 
   const changeBackground = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
@@ -39,19 +42,6 @@ const AchievementContainer = ({
       ["#00FFE0", "#8C52FF", "#FF52A2", "#FFD700"]
     ),
   }));
-
-  const onScale = useAnimatedStyle(() => ({
-    opacity: scaleVal.value,
-    transform: [{ scale: scaleVal.value }],
-  }));
-
-  useEffect(() => {
-    scaleVal.value = 0;
-    scaleVal.value = withDelay(
-      id * 100,
-      withSpring(1, { damping: 15, stiffness: 80 })
-    );
-  }, [selectedCategory]);
 
   useEffect(() => {
     interpolateVal.value = withRepeat(

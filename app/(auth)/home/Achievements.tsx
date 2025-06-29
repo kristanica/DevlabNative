@@ -9,38 +9,11 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonComponent from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import {
-  cssMockUp,
-  databaseMockUp,
-  htmlMockUp,
-  jsMockUp,
-} from "@/assets/mockup";
+import { htmlMockUp, mockData } from "@/assets/constants/constants";
+
 import { FlatList, Image, ImageBackground, Text, View } from "react-native";
 
 const Achievements = () => {
-  const mockData = [
-    {
-      id: 1,
-      name: "HTML",
-      data: htmlMockUp,
-    },
-    {
-      id: 2,
-      name: "CSS",
-      data: cssMockUp,
-    },
-    {
-      id: 3,
-      name: "JavaScript",
-      data: jsMockUp,
-    },
-    {
-      id: 4,
-      name: "Database",
-      data: databaseMockUp,
-    },
-  ];
-
   const [category, setCategory] =
     useState<
       { name: string; description: string; id: number; complete: boolean }[]

@@ -1,7 +1,8 @@
 import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsButton";
+import { width } from "@/assets/constants/constants";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 export default function CustomTabBar({
@@ -9,8 +10,6 @@ export default function CustomTabBar({
   descriptors,
   navigation,
 }: BottomTabBarProps) {
-  const { width } = Dimensions.get("screen");
-
   return (
     <Animated.View
       entering={FadeIn.duration(500)}
