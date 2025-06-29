@@ -3,23 +3,18 @@ import ButtonComponent from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import { lessons } from "@/assets/constants/constants";
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
 import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
-import { FIREBASE_AUTH } from "@/firebaseConfig";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsFocused } from "@react-navigation/native";
 import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
 
 export default function Home() {
   // Recieves background and profile images
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
-
-  //firebase
-  const auth = FIREBASE_AUTH;
-  const isFocused = useIsFocused();
 
   return (
     <ProtectedRoutes>
@@ -129,7 +124,7 @@ export default function Home() {
               </Text>
 
               {/* Routes to last  lesson viewed */}
-              <ButtonComponent backgroundColor={""} height={100} width={390}>
+              <ButtonComponent backgroundColor={""}>
                 <View className="bg-accentContainer mx-3 my-2 flex-row rounded-2xl overflow-hidden">
                   <View className="flex-[.5] justify-center items-center bg-[#070606] rounded-2xl">
                     <Ionicons name="logo-html5" size={50} color={"white"} />
@@ -166,14 +161,15 @@ export default function Home() {
               </Text>
               {/* Renders HomeLesson component */}
               <View className="flex-row flex-wrap justify-center">
-                <HomeLesson name="HTML" color="#FFC300" icon="logo-html5" />
-                <HomeLesson name="CSS" color="#00BFFF" icon="logo-css3" />
-                <HomeLesson
-                  name="JavaScript"
-                  color="#FF8C00"
-                  icon="logo-javascript"
-                />
-                <HomeLesson name="Database" color="#388E3C" icon="albums" />
+                {lessons.map((item, index) => (
+                  <HomeLesson
+                    key={item.id}
+                    name={item.name}
+                    color={item.color}
+                    icon={item.icon as keyof typeof Ionicons.glyphMap}
+                    index={index}
+                  />
+                ))}
               </View>
             </ScrollView>
           </CustomGeneralContainer>

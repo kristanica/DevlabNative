@@ -1,8 +1,11 @@
 import InputBox from "@/assets/components/InputBox";
+import OnSuccessRegisterModal from "@/assets/components/RegisterComponents/OnSuccessRegisterModal";
+import useModal from "@/assets/Hooks/useModal";
+import useRegister from "@/assets/Hooks/useRegister";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -13,43 +16,11 @@ import {
   View,
 } from "react-native";
 
-import Loading from "@/assets/components/Loading";
-import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-
 const Register = () => {
-  // Firebase
-  const auth = FIREBASE_AUTH;
-  const db = FIREBASE_STORE;
+  //custom hook
+  const { state, dispatch, handleRegister } = useRegister();
 
-  // useStates
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [age, setAge] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  // Handle account registration
-  const handleRegister = async () => {
-    setLoading(true);
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      const user = auth.currentUser;
-      if (user) {
-        setDoc(doc(db, "Users", user.uid), {
-          email: user.email,
-          username: username,
-          age: age,
-        });
-        setLoading(false);
-        alert("Test");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
 
   return (
     <KeyboardAvoidingView
@@ -84,37 +55,59 @@ const Register = () => {
 
             <InputBox
               placeHolder={"Email"}
-              value={email}
-              setValue={setEmail}
+              value={state.email}
+              setValue={(text) =>
+                dispatch({ type: "UPDATE_FIELD", field: "email", value: text })
+              }
               icon={"mail"}
             />
             {/* Input field for password */}
             <InputBox
               placeHolder={"Password"}
-              value={password}
-              setValue={setPassword}
+              value={state.password}
+              setValue={(text) =>
+                dispatch({
+                  type: "UPDATE_FIELD",
+                  field: "password",
+                  value: text,
+                })
+              }
               icon={"lock-closed"}
               isPassword={true}
             />
             {/* Input field for confirm password */}
             <InputBox
               placeHolder={"ConfirmPassword"}
-              value={confirmPassword}
-              setValue={setConfirmPassword}
+              value={state.confirmPassword}
+              setValue={(text) =>
+                dispatch({
+                  type: "UPDATE_FIELD",
+                  field: "confirmPassword",
+                  value: text,
+                })
+              }
               icon={"lock-closed"}
               isPassword={true}
             />
             {/* Input field for username */}
             <InputBox
               placeHolder={"Username"}
-              value={username}
-              setValue={setUsername}
+              value={state.username}
+              setValue={(text) =>
+                dispatch({
+                  type: "UPDATE_FIELD",
+                  field: "username",
+                  value: text,
+                })
+              }
               icon={"person"}
             />
             <InputBox
               placeHolder={"Age"}
-              value={age}
-              setValue={setAge}
+              value={state.age}
+              setValue={(text) =>
+                dispatch({ type: "UPDATE_FIELD", field: "age", value: text })
+              }
               icon={"calendar-outline"}
             />
           </View>
@@ -122,7 +115,10 @@ const Register = () => {
           <View className="flex-[.5]  justify-center items-center ">
             <TouchableOpacity
               className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full "
-              onPress={handleRegister}
+              onPress={() => {
+                handleRegister();
+                setVisibility((prev) => !prev);
+              }}
             >
               <Text
                 className="color-white text-lg "
@@ -150,7 +146,14 @@ const Register = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          {loading && <Loading />}
+
+          {visibility && (
+            <OnSuccessRegisterModal
+              visibility={visibility}
+              scaleStyle={scaleStyle}
+              closeModal={closeModal}
+            ></OnSuccessRegisterModal>
+          )}
         </View>
       </TouchableNativeFeedback>
     </KeyboardAvoidingView>
@@ -158,75 +161,3 @@ const Register = () => {
 };
 
 export default Register;
-
-// // State to manage the visibility of the DateTimePicker
-// const [dateVisible, isDateVisible] = useState(false);
-
-// //Toucablewithoutfeedback function to close modal
-// const setDateVisibility = () => {
-//   isDateVisible(false);
-// };
-// const onChange = (
-//   event: DateTimePickerEvent,
-//   selectedDate: Date | undefined
-// ) => {
-//   if (selectedDate) {
-//     setDate(selectedDate);
-//   }
-// };
-
-//  {/* Input field for date of birth */}
-//       <View className="flex-row  border-2 border-solid  p-2 rounded-3xl mt-2">
-//         <Ionicons
-//           name="calendar-outline"
-//           size={20}
-//           className="mx-3 border-r-2 pr-2 border-black"
-//           color={"#FFFFFE"}
-//         />
-
-//         {/* Pressable to open the DateTimePicker */}
-//         <Pressable
-//           onPress={() => isDateVisible(true)}
-//           className=" flex-row items-center justify-between"
-//         >
-//           <TextInput
-//             editable={false}
-//             placeholder="00/00/0000"
-//             value={date.toLocaleDateString("en-GB")}
-//             className="text-offwhite w-[240px]"
-//             onPressIn={() => isDateVisible(true)}
-//             style={{ fontFamily: fontFamily.ExoLight }}
-//           />
-//         </Pressable>
-
-//         {/* Modal to display the DateTimePicker */}
-//         {dateVisible && (
-//           <Modal animationType="slide" visible={true} transparent={true}>
-//             {/* Close date modal when press outside */}
-//             <TouchableWithoutFeedback onPress={setDateVisibility}>
-//               <View className="justify-end items-end flex-1 rounded-t-2xl">
-//                 <View className="bg-background  w-full h-[320px] justify-center items-center text-white order-white rounded-2xl">
-//                   <Pressable
-//                     onPress={() => isDateVisible(false)}
-//                     className="absolute top-2 right-2 mt-2"
-//                   >
-//                     <Ionicons
-//                       name="close-outline"
-//                       color={"#FFFFFE"}
-//                       size={30}
-//                     />
-//                   </Pressable>
-//                   <DateTimePicker
-//                     mode="date"
-//                     display="spinner"
-//                     textColor="white"
-//                     value={date}
-//                     onChange={onChange}
-//                     maximumDate={new Date()}
-//                   />
-//                 </View>
-//               </View>
-//             </TouchableWithoutFeedback>
-//           </Modal>
-//         )}
-//       </View>
