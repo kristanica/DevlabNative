@@ -1,19 +1,27 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 type CustomGeneralContainerProps = {
   children: React.ReactNode;
 };
 
 const CustomGeneralContainer = ({ children }: CustomGeneralContainerProps) => {
-  const tabHeight = useBottomTabBarHeight() + 5;
+  let tabHeight = 0;
+  try {
+    tabHeight = useBottomTabBarHeight() + 15;
+  } catch (error) {
+    tabHeight = 0;
+  }
+
   const actionCenterHeight = useSafeAreaInsets();
   return (
     <View
-      className="flex-1 m-3"
-      style={{ marginBottom: tabHeight, marginTop: actionCenterHeight.top }}
+      className="flex-1"
+      style={{
+        marginBottom: tabHeight ? tabHeight : 0,
+        marginTop: actionCenterHeight.top,
+      }}
     >
       {children}
     </View>
@@ -21,5 +29,3 @@ const CustomGeneralContainer = ({ children }: CustomGeneralContainerProps) => {
 };
 
 export default CustomGeneralContainer;
-
-const styles = StyleSheet.create({});

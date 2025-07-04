@@ -15,11 +15,12 @@ const LessonsContainer = ({ color1, color2 }: HomeLessonProps) => {
     // Container iteself
     <View className="bg-accentContainer h-[300px] p-2 rounded-xl my-2">
       {/* Gradient background */}
+
       <LinearGradient
         colors={[color1, color2]}
         locations={[0.1, 0.8]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
+        start={{ x: 1, y: 0 }}
+        end={{ x: 0, y: 0 }}
         style={styles.container}
       >
         {/* The icon itself */}

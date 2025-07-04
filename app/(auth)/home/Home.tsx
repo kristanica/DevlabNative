@@ -9,104 +9,162 @@ import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
+import { router } from "expo-router";
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function Home() {
   // Recieves background and profile images
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
 
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     const uid = auth.currentUser?.uid;
+
+  //     if (!uid) {
+  //       console.log("No user UID found.");
+  //       return;
+  //     }
+  //     try {
+  //       const userRef = doc(db, "Users", uid);
+  //       const data = await getDoc(userRef);
+  //       if (data.exists()) {
+  //         const userData = data.data();
+  //         console.log(userData.username);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getUser();
+  // }, []);
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
-            <ImageBackground
-              source={
-                // backgroundVal context usage
-                backgroundVal
-                  ? { uri: backgroundVal }
-                  : // Default val if backgroundVal is false
-                    require("@/assets/images/profile.png")
-              }
-              className="flex-row flex-1 bg-accent  rounded-[10px] overflow-hidden"
-            >
-              {/* Renders left side user information */}
-              <View className="flex-[2]  justify-center items-center">
-                {profileVal && (
-                  <Image
-                    // profileVal context usage
-                    source={
-                      profileVal
-                        ? { uri: profileVal }
-                        : // Default val if profileVal is false
-                          require("@/assets/images/profile.png")
-                    }
-                    className="w-[100px] h-[100px] rounded-full overflow-hidden border-black border-[1px]"
-                  />
-                )}
+            <View className="flex-[2] py-3">
+              <View className="my-3 flex-row justify-between items-center">
+                <View>
+                  <Text
+                    className="text-white text-4xl"
+                    style={{ fontFamily: fontFamily.ExoBold }}
+                  >
+                    Welcome Aboard,
+                  </Text>
+                  <Text
+                    className="text-white text-4xl"
+                    style={{ fontFamily: fontFamily.ExoBold }}
+                  >
+                    Lain
+                  </Text>
+                </View>
 
-                <Text
-                  className="text-xs text-white"
-                  style={[
-                    { fontFamily: fontFamily.ExoLight },
-                    boxShadow.textShadowLight,
-                  ]}
+                <Pressable
+                  className="mr-4"
+                  onPress={() => router.replace("/(auth)/home/Settings")}
                 >
-                  This is an awesome bio
-                </Text>
+                  <Ionicons
+                    name={"settings"}
+                    size={22}
+                    color={"white"}
+                  ></Ionicons>
+                </Pressable>
               </View>
-              {/* Renders right side user information */}
-              <View className="flex-[3] justify-center items-star ">
-                <Text
-                  className="text-white"
-                  style={[
-                    { fontFamily: fontFamily.ExoBold },
-                    boxShadow.textShadowLight,
-                  ]}
-                >
-                  Good to see you!
-                </Text>
-                <Text
-                  className="text-white text-4xl "
-                  style={[
-                    { fontFamily: fontFamily.ExoExtraBold },
-                    boxShadow.textShadow,
-                  ]}
-                >
-                  LAIN LAIN
-                </Text>
-                <Text
-                  className="text-white"
-                  style={[
-                    { fontFamily: fontFamily.ExoBold },
-                    boxShadow.textShadowLight,
-                  ]}
-                >
-                  LEVEL 91
-                </Text>
-                {/* EXP bar */}
-                <View
-                  style={boxShadow.shadow}
-                  className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs "
-                >
+
+              <ImageBackground
+                source={
+                  // backgroundVal context usage
+                  backgroundVal
+                    ? { uri: backgroundVal }
+                    : // Default val if backgroundVal is false
+                      require("@/assets/images/profile.png")
+                }
+                className="flex-row flex-[1] bg-accent  overflow-hidden"
+              >
+                {/* Renders left side user information */}
+                <View className="flex-[2]  justify-center items-center">
+                  {profileVal && (
+                    <Image
+                      // profileVal context usage
+                      source={
+                        profileVal
+                          ? { uri: profileVal }
+                          : // Default val if profileVal is false
+                            require("@/assets/images/profile.png")
+                      }
+                      className="w-[100px] h-[100px] rounded-full overflow-hidden border-black border-[1px]"
+                    />
+                  )}
+
+                  <Text
+                    className="text-xs text-white"
+                    style={[
+                      { fontFamily: fontFamily.ExoLight },
+                      boxShadow.textShadowLight,
+                    ]}
+                  >
+                    This is an awesome bio
+                  </Text>
+                </View>
+                {/* Renders right side user information */}
+                <View className="flex-[3] justify-center items-star ">
+                  <Text
+                    className="text-white"
+                    style={[
+                      { fontFamily: fontFamily.ExoBold },
+                      boxShadow.textShadowLight,
+                    ]}
+                  >
+                    Good to see you!
+                  </Text>
+                  <Text
+                    className="text-white text-4xl "
+                    style={[
+                      { fontFamily: fontFamily.ExoExtraBold },
+                      boxShadow.textShadow,
+                    ]}
+                  >
+                    LAIN LAIN
+                  </Text>
+                  <Text
+                    className="text-white"
+                    style={[
+                      { fontFamily: fontFamily.ExoBold },
+                      boxShadow.textShadowLight,
+                    ]}
+                  >
+                    LEVEL 91
+                  </Text>
+                  {/* EXP bar */}
                   <View
                     style={boxShadow.shadow}
-                    className="w-[80%] bg-[#32FF99] h-4 rounded-xl"
-                  ></View>
+                    className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs "
+                  >
+                    <View
+                      style={boxShadow.shadow}
+                      className="w-[80%] bg-[#32FF99] h-4 rounded-xl"
+                    ></View>
+                  </View>
+                  <Text
+                    className="text-white text-shadow-lg/30"
+                    style={[
+                      { fontFamily: fontFamily.ExoRegular },
+                      boxShadow.textShadowLight,
+                    ]}
+                  >
+                    100/200 XP
+                  </Text>
                 </View>
-                <Text
-                  className="text-white text-shadow-lg/30"
-                  style={[
-                    { fontFamily: fontFamily.ExoRegular },
-                    boxShadow.textShadowLight,
-                  ]}
-                >
-                  100/200 XP
-                </Text>
-              </View>
-            </ImageBackground>
-
+              </ImageBackground>
+            </View>
             {/* Renders rest  */}
             <ScrollView
               bounces={true}

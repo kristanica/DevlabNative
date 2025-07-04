@@ -39,7 +39,7 @@ const Achievements = () => {
                   : // Default val if backgroundVal is false
                     require("@/assets/images/pink-background-sample.jpg")
               }
-              className=" flex-[1] rounded-[10px] overflow-hidden"
+              className=" flex-[1] "
               style={{ borderRadius: 20 }}
             >
               <View className="flex-[1] justify-center items-center mt-3 ">

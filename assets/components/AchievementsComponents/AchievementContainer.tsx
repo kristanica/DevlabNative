@@ -54,7 +54,7 @@ const AchievementContainer = ({
     <View key={id}>
       {/* Border gradient for completed achievements*/}
       <Animated.View
-        style={[changeBackground, onScale]}
+        style={[onScale, changeBackground]}
         className="w-[170px] h-[250px] rounded-[20px] mb-[10px] m-[3px] "
       >
         {/* If Achievement is incomplete, will render background color as black */}

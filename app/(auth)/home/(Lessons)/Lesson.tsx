@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -40,9 +41,9 @@ const Lessons = () => {
             <View className="flex-row pt-3 flex-wrap justify-evenly  flex-[2]">
               <TouchableOpacity
                 className=" w-[40%] h-[200px]"
-                onPress={() =>
-                  router.replace("/(auth)/home/(Lessons)/playground/Coding")
-                }
+                // onPress={() =>
+                //   router.replace("/(auth)/(Lessons)/playground/Coding")
+                // }
               >
                 <View className="bg-accentContainer h-full w-full p-2 rounded-xl border-black border-2">
                   {/* Gradient background */}
@@ -94,10 +95,48 @@ const Lessons = () => {
             </View>
             {/* Renders lessonContainer component */}
             <ScrollView className="flex-[3] border-[#36334B] border-2 rounded-[10px] p-3">
-              <LessonsContainer color1="#FFC300" color2="#FF5733" />
-              <LessonsContainer color1="#00BFFF" color2="#1E90FF" />
-              <LessonsContainer color1="#F7DF1E" color2="#FF8C00" />
-              <LessonsContainer color1="#4CAF50" color2="#388E3C" />
+              <Pressable
+                onPress={() => {
+                  router.push({
+                    pathname: "/(auth)/home/(Lessons)/category/[categoryId]",
+                    params: { categoryId: "Html" },
+                  });
+                }}
+              >
+                <LessonsContainer color1="#FFC300" color2="#FF5733" />
+              </Pressable>
+
+              <Pressable
+                onPress={() => {
+                  router.push({
+                    pathname: "/(auth)/home/(Lessons)/category/[categoryId]",
+                    params: { categoryId: "Css" },
+                  });
+                }}
+              >
+                <LessonsContainer color1="#00BFFF" color2="#1E90FF" />
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  router.push({
+                    pathname: "/(auth)/home/(Lessons)/category/[categoryId]",
+                    params: { categoryId: "JavaScript" },
+                  });
+                }}
+              >
+                <LessonsContainer color1="#F7DF1E" color2="#FF8C00" />
+              </Pressable>
+
+              <Pressable
+                onPress={() => {
+                  router.push({
+                    pathname: "/(auth)/home/(Lessons)/category/[categoryId]",
+                    params: { categoryId: "Database" },
+                  });
+                }}
+              >
+                <LessonsContainer color1="#4CAF50" color2="#388E3C" />
+              </Pressable>
             </ScrollView>
           </CustomGeneralContainer>
         </AnimatedViewContainer>

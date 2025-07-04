@@ -2,10 +2,10 @@ import { Stack } from "expo-router";
 import React from "react";
 import { StyleSheet } from "react-native";
 
-const LessonsLayout = () => {
-  return <Stack screenOptions={{ headerShown: false, animation: "none" }} />;
+const PlaygroundLayout = () => {
+  return <Stack screenOptions={{ headerShown: false }} />;
 };
 
-export default LessonsLayout;
+export default PlaygroundLayout;
 
 const styles = StyleSheet.create({});

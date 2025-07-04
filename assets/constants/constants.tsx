@@ -3,7 +3,88 @@
 import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
 import { Dimensions } from "react-native";
 
-export const { width } = Dimensions.get("screen");
+export const { width, height } = Dimensions.get("screen");
+
+export const lessonMetaData = {
+  Css: {
+    title: ` CSS: The Art of Styling Your Digital World`,
+    description: `Wield the power of CSS to shape the web! Master the art of
+              styling, layout, and responsiveness as you transform plain pages
+              into polished, pixel-perfect designs. Your mission: bring beauty
+              and order to the digital realm.`,
+
+    about: `Embark on a creative journey where you become a master of design! As
+            an aspiring stylist, you’ll wield the magic of CSS to transform
+            plain web pages into stunning digital artworks. Learn to craft
+            colors, layouts, and typography that will bring your creations to
+            life. Your quest: turn your simple web page into a visually
+            captivating masterpiece that wows users across the globe!`,
+    icon: require("@/assets/images/lessonIcons/CSSicon.png"),
+    ionIcon: "logo-css3",
+    gradient: {
+      color1: "#00BFFF",
+      color2: "#1E90FF",
+    },
+  },
+  Html: {
+    title: `HTML: The Gateway to Web Adventure`,
+    description: `Every great structure needs a solid foundation—HTML is the
+              skeleton that holds the web together! Without it, web pages would
+              collapse into chaos`,
+    about: `   Step into the world of web development! As a novice adventurer,
+            you’ll unlock the powerful language that forms the backbone of the
+            internet—HTML. In this first quest, you’ll discover how to craft the
+            structure of your web pages, using simple tags and elements. Your
+            mission: build your very first web page and lay the foundation for
+            your journey into the digital realm`,
+    icon: require("@/assets/images/lessonIcons/HTMLicon.png"),
+    ionIcon: "logo-html5",
+    gradient: {
+      color1: "#FFC300",
+      color2: "#FF5733",
+    },
+  },
+  Database: {
+    title: `Database: The Vault of Digital Knowledge`,
+    description:
+      "Step into the realm of JavaScript magic! As a budding code \n\
+              sorcerer, you'll learn to bring websites to life—making pages \n\
+              interactive, dynamic, and full of wonder. Ready to wield the power \n\
+              of the web? Your journey begins now!",
+    about: `Step into the world of web development! As a novice adventurer,
+            you’ll unlock the powerful language that forms the backbone of the
+            internet—HTML. In this first quest, you’ll discover how to craft the
+            structure of your web pages, using simple tags and elements. Your
+            mission: build your very first web page and lay the foundation for
+            your journey into the digital realm`,
+    icon: require("@/assets/images/lessonIcons/DATABASEicon.png"),
+    ionIcon: "cube",
+
+    gradient: {
+      color1: "#4CAF50",
+      color2: "#388E3C",
+    },
+  },
+  JavaScript: {
+    title: `Database: The Vault of Digital Knowledge`,
+    description: `Enter the fortress of data! As a Database Guardian, you'll learn
+              to organize and retrieve information with precision. Harness SQL
+              to unlock insights and guard the digital realm with skill and
+              efficiency`,
+    about: ` Venture into the depths of data storage and mastery! As a Database
+            Guardian, you’ll learn to organize and retrieve vast amounts of
+            information with precision and speed. Harness the power of SQL to
+            access and manipulate data, keeping your digital vault secure and
+            efficient. Your quest: unlock the secrets of database querying and
+            become the protector of vast digital knowledge!`,
+    icon: require("@/assets/images/lessonIcons/JSicon.png"),
+    ionIcon: "logo-javascript",
+    gradient: {
+      color1: "#F7DF1E",
+      color2: "#FF8C00",
+    },
+  },
+};
 
 //FIREBASE
 export const auth = FIREBASE_AUTH;
