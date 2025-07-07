@@ -26,6 +26,15 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
       style={onScale}
       className="bg-shopAccent rounded-3xl h-28 flex-row my-2 border-black border-[2px]"
     >
+      {item.status ? null : (
+        <>
+          <View className="absolute w-full z-10 rounded-3xl bg-black opacity-[.6] h-full justify-center items-center"></View>
+          <View className="flex-1 justify-center items-center absolute z-20 h-full w-full">
+            <Ionicons name={"lock-closed"} color={"white"} size={40} />
+          </View>
+        </>
+      )}
+
       <View className="w-[25%] justify-center items-center bg-black rounded-3xl">
         <Ionicons name={icon} color={"white"} size={50} />
       </View>

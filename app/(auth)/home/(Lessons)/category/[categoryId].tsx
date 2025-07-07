@@ -1,17 +1,28 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LessonContainer from "@/assets/components/LessonsComponent/LessonContainer";
+import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import { lessonMetaData } from "@/assets/constants/constants";
 
 import useFetchLessonList from "@/assets/Hooks/useFetchLessonList";
+import useModal from "@/assets/Hooks/useModal";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React from "react";
-import { Image, SectionList, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  SectionList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const categoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
+  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
+
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
@@ -57,6 +68,11 @@ const categoryScreen = () => {
 
           <Text className="text-white text-justify my-2">{meta.about}</Text>
         </View>
+        <LockLessonModal
+          visibility={visibility}
+          scaleStyle={scaleStyle}
+          closeModal={closeModal}
+        ></LockLessonModal>
         {loading ? (
           <LoadingAnim />
         ) : (
@@ -69,17 +85,26 @@ const categoryScreen = () => {
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item, index }) => (
-              <LessonContainer
-                item={item}
-                icon={
-                  meta.ionIcon as
-                    | "cube"
-                    | "logo-javascript"
-                    | "logo-html5"
-                    | "logo-css3"
-                }
-                index={index}
-              />
+              <Pressable
+                onPress={() => {
+                  if (!item.status) {
+                    setVisibility(true);
+                  } else {
+                  }
+                }}
+              >
+                <LessonContainer
+                  item={item}
+                  icon={
+                    meta.ionIcon as
+                      | "cube"
+                      | "logo-javascript"
+                      | "logo-html5"
+                      | "logo-css3"
+                  }
+                  index={index}
+                />
+              </Pressable>
             )}
             renderSectionHeader={({ section }) => (
               <Text

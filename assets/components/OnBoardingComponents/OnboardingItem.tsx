@@ -1,7 +1,8 @@
+import { height, width } from "@/assets/constants/constants";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Animated, {
   Extrapolation,
   interpolate,
@@ -25,7 +26,6 @@ type OnboardingItemProps = {
 };
 
 const OnboardingItem = ({ xVal, item, index }: OnboardingItemProps) => {
-  const { width, height } = Dimensions.get("screen");
   const interpolateBackground = useAnimatedStyle(() => ({
     transform: [
       {
