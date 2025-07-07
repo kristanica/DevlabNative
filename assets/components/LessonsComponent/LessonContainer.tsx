@@ -46,7 +46,9 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
         >
           {item.title}
         </Text>
-        <Text className="text-[#94A1B2] text-sm">{item.desc}</Text>
+        <Text numberOfLines={2} className="text-[#94A1B2] text-sm w-[15%] ">
+          {item.desc}
+        </Text>
       </View>
     </Animated.View>
   );

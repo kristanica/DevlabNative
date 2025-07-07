@@ -8,6 +8,7 @@ import useFetchLessonList from "@/assets/Hooks/useFetchLessonList";
 import useModal from "@/assets/Hooks/useModal";
 import { fontFamily } from "@/fontFamily/fontFamily";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React from "react";
 import {
@@ -27,6 +28,8 @@ const categoryScreen = () => {
   const meta = lessonMetaData[id];
 
   const { loading, lesson } = useFetchLessonList({ category: id });
+  let globalAnim: number = 0;
+
   return (
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>
@@ -60,7 +63,7 @@ const categoryScreen = () => {
             className="my-5 text-3xl text-white "
             style={{ fontFamily: fontFamily.ExoBold }}
           >
-            About{" "}
+            About
             <Text style={{ color: meta.gradient.color1 }}>
               {id.toUpperCase().toString()}
             </Text>
@@ -79,33 +82,48 @@ const categoryScreen = () => {
           <SectionList
             sections={lesson.map((data: any) => ({
               title: data.title,
-              data: data.levels,
+              data: data.levels.map((level: any) => ({
+                ...level,
+                lessonid: data.id,
+              })),
             }))}
             stickySectionHeadersEnabled={false}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item, index }) => (
-              <Pressable
-                onPress={() => {
-                  if (!item.status) {
-                    setVisibility(true);
-                  } else {
-                  }
-                }}
-              >
-                <LessonContainer
-                  item={item}
-                  icon={
-                    meta.ionIcon as
-                      | "cube"
-                      | "logo-javascript"
-                      | "logo-html5"
-                      | "logo-css3"
-                  }
-                  index={index}
-                />
-              </Pressable>
-            )}
+            renderItem={({ item, index }) => {
+              globalAnim++;
+              return (
+                <Pressable
+                  onPress={() => {
+                    if (!item.status) {
+                      setVisibility(true);
+                    } else {
+                      console.log(item);
+                      router.replace({
+                        pathname: "/level/[levelid]",
+                        params: {
+                          levelid: item.id,
+                          title: id,
+                          lessonid: item.lessonid,
+                        },
+                      });
+                    }
+                  }}
+                >
+                  <LessonContainer
+                    item={item}
+                    icon={
+                      meta.ionIcon as
+                        | "cube"
+                        | "logo-javascript"
+                        | "logo-html5"
+                        | "logo-css3"
+                    }
+                    index={globalAnim}
+                  />
+                </Pressable>
+              );
+            }}
             renderSectionHeader={({ section }) => (
               <Text
                 className="text-white text-2xl"
