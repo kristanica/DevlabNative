@@ -4,7 +4,6 @@ import OnboardingItem from "@/assets/components/OnBoardingComponents/OnboardingI
 import Pagination from "@/assets/components/OnBoardingComponents/Pagination";
 import { onboardingData, width } from "@/assets/constants/constants";
 import usePresstoScroll from "@/assets/Hooks/usePresstoScroll";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
@@ -71,12 +70,7 @@ const Onboarding = () => {
               className="absolute top-16 right-10"
             >
               <ButtonComponent onPressAction={() => router.replace("/Login")}>
-                <Text
-                  className="text-white text-xl "
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
-                  Skip
-                </Text>
+                <Text className="text-white text-xl font-exoBold">Skip</Text>
               </ButtonComponent>
             </Animated.View>
           </>
@@ -91,18 +85,12 @@ const Onboarding = () => {
             }}
           >
             <ButtonComponent onPressAction={() => router.replace("/Login")}>
-              <Text
-                className="text-white text-center rounded-3xl bg-button px-14 py-2 "
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-center rounded-3xl bg-button px-14 py-2 font-exoBold">
                 Login
               </Text>
             </ButtonComponent>
             <ButtonComponent onPressAction={() => router.replace("/Register")}>
-              <Text
-                className="text-white text-center rounded-3xl bg-accent px-14 py-2 "
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-center rounded-3xl bg-accent px-14 py-2 font-exoBold">
                 Sign up
               </Text>
             </ButtonComponent>

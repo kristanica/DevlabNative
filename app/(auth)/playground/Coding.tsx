@@ -1,6 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useRef, useState } from "react";
@@ -21,10 +20,7 @@ const Coding = () => {
         <CustomGeneralContainer>
           <View className="flex-row justify-between">
             <Pressable onPress={() => router.replace("/(auth)/home/Home")}>
-              <Text
-                className="text-white ml-3 text-2xl"
-                style={{ fontFamily: fontFamily.ExoExtraBold }}
-              >
+              <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB
               </Text>
             </Pressable>
@@ -32,10 +28,7 @@ const Coding = () => {
               onPress={() => router.replace("/(auth)/playground/Database")}
               className="justify-center"
             >
-              <Text
-                className="text-white mr-3 text-sm"
-                style={{ fontFamily: fontFamily.ExoExtraBold }}
-              >
+              <Text className="text-white mr-3 text-sm font-exoExtraBold">
                 Database playground
               </Text>
             </Pressable>
@@ -59,7 +52,7 @@ const Coding = () => {
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
   <meta charset="UTF-8" />
-    <style>
+p    <style>
      ${recievedCode?.css}
     </style>
   </head>
@@ -75,10 +68,7 @@ const Coding = () => {
                     source={require("@/assets/Lottie/Loading.json")}
                     style={{ height: 160, width: 200 }}
                   />
-                  <Text
-                    className="text-black text-center w-[300px] "
-                    style={{ fontFamily: fontFamily.ExoExtraBold }}
-                  >
+                  <Text className="text-black text-center w-[300px] font-exoExtraBold">
                     YOUR CODES RESULT WILL APPEAR HERE WHEN YOU RUN YOUR PROJECT
                   </Text>
                 </View>

@@ -6,19 +6,11 @@ import { lessonMetaData } from "@/assets/constants/constants";
 
 import useFetchLessonList from "@/assets/Hooks/useFetchLessonList";
 import useModal from "@/assets/Hooks/useModal";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React from "react";
-import {
-  Image,
-  Pressable,
-  SectionList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, SectionList, Text, View } from "react-native";
 
 const categoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
@@ -41,16 +33,10 @@ const categoryScreen = () => {
           style={{ height: "25%", flexDirection: "row" }}
         >
           <View className="flex-[1] justify-center items-center ml-3">
-            <Text
-              className="text-white shadow text-2xl text-justify"
-              style={{ fontFamily: fontFamily.ExoBold }}
-            >
+            <Text className="text-white shadow text-2xl text-justify font-exoBold">
               {meta.title}
             </Text>
-            <Text
-              className="text-white shadow"
-              style={{ fontFamily: fontFamily.ExoRegular }}
-            >
+            <Text className="text-white shadow font-exoBold">
               {meta.description}
             </Text>
           </View>
@@ -59,10 +45,7 @@ const categoryScreen = () => {
           </View>
         </LinearGradient>
         <View className=" items-center">
-          <Text
-            className="my-5 text-3xl text-white "
-            style={{ fontFamily: fontFamily.ExoBold }}
-          >
+          <Text className="my-5 text-3xl text-white font-exoBold">
             About
             <Text style={{ color: meta.gradient.color1 }}>
               {id.toUpperCase().toString()}
@@ -125,10 +108,7 @@ const categoryScreen = () => {
               );
             }}
             renderSectionHeader={({ section }) => (
-              <Text
-                className="text-white text-2xl"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-2xl font-exoBold">
                 {section.title}
               </Text>
             )}
@@ -140,5 +120,3 @@ const categoryScreen = () => {
 };
 
 export default categoryScreen;
-
-const styles = StyleSheet.create({});

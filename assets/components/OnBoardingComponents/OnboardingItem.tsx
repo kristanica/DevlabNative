@@ -1,5 +1,4 @@
 import { height, width } from "@/assets/constants/constants";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Text, View } from "react-native";
@@ -54,22 +53,13 @@ const OnboardingItem = ({ xVal, item, index }: OnboardingItemProps) => {
         autoPlay
         loop
       />
-      <Text
-        className="text-white text-4xl"
-        style={{ fontFamily: fontFamily.ExoExtraBold }}
-      >
+      <Text className="text-white text-4xl font-exoExtraBold">
         {item.title}
       </Text>
-      <Text
-        className="text-white text-xl my-3"
-        style={{ fontFamily: fontFamily.ExoSemiBold }}
-      >
+      <Text className="text-white text-xl my-3 font-exoSemiBold">
         {item.subtitle}
       </Text>
-      <Text
-        className="text-white text-sm text-center mx-5"
-        style={{ fontFamily: fontFamily.ExoMedium }}
-      >
+      <Text className="text-white text-sm text-center mx-5 font-exoMedium">
         {item.description}
       </Text>
     </View>

@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
@@ -42,7 +41,6 @@ const InputBox = ({
         placeholder={placeHolder}
         className="text-offwhite"
         style={{
-          fontFamily: fontFamily.ExoLight,
           // Set the width based on the icon type
           width: icon === "lock-closed" ? 200 : 240,
         }}

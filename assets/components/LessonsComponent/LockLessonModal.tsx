@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import LottieView from "lottie-react-native";
 import React from "react";
 import {
@@ -40,10 +39,7 @@ const LockLessonModal = ({
           />
 
           <View className="flex-[1] justify-center items-center">
-            <Text
-              className="text-white text-center"
-              style={{ fontFamily: fontFamily.ExoBold }}
-            >
+            <Text className="text-white text-center font-exoBold">
               This content is currently locked.
             </Text>
           </View>
@@ -52,10 +48,7 @@ const LockLessonModal = ({
               backgroundColor={"#7F5AF0"}
               onPressAction={() => closeModal()}
             >
-              <Text
-                className="text-white py-2 px-10"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white py-2 px-10 font-exoBold">
                 Continue
               </Text>
             </ButtonAnimated>

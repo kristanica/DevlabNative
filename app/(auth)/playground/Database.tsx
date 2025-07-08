@@ -1,6 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useState } from "react";
@@ -38,10 +37,7 @@ const Database = () => {
         <CustomGeneralContainer>
           <View className="flex-row justify-between">
             <Pressable onPress={() => router.replace("/home/Lesson")}>
-              <Text
-                className="text-white ml-3 text-2xl"
-                style={{ fontFamily: fontFamily.ExoExtraBold }}
-              >
+              <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB
               </Text>
             </Pressable>
@@ -49,10 +45,7 @@ const Database = () => {
               onPress={() => router.replace("/(auth)/playground/Coding")}
               className="justify-center"
             >
-              <Text
-                className="text-white mr-3 text-sm"
-                style={{ fontFamily: fontFamily.ExoExtraBold }}
-              >
+              <Text className="text-white mr-3 text-sm font-exoExtraBold">
                 Coding playground
               </Text>
             </Pressable>
@@ -123,10 +116,7 @@ ${tableStyle}
                     autoPlay
                     loop
                   />
-                  <Text
-                    className="text-black text-center w-[300px] "
-                    style={{ fontFamily: fontFamily.ExoExtraBold }}
-                  >
+                  <Text className="text-black text-center w-[300px] font-exoExtraBold">
                     YOUR CODES RESULT WILL APPEAR HERE WHEN YOU RUN YOUR PROJECT
                   </Text>
                 </View>

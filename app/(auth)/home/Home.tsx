@@ -7,7 +7,6 @@ import { lessons } from "@/assets/constants/constants";
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
 import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import {
@@ -53,18 +52,10 @@ export default function Home() {
             <View className="flex-[2] py-3">
               <View className="my-3 flex-row justify-between items-center">
                 <View>
-                  <Text
-                    className="text-white text-4xl"
-                    style={{ fontFamily: fontFamily.ExoBold }}
-                  >
+                  <Text className="text-white text-4xl font-exoBold">
                     Welcome Aboard,
                   </Text>
-                  <Text
-                    className="text-white text-4xl"
-                    style={{ fontFamily: fontFamily.ExoBold }}
-                  >
-                    Lain
-                  </Text>
+                  <Text className="text-white text-4xl font-exoBold">Lain</Text>
                 </View>
 
                 <Pressable
@@ -105,11 +96,8 @@ export default function Home() {
                   )}
 
                   <Text
-                    className="text-xs text-white"
-                    style={[
-                      { fontFamily: fontFamily.ExoLight },
-                      boxShadow.textShadowLight,
-                    ]}
+                    className="text-xs text-white font-exoLight"
+                    style={[boxShadow.textShadowLight]}
                   >
                     This is an awesome bio
                   </Text>
@@ -117,29 +105,20 @@ export default function Home() {
                 {/* Renders right side user information */}
                 <View className="flex-[3] justify-center items-star ">
                   <Text
-                    className="text-white"
-                    style={[
-                      { fontFamily: fontFamily.ExoBold },
-                      boxShadow.textShadowLight,
-                    ]}
+                    className="text-white font-exoBold"
+                    style={[boxShadow.textShadowLight]}
                   >
                     Good to see you!
                   </Text>
                   <Text
-                    className="text-white text-4xl "
-                    style={[
-                      { fontFamily: fontFamily.ExoExtraBold },
-                      boxShadow.textShadow,
-                    ]}
+                    className="text-white text-4xl font-exoExtraBold"
+                    style={[boxShadow.textShadow]}
                   >
                     LAIN LAIN
                   </Text>
                   <Text
-                    className="text-white"
-                    style={[
-                      { fontFamily: fontFamily.ExoBold },
-                      boxShadow.textShadowLight,
-                    ]}
+                    className="text-white font-exoBold"
+                    style={[boxShadow.textShadowLight]}
                   >
                     LEVEL 91
                   </Text>
@@ -154,11 +133,8 @@ export default function Home() {
                     ></View>
                   </View>
                   <Text
-                    className="text-white text-shadow-lg/30"
-                    style={[
-                      { fontFamily: fontFamily.ExoRegular },
-                      boxShadow.textShadowLight,
-                    ]}
+                    className="text-white text-shadow-lg/30 font-exoRegular"
+                    style={[boxShadow.textShadowLight]}
                   >
                     100/200 XP
                   </Text>
@@ -172,11 +148,8 @@ export default function Home() {
               className="flex-[3]  "
             >
               <Text
-                className="text-white ml-2 text-xl mt-3"
-                style={[
-                  { fontFamily: fontFamily.ExoBold },
-                  boxShadow.textShadowLight,
-                ]}
+                className="text-white ml-2 text-xl mt-3 font-exoBold"
+                style={[boxShadow.textShadowLight]}
               >
                 JUMP BACK IN
               </Text>
@@ -189,17 +162,11 @@ export default function Home() {
                   </View>
 
                   <View className="flex-1 overflow-hidden p-2 ">
-                    <Text
-                      className="text-white text-sm text-justify"
-                      style={{ fontFamily: fontFamily.ExoBold }}
-                    >
+                    <Text className="text-white text-sm text-justify font-exoBold">
                       HTML Explorer - The Foundation
                     </Text>
 
-                    <Text
-                      className="text-[#94A1B2] text-xs text-justify"
-                      style={{ fontFamily: fontFamily.ExoLight }}
-                    >
+                    <Text className="text-[#94A1B2] text-xs text-justify font-exoLight">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       Dignissimos, voluptates laudantium sint error deleniti
                       aliquid quasi maiores suscipit a maxime voluptatibus nemo
@@ -209,11 +176,8 @@ export default function Home() {
                 </View>
               </ButtonComponent>
               <Text
-                className="text-white ml-2 text-xl "
-                style={[
-                  { fontFamily: fontFamily.ExoBold },
-                  boxShadow.textShadowLight,
-                ]}
+                className="text-white ml-2 text-xl font-exoBold"
+                style={[boxShadow.textShadowLight]}
               >
                 VIEW YOUR PROGRESS
               </Text>

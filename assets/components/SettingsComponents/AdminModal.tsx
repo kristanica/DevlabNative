@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import LottieView from "lottie-react-native";
 import React from "react";
 import {
@@ -43,19 +42,13 @@ const AdminModal = ({
               }}
             />
             <View className="flex-[1] justify-center items-center">
-              <Text
-                className="text-white text-center"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-center font-exoBold">
                 Your'e about to be redirected to admin view
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
               <ButtonAnimated backgroundColor={"#7F5AF0"}>
-                <Text
-                  className="text-white py-2 px-10"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
+                <Text className="text-white py-2 px-10 font-exoBold">
                   Continue
                 </Text>
               </ButtonAnimated>
@@ -63,12 +56,7 @@ const AdminModal = ({
                 backgroundColor={"#FF6166"}
                 onPressAction={closeModal}
               >
-                <Text
-                  className="text-white py-2 px-10"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
-                  No
-                </Text>
+                <Text className="text-white py-2 px-10 font-exoBold">No</Text>
               </ButtonAnimated>
             </View>
           </View>

@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
@@ -21,17 +20,11 @@ const ShopItem = () => {
         </View>
         <View className="flex-col justify-evenly items-center flex-[3]">
           {/* Render's Item name */}
-          <Text
-            className="text-white text-xl"
-            style={{ fontFamily: fontFamily.ExoExtraBold }}
-          >
+          <Text className="text-white text-xl font-exoExtraBold">
             DOUBLE DOWN
           </Text>
           {/* Render's Item Description */}
-          <Text
-            className="text-white text-center"
-            style={{ fontFamily: fontFamily.ExoRegular }}
-          >
+          <Text className="text-white text-center font-exoRegular">
             Multiply your rewards at a risk! Earn double or lose the bonus
             depending on your answer
           </Text>

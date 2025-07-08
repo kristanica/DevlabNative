@@ -1,6 +1,5 @@
 import AchievementContainer from "@/assets/components/AchievementsComponents/AchievementContainer";
 import AchievementsProgressBar from "@/assets/components/AchievementsComponents/AchievementsProgressBar";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import React, { useState } from "react";
 
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
@@ -39,8 +38,7 @@ const Achievements = () => {
                   : // Default val if backgroundVal is false
                     require("@/assets/images/pink-background-sample.jpg")
               }
-              className=" flex-[1] "
-              style={{ borderRadius: 20 }}
+              className="flex-[1]"
             >
               <View className="flex-[1] justify-center items-center mt-3 ">
                 {profileVal && (
@@ -58,17 +56,9 @@ const Achievements = () => {
               </View>
               {/* Renders name */}
               <View className="justify-center items-center flex-[.5] ">
-                <Text
-                  className="text-white"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
-                  LAIN
-                </Text>
+                <Text className="text-white font-exoBold">LAIN</Text>
 
-                <Text
-                  className="text-white"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
+                <Text className="text-white font-exoBold">
                   Hall of Achievements
                 </Text>
               </View>
@@ -98,10 +88,7 @@ const Achievements = () => {
                         setSelectedCategory(item.name);
                       }}
                     >
-                      <Text
-                        className="text-white"
-                        style={{ fontFamily: fontFamily.ExoBold }}
-                      >
+                      <Text className="text-white font-exoBold">
                         {item.name}
                       </Text>
                     </ButtonComponent>

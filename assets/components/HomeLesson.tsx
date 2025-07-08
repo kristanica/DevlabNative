@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 
@@ -35,9 +34,7 @@ const HomeLesson = ({ name, color, icon, index }: HomeLessonProps) => {
       </View>
       {/* Render's Name */}
       <View className="flex-[.5] justify-center items-center text-center">
-        <Text className="text-white" style={{ fontFamily: fontFamily.ExoBold }}>
-          {name}
-        </Text>
+        <Text className="text-white font-exoBold">{name}</Text>
       </View>
     </Animated.View>
   );

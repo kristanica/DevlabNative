@@ -1,6 +1,5 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import React, { memo } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 
 type AchievementContainerProps = {
@@ -25,23 +24,11 @@ const AchievementsProgressBar = ({ name, id }: AchievementContainerProps) => {
       />
       {/* Render's Name */}
       <View className="justify-center items-center">
-        <Text
-          className="text-sm text-white"
-          style={{ fontFamily: fontFamily.ExoRegular }}
-        >
-          {name}
-        </Text>
-        <Text
-          className="text-sm text-white"
-          style={{ fontFamily: fontFamily.ExoRegular }}
-        >
-          Achievements
-        </Text>
+        <Text className="text-sm text-white font-exoRegular">{name}</Text>
+        <Text className="text-sm text-white font-exoRegular">Achievements</Text>
       </View>
     </View>
   );
 };
 
 export default memo(AchievementsProgressBar);
-
-const styles = StyleSheet.create({});

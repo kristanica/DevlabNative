@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
@@ -37,26 +36,16 @@ const OnSuccessRegister = ({
               }}
             />
             <View className="flex-[1] justify-center items-center">
-              <Text
-                className="text-white text-center"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-center font-exoBold">
                 Sucessfully created an account!
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
               <ButtonAnimated
-                height={30}
-                width={100}
                 backgroundColor={"#7F5AF0"}
                 onPressAction={() => router.replace("/Login")}
               >
-                <Text
-                  className="text-white"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
-                  Login
-                </Text>
+                <Text className="text-white font-exoBold">Login</Text>
               </ButtonAnimated>
             </View>
           </View>

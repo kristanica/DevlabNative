@@ -2,7 +2,6 @@ import InputBox from "@/assets/components/InputBox";
 import OnSuccessRegisterModal from "@/assets/components/RegisterComponents/OnSuccessRegisterModal";
 import useModal from "@/assets/Hooks/useModal";
 import useRegister from "@/assets/Hooks/useRegister";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
@@ -29,10 +28,7 @@ const Register = () => {
     >
       {/* Title Container */}
       <View>
-        <Text
-          className="color-white  mb-5 text-3xl font-[500]"
-          style={{ fontFamily: fontFamily.ExoExtraBold }}
-        >
+        <Text className="color-white  mb-5 text-3xl font-[500] font-exoExtraBold">
           DEVLAB
         </Text>
       </View>
@@ -120,28 +116,19 @@ const Register = () => {
                 setVisibility((prev) => !prev);
               }}
             >
-              <Text
-                className="color-white text-lg "
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="color-white text-lg font-exoRegular">
                 REGISTER
               </Text>
             </TouchableOpacity>
           </View>
           {/* Text to navigate to login page */}
           <View className="flex-[1]  justify-center items-center">
-            <Text
-              className="mt-7 color-[#FFFFFE]"
-              style={{ fontFamily: fontFamily.ExoRegular }}
-            >
+            <Text className="mt-7 color-[#FFFFFE] font-exoRegular">
               Already have an Account?
             </Text>
             {/* Routes user to login (index) */}
             <TouchableOpacity onPress={() => router.replace("/")}>
-              <Text
-                className="color-[#4F80C5] mt-2"
-                style={{ fontFamily: fontFamily.ExoRegular }}
-              >
+              <Text className="color-[#4F80C5] mt-2 font-exoRegular">
                 Login here
               </Text>
             </TouchableOpacity>

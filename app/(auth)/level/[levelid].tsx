@@ -2,7 +2,6 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useFetchLesson from "@/assets/Hooks/useFetchLesson";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
@@ -36,25 +35,16 @@ const levelSceen = () => {
             <LoadingAnim />
           ) : (
             <View key={lesson.id} className="m-3">
-              <Text
-                className="text-white font-bold text-3xl py-2"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white font-bold text-3xl py-2 font-exoBold">
                 {levelid}: {lesson.title}
               </Text>
               <View className="py-2">
-                <Text
-                  className="text-white text-lg text-justify "
-                  style={{ fontFamily: fontFamily.ExoRegular }}
-                >
+                <Text className="text-white text-lg text-justify font-exoBold">
                   {lesson.desc}
                 </Text>
               </View>
               <View className="bg-[#25293B] p-3 rounded-2xl">
-                <Text
-                  className="text-white text-lg py-2"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
+                <Text className="text-white text-lg py-2 font-exoBold">
                   Instructions
                 </Text>
                 <Text className="text-white italic text-lg">
@@ -62,10 +52,7 @@ const levelSceen = () => {
                 </Text>
 
                 <View className="bg-[#191C2B] rounded-2xl p-2">
-                  <Text
-                    className="text-white text-lg"
-                    style={{ fontFamily: fontFamily.ExoMedium }}
-                  >
+                  <Text className="text-white text-lg font-exoBold">
                     {
                       "<h1>Welcome to Your First Webpage!</h1>\n<p>This is your first step into the world of HTML. Great job!</p>"
                     }

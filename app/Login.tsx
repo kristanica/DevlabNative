@@ -2,7 +2,6 @@ import InputBox from "@/assets/components/InputBox";
 import OnFailedLogin from "@/assets/components/LoginComponents/OnFailedLogin";
 import Splash from "@/assets/components/Splash";
 import useLogin from "@/assets/Hooks/useLogin";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -39,10 +38,7 @@ const Login = () => {
           className="justify-center items-center"
           entering={FadeIn.duration(500)}
         >
-          <Text
-            className="color-white  mb-5 text-3xl"
-            style={{ fontFamily: fontFamily.ExoExtraBold }}
-          >
+          <Text className="color-white  mb-5 text-3xl font-exoExtraBold">
             DEVLAB
           </Text>
 
@@ -94,7 +90,6 @@ const Login = () => {
                     iconStyle={{ borderColor: "red" }}
                     innerIconStyle={{ borderWidth: 1 }}
                     textStyle={{
-                      fontFamily: fontFamily.ExoLight,
                       textDecorationLine: "none",
                     }}
                     onPress={(boolean) => {
@@ -105,7 +100,7 @@ const Login = () => {
                       });
                     }}
                   />
-                  <Text className="py-[6px] text-white opacity-20 text-sm">
+                  <Text className="py-[6px] text-white opacity-20 text-sm font-exoRegular">
                     Keep me signed in
                   </Text>
                 </View>
@@ -121,10 +116,7 @@ const Login = () => {
                       setTrigger(false);
                     }}
                   >
-                    <Text
-                      className="color-white text-lg "
-                      style={{ fontFamily: fontFamily.ExoBold }}
-                    >
+                    <Text className="color-white text-lg font-exoBold">
                       LOGIN
                     </Text>
                   </TouchableOpacity>
@@ -132,18 +124,12 @@ const Login = () => {
 
                 {/* Register Container */}
                 <View className="flex-[1]  justify-center items-center">
-                  <Text
-                    className="color-[#FFFFFE]"
-                    style={{ fontFamily: fontFamily.ExoRegular }}
-                  >
+                  <Text className="color-[#FFFFFE] font-exoRegular">
                     Don't have an account?
                   </Text>
                   {/* // TouchableOpacity to navigate to the Register page */}
                   <TouchableOpacity onPress={() => router.replace("/Register")}>
-                    <Text
-                      className="color-[#4F80C5] mt-2"
-                      style={{ fontFamily: fontFamily.ExoRegular }}
-                    >
+                    <Text className="color-[#4F80C5] mt-2 font-exoRegular">
                       Register here
                     </Text>
                   </TouchableOpacity>

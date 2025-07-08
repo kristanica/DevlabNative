@@ -2,7 +2,6 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LessonsContainer from "@/assets/components/LessonsContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -24,16 +23,10 @@ const Lessons = () => {
           <CustomGeneralContainer>
             {/* Renders tab information */}
             <View className="justify-evenly items-center flex-1">
-              <Text
-                className="text-white text-4xl"
-                style={{ fontFamily: fontFamily.ExoExtraBold }}
-              >
+              <Text className="text-white text-4xl font-exoExtraBold">
                 LESSONS
               </Text>
-              <Text
-                className="text-white"
-                style={{ fontFamily: fontFamily.ExoRegular }}
-              >
+              <Text className="text-white font-exoRegular">
                 Delve into the realm of web development!{" "}
               </Text>
             </View>
@@ -60,10 +53,7 @@ const Lessons = () => {
                   {/* Routes to Coding playground */}
 
                   <View className="flex-1 justify-center items-center ">
-                    <Text
-                      className="text-white"
-                      style={{ fontFamily: fontFamily.ExoBold }}
-                    >
+                    <Text className="text-white font-exoBold">
                       Coding Playground
                     </Text>
                   </View>
@@ -83,10 +73,7 @@ const Lessons = () => {
                   </LinearGradient>
                   {/* Routes to Database playground */}
                   <View className="flex-1 justify-center items-center">
-                    <Text
-                      className="text-white text-center"
-                      style={{ fontFamily: fontFamily.ExoBold }}
-                    >
+                    <Text className="text-white text-center font-exoBold">
                       Database Playground
                     </Text>
                   </View>

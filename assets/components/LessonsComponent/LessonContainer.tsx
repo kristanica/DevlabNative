@@ -1,5 +1,4 @@
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsFocused } from "@react-navigation/native";
 import React from "react";
@@ -40,13 +39,11 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
       </View>
 
       <View className="justify-center items-start ml-3">
+        <Text className="text-white text-2xl font-exoBold">{item.title}</Text>
         <Text
-          className="text-white text-2xl"
-          style={{ fontFamily: fontFamily.ExoBold }}
+          numberOfLines={2}
+          className="text-[#94A1B2] text-sm w-[17%] text-justify font-exoLight "
         >
-          {item.title}
-        </Text>
-        <Text numberOfLines={2} className="text-[#94A1B2] text-sm w-[15%] ">
           {item.desc}
         </Text>
       </View>

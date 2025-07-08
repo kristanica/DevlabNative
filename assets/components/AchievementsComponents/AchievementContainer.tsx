@@ -1,5 +1,4 @@
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import React, { memo, useEffect } from "react";
 import { Image, Text, View } from "react-native";
 import Animated, {
@@ -79,19 +78,11 @@ const AchievementContainer = ({
             </View>
             {/* Render the name of Achievement */}
             <View className="flex-[.5] justify-center items-center border-t-2 b-black mx-5">
-              <Text
-                className="text-white"
-                style={{ fontFamily: fontFamily.ExoExtraBold }}
-              >
-                {name}
-              </Text>
+              <Text className="text-white font-exoExtraBold">{name}</Text>
             </View>
             {/* Render the Description of Achievement */}
             <View className="flex-[.5] justify-center items-center">
-              <Text
-                className="text-[#94A1B2] text-center"
-                style={{ fontFamily: fontFamily.ExoLight }}
-              >
+              <Text className="text-[#94A1B2] text-center font-exoLight">
                 {description}
               </Text>
             </View>
@@ -104,10 +95,7 @@ const AchievementContainer = ({
               }}
               className="flex-[.5] justify-center items-center mx-10 my-2 rounded-3xl"
             >
-              <Text
-                className="text-white text-center"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-center font-exoBold">
                 {complete ? "Completed" : "Inprogress"}
               </Text>
             </View>

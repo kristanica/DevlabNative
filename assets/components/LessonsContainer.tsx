@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
@@ -29,10 +28,7 @@ const LessonsContainer = ({ color1, color2 }: HomeLessonProps) => {
 
       <View className="flex-1 p-2 justify-between items-center ">
         {/* Renders name */}
-        <Text
-          className="text-white text-xl text-center"
-          style={{ fontFamily: fontFamily.ExoBold }}
-        >
+        <Text className="text-white text-xl text-center font-exoBold">
           HTML: The Gateway to Web Adventure
         </Text>
         {/* Renders Description */}

@@ -1,5 +1,4 @@
 import useSignOut from "@/assets/Hooks/useSignOut";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import LottieView from "lottie-react-native";
 import React from "react";
 import {
@@ -44,10 +43,7 @@ const SignOutModal = ({ visibility, scaleStyle, closeModal }: signOutProps) => {
               }}
             />
             <View className="flex-[1] justify-center items-center">
-              <Text
-                className="text-white text-center"
-                style={{ fontFamily: fontFamily.ExoBold }}
-              >
+              <Text className="text-white text-center font-exoBold">
                 Are you sure you want to sign out?
               </Text>
             </View>
@@ -56,10 +52,7 @@ const SignOutModal = ({ visibility, scaleStyle, closeModal }: signOutProps) => {
                 backgroundColor={"#7F5AF0"}
                 onPressAction={logOut}
               >
-                <Text
-                  className="text-white py-2 px-10"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
+                <Text className="text-white py-2 px-10 font-exoBold">
                   Continue
                 </Text>
               </ButtonAnimated>
@@ -67,12 +60,7 @@ const SignOutModal = ({ visibility, scaleStyle, closeModal }: signOutProps) => {
                 backgroundColor={"#FF6166"}
                 onPressAction={closeModal}
               >
-                <Text
-                  className="text-white py-2 px-10"
-                  style={{ fontFamily: fontFamily.ExoBold }}
-                >
-                  No
-                </Text>
+                <Text className="text-white py-2 px-10 font-exoBold">No</Text>
               </ButtonAnimated>
             </View>
           </View>

@@ -13,8 +13,6 @@ const useFetchLessonList = ({ category }: useFetchLessonListProps) => {
   const isMounted = useMounted();
   useEffect(() => {
     const fetchData = async () => {
-      if (!isMounted.current) return;
-
       setLoading(true);
       try {
         const Lessonref = collection(db, category);
@@ -40,6 +38,7 @@ const useFetchLessonList = ({ category }: useFetchLessonListProps) => {
 
         if (isMounted.current) {
           setLesson(lessonData);
+          console.log(lessonData);
         }
       } catch (error) {
         if (isMounted.current) {

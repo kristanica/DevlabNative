@@ -1,4 +1,3 @@
-import { fontFamily } from "@/fontFamily/fontFamily";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { StyleSheet, Text } from "react-native";
@@ -15,9 +14,7 @@ const LoadingAnim = () => {
         style={{ height: 200, width: 200 }}
       />
 
-      <Text className="text-white" style={{ fontFamily: fontFamily.ExoBold }}>
-        Hang out tight
-      </Text>
+      <Text className="text-white font-exoBold">Hang on tight</Text>
     </Animated.View>
   );
 };

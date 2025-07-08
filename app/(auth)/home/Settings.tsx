@@ -9,7 +9,6 @@ import usePickImage from "@/assets/Hooks/usePickImage";
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
 import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
-import { fontFamily } from "@/fontFamily/fontFamily";
 import React from "react";
 
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
@@ -76,11 +75,8 @@ const Settings = () => {
 
                     <View className="flex-[.5] items-center justify-center">
                       <Text
-                        className="text-white text-center text-2xl"
-                        style={[
-                          { fontFamily: fontFamily.ExoBold },
-                          boxShadow.textShadowLight,
-                        ]}
+                        className="text-white text-center text-2xl font-exoBold"
+                        style={[boxShadow.textShadowLight]}
                       >
                         UPDATE PROFILE INFORMATION
                       </Text>
@@ -113,10 +109,7 @@ const Settings = () => {
 
                     <View className="flex-[2] items-center pt-10   ">
                       <ButtonAnimated backgroundColor="#7F5AF0">
-                        <Text
-                          className="text-white py-4 px-16"
-                          style={{ fontFamily: fontFamily.ExoBold }}
-                        >
+                        <Text className="text-white py-4 px-16 font-exoBold">
                           Save Changes
                         </Text>
                       </ButtonAnimated>
@@ -125,10 +118,7 @@ const Settings = () => {
                         backgroundColor="#FF6166"
                         onPressAction={() => logOutModal.setVisibility(true)}
                       >
-                        <Text
-                          className="text-white py-4 px-20"
-                          style={{ fontFamily: fontFamily.ExoBold }}
-                        >
+                        <Text className="text-white py-4 px-20 font-exoBold">
                           Log out
                         </Text>
                       </ButtonAnimated>
@@ -137,10 +127,7 @@ const Settings = () => {
                         backgroundColor="transparent"
                         onPressAction={() => adminModal.setVisibility(true)}
                       >
-                        <Text
-                          className="text-white"
-                          style={{ fontFamily: fontFamily.ExoLight }}
-                        >
+                        <Text className="text-white font-exoLight">
                           Login as Administrator
                         </Text>
                       </ButtonAnimated>
