@@ -22,14 +22,6 @@
     </script>
 
     <style>
-      .buttonContainer {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-
-        z-index: 1;
-        margin-bottom: 10px;
-      }
       .run {
         position: absolute;
         z-index: 1;
@@ -48,26 +40,9 @@
         width: 100%;
         height: 88vh;
       }
-      .switch {
-        width: 100px;
-        height: 30px;
-        background-color: #111827;
-        border-radius: 20px;
-        border: none;
-        color: white;
-        font-weight: bolder;
-      }
-      .active {
-        color: rgb(151, 141, 141);
-      }
     </style>
   </head>
   <body>
-    <div class="buttonContainer">
-      <button class="switch active" data-language="html">HTML</button>
-      <button class="switch" data-language="css">CSS</button>
-      <button class="switch" data-language="js">JS</button>
-    </div>
     <button class="run">RUN</button>
     <div id="editor"></div>
 
@@ -101,27 +76,21 @@
         });
       }
       let prevLang = "html";
-      buttonContainer.addEventListener("click", (e) => {
-        const clicked = e.target.closest(".switch");
-        if (!clicked) return;
-        document.querySelectorAll(".switch").forEach((button) => {
-          button.classList.remove("active");
-        });
-        clicked.classList.add("active");
-        if (editor) {
-          code[prevLang] = editor.state.doc.toString();
-          prevLang = clicked.getAttribute("data-language");
-          editor.destroy();
-        }
-
-        let selectedLang = language[clicked.getAttribute("data-language")];
-        newEditor(selectedLang, code[clicked.getAttribute("data-language")]);
-      });
 
       document.querySelector(".run").addEventListener("click", () => {
         code[prevLang] = editor.state.doc.toString();
-
         window.ReactNativeWebView.postMessage(JSON.stringify(code));
+      });
+
+      window.addEventListener("message", (e) => {
+        const lang = e.data;
+        if (!["html", "css", "js"].includes(lang)) return;
+
+        code[prevLang] = editor.state.doc.toString();
+
+        editor.destroy();
+        prevLang = lang;
+        newEditor(language[lang], code[lang]);
       });
     </script>
   </body>
