@@ -20,17 +20,18 @@ const SelectLanguageNavigation = ({
     if (lang === "Html" && isHtml) return "Html";
     if (lang === "Css" && isCss) return "Css";
     if (lang === "Js" && isJs) return "Js";
-    return;
+    return false;
   });
+
   return (
     <View className="flex-row">
-      {visibleButton.map((val, index) => (
+      {visibleButton.map((val: string, index: number) => (
         <ButtonAnimated
           key={index}
           onPressAction={() => sendToWebView(val.toLowerCase())}
         >
           <Text className="py-2 px-4 mx-2 rounded-2xl bg-shopAccent text-white font-exoBold">
-            {val}
+            {val.toUpperCase()}
           </Text>
         </ButtonAnimated>
       ))}

@@ -1,13 +1,10 @@
-import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useFetchLesson from "@/assets/Hooks/useFetchLesson";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useRef } from "react";
+import React from "react";
 import { Pressable, Text, View } from "react-native";
-import WebView from "react-native-webview";
 
 const levelSceen = () => {
   const { levelid, title, lessonid } = useLocalSearchParams() as {
@@ -18,31 +15,30 @@ const levelSceen = () => {
 
   const { lesson, loading } = useFetchLesson({ levelid, title, lessonid });
 
-  const webRef = useRef<WebView>(null);
-
-  const sendToWebView = (lang: string) => {
-    webRef.current?.postMessage(lang);
-    console.log(lang);
-  };
-
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-[#393F59]">
         <CustomGeneralContainer>
-          <View className="flex-row justify-between ">
+          <View className="flex-row justify-between mx-3">
             <Pressable
               className="bg-[#1E1E2E] rounded-2xl"
               onPress={() => router.replace("/(auth)/home/(Lessons)/Lesson")}
             >
-              <Text className="text-white py-2 px-7">INSTRUCTIONS</Text>
+              <Text className="text-white py-2 px-7 font-exoBold">
+                INSTRUCTIONS
+              </Text>
             </Pressable>
 
-            <SelectLanguageNavigation
-              sendToWebView={sendToWebView}
-              isCss={true}
-              isJs={false}
-              isHtml={true}
-            ></SelectLanguageNavigation>
+            <Pressable
+              className="bg-[#1E1E2E] rounded-2xl font-exoBold"
+              onPress={() =>
+                router.push({
+                  pathname: "/level/EditorView",
+                })
+              }
+            >
+              <Text className="text-white py-2 px-7 font-exoBold">Editor</Text>
+            </Pressable>
           </View>
           {loading || !lesson ? (
             <LoadingAnim />
@@ -74,8 +70,6 @@ const levelSceen = () => {
               </View>
             </View>
           )}
-
-          <CodingPlaygroundEditor webRef={webRef} />
         </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>

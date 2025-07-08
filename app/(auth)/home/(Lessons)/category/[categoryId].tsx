@@ -44,9 +44,10 @@ const categoryScreen = () => {
             <Image source={meta.icon} className="w-[100px] h-[100px]"></Image>
           </View>
         </LinearGradient>
-        <View className=" items-center">
+
+        <View className=" items-center mx-3">
           <Text className="my-5 text-3xl text-white font-exoBold">
-            About
+            About {""}
             <Text style={{ color: meta.gradient.color1 }}>
               {id.toUpperCase().toString()}
             </Text>
@@ -73,10 +74,11 @@ const categoryScreen = () => {
             stickySectionHeadersEnabled={false}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item, index }) => {
+            renderItem={({ item }) => {
               globalAnim++;
               return (
                 <Pressable
+                  className="mx-3"
                   onPress={() => {
                     if (!item.status) {
                       setVisibility(true);
@@ -108,7 +110,7 @@ const categoryScreen = () => {
               );
             }}
             renderSectionHeader={({ section }) => (
-              <Text className="text-white text-2xl font-exoBold">
+              <Text className="text-white text-2xl font-exoBold mx-3 my-5">
                 {section.title}
               </Text>
             )}

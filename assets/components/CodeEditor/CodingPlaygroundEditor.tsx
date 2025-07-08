@@ -2,17 +2,21 @@ import LottieView from "lottie-react-native";
 import type { RefObject } from "react";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import WebView from "react-native-webview";
+import WebView, { WebViewMessageEvent } from "react-native-webview";
 
 type CodingPlaygroundEditorProps = {
   webRef: RefObject<WebView | null>;
 };
+
+type CodeEditorPayload = {
+  html?: string;
+  css?: string;
+  js?: string;
+};
 const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
-  const [recievedCode, setRecievedCode] = useState<{
-    html?: string;
-    css?: string;
-    js?: string;
-  }>();
+  const [recievedCode, setRecievedCode] = useState<
+    CodeEditorPayload | undefined
+  >(undefined);
   return (
     <View className="bg-accent flex-[1] rounded-[10px]">
       <View className="flex-1 bg-[#D9D9D9] m-2 rounded-xl">
@@ -38,6 +42,7 @@ const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
   </head>
   <body>
       ${recievedCode?.html}
+          <script>${recievedCode?.js}</script>
   </body>
 </html>`,
             }}
@@ -58,8 +63,6 @@ const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
       <View className="flex-[2]">
         <WebView
           scrollEnabled={false}
-          javaScriptEnabled={true}
-          originWhitelist={["*"]}
           ref={webRef}
           style={{
             flex: 1,
@@ -68,9 +71,9 @@ const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
             borderRadius: 10,
           }}
           source={require("@/fontFamily/editor/codeMirror.html")}
-          onMessage={(e) => {
+          onMessage={(e: WebViewMessageEvent) => {
             try {
-              const val = JSON.parse(e.nativeEvent.data);
+              const val: CodeEditorPayload = JSON.parse(e.nativeEvent.data);
 
               setRecievedCode(val);
             } catch (error) {

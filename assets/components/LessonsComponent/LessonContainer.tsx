@@ -42,7 +42,7 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
         <Text className="text-white text-2xl font-exoBold">{item.title}</Text>
         <Text
           numberOfLines={2}
-          className="text-[#94A1B2] text-sm w-[17%] text-justify font-exoLight "
+          className="text-[#94A1B2] text-sm w-[16%] text-justify font-exoLight "
         >
           {item.desc}
         </Text>
