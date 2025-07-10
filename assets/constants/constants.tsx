@@ -99,7 +99,7 @@ export const lessons = [
   { id: 1, name: "HTML", color: "#FFC300", icon: "logo-html5" },
   { id: 2, name: "CSS", color: "#00BFFF", icon: "logo-css3" },
   { id: 3, name: "JavaScript", color: "#FF8C00", icon: "logo-javascript" },
-  { id: 4, name: "Database", color: "#388E3C", icon: "albums" },
+  { id: 4, name: "Database", color: "#388E3C", icon: "cube" },
 ];
 
 // Achievements Constants

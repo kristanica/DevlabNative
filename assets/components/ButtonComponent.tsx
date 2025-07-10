@@ -40,7 +40,7 @@ const ButtonAnimated = ({
     >
       <AnimatedView
         style={[{ backgroundColor }, animatedStyle]}
-        className="my-2  justify-center items-center rounded-3xl"
+        className="my-2   rounded-3xl"
       >
         {children}
       </AnimatedView>

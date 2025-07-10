@@ -5,6 +5,7 @@ import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
 import { useBackground } from "@/assets/Provider/BackgroundProvider";
+import { useInfo } from "@/assets/Provider/InformationProvider";
 import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -22,6 +23,9 @@ export default function Home() {
   // Recieves background and profile images
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
+
+  const { userData } = useInfo();
+  console.log(userData);
 
   // useEffect(() => {
   //   const getUser = async () => {
@@ -114,7 +118,7 @@ export default function Home() {
                     className="text-white text-4xl font-exoExtraBold"
                     style={[boxShadow.textShadow]}
                   >
-                    LAIN LAIN
+                    {userData?.username}
                   </Text>
                   <Text
                     className="text-white font-exoBold"
