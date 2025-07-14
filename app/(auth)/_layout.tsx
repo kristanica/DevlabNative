@@ -1,26 +1,30 @@
 import { Stack } from "expo-router";
-import React from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect } from "react";
 
-import { AuthProvider } from "@/assets/Provider/AuthProvider";
-import { BackgroundProvider } from "@/assets/Provider/BackgroundProvider";
-import { InformationProvider } from "@/assets/Provider/InformationProvider";
-import { ProfileProvider } from "@/assets/Provider/ProfileProvider";
+import { BackgroundProvider } from "@/assets/zustand/BackgroundProvider";
+// import { InformationProvider } from "@/assets/Provider/InformationProvider";
+import useMounted from "@/assets/Hooks/useMounted";
+import { ProfileProvider } from "@/assets/zustand/ProfileProvider";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 
 const TabsLayout = () => {
+  const getValidUser = useGetUserInfo((state) => state.getUser);
+
+  const isMounted = useMounted();
+  useEffect(() => {
+    if (!isMounted.current) return;
+
+    const user = getValidUser();
+    console.log(JSON.stringify(user));
+  }, []);
+
   return (
-    <AuthProvider>
-      <InformationProvider>
-        <ProfileProvider>
-          <BackgroundProvider>
-            <Stack screenOptions={{ headerShown: false }} />
-          </BackgroundProvider>
-        </ProfileProvider>
-      </InformationProvider>
-    </AuthProvider>
+    <ProfileProvider>
+      <BackgroundProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </BackgroundProvider>
+    </ProfileProvider>
   );
 };
 
 export default TabsLayout;
-
-const styles = StyleSheet.create({});

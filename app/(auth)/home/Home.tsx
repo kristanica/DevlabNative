@@ -4,10 +4,10 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
-import { useBackground } from "@/assets/Provider/BackgroundProvider";
-import { useInfo } from "@/assets/Provider/InformationProvider";
-import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
+import { useBackground } from "@/assets/zustand/BackgroundProvider";
+import { useProfile } from "@/assets/zustand/ProfileProvider";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import {
@@ -24,30 +24,8 @@ export default function Home() {
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
 
-  const { userData } = useInfo();
-  console.log(userData);
+  const { userData } = useGetUserInfo();
 
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     const uid = auth.currentUser?.uid;
-
-  //     if (!uid) {
-  //       console.log("No user UID found.");
-  //       return;
-  //     }
-  //     try {
-  //       const userRef = doc(db, "Users", uid);
-  //       const data = await getDoc(userRef);
-  //       if (data.exists()) {
-  //         const userData = data.data();
-  //         console.log(userData.username);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   getUser();
-  // }, []);
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -59,7 +37,9 @@ export default function Home() {
                   <Text className="text-white text-4xl font-exoBold">
                     Welcome Aboard,
                   </Text>
-                  <Text className="text-white text-4xl font-exoBold">Lain</Text>
+                  <Text className="text-white text-4xl font-exoBold">
+                    {userData?.username}
+                  </Text>
                 </View>
 
                 <Pressable
@@ -103,7 +83,7 @@ export default function Home() {
                     className="text-xs text-white font-exoLight"
                     style={[boxShadow.textShadowLight]}
                   >
-                    This is an awesome bio
+                    {userData?.bio}
                   </Text>
                 </View>
                 {/* Renders right side user information */}
@@ -124,7 +104,7 @@ export default function Home() {
                     className="text-white font-exoBold"
                     style={[boxShadow.textShadowLight]}
                   >
-                    LEVEL 91
+                    {"Level"} {userData?.userLevel}
                   </Text>
                   {/* EXP bar */}
                   <View
@@ -140,7 +120,7 @@ export default function Home() {
                     className="text-white text-shadow-lg/30 font-exoRegular"
                     style={[boxShadow.textShadowLight]}
                   >
-                    100/200 XP
+                    {userData?.exp} {"EXP"}
                   </Text>
                 </View>
               </ImageBackground>

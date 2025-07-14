@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { useBackground } from "../Provider/BackgroundProvider";
-import { useProfile } from "../Provider/ProfileProvider";
+import { useBackground } from "../zustand/BackgroundProvider";
+import { useProfile } from "../zustand/ProfileProvider";
 
 const usePickImage = () => {
   const { setBackground } = useBackground();

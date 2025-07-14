@@ -6,12 +6,15 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useModal from "@/assets/Hooks/useModal";
 import usePickImage from "@/assets/Hooks/usePickImage";
-import { useBackground } from "@/assets/Provider/BackgroundProvider";
-import { useProfile } from "@/assets/Provider/ProfileProvider";
 import { boxShadow } from "@/assets/styles/ContainerStyles";
-import React from "react";
+import { useBackground } from "@/assets/zustand/BackgroundProvider";
+import { useProfile } from "@/assets/zustand/ProfileProvider";
+import React, { useState } from "react";
 
+import ConfirmationModal from "@/assets/components/SettingsComponents/ConfirmationModal";
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
+
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import {
   Image,
   ImageBackground,
@@ -27,10 +30,16 @@ import {
 } from "react-native";
 
 const Settings = () => {
+  const [bio, setBio] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
   const logOutModal = useModal();
   const adminModal = useModal();
+  const confirmationModal = useModal();
+
+  const { userData } = useGetUserInfo();
 
   const { pickImageProfile, pickImageBackground } = usePickImage();
 
@@ -88,7 +97,10 @@ const Settings = () => {
                         <Text className="text-white mx-5 mb-2">Username</Text>
                         <View className="flex-row bg-[#1E212F] mx-5 p-3 rounded-[10px]">
                           <TextInput
-                            placeholder={"Username goes here..."}
+                            value={userName}
+                            onChangeText={setUserName}
+                            // placeholder={"username"}
+                            placeholder={userData?.username}
                             className="text-white bg-[#1E212F] flex-[1]"
                           />
                         </View>
@@ -100,7 +112,10 @@ const Settings = () => {
 
                         <View className="flex-row bg-[#1E212F] mx-5 p-3 rounded-[10px]">
                           <TextInput
-                            placeholder={"Bio goes here...."}
+                            value={bio}
+                            onChangeText={setBio}
+                            // placeholder={"Bio"}
+                            placeholder={userData?.bio}
                             className="text-white flex-[1]"
                           />
                         </View>
@@ -108,7 +123,16 @@ const Settings = () => {
                     </View>
 
                     <View className="flex-[2] items-center pt-10   ">
-                      <ButtonAnimated backgroundColor="#7F5AF0">
+                      <ButtonAnimated
+                        backgroundColor="#7F5AF0"
+                        onPressAction={() => {
+                          if (!userName.trim() && !bio.trim()) {
+                            alert("Empty credentials");
+                            return;
+                          }
+                          confirmationModal.setVisibility(true);
+                        }}
+                      >
                         <Text className="text-white py-4 px-16 font-exoBold">
                           Save Changes
                         </Text>
@@ -148,6 +172,16 @@ const Settings = () => {
                 visibility={logOutModal.visibility}
                 scaleStyle={logOutModal.scaleStyle}
                 closeModal={logOutModal.closeModal}
+              />
+            )}
+
+            {confirmationModal.visibility && (
+              <ConfirmationModal
+                userName={userName}
+                bio={bio}
+                visibility={confirmationModal.visibility}
+                scaleStyle={confirmationModal.scaleStyle}
+                closeModal={confirmationModal.closeModal}
               />
             )}
           </CustomGeneralContainer>

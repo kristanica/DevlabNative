@@ -1,18 +1,22 @@
 import useCustomFonts from "@/assets/Hooks/useCustomFonts";
-import { AuthProvider } from "@/assets/Provider/AuthProvider";
+import { zustandProtected } from "@/assets/zustand/Authentication";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import "../global.css";
 export default function RootLayout() {
   const readyFont = useCustomFonts();
 
-  if (!readyFont) return null;
+  const getValidUser = zustandProtected((state) => state.getValidUser);
+  useEffect(() => {
+    getValidUser();
+  }, []);
 
+  if (!readyFont) return null;
   return (
-    <AuthProvider>
+    <>
       <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false, animation: "none" }} />
-    </AuthProvider>
+    </>
   );
 }
