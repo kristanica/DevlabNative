@@ -39,7 +39,7 @@ const index = () => {
             <Text className="font-exoRegular text-white">
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={() => router.replace("/home/Home")}>
+            <TouchableOpacity onPress={() => router.replace("/Login")}>
               <Text className="text-pink-400 ml-3 font-exoRegular">Login</Text>
             </TouchableOpacity>
           </View>

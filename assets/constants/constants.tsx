@@ -56,6 +56,59 @@ export const lessonMetaData = {
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
 
+//Shop constants
+
+export const mockUpShopItem = [
+  {
+    id: 1,
+    name: "Double Down",
+    description:
+      "Multiply your rewards at a risk! Earn double or lose the bonus depending on your answer.",
+    functionality: "Multiply or lose rewards by 2x",
+    price: "$400",
+  },
+  {
+    id: 2,
+    name: "Syntax Scroll",
+    description:
+      "Reveal the syntax of the correct answer. Ideal for trick questions or mental breakdowns.",
+    functionality: "Highlight correct syntax in one question",
+    price: "$250",
+  },
+  {
+    id: 3,
+    name: "Hint Potion",
+    description:
+      "Consume to unlock a helpful hint for a hard question. May include a mild ego boost.",
+    functionality: "Reveals a contextual hint",
+    price: "$300",
+  },
+  {
+    id: 4,
+    name: "Time Freeze",
+    description:
+      "Pauses the countdown timer, giving you a breather and some much-needed sanity.",
+    functionality: "Freezes timer for 15 seconds",
+    price: "$500",
+  },
+  {
+    id: 5,
+    name: "Debug Drone",
+    description:
+      "Automatically identifies a small mistake in your code. Doesn't fix emotional bugs though.",
+    functionality: "Highlights one syntax or logic error",
+    price: "$600",
+  },
+  {
+    id: 6,
+    name: "XP Magnet",
+    description:
+      "Pulls XP from every corner of the battlefield. Temporarily boosts XP gained.",
+    functionality: "Gives +50% XP for next 3 questions",
+    price: "$350",
+  },
+] as const;
+
 //Onboarding Constants
 export const onboardingData = [
   {

@@ -38,9 +38,7 @@ const Settings = () => {
   const logOutModal = useModal();
   const adminModal = useModal();
   const confirmationModal = useModal();
-
   const { userData } = useGetUserInfo();
-
   const { pickImageProfile, pickImageBackground } = usePickImage();
 
   return (

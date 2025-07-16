@@ -8,7 +8,7 @@ type ProtectedProps = {
   getValidUser: () => void;
 };
 
-export const zustandProtected = create<ProtectedProps>((set) => ({
+export const Protected = create<ProtectedProps>((set) => ({
   user: null,
   loaded: false,
   setValidUser: (val: User) => set({ user: val }),

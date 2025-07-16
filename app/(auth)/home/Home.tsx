@@ -18,14 +18,11 @@ import {
   Text,
   View,
 } from "react-native";
-
 export default function Home() {
   // Recieves background and profile images
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
-
   const { userData } = useGetUserInfo();
-
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">

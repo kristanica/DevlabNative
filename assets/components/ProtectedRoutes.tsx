@@ -1,7 +1,7 @@
 import { Redirect } from "expo-router";
 import React, { ReactNode } from "react";
 import { View } from "react-native";
-import { zustandProtected } from "../zustand/Authentication";
+import { Protected } from "../zustand/Authentication";
 import LoadingAnim from "./LoadingAnim";
 
 type childrenProps = {
@@ -9,16 +9,15 @@ type childrenProps = {
 };
 
 const ProtectedRoutes = ({ children }: childrenProps) => {
-  // useAuth Context
-
-  const user = zustandProtected((state) => state.user);
-  const loaded = zustandProtected((state) => state.loaded);
-  // If still loading
+  const user = Protected((state) => state.user);
+  const loaded = Protected((state) => state.loaded);
 
   if (!loaded) {
-    <View className="flex-[1] bg-background justify-center items-center">
-      <LoadingAnim />
-    </View>;
+    return (
+      <View className="flex-[1] bg-background justify-center items-center">
+        <LoadingAnim />
+      </View>
+    );
   }
 
   // If there is no user, redirect to index (login)
@@ -26,7 +25,6 @@ const ProtectedRoutes = ({ children }: childrenProps) => {
 
   // If user is logged in and loaded, render children
   if (user && loaded) return <View className="flex-1">{children}</View>;
-
   return null;
 };
 
