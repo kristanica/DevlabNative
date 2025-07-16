@@ -2,13 +2,13 @@ import AchievementContainer from "@/assets/components/AchievementsComponents/Ach
 import AchievementsProgressBar from "@/assets/components/AchievementsComponents/AchievementsProgressBar";
 import React, { useState } from "react";
 
-import { useBackground } from "@/assets/Provider/BackgroundProvider";
-import { useProfile } from "@/assets/Provider/ProfileProvider";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonComponent from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { htmlMockUp, mockData } from "@/assets/constants/constants";
+import { useBackground } from "@/assets/zustand/BackgroundProvider";
+import { useProfile } from "@/assets/zustand/ProfileProvider";
 
 import { FlatList, Image, ImageBackground, Text, View } from "react-native";
 

@@ -1,6 +1,6 @@
 import LottieView from "lottie-react-native";
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { Text } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 const LoadingAnim = () => {
@@ -20,5 +20,3 @@ const LoadingAnim = () => {
 };
 
 export default LoadingAnim;
-
-const styles = StyleSheet.create({});
