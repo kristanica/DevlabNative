@@ -1,7 +1,8 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import useFetchLesson from "@/assets/Hooks/useFetchLesson";
+import { useFetchLessons } from "@/assets/Hooks/query/useFetchLessons";
+import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
@@ -13,7 +14,10 @@ const levelSceen = () => {
     lessonid: string;
   };
 
-  const { lesson, loading } = useFetchLesson({ levelid, title, lessonid });
+  const { data: levelData, isLoading } = useQuery({
+    queryKey: ["level", levelid, title, lessonid],
+    queryFn: () => useFetchLessons({ levelid, title, lessonid }),
+  });
 
   return (
     <ProtectedRoutes>
@@ -22,7 +26,7 @@ const levelSceen = () => {
           <View className="flex-row justify-between mx-3">
             <Pressable
               className="bg-[#1E1E2E] rounded-2xl"
-              onPress={() => router.replace("/(auth)/home/(Lessons)/Lesson")}
+              onPress={() => router.replace("/(user)/home/(Lessons)/Lesson")}
             >
               <Text className="text-white py-2 px-7 font-exoBold">
                 INSTRUCTIONS
@@ -40,16 +44,16 @@ const levelSceen = () => {
               <Text className="text-white py-2 px-7 font-exoBold">Editor</Text>
             </Pressable>
           </View>
-          {loading || !lesson ? (
+          {isLoading || !levelData ? (
             <LoadingAnim />
           ) : (
-            <View key={lesson.id} className="m-3">
+            <View key={levelData.id} className="m-3">
               <Text className="text-white font-bold text-3xl py-2 font-exoBold">
-                {levelid}: {lesson.title}
+                {levelid}: {levelData.title}
               </Text>
               <View className="py-2">
                 <Text className="text-white text-lg text-justify font-exoBold">
-                  {lesson.desc}
+                  {levelData.desc}
                 </Text>
               </View>
               <View className="bg-[#25293B] p-3 rounded-2xl">
@@ -57,7 +61,7 @@ const levelSceen = () => {
                   Instructions
                 </Text>
                 <Text className="text-white italic text-lg">
-                  {lesson.instruction}
+                  {levelData.instruction}
                 </Text>
 
                 <View className="bg-[#191C2B] rounded-2xl p-2">

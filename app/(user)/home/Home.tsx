@@ -23,6 +23,7 @@ export default function Home() {
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
   const { userData } = useGetUserInfo();
+
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -41,7 +42,7 @@ export default function Home() {
 
                 <Pressable
                   className="mr-4"
-                  onPress={() => router.replace("/(auth)/home/Settings")}
+                  onPress={() => router.replace("/(user)/home/Settings")}
                 >
                   <Ionicons
                     name={"settings"}

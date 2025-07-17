@@ -1,7 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../constants/constants";
-import useMounted from "./useMounted";
+import useMounted from "../Hooks/useMounted";
 
 type useFetchLessonListProps = {
   category: string;

@@ -13,15 +13,13 @@ const TabsLayout = () => {
   const isMounted = useMounted();
   useEffect(() => {
     if (!isMounted.current) return;
-
-    const user = getValidUser();
-    console.log(JSON.stringify(user));
+    getValidUser();
   }, []);
 
   return (
     <ProfileProvider>
       <BackgroundProvider>
-        <Stack screenOptions={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false, animation: "none" }} />
       </BackgroundProvider>
     </ProfileProvider>
   );

@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useEffect, useReducer } from "react";
 import { Keyboard } from "react-native";
@@ -43,44 +42,23 @@ const useLogin = () => {
       } else {
         await AsyncStorage.removeItem("isLoggin");
       }
-      router.replace("/(auth)/home/Home");
+      router.replace("/(user)/LoadingScreen");
     } catch (error) {
-      const err = error as FirebaseError;
-      let message = "An unknown error occurred. Please try again.";
-      switch (err.code) {
-        case "auth/invalid-email":
-          message = "The email address is badly formatted.";
-          break;
-        case "auth/user-disabled":
-          message = "This user account has been disabled.";
-          break;
-        case "auth/invalid-credential":
-          message = "Credentials does not match";
-          break;
-        case "auth/wrong-password":
-          message = "Incorrect password. Please try again.";
-          break;
-        case "auth/too-many-requests":
-          message = "Too many login attempts. Try again later.";
-          break;
-        default:
-          console.log("Firebase error:", err.code); // for dev/debugging
-      }
-
-      alert(message);
+      console.log(error);
       if (isFailed) {
         isFailed();
       }
     }
   };
 
-  // Redirects user to Home.tsxif keepSign is true
+  // Redirects user to LoadingScreen.tsx first then home.tsx if keepSign is true
   useEffect(() => {
     const keepSignIn = async () => {
       try {
         const val = await AsyncStorage.getItem("isLoggin");
         if (val === "true") {
-          router.replace("/(auth)/home/Home");
+          // redirects first to LoadingScreen to simulate loading and avoid seeing userinformation as blank as it is being fetched first
+          router.replace("/(user)/LoadingScreen");
         }
       } catch (error) {
         console.log(error);

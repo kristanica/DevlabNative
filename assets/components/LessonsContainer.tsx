@@ -46,7 +46,7 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
           <ButtonAnimated
             onPressAction={() =>
               router.push({
-                pathname: "/(auth)/home/(Lessons)/category/[categoryId]",
+                pathname: "/(user)/home/(Lessons)/category/[categoryId]",
                 params: { categoryId: name },
               })
             }

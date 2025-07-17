@@ -3,9 +3,10 @@ import LessonContainer from "@/assets/components/LessonsComponent/LessonContaine
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import { lessonMetaData } from "@/assets/constants/constants";
+import { useFetchLessonList } from "@/assets/Hooks/query/useFetchLessonList";
 
-import useFetchLessonList from "@/assets/Hooks/useFetchLessonList";
 import useModal from "@/assets/Hooks/useModal";
+import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -19,8 +20,16 @@ const categoryScreen = () => {
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
-  const { loading, lesson } = useFetchLessonList({ category: id });
   let globalAnim: number = 0;
+
+  const { data: lessonData, isLoading } = useQuery({
+    queryKey: ["lesson", id],
+    queryFn: ({ queryKey }) => {
+      const [, categoryId] = queryKey as [string, keyof typeof lessonMetaData];
+      return useFetchLessonList({ category: categoryId });
+    },
+    enabled: !!id,
+  });
 
   return (
     <View className="bg-accent flex-[1]">
@@ -60,17 +69,21 @@ const categoryScreen = () => {
           scaleStyle={scaleStyle}
           closeModal={closeModal}
         ></LockLessonModal>
-        {loading ? (
+        {isLoading ? (
           <LoadingAnim />
         ) : (
           <SectionList
-            sections={lesson.map((data: any) => ({
-              title: data.title,
-              data: data.levels.map((level: any) => ({
-                ...level,
-                lessonid: data.id,
-              })),
-            }))}
+            sections={
+              lessonData
+                ? lessonData.map((data: any) => ({
+                    title: data.title,
+                    data: data.levels.map((level: any) => ({
+                      ...level,
+                      lessonid: data.id,
+                    })),
+                  }))
+                : []
+            }
             stickySectionHeadersEnabled={false}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}

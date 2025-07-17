@@ -3,7 +3,10 @@
 import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
 import { Dimensions } from "react-native";
 
+//global
 export const { width, height } = Dimensions.get("screen");
+export const auth = FIREBASE_AUTH;
+export const db = FIREBASE_STORE;
 
 export const lessonMetaData = {
   Css: {
@@ -51,10 +54,6 @@ export const lessonMetaData = {
     },
   },
 } as const;
-
-//FIREBASE
-export const auth = FIREBASE_AUTH;
-export const db = FIREBASE_STORE;
 
 //Shop constants
 
@@ -109,6 +108,64 @@ export const mockUpShopItem = [
   },
 ] as const;
 
+//LoadingScreen constants
+export const devlabTips = [
+  "Breaking your code is just ✨unit testing✨ in disguise.",
+  "If Google ever crashes, we riot.",
+  "Learning to code? Step 1: Panic. Step 2: Google it.",
+  "If it works on your machine, it's basically production-ready.",
+  "Syntax errors are just your code asking for attention.",
+  "Comment your code like you're leaving instructions for aliens.",
+
+  "Console.log is the duct tape of JavaScript.",
+  "Commit early, commit often, regret nothing (until production).",
+  "`===` saves lives. `==` starts fires.",
+  "Naming things is hard. Just call it `thingyMcThingface` and move on.",
+  "Don’t repeat yourself… unless you're debugging, then repeat yourself loudly.",
+
+  "There’s no place like 127.0.0.1 — unless you forgot the port number.",
+  "Programming: turning coffee into bugs since forever.",
+  "It’s not a bug, it’s a surprise mechanic.",
+  "Want to feel alive? Deploy without testing.",
+  "CSS is just sorcery we pretend to understand.",
+  "You miss 100% of the semicolons you don’t place.",
+
+  "DevLab Tip: Pressing 'Run' counts as bravery.",
+  "XP Bonus: Read your error message *before* crying.",
+  "JS functions are like spells. Forget the parentheses, summon chaos.",
+  "HTML is like pizza dough. Easy to make, hard to get crispy.",
+  "Your bugs fear one thing: `console.log('you')`",
+
+  "You’re one crash away from greatness.",
+  "Even the best devs once misspelled `console`.",
+  "Keep pushing. The bugs are more afraid of you than you are of them.",
+  "A failed build is just a plot twist.",
+  "Coding is 10% writing and 90% explaining to your rubber duck.",
+  "Your future self will look at this and say: 'why tho?' — and that's growth.",
+] as const;
+
+export const devlabBootLines = [
+  "Injecting 3 shots of espresso into mainframe...",
+  "Unleashing the rubber duck debugger army...",
+  "Bribing the compiler with compliments...",
+  "Assembling pixels into something vaguely UI-ish...",
+  "Reciting forbidden Stack Overflow incantations...",
+  "Drawing a pentagram with flexbox...",
+  "Sacrificing semicolons for stronger typings...",
+  "Reviving dead commits from Git graveyard...",
+  "Slapping bugs with a keyboard (gently)...",
+  "Brewing dark mode potions...",
+  "Installing `hope`... failed. Retrying...",
+  "Deploying divs into the void...",
+  "Asking ChatGPT for life advice...",
+  "Converting caffeine to source code...",
+  "Taming rogue animations with duct tape...",
+  "Binding the soul of a junior dev to this project...",
+  "Buffing syntax with +5 chaos energy...",
+  "Enabling God Mode for your console.logs...",
+  "All systems unstable. Proceed anyway 🚀",
+] as const;
+
 //Onboarding Constants
 export const onboardingData = [
   {
@@ -147,6 +204,7 @@ export const onboardingData = [
     background: "#2c0e37",
   },
 ];
+
 // Home Constatns
 export const lessons = [
   { id: 1, name: "HTML", color: "#FFC300", icon: "logo-html5" },

@@ -17,7 +17,6 @@ export const Protected = create<ProtectedProps>((set) => ({
     const unsub = onAuthStateChanged(auth, (fireBaseUser) => {
       set({ user: fireBaseUser, loaded: true });
     });
-
     return unsub;
   },
 }));

@@ -30,7 +30,7 @@ const Lessons = () => {
             <View className="flex-row justify-between  flex-[.6] items-center ">
               <Pressable
                 onPress={() =>
-                  router.replace({ pathname: "/(auth)/playground/Coding" })
+                  router.replace({ pathname: "/(user)/playground/Coding" })
                 }
                 className="h-[200px] w-[200px]"
               >
@@ -49,11 +49,10 @@ const Lessons = () => {
                   </Text>
                 </LinearGradient>
               </Pressable>
-
               <Pressable
                 className="h-[200px] w-[200px]"
                 onPress={() =>
-                  router.replace({ pathname: "/(auth)/playground/Database" })
+                  router.replace({ pathname: "/(user)/playground/Database" })
                 }
               >
                 <LinearGradient

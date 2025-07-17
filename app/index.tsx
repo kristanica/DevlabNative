@@ -1,17 +1,18 @@
+import AnimatedAppearContainer from "@/assets/components/AnimatedAppearContainer";
 import ButtonComponent from "@/assets/components/ButtonComponent";
+import useNavigate from "@/assets/Hooks/useNavigate";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { useSharedValue } from "react-native-reanimated";
 
 const index = () => {
+  const opacityVal = useSharedValue(0);
+
   return (
     <View className="bg-background flex-[1] justify-center items-center">
-      <Animated.View
-        entering={FadeIn.duration(500)}
-        exiting={FadeOut.duration(100)}
-      >
+      <AnimatedAppearContainer opacityVal={opacityVal}>
         <View className="flex-[2] justify-center items-center">
           <LottieView
             source={require("@/assets/Lottie/Loading.json")}
@@ -39,12 +40,12 @@ const index = () => {
             <Text className="font-exoRegular text-white">
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={() => router.replace("/Login")}>
+            <TouchableOpacity onPress={() => useNavigate(opacityVal)}>
               <Text className="text-pink-400 ml-3 font-exoRegular">Login</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </Animated.View>
+      </AnimatedAppearContainer>
     </View>
   );
 };
