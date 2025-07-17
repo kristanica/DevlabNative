@@ -37,9 +37,16 @@ const index = () => {
             </ButtonComponent>
           </View>
           <View className="flex-row">
-            <Text className="font-exoRegular text-white">
-              Already have an account?
-            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                router.replace({ pathname: "/(admin)/AdminLogin" })
+              }
+            >
+              <Text className="font-exoRegular text-white">
+                Already have an account?
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => useNavigate(opacityVal)}>
               <Text className="text-pink-400 ml-3 font-exoRegular">Login</Text>
             </TouchableOpacity>
