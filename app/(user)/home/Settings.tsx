@@ -32,7 +32,6 @@ import {
 const Settings = () => {
   const [bio, setBio] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
   const logOutModal = useModal();
@@ -124,6 +123,7 @@ const Settings = () => {
                       <ButtonAnimated
                         backgroundColor="#7F5AF0"
                         onPressAction={() => {
+                          Keyboard.dismiss;
                           if (!userName.trim() && !bio.trim()) {
                             alert("Empty credentials");
                             return;

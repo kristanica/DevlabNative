@@ -1,7 +1,9 @@
-import useChangeUserInfo from "@/assets/Hooks/useChangeUserInfo";
+import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
+import { useMutation } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import React from "react";
 import {
+  Keyboard,
   Modal,
   Pressable,
   StyleSheet,
@@ -27,7 +29,10 @@ const ConfirmationModal = ({
   userName,
   bio,
 }: confirmationModalProps) => {
-  const changeUserInfo = useChangeUserInfo();
+  const mutation = useMutation({
+    mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
+      await useEditUserInfo(userName, bio),
+  });
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
@@ -57,7 +62,8 @@ const ConfirmationModal = ({
               <ButtonAnimated
                 backgroundColor={"#7F5AF0"}
                 onPressAction={() => {
-                  changeUserInfo(userName, bio);
+                  Keyboard.dismiss;
+                  mutation.mutate({ userName, bio });
                   closeModal();
                 }}
               >

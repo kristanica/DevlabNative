@@ -10,18 +10,27 @@ const LoadingScreen = () => {
   const [bootText, setBootText] = useState<string>(
     "Setting up the workplace..."
   );
-  const [counter, setCounter] = useState<number>(1);
+
   const [quote, setQuote] = useState<string>("");
   const [visible, setVisible] = useState(true);
-  // Set boottext every 2sec
   useEffect(() => {
-    const unsub1 = setTimeout(() => {
-      setBootText(devlabBootLines[counter]);
-      setCounter((prev) => (prev + 1) % devlabBootLines.length);
-    }, 1000);
+    let i: number = 0;
+    //random quote
+    const iden = Math.floor(Math.random() * devlabTips.length);
+    setQuote(devlabTips[iden]);
 
-    return () => clearTimeout(unsub1);
-  }, [counter]);
+    //imitates booting
+    const interval = setInterval(() => {
+      if (i < devlabBootLines.length) {
+        setBootText(devlabBootLines[i]);
+        return i++;
+      } else {
+        clearInterval(interval);
+        return i;
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // redirect to homepage after 15 sec
   useEffect(() => {
@@ -33,12 +42,6 @@ const LoadingScreen = () => {
     }, 15000);
 
     return () => clearTimeout(timeoutId);
-  }, []);
-
-  //get random quote
-  useEffect(() => {
-    const iden = Math.floor(Math.random() * devlabTips.length);
-    setQuote(devlabTips[iden]);
   }, []);
 
   return (
