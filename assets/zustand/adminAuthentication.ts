@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { create } from "zustand";
-import { auth, db } from "../constants/constants";
+import { auth, db, path } from "../constants/constants";
 
 type adminAuthenticationProps = {
   user: User | null;
@@ -19,7 +19,7 @@ const adminAuthentication = create<adminAuthenticationProps>((set) => ({
     set({ loaded: false });
     onAuthStateChanged(auth, async (adminUser) => {
       if (!adminUser) {
-        router.replace({ pathname: "/(user)/home/Settings" });
+        router.replace({ pathname: path.SETTINGS });
         return;
       }
       const uid = adminUser.uid;
@@ -30,7 +30,7 @@ const adminAuthentication = create<adminAuthenticationProps>((set) => ({
         set({ user: adminUser, loaded: true });
         return;
       } else {
-        router.replace({ pathname: "/(user)/home/Settings" });
+        router.replace({ pathname: path.SETTINGS });
         return;
       }
     });

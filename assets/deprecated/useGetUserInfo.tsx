@@ -1,6 +1,7 @@
+import { router } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth, db } from "../constants/constants";
+import { auth, db, path } from "../constants/constants";
 
 const useGetUserInfo = (p0: (state: any) => any) => {
   const [userData, setUserData] = useState<any>();
@@ -10,6 +11,7 @@ const useGetUserInfo = (p0: (state: any) => any) => {
 
       if (!uid) {
         console.log("No user UID found.");
+        router.replace({ pathname: path.LOGIN });
         return;
       }
       try {

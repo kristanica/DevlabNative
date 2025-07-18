@@ -1,12 +1,12 @@
 import AnimatedAppearContainer from "@/assets/components/AnimatedAppearContainer";
 import ButtonComponent from "@/assets/components/ButtonComponent";
+import { path } from "@/assets/constants/constants";
 import useNavigate from "@/assets/Hooks/useNavigate";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
-
 const index = () => {
   const opacityVal = useSharedValue(0);
 
@@ -29,7 +29,7 @@ const index = () => {
           </Text>
           <View className="mb-3">
             <ButtonComponent
-              onPressAction={() => router.replace("/OnBoarding")}
+              onPressAction={() => router.replace(path.ONBOARDING)}
             >
               <Text className="font-exoBold text-white bg-button text-xl px-16 py-5 rounded-2xl">
                 Proceed
@@ -38,9 +38,7 @@ const index = () => {
           </View>
           <View className="flex-row">
             <TouchableOpacity
-              onPress={() =>
-                router.replace({ pathname: "/(admin)/AdminLogin" })
-              }
+              onPress={() => router.replace({ pathname: path.ADMIN_LOGIN })}
             >
               <Text className="font-exoRegular text-white">
                 Already have an account?

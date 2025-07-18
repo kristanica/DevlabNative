@@ -1,5 +1,6 @@
 import InputBox from "@/assets/components/InputBox";
 import OnFailedLogin from "@/assets/components/LoginComponents/OnFailedLogin";
+import { path } from "@/assets/constants/constants";
 import useLogin from "@/assets/Hooks/useLogin";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
@@ -122,7 +123,9 @@ const Login = () => {
                   Don't have an account?
                 </Text>
                 {/* // TouchableOpacity to navigate to the Register page */}
-                <TouchableOpacity onPress={() => router.replace("/Register")}>
+                <TouchableOpacity
+                  onPress={() => router.replace({ pathname: path.REGISTER })}
+                >
                   <Text className="color-[#4F80C5] mt-2 font-exoRegular">
                     Register here
                   </Text>

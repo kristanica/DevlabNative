@@ -5,11 +5,16 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
+type Props = BottomTabBarProps & {
+  tabIcon: readonly string[];
+};
+
 export default function CustomTabBar({
   state,
   descriptors,
   navigation,
-}: BottomTabBarProps) {
+  tabIcon,
+}: Props) {
   return (
     <Animated.View
       entering={FadeIn.duration(500)}
@@ -46,14 +51,12 @@ export default function CustomTabBar({
           });
         };
 
-        const icon = ["home", "cart", "settings", "book", "trophy"] as const;
-
         return (
           <CustomTabsButton
             key={route.key}
             onPress={onPress}
             onLongPress={onLongPress}
-            icon={icon[index]}
+            icon={tabIcon[index]}
             isFocused={isFocused}
             name={label.toString()}
           />

@@ -2,8 +2,9 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonComponent from "@/assets/components/ButtonComponent";
 import OnboardingItem from "@/assets/components/OnBoardingComponents/OnboardingItem";
 import Pagination from "@/assets/components/OnBoardingComponents/Pagination";
-import { onboardingData, width } from "@/assets/constants/constants";
+import { onboardingData, path, width } from "@/assets/constants/constants";
 import usePresstoScroll from "@/assets/Hooks/usePresstoScroll";
+
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
@@ -69,7 +70,7 @@ const Onboarding = () => {
               exiting={FadeOut.duration(100)}
               className="absolute top-16 right-10"
             >
-              <ButtonComponent onPressAction={() => router.replace("/Login")}>
+              <ButtonComponent onPressAction={() => router.replace(path.LOGIN)}>
                 <Text className="text-white text-xl font-exoBold">Skip</Text>
               </ButtonComponent>
             </Animated.View>
@@ -84,12 +85,16 @@ const Onboarding = () => {
               transform: [{ translateX: -75 }],
             }}
           >
-            <ButtonComponent onPressAction={() => router.replace("/Login")}>
+            <ButtonComponent
+              onPressAction={() => router.replace({ pathname: path.LOGIN })}
+            >
               <Text className="text-white text-center rounded-3xl bg-button px-14 py-2 font-exoBold">
                 Login
               </Text>
             </ButtonComponent>
-            <ButtonComponent onPressAction={() => router.replace("/Register")}>
+            <ButtonComponent
+              onPressAction={() => router.replace({ pathname: path.REGISTER })}
+            >
               <Text className="text-white text-center rounded-3xl bg-accent px-14 py-2 font-exoBold">
                 Sign up
               </Text>

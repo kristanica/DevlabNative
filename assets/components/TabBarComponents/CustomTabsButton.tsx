@@ -13,7 +13,7 @@ type customTabsButton = {
   onLongPress: () => void;
   name: string;
   isFocused: boolean;
-  icon: "home" | "cart" | "settings" | "book" | "trophy";
+  icon: any;
 };
 
 const CustomTabsButton = ({

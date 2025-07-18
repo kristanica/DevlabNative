@@ -3,10 +3,41 @@
 import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
 import { Dimensions } from "react-native";
 
+//icon for tabs
+export const userIcon = ["home", "cart", "settings", "book", "trophy"] as const;
+export const adminIcon = ["people-circle", "archive"] as const;
+
 //global
 export const { width, height } = Dimensions.get("screen");
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
+
+//path
+export const path = {
+  INDEX: "/",
+  ONBOARDING: "/OnBoarding",
+  //auth
+  LOGIN: "/Login",
+  REGISTER: "/Register",
+  //general
+  HOME: "/(user)/home/Home",
+  ACHIEVEMENTS: "/(user)/home/Achievements",
+  SETTINGS: "/(user)/home/Settings",
+  SHOP: "/(user)/home/Shop",
+  LESSON: "/(user)/home/(Lessons)/Lesson",
+  //dynamic path
+  LESSON_CATEGORY: "/(user)/home/(Lessons)/category/[categoryId]",
+  LEVEL: "/(user)/level/[levelid]",
+  //
+  LOADING_SCREEN: "/(user)/LoadingScreen",
+  CODING_PLAYGROUND: "/(user)/playground/Coding",
+  QUERY_PLAYGROUND: "/(user)/playground/Database",
+
+  //admin route
+  ADMIN_LOGIN: "/(admin)/AdminLogin",
+} as const;
+// export type USERPATH = keyof typeof path;
+// export type USERROUTE = (typeof path)[USERPATH];
 
 export const lessonMetaData = {
   Css: {

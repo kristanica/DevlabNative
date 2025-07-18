@@ -7,6 +7,7 @@ type userData = {
   coins: number;
   exp: number;
   userLevel: number;
+  suspend: boolean;
 };
 
 type InformationProviderProps = {
@@ -23,7 +24,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   getUser: async () => {
     const uid = auth.currentUser?.uid;
     if (!uid) {
-      console.log("No user UID found.");
+      console.log("No user UID found.1");
       return;
     }
     try {
@@ -39,6 +40,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
               coins: data.coins,
               exp: data.exp,
               userLevel: data.userLevel,
+              suspend: data.suspend,
             },
             loading: false,
           });

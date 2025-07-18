@@ -1,5 +1,6 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import { path } from "@/assets/constants/constants";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useState } from "react";
@@ -42,7 +43,9 @@ const Database = () => {
               </Text>
             </Pressable>
             <Pressable
-              onPress={() => router.replace("/(auth)/playground/Coding")}
+              onPress={() =>
+                router.replace({ pathname: path.CODING_PLAYGROUND })
+              }
               className="justify-center"
             >
               <Text className="text-white mr-3 text-sm font-exoExtraBold">
@@ -54,10 +57,11 @@ const Database = () => {
             <ScrollView
               className=" flex-[1] m-3 rounded-[10px]"
               horizontal={true}
-              snapToInterval={380}
+              pagingEnabled
               decelerationRate="fast"
               bounces={false}
               showsHorizontalScrollIndicator={false}
+              alwaysBounceVertical={false}
             >
               <WebView
                 style={{
