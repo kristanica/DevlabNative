@@ -25,6 +25,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
     const uid = auth.currentUser?.uid;
     if (!uid) {
       console.log("No user UID found.1");
+
       return;
     }
     try {

@@ -38,7 +38,7 @@ const index = () => {
           </View>
           <View className="flex-row">
             <TouchableOpacity
-              onPress={() => router.replace({ pathname: path.ADMIN_LOGIN })}
+              onPress={async () => router.replace({ pathname: path.LOGIN })}
             >
               <Text className="font-exoRegular text-white">
                 Already have an account?

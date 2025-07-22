@@ -53,9 +53,14 @@ const Settings = () => {
                 <View className="flex-[1] bg-accent  rounded-[10px] ">
                   <View className="flex-[.7] justify-center items-center">
                     <Pressable onPress={pickImageProfile}>
-                      {profileVal && (
+                      {profileVal ? (
                         <Image
                           source={{ uri: profileVal }}
+                          className="flex-[1] rounded-full w-[180px]"
+                        />
+                      ) : (
+                        <Image
+                          source={require("@/assets/images/profile.png")}
                           className="flex-[1] rounded-full w-[180px]"
                         />
                       )}

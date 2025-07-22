@@ -1,123 +1,104 @@
+import AdminUserContainer from "@/assets/components/AdminComponents/AdminUserContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
+import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import { db } from "@/assets/constants/constants";
-import { collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-type userDataProps = {
-  username: string;
-  email: string;
-  userLeveL: number;
-  suspend: boolean;
-  uid?: any;
-};
+import LoadingAnim from "@/assets/components/LoadingAnim";
+import setSuspended from "@/assets/Hooks/query/mutation/setSuspended";
+import useFetchUsers from "@/assets/Hooks/query/useFetchUsers";
+import useSearchUserFireStore from "@/assets/Hooks/searchUserFireStore";
+import useDebounce from "@/assets/Hooks/useDebounce";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { FlatList, Text, TextInput, View } from "react-native";
 
 const UserManagement = () => {
-  const [user, setUser] = useState<userDataProps[]>([]);
-  useEffect(() => {
-    try {
-      const userRef = collection(db, "Users");
-      onSnapshot(userRef, (snapshot: any) => {
-        const userData: userDataProps[] = snapshot.docs.map((doc: any) => {
-          return {
-            uid: doc.id,
-            ...(doc.data() as userDataProps),
-          };
-        });
-        setUser(userData);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  const [searchUser, setSearchUser] = useState<string>("");
 
-  const suspend = async (uid: any, isSuspended: boolean) => {
-    const userRef = doc(db, "Users", uid);
+  const queryClient = useQueryClient();
+  const { data: users } = useQuery({
+    queryKey: ["allUser"],
+    queryFn: useFetchUsers,
+  });
 
-    await updateDoc(userRef, {
-      suspend: !isSuspended,
-    });
-  };
+  const debounce = useDebounce(1000, searchUser);
+  const { data: searchedUser, isFetching: searchUserLoading } = useQuery({
+    queryKey: ["searchedUser", debounce],
+    queryFn: () => useSearchUserFireStore(debounce),
+    staleTime: 0,
+
+    enabled: !!debounce,
+  });
+  const mutation = useMutation({
+    mutationFn: ({ uid, isSuspended }: { uid: any; isSuspended: boolean }) =>
+      setSuspended(uid, isSuspended),
+    // refetches allUser when setSuspended is success hence updating the UI from suspended > active and vice versa
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["allUser"] }),
+  });
 
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
-        <CustomGeneralContainer>
-          <View>
-            <Text className="text-white font-exoBold text-3xl">
-              User Management
-            </Text>
-          </View>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            bounces={false}
-            data={user}
-            renderItem={({ item }) => (
-              <View className="bg-background flex-row h-[200px] my-2 mx-3 rounded-2xl border-[#56EBFF] border-[1px]">
-                <View className="flex-[.5] justify-center items-center ">
-                  <Image
-                    style={{
-                      height: 100,
-                      width: 100,
-                      borderRadius: 40,
-                    }}
-                    source={require("@/assets/images/profile.png")}
-                  ></Image>
-                </View>
-                <View
-                  className="flex-[2] p-2 "
-                  style={{
-                    borderColor: "#C1ADAD",
-                    borderLeftWidth: 2,
-                    marginVertical: 10,
-                  }}
-                >
-                  <Text className="text-white font-exoBold">
-                    USERNAME:
-                    <Text className="text-white font-exoLight">
-                      {" "}
-                      {item.username}
-                    </Text>
-                  </Text>
-                  <Text className="my-3 text-white font-exoBold">
-                    EMAIL:
-                    <Text className="font-exoLight"> {item.email}</Text>
-                  </Text>
+        <AnimatedViewContainer>
+          <CustomGeneralContainer>
+            <View className=" items-center flex-row  mx-4">
+              <Text className="text-white font-exoExtraBold text-3xl">
+                User Management
+              </Text>
+            </View>
+            <TextInput
+              className=" px-7 py-2 my-2 mx-7 rounded-3xl border-[2px] border-black text-white font-exoLight"
+              placeholder="Search a user"
+              onChangeText={(text) => {
+                setSearchUser(text);
+              }}
+            />
 
-                  <Text className="text-white font-exoBold">
-                    STATUS:
-                    <Text
-                      className="font-exoLight "
-                      style={{ color: item.suspend ? "red" : "green" }}
-                    >
-                      {"  "}
-                      {item.suspend ? "Suspended" : "Active"}
-                    </Text>
-                  </Text>
-                  <View className="flex-row justify-evenly items-center flex-[1]">
-                    <TouchableOpacity
-                      disabled={item.suspend}
-                      onPress={() => suspend(item.uid, item.suspend)}
-                    >
-                      <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
-                        Suspend
-                      </Text>
-                    </TouchableOpacity>
+            {/* UNFINISHED - When searching another user, it renders the previous searched results before rendering the new one. Might swtich to  Algolia, Typesense, or Meilisearch if remained unfixsable*/}
+            {/* Might just add search button */}
 
-                    <TouchableOpacity
-                      disabled={!item.suspend}
-                      onPress={() => suspend(item.uid, item.suspend)}
-                    >
-                      <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
-                        Activate
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
+            {/* Renders all list first */}
+            {!searchUser ? (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+                data={users}
+                renderItem={({ item, index }) => (
+                  <AdminUserContainer
+                    item={item}
+                    mutation={() =>
+                      mutation.mutate({
+                        uid: item.uid,
+                        isSuspended: item.suspend,
+                      })
+                    }
+                    index={index}
+                  ></AdminUserContainer>
+                )}
+              />
+            ) : // When the user searches something, hides all list and renders the search result
+            searchUserLoading ? (
+              <LoadingAnim></LoadingAnim>
+            ) : (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+                data={searchedUser}
+                renderItem={({ item, index }) => (
+                  <AdminUserContainer
+                    index={index}
+                    item={item}
+                    mutation={() =>
+                      mutation.mutate({
+                        uid: item.uid,
+                        isSuspended: item.suspend,
+                      })
+                    }
+                  ></AdminUserContainer>
+                )}
+              />
             )}
-          />
-        </CustomGeneralContainer>
+          </CustomGeneralContainer>
+        </AnimatedViewContainer>
       </View>
     </AdminProtectedRoutes>
   );
