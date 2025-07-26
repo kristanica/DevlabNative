@@ -12,6 +12,14 @@ export const { width, height } = Dimensions.get("screen");
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
 
+export const gameModes = [
+  "Lesson",
+  "BugBust",
+  "CodeRush",
+  "CodeCrafter",
+  "BrainBytes",
+];
+
 //path
 export const path = {
   INDEX: "/",

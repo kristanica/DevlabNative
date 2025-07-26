@@ -4,7 +4,7 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
-import { useFetchLessonList } from "@/assets/Hooks/query/useFetchLessonList";
+import fetchLessonAdmin from "@/assets/Hooks/query/fetchLessonAdmin";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -15,9 +15,10 @@ const ContentManagement = () => {
 
   const { data: lessonsData, isLoading } = useQuery({
     queryKey: ["lesson admin", category],
-    queryFn: () => useFetchLessonList({ category: category }),
+    queryFn: () => fetchLessonAdmin({ subject: category }),
   });
   let globalCounter = 0;
+
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -62,6 +63,7 @@ const ContentManagement = () => {
                         title: data.title,
                         data: data.levels.map((level: any) => ({
                           ...level,
+
                           lessonid: data.id,
                         })),
                       }))
@@ -74,6 +76,7 @@ const ContentManagement = () => {
                   return (
                     <AdminLessonContainer
                       item={item}
+                      category={category}
                       key={index}
                       index={globalCounter}
                     />
