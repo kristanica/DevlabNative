@@ -5,14 +5,17 @@ type gamePayload = {
   lessonId: string;
   levelId: string;
   topicId: string;
+  gameCategory: string;
 };
 type gamemIdentifierProps = {
   data: gamePayload | null;
+
   setGameIdentifer: (val: gamePayload) => void;
 };
 
 const gameIdentifier = create<gamemIdentifierProps>((set) => ({
   data: null,
+
   setGameIdentifer: (val: gamePayload) => set({ data: val }),
 }));
 

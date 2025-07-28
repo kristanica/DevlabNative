@@ -43,7 +43,7 @@ const LoadingScreen = () => {
       setTimeout(() => {
         router.replace({ pathname: path.HOME });
       }, 2500);
-    }, 15000);
+    }, 4000);
 
     return () => clearTimeout(timeoutId);
   }, []);

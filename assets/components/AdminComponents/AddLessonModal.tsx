@@ -19,7 +19,6 @@ import BugBustGame from "./GameModes/BugBustGame";
 import CodeCrafter from "./GameModes/CodeCrafter";
 import CodeRush from "./GameModes/CodeRush";
 import LessonGame from "./GameModes/LessonGame";
-import InputContainer from "./InputContainer";
 
 type AddLessonModalProps = {
   visibility: boolean;
@@ -34,6 +33,8 @@ const AddLessonModal = ({
   const [category, setCategory] = useState<string>("Lesson");
 
   const gameIdenData = gameIdentifier((state) => state.data);
+  const gameIdenSetter = gameIdentifier((state) => state.setGameIdentifer);
+
   const { data: gameModeData } = useQuery({
     queryKey: ["gamemode", category, gameIdenData?.topicId],
     queryFn: async () => {
@@ -52,6 +53,9 @@ const AddLessonModal = ({
           "Gamemodes",
           category
         );
+
+        gameIdenSetter({ ...gameIdenData, gameCategory: category });
+
         const data = await getDoc(gameModeRef);
 
         if (!data.exists()) {
@@ -117,31 +121,17 @@ const AddLessonModal = ({
                   {category}
                 </Text>
               </View>
-              <InputContainer
+              {/* <InputContainer
                 title={"Level Title"}
                 placeholder="Test"
               ></InputContainer>
               <InputContainer
                 title={"Level Description"}
                 placeholder="Test"
-              ></InputContainer>
+              ></InputContainer> */}
 
               {/* Cycles between different gamemodes */}
               {gameComponents[category] ?? null}
-
-              <View className="justify-evenly items-center flex-row my-7">
-                <TouchableOpacity>
-                  <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-red-700 self-start">
-                    Delete
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                  <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-green-700 self-start">
-                    Save Changes
-                  </Text>
-                </TouchableOpacity>
-              </View>
             </ScrollView>
           </Animated.View>
         </Pressable>

@@ -90,6 +90,7 @@ const AdminLessonContainer = ({
                     lessonId: item.lessonid,
                     levelId: item.id,
                     topicId: specificTopic.id,
+                    gameCategory: "Lesson",
                   });
                   setTimeout(() => {
                     setVisibility(true);
