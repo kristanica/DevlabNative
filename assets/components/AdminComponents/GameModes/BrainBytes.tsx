@@ -21,6 +21,7 @@ const BrainBytes = ({ data }: BrainBytesProps) => {
   return (
     <View>
       <InputContainer
+        numeric={false}
         title={"Gamemode Title"}
         value={state.title}
         placeholder={data?.title}
@@ -33,6 +34,7 @@ const BrainBytes = ({ data }: BrainBytesProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Instruction"}
         placeholder={data?.instruction}
         value={state.instruction}
@@ -41,6 +43,7 @@ const BrainBytes = ({ data }: BrainBytesProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Topic"}
         placeholder={data?.topic}
         value={state.topic}

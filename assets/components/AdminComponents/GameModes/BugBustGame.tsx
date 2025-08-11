@@ -18,6 +18,7 @@ const BugBustGame = ({ data }: BugBustProps) => {
   return (
     <View>
       <InputContainer
+        numeric={false}
         title={"Gamemode Title"}
         value={state.title}
         placeholder={data?.title}
@@ -30,6 +31,7 @@ const BugBustGame = ({ data }: BugBustProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Instruction"}
         placeholder={data?.instruction}
         value={state.instruction}
@@ -38,6 +40,7 @@ const BugBustGame = ({ data }: BugBustProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Topic"}
         placeholder={data?.topic}
         value={state.topic}
@@ -46,6 +49,7 @@ const BugBustGame = ({ data }: BugBustProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Coding Interface"}
         placeholder={data?.preCode}
         value={state.preCode}

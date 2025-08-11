@@ -20,6 +20,7 @@ const CodeRush = ({ data }: CodeRushProps) => {
   return (
     <View>
       <InputContainer
+        numeric={false}
         title={"Gamemode Title"}
         value={state.title}
         placeholder={data?.title}
@@ -32,6 +33,7 @@ const CodeRush = ({ data }: CodeRushProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Instruction"}
         placeholder={data?.instruction}
         value={state.instruction}
@@ -40,6 +42,7 @@ const CodeRush = ({ data }: CodeRushProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Topic"}
         placeholder={data?.topic}
         value={state.topic}
@@ -48,6 +51,7 @@ const CodeRush = ({ data }: CodeRushProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Coding Interface"}
         placeholder={data?.preCode}
         value={state.preCode}
@@ -57,6 +61,7 @@ const CodeRush = ({ data }: CodeRushProps) => {
       ></InputContainer>
 
       <InputContainer
+        numeric={false}
         title="Hint"
         placeholder={data?.hint}
         value={state.hint || "unudentified"}

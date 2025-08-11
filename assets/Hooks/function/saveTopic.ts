@@ -17,7 +17,7 @@ const saveTopic = async (state: any, type: any) => {
         "Gamemodes",
         type
       );
-      console.log(type);
+
       await setDoc(gameModeRef, state, { merge: true });
     }
   } catch (error) {

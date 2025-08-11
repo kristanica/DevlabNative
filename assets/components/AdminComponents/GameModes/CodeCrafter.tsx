@@ -14,6 +14,7 @@ const CodeCrafter = ({ data }: CodeCrafterProps) => {
   return (
     <View>
       <InputContainer
+        numeric={false}
         title={"Gamemode Title"}
         value={state.title}
         placeholder={data?.title}
@@ -26,6 +27,7 @@ const CodeCrafter = ({ data }: CodeCrafterProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Instruction"}
         placeholder={data?.instruction}
         value={state.instruction}
@@ -34,6 +36,7 @@ const CodeCrafter = ({ data }: CodeCrafterProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Topic"}
         placeholder={data?.topic}
         value={state.topic}
@@ -42,6 +45,7 @@ const CodeCrafter = ({ data }: CodeCrafterProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Coding Interface"}
         placeholder={data?.preCode}
         value={state.preCode}
@@ -51,6 +55,7 @@ const CodeCrafter = ({ data }: CodeCrafterProps) => {
       ></InputContainer>
 
       <InputContainer
+        numeric={false}
         title="Hint"
         placeholder={data?.hint}
         value={state?.hint || "unudentified"}

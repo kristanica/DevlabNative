@@ -6,7 +6,7 @@ const AdminRootLayout = () => {
   const getValidAdmin = adminAuthentication((state) => state.getAdmin);
   useEffect(() => {
     getValidAdmin();
-  }, []);
+  }, [getValidAdmin]);
   return <Stack screenOptions={{ headerShown: false, animation: "none" }} />;
 };
 

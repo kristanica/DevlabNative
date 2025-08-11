@@ -1,23 +1,31 @@
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
+import EditLevelModal from "@/assets/components/AdminComponents/EditLevelModal";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import fetchLessonAdmin from "@/assets/Hooks/query/fetchLessonAdmin";
+import useModal from "@/assets/Hooks/useModal";
+import levelIdentifier from "@/assets/zustand/levelIdentifier";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { SectionList, Text, View } from "react-native";
+import { SectionList, Text, TouchableOpacity, View } from "react-native";
 
 const ContentManagement = () => {
   const [category, setCategory] = useState<string>("Html");
 
+  const setLevelidentifier = levelIdentifier(
+    (state) => state.setLevelIdentifier
+  );
   const { data: lessonsData, isLoading } = useQuery({
     queryKey: ["lesson admin", category],
     queryFn: () => fetchLessonAdmin({ subject: category }),
   });
   let globalCounter = 0;
+
+  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
 
   return (
     <AdminProtectedRoutes>
@@ -74,12 +82,24 @@ const ContentManagement = () => {
                 renderItem={({ item, index }) => {
                   globalCounter++;
                   return (
-                    <AdminLessonContainer
-                      item={item}
-                      category={category}
-                      key={index}
-                      index={globalCounter}
-                    />
+                    <TouchableOpacity
+                      onPress={() => {
+                        setLevelidentifier({
+                          category: category,
+                          lessonId: item.lessonid,
+                          levelId: item.id,
+                        });
+
+                        setVisibility(true);
+                      }}
+                    >
+                      <AdminLessonContainer
+                        item={item}
+                        category={category}
+                        key={index}
+                        index={globalCounter}
+                      />
+                    </TouchableOpacity>
                   );
                 }}
                 renderSectionHeader={({ section }) => (
@@ -88,6 +108,14 @@ const ContentManagement = () => {
                   </Text>
                 )}
               />
+            )}
+
+            {visibility && (
+              <EditLevelModal
+                visibility={visibility}
+                closeModal={closeModal}
+                scaleStyle={scaleStyle}
+              ></EditLevelModal>
             )}
           </CustomGeneralContainer>
         </AnimatedViewContainer>
