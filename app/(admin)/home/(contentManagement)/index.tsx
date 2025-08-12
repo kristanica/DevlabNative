@@ -1,4 +1,3 @@
-import AddLessonModal from "@/assets/components/AdminComponents/AddLessonModal";
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
@@ -6,10 +5,10 @@ import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import fetchLessonAdmin from "@/assets/Hooks/query/fetchLessonAdmin";
-import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { SectionList, Text, TouchableOpacity, View } from "react-native";
 
@@ -24,7 +23,6 @@ const ContentManagement = () => {
     queryFn: () => fetchLessonAdmin(category),
   });
 
-  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   let globalCounter = 0;
 
   return (
@@ -88,7 +86,9 @@ const ContentManagement = () => {
                           lessonId: item.lessonid,
                           levelId: item.id,
                         });
-                        setVisibility(true);
+                        router.push({
+                          pathname: "/(admin)/home/(contentManagement)/Stage",
+                        });
                       }}
                     >
                       <AdminLessonContainer
@@ -107,13 +107,6 @@ const ContentManagement = () => {
                   </Text>
                 )}
               ></SectionList>
-            )}
-            {visibility && (
-              <AddLessonModal
-                Vvisibility={visibility}
-                SscaleStyle={scaleStyle}
-                CcloseModal={closeModal}
-              ></AddLessonModal>
             )}
           </CustomGeneralContainer>
         </AnimatedViewContainer>

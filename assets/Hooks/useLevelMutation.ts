@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import saveLevel from "../deprecated/function/saveLevel";
 import levelIdentifier from "../zustand/levelIdentifier";
-import saveLevel from "./function/saveLevel";
 
 const useLevelMutation = () => {
   const gameLevelIden = levelIdentifier.getState().levelIdentifier;

@@ -1,22 +1,24 @@
-import useAddLesson from "@/assets/Hooks/useAddLesson";
+import useAddLesson from "@/assets/deprecated/useAddLesson";
 import useLessonMuation from "@/assets/Hooks/useLessonMutation";
 import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import InputContainer from "../InputContainer";
-
-type lessonProps = {
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import InputContainer from "../../components/AdminComponents/InputContainer";
+type BugBustProps = {
   data: any;
 };
-
-const LessonGame = ({ data }: lessonProps) => {
+const BugBustGame = ({ data }: BugBustProps) => {
   const { state, dispatch } = useAddLesson();
+
   const gameIdenData = gameIdentifier((state) => state.data);
   const mutation = useLessonMuation();
+
+  console.log(gameIdenData?.gameCategory);
 
   return (
     <View>
       <InputContainer
+        numeric={false}
         title={"Gamemode Title"}
         value={state.title}
         placeholder={data?.title}
@@ -29,6 +31,7 @@ const LessonGame = ({ data }: lessonProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Instruction"}
         placeholder={data?.instruction}
         value={state.instruction}
@@ -37,6 +40,7 @@ const LessonGame = ({ data }: lessonProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Topic"}
         placeholder={data?.topic}
         value={state.topic}
@@ -45,6 +49,7 @@ const LessonGame = ({ data }: lessonProps) => {
         }
       ></InputContainer>
       <InputContainer
+        numeric={false}
         title={"Coding Interface"}
         placeholder={data?.preCode}
         value={state.preCode}
@@ -52,7 +57,6 @@ const LessonGame = ({ data }: lessonProps) => {
           dispatch({ type: "UPDATE_FIELD", field: "preCode", value: text })
         }
       ></InputContainer>
-
       <View className="justify-evenly items-center flex-row my-7">
         <TouchableOpacity>
           <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-red-700 self-start">
@@ -81,4 +85,6 @@ const LessonGame = ({ data }: lessonProps) => {
   );
 };
 
-export default LessonGame;
+export default BugBustGame;
+
+const styles = StyleSheet.create({});

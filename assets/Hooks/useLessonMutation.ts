@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import saveTopic from "../deprecated/function/saveTopic";
 import gameIdentifier from "../zustand/gameIdentifier";
-import saveTopic from "./function/saveTopic";
 
 const useLessonMuation = () => {
   const gameIdenData = gameIdentifier.getState().data;

@@ -1,4 +1,4 @@
-import useAddLesson from "@/assets/Hooks/useAddLesson";
+import useAddLesson from "@/assets/deprecated/useAddLesson";
 import useLessonMuation from "@/assets/Hooks/useLessonMutation";
 import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import React from "react";
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import InputContainer from "../InputContainer";
+import InputContainer from "../../components/AdminComponents/InputContainer";
 type CodeRushProps = {
   data: any | "Fill the fields";
 };

@@ -1,24 +1,22 @@
-import useAddLesson from "@/assets/Hooks/useAddLesson";
+import useAddLesson from "@/assets/deprecated/useAddLesson";
 import useLessonMuation from "@/assets/Hooks/useLessonMutation";
 import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import InputContainer from "../InputContainer";
-type BugBustProps = {
+import { Text, TouchableOpacity, View } from "react-native";
+import InputContainer from "../../components/AdminComponents/InputContainer";
+
+type lessonProps = {
   data: any;
 };
-const BugBustGame = ({ data }: BugBustProps) => {
-  const { state, dispatch } = useAddLesson();
 
+const LessonGame = ({ data }: lessonProps) => {
+  const { state, dispatch } = useAddLesson();
   const gameIdenData = gameIdentifier((state) => state.data);
   const mutation = useLessonMuation();
-
-  console.log(gameIdenData?.gameCategory);
 
   return (
     <View>
       <InputContainer
-        numeric={false}
         title={"Gamemode Title"}
         value={state.title}
         placeholder={data?.title}
@@ -31,7 +29,6 @@ const BugBustGame = ({ data }: BugBustProps) => {
         }
       ></InputContainer>
       <InputContainer
-        numeric={false}
         title={"Instruction"}
         placeholder={data?.instruction}
         value={state.instruction}
@@ -40,7 +37,6 @@ const BugBustGame = ({ data }: BugBustProps) => {
         }
       ></InputContainer>
       <InputContainer
-        numeric={false}
         title={"Topic"}
         placeholder={data?.topic}
         value={state.topic}
@@ -49,7 +45,6 @@ const BugBustGame = ({ data }: BugBustProps) => {
         }
       ></InputContainer>
       <InputContainer
-        numeric={false}
         title={"Coding Interface"}
         placeholder={data?.preCode}
         value={state.preCode}
@@ -57,6 +52,7 @@ const BugBustGame = ({ data }: BugBustProps) => {
           dispatch({ type: "UPDATE_FIELD", field: "preCode", value: text })
         }
       ></InputContainer>
+
       <View className="justify-evenly items-center flex-row my-7">
         <TouchableOpacity>
           <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-red-700 self-start">
@@ -85,6 +81,4 @@ const BugBustGame = ({ data }: BugBustProps) => {
   );
 };
 
-export default BugBustGame;
-
-const styles = StyleSheet.create({});
+export default LessonGame;

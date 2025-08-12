@@ -11,7 +11,13 @@ const AdminLayout = () => {
       <Tabs
         screenOptions={{ headerShown: false }}
         tabBar={(props) => <CustomTabBar {...props} tabIcon={adminIcon} />}
-      ></Tabs>
+      >
+        <Tabs.Screen name="UserManagement"></Tabs.Screen>
+        <Tabs.Screen
+          name="(contentManagement)"
+          options={{ title: "Content Management" }}
+        ></Tabs.Screen>
+      </Tabs>
     </QueryClientProvider>
   );
 };

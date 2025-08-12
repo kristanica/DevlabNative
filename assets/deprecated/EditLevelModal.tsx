@@ -14,7 +14,7 @@ import {
   ViewStyle,
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
-import InputContainer from "./InputContainer";
+import InputContainer from "../components/AdminComponents/InputContainer";
 type AddLessonModalProps = {
   visibility: boolean;
   scaleStyle: AnimatedStyle<ViewStyle>;

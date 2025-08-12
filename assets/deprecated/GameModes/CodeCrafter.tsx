@@ -1,23 +1,16 @@
-import useAddLesson from "@/assets/Hooks/useAddLesson";
+import useAddLesson from "@/assets/deprecated/useAddLesson";
 import useLessonMuation from "@/assets/Hooks/useLessonMutation";
 import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import InputContainer from "../InputContainer";
-type BrainBytesProps = {
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import InputContainer from "../../components/AdminComponents/InputContainer";
+type CodeCrafterProps = {
   data: any;
 };
-const BrainBytes = ({ data }: BrainBytesProps) => {
+const CodeCrafter = ({ data }: CodeCrafterProps) => {
   const { state, dispatch } = useAddLesson();
   const gameIdenData = gameIdentifier((state) => state.data);
   const mutation = useLessonMuation();
-
   return (
     <View>
       <InputContainer
@@ -51,49 +44,25 @@ const BrainBytes = ({ data }: BrainBytesProps) => {
           dispatch({ type: "UPDATE_FIELD", field: "topic", value: text })
         }
       ></InputContainer>
-      <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
-        <Text className="text-white my-2">Choices</Text>
-        <TextInput
-          placeholder={data?.options?.A}
-          multiline
-          value={state.options?.A}
-          onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "A", value: text })
-          }
-          className="rounded-xl p-2 text-white"
-          style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-        ></TextInput>
-        <TextInput
-          placeholder={data?.options?.B}
-          multiline
-          value={state.options?.B}
-          onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "B", value: text })
-          }
-          className="rounded-xl p-2 text-white my-2"
-          style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-        ></TextInput>
-        <TextInput
-          placeholder={data?.options?.C}
-          multiline
-          value={state.options?.C}
-          onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "C", value: text })
-          }
-          className="rounded-xl p-2 text-white my-2"
-          style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-        ></TextInput>
-        <TextInput
-          placeholder={data?.options?.D}
-          multiline
-          value={state.options?.D}
-          onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "D", value: text })
-          }
-          className="rounded-xl p-2 text-white"
-          style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-        ></TextInput>
-      </View>
+      <InputContainer
+        numeric={false}
+        title={"Coding Interface"}
+        placeholder={data?.preCode}
+        value={state.preCode}
+        setValue={(text) =>
+          dispatch({ type: "UPDATE_FIELD", field: "preCode", value: text })
+        }
+      ></InputContainer>
+
+      <InputContainer
+        numeric={false}
+        title="Hint"
+        placeholder={data?.hint}
+        value={state?.hint || "unudentified"}
+        setValue={(text) =>
+          dispatch({ type: "UPDATE_FIELD", field: "hint", value: text })
+        }
+      />
 
       <View className="justify-evenly items-center flex-row my-7">
         <TouchableOpacity>
@@ -123,6 +92,6 @@ const BrainBytes = ({ data }: BrainBytesProps) => {
   );
 };
 
-export default BrainBytes;
+export default CodeCrafter;
 
 const styles = StyleSheet.create({});

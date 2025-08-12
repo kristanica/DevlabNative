@@ -46,7 +46,9 @@ const useAdminLogin = () => {
         return;
       }
       if (userDoc.data()?.isAdmin && userDoc.exists()) {
-        router.replace({ pathname: "/(admin)/home/ContentManagement" });
+        router.replace({
+          pathname: "/(admin)/home/UserManagement",
+        });
       } else {
         console.log("error!");
       }
