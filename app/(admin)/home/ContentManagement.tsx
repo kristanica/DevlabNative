@@ -1,5 +1,5 @@
+import AddLessonModal from "@/assets/components/AdminComponents/AddLessonModal";
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
-import EditLevelModal from "@/assets/components/AdminComponents/EditLevelModal";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonAnimated from "@/assets/components/ButtonComponent";
@@ -7,25 +7,25 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import fetchLessonAdmin from "@/assets/Hooks/query/fetchLessonAdmin";
 import useModal from "@/assets/Hooks/useModal";
-import levelIdentifier from "@/assets/zustand/levelIdentifier";
+import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { SectionList, Text, TouchableOpacity, View } from "react-native";
 
 const ContentManagement = () => {
-  const [category, setCategory] = useState<string>("Html");
+  const [category, setCategory] = useState<string>("sampleHTML");
 
-  const setLevelidentifier = levelIdentifier(
-    (state) => state.setLevelIdentifier
-  );
+  const setTracker = tracker((state) => state.setTracker);
+  const payload = tracker((state) => state.levelPayload);
+
   const { data: lessonsData, isLoading } = useQuery({
     queryKey: ["lesson admin", category],
-    queryFn: () => fetchLessonAdmin({ subject: category }),
+    queryFn: () => fetchLessonAdmin(category),
   });
-  let globalCounter = 0;
 
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
+  let globalCounter = 0;
 
   return (
     <AdminProtectedRoutes>
@@ -47,7 +47,7 @@ const ContentManagement = () => {
             </View>
 
             <View className="flex-row justify-between px-7 border-[2px] border-white border-x-0 border-t-0 mt-7">
-              <ButtonAnimated onPressAction={() => setCategory("Html")}>
+              <ButtonAnimated onPressAction={() => setCategory("sampleHTML")}>
                 <Text className="text-white font-exoBold ">HTML</Text>
               </ButtonAnimated>
               <ButtonAnimated onPressAction={() => setCategory("Css")}>
@@ -62,16 +62,15 @@ const ContentManagement = () => {
             </View>
 
             {isLoading ? (
-              <LoadingAnim />
+              <LoadingAnim></LoadingAnim>
             ) : (
               <SectionList
                 sections={
                   lessonsData
                     ? lessonsData.map((data: any) => ({
-                        title: data.title,
-                        data: data.levels.map((level: any) => ({
+                        title: data.Lesson,
+                        data: data.levelsData.map((level: any) => ({
                           ...level,
-
                           lessonid: data.id,
                         })),
                       }))
@@ -84,12 +83,11 @@ const ContentManagement = () => {
                   return (
                     <TouchableOpacity
                       onPress={() => {
-                        setLevelidentifier({
+                        setTracker({
                           category: category,
                           lessonId: item.lessonid,
                           levelId: item.id,
                         });
-
                         setVisibility(true);
                       }}
                     >
@@ -104,18 +102,18 @@ const ContentManagement = () => {
                 }}
                 renderSectionHeader={({ section }) => (
                   <Text className="text-white text-2xl font-exoBold mx-3 my-5">
+                    {"Lesson "}
                     {section.title}
                   </Text>
                 )}
-              />
+              ></SectionList>
             )}
-
             {visibility && (
-              <EditLevelModal
-                visibility={visibility}
-                closeModal={closeModal}
-                scaleStyle={scaleStyle}
-              ></EditLevelModal>
+              <AddLessonModal
+                Vvisibility={visibility}
+                SscaleStyle={scaleStyle}
+                CcloseModal={closeModal}
+              ></AddLessonModal>
             )}
           </CustomGeneralContainer>
         </AnimatedViewContainer>
@@ -123,5 +121,4 @@ const ContentManagement = () => {
     </AdminProtectedRoutes>
   );
 };
-
 export default ContentManagement;

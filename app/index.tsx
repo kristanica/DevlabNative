@@ -2,6 +2,8 @@ import AnimatedAppearContainer from "@/assets/components/AnimatedAppearContainer
 import ButtonComponent from "@/assets/components/ButtonComponent";
 import { path } from "@/assets/constants/constants";
 import useNavigate from "@/assets/Hooks/useNavigate";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
@@ -38,7 +40,14 @@ const index = () => {
           </View>
           <View className="flex-row">
             <TouchableOpacity
-              onPress={async () => router.replace({ pathname: path.LOGIN })}
+              onPress={async () => {
+                try {
+                  await AsyncStorage.clear();
+                  console.log("AsyncStorage cleared!");
+                } catch (e) {
+                  console.error("Failed to clear AsyncStorage.", e);
+                }
+              }}
             >
               <Text className="font-exoRegular text-white">
                 Already have an account?

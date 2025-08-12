@@ -2,24 +2,16 @@ import addNewTopic from "@/assets/Hooks/query/mutation/addNewTopic";
 import useModal from "@/assets/Hooks/useModal";
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import gameIdentifier from "@/assets/zustand/gameIdentifier";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsFocused } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import {
-  FlatList,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-import AddLessonModal from "./AddLessonModal";
 
 type AdminLessonContainerProps = {
   item: any;
   index: number;
-  category: string;
+  category?: string;
 };
 
 const AdminLessonContainer = ({
@@ -63,69 +55,9 @@ const AdminLessonContainer = ({
 
       <View className="my-2">
         <Text className="text-[#94A1B2] text-sm  text-justify font-exoLight ">
-          {item.desc}
+          {item.description}
         </Text>
       </View>
-
-      <View className="flex-row  my-3">
-        <View className="w-[90%]">
-          <FlatList
-            data={[...item.topics].sort(
-              (a, b) =>
-                parseInt(a.id.match(/\d+/)) - parseInt(b.id.match(/\d+/))
-            )}
-            horizontal
-            contentContainerStyle={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item: specificTopic }) => (
-              <TouchableOpacity
-                key={specificTopic.id}
-                className="mx-4  bg-button self-start rounded-lg"
-                onPress={() => {
-                  setGameIdentifier({
-                    subject: category,
-                    lessonId: item.lessonid,
-                    levelId: item.id,
-                    topicId: specificTopic.id,
-                    gameCategory: "Lesson",
-                  });
-                  setTimeout(() => {
-                    setVisibility(true);
-                  }, 100);
-                }}
-              >
-                <Text className="text-white px-2 py-2 ">
-                  {specificTopic.id}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-
-        <Pressable
-          className="justify-center items-center w-[10%]"
-          onPress={() => {
-            // mutation.mutate({
-            //   subject: category,
-            //   lessonId: item.lessonid,
-            //   levelId: item.id,
-            // });
-            setVisibility(true);
-          }}
-        >
-          <Ionicons name="pencil" size={25} color="white"></Ionicons>
-        </Pressable>
-      </View>
-      {visibility && (
-        <AddLessonModal
-          visibility={visibility}
-          scaleStyle={scaleStyle}
-          closeModal={closeModal}
-        ></AddLessonModal>
-      )}
     </Animated.View>
   );
 };

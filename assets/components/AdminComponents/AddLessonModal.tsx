@@ -1,138 +1,129 @@
-import { db, gameModes } from "@/assets/constants/constants";
-import gameIdentifier from "@/assets/zustand/gameIdentifier";
+import { db } from "@/assets/constants/constants";
 import { useQuery } from "@tanstack/react-query";
-import { doc, getDoc } from "firebase/firestore";
-import React, { JSX, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import React from "react";
 import {
   FlatList,
   Modal,
   Pressable,
-  ScrollView,
   Text,
   TouchableOpacity,
-  View,
   ViewStyle,
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
-import BrainBytes from "./GameModes/BrainBytes";
-import BugBustGame from "./GameModes/BugBustGame";
-import CodeCrafter from "./GameModes/CodeCrafter";
-import CodeRush from "./GameModes/CodeRush";
-import LessonGame from "./GameModes/LessonGame";
+
+type StageDataProps = {
+  id: string;
+  title: string;
+  description: string;
+  type: "lesson" | "game";
+  isHidden?: boolean;
+};
+
+import useModal from "@/assets/Hooks/useModal";
+import tracker from "@/assets/zustand/tracker";
+import AdminLessonContainer from "./AdminLessonContainer";
+import EditStageModal from "./EditStageModal";
 
 type AddLessonModalProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
+  Vvisibility: boolean;
+  SscaleStyle: AnimatedStyle<ViewStyle>;
+  CcloseModal: () => void;
 };
 const AddLessonModal = ({
-  visibility,
-  scaleStyle,
-  closeModal,
+  Vvisibility,
+  SscaleStyle,
+  CcloseModal,
 }: AddLessonModalProps) => {
-  const [category, setCategory] = useState<string>("Lesson");
-
-  const gameIdenData = gameIdentifier((state) => state.data);
-  const gameIdenSetter = gameIdentifier((state) => state.setGameIdentifer);
-
-  const { data: gameModeData } = useQuery({
-    queryKey: ["gamemode", category, gameIdenData?.topicId],
+  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
+  const levelPayload = tracker((state) => state.levelPayload);
+  const stageTracker = tracker((state) => state.setStage);
+  console.log(levelPayload);
+  const { data: levelsData, refetch } = useQuery({
+    queryKey: [
+      "Stages",
+      levelPayload?.category,
+      levelPayload?.lessonId,
+      levelPayload?.levelId,
+    ],
     queryFn: async () => {
-      if (!gameIdenData) {
-        throw new Error("Gamemode identifier is undefined");
+      if (!levelPayload) {
+        return;
       }
       try {
-        const gameModeRef = doc(
+        const stagesRef = collection(
           db,
-          gameIdenData?.subject,
-          gameIdenData?.lessonId,
+          levelPayload.category,
+          levelPayload.lessonId,
           "Levels",
-          gameIdenData?.levelId,
-          "Topics",
-          gameIdenData?.topicId,
-          "Gamemodes",
-          category
+          levelPayload.levelId,
+          "Stages"
         );
 
-        gameIdenSetter({ ...gameIdenData, gameCategory: category });
+        const stagesDocs = await getDocs(stagesRef);
+        const stagesData: StageDataProps[] = stagesDocs.docs.map((doc) => {
+          return {
+            id: doc.id,
+            ...(doc.data() as Omit<StageDataProps, "id">),
+          };
+        });
 
-        const data = await getDoc(gameModeRef);
-
-        if (!data.exists()) {
-          throw new Error("Data does not exist");
-        }
-        return data.data();
-      } catch (error) {
-        throw new Error("error");
-      }
+        return stagesData;
+      } catch (error) {}
     },
-    enabled:
-      visibility &&
-      !!gameIdenData?.subject &&
-      !!gameIdenData?.lessonId &&
-      !!gameIdenData?.levelId &&
-      !!gameIdenData?.topicId &&
-      !!category,
+    enabled: !!(
+      levelPayload?.category &&
+      levelPayload?.lessonId &&
+      levelPayload?.levelId
+    ),
   });
-
-  const gameComponents: Record<string, JSX.Element> = {
-    Lesson: <LessonGame data={gameModeData} />,
-    BugBust: <BugBustGame data={gameModeData} />,
-    CodeCrafter: <CodeCrafter data={gameModeData} />,
-    BrainBytes: <BrainBytes data={gameModeData} />,
-    CodeRush: <CodeRush data={gameModeData} />,
-  };
-
   return (
-    <Modal visible={visibility} transparent={true}>
+    <Modal visible={Vvisibility} transparent={true}>
       <Pressable
         className="flex-[1] justify-center items-center"
-        onPress={closeModal}
+        onPress={CcloseModal}
       >
-        <Pressable className="w-[80%] h-[70%]" onPress={() => {}}>
+        <Pressable className="w-[90%] h-[80%] " onPress={() => {}}>
           <Animated.View
-            className="  bg-accent  border-[2px] border-[#56EBFF]"
-            style={[scaleStyle]}
+            className="  bg-accent  border-[2px] h-full border-[#56EBFF]"
+            style={[SscaleStyle]}
           >
+            <Text className="text-white font-exoBold font-lg m-auto">
+              Currently viewing {levelPayload?.lessonId} {levelPayload?.levelId}
+            </Text>
+
+            <Text className="text-white font-exoRegular py-2 px-7 text-center">
+              The following are the stages for {levelPayload?.lessonId}{" "}
+              {levelPayload?.levelId}, press one of the following to edit them
+            </Text>
             <FlatList
-              horizontal
-              data={gameModes}
-              contentContainerStyle={{ marginVertical: 20 }}
-              keyExtractor={(item) => item}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => setCategory(item)}>
-                  <Text className="text-white bg-button px-2 py-3 mx-4 rounded-xl">
-                    {item}
-                  </Text>
-                </TouchableOpacity>
+              data={levelsData}
+              showsVerticalScrollIndicator
+              keyExtractor={(item) => item.id}
+              renderItem={({ item, index }) => (
+                <>
+                  <TouchableOpacity
+                    onPress={() => {
+                      stageTracker(item.id);
+                      console.log(item.id);
+                      setVisibility(true);
+                    }}
+                  >
+                    <AdminLessonContainer
+                      item={item}
+                      index={index}
+                    ></AdminLessonContainer>
+                  </TouchableOpacity>
+                </>
               )}
             ></FlatList>
-            <ScrollView
-              showsVerticalScrollIndicator={true}
-              alwaysBounceVertical={false}
-              className="   rounded-xl p-2 h-[90%]"
-            >
-              <View className="bg-background h-[50px] border-[#56EBFF] border-[2px]  justify-center rounded-2xl">
-                <Text className="text-white  ml-2">Editing: </Text>
-              </View>
-              <View className="justify-center items-center">
-                <Text className="text-white text-2xl font-exoBold">
-                  {category}
-                </Text>
-              </View>
-              {/* <InputContainer
-                title={"Level Title"}
-                placeholder="Test"
-              ></InputContainer>
-              <InputContainer
-                title={"Level Description"}
-                placeholder="Test"
-              ></InputContainer> */}
-
-              {/* Cycles between different gamemodes */}
-              {gameComponents[category] ?? null}
-            </ScrollView>
+            {visibility && (
+              <EditStageModal
+                visibility={visibility}
+                scaleStyle={scaleStyle}
+                closeModal={closeModal}
+              />
+            )}
           </Animated.View>
         </Pressable>
       </Pressable>
