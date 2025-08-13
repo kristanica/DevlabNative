@@ -1,18 +1,24 @@
 import { useReducer } from "react";
 
 type State = {
+  //general
   title: string;
   description: string;
   isHidden: boolean;
   type: string;
-  coinsReward: number;
-  expReward: number;
+
+  codingInterface: string;
+
+  //Bug Bust
+  instruction?: string;
+  hint?: string;
+  timer?: number;
 };
 
 type Action = {
   type: "UPDATE_FIELD";
   field: keyof State;
-  value: string;
+  value: string | boolean;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -35,8 +41,11 @@ const useEditStage = () => {
     description: "",
     isHidden: false,
     type: "",
-    coinsReward: 0,
-    expReward: 0,
+
+    codingInterface: "",
+    instruction: "",
+    hint: "",
+    timer: 0,
   });
 
   return { state, dispatch };

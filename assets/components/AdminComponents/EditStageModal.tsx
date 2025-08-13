@@ -3,19 +3,22 @@ import useEditStage from "@/assets/Hooks/useEditStage";
 import tracker from "@/assets/zustand/tracker";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import React, { JSX } from "react";
 import {
   Keyboard,
   Modal,
   Pressable,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
-import InputContainer from "./InputContainer";
+import DropDownMenu from "./DropDownMenu";
+import BugBust from "./GameModes/BugBust";
+import CodeRush from "./GameModes/CodeRush";
+import Lesson from "./GameModes/Lesson";
 type EditStageModalProps = {
   visibility: boolean;
   scaleStyle: AnimatedStyle<ViewStyle>;
@@ -29,15 +32,7 @@ const EditStageModal = ({
 }: EditStageModalProps) => {
   const levelPayload = tracker((state) => state.levelPayload);
   const stageIdentifier = tracker((state) => state.stageId);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "BUG BUST", value: "bugBust" },
-    { label: "BRAIN BYTES", value: "brainBytes" },
-    { label: "CODE CRAFTER", value: "codeCrafter" },
-    { label: "CODE RUSH", value: "codeRush" },
-    { label: "LESSON", value: "lesson" },
-  ]);
+
   const { state, dispatch } = useEditStage();
   const queryClient = useQueryClient();
   const { data: stageData } = useQuery({
@@ -91,7 +86,14 @@ const EditStageModal = ({
             "Stages",
             stageIdentifier
           );
-          await setDoc(stageRef, state, { merge: true });
+          await setDoc(
+            stageRef,
+            {
+              ...state,
+              timer: Number(state.timer),
+            },
+            { merge: true }
+          );
         } catch {}
       } catch {
         throw new Error("Something went wwrong...");
@@ -118,6 +120,21 @@ const EditStageModal = ({
       });
     },
   });
+  console.log(stageData?.type);
+
+  const gameComponents: Record<string, JSX.Element> = {
+    Lesson: <Lesson dispatch={dispatch} state={state} stageData={stageData} />,
+    BugBust: (
+      <BugBust dispatch={dispatch} state={state} stageData={stageData} />
+    ),
+    CodeRush: (
+      <CodeRush
+        dispatch={dispatch}
+        state={state}
+        stageData={stageData}
+      ></CodeRush>
+    ),
+  };
 
   return (
     <Modal visible={visibility} transparent={true}>
@@ -135,106 +152,71 @@ const EditStageModal = ({
             className="  bg-accent  border-[2px] h-full border-[#56EBFF]"
             style={[scaleStyle]}
           >
-            {/* <InputContainer
-              title={"Visibility"}
-              placeholder={String(stageData?.isHidden)}
-              value={String(state.isHidden ?? "")}
-              setValue={(text) => {
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "isHidden",
-                  value: text,
-                });
-              }}
-              numeric={false}
-            ></InputContainer> */}
-
-            <TouchableOpacity
-              className="px-7 py-2  bg-green-400 self-start mx-auto mt-2 rounded-lg"
-              onPress={() => {
-                mutation.mutate({ state });
-              }}
-            >
-              <Text className="text-white">Save</Text>
-            </TouchableOpacity>
-            <InputContainer
-              title={"Title"}
-              placeholder={stageData?.title}
-              value={state.title}
-              setValue={(text) => {
-                dispatch({ type: "UPDATE_FIELD", field: "title", value: text });
-              }}
-              numeric={false}
-            ></InputContainer>
-
-            <InputContainer
-              title={"Description"}
-              placeholder={stageData?.description}
-              value={state.description}
-              setValue={(text) => {
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "description",
-                  value: text,
-                });
-              }}
-              numeric={false}
-            ></InputContainer>
-
-            <InputContainer
-              title={"Coins Reward"}
-              placeholder={String(stageData?.coinsReward)}
-              value={String(state.coinsReward ?? "")}
-              setValue={(text) => {
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "coinsReward",
-                  value: text,
-                });
-              }}
-              numeric={true}
-            ></InputContainer>
-            <InputContainer
-              title={"Experience Points"}
-              placeholder={String(stageData?.expReward)}
-              value={String(state.expReward ?? "")}
-              setValue={(text) => {
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "expReward",
-                  value: text,
-                });
-              }}
-              numeric={true}
-            ></InputContainer>
-            <View style={{ padding: 20 }}>
-              <DropDownPicker
-                open={open}
-                value={state.type}
-                items={items}
-                setOpen={setOpen}
-                style={{ backgroundColor: "#0D1117", borderColor: "#56EBFF" }}
-                textStyle={{
-                  color: "white",
+            <View className="mx-2">
+              <ScrollView
+                contentContainerStyle={{
+                  paddingVertical: 16,
+                  paddingHorizontal: 12,
                 }}
-                dropDownContainerStyle={{
-                  backgroundColor: "#0D1117",
-                  borderColor: "#56EBFF",
-                  borderTopWidth: 0,
-                }}
-                placeholder={state.type ? state.type : stageData?.type}
-                setValue={(callback) => {
-                  setValue((current) => {
-                    const newValue = callback(current);
+                showsVerticalScrollIndicator={false}
+              >
+                <Text className="text-white font-exoBold text-lg mx-auto my-3">
+                  Currently editing {stageIdentifier}
+                </Text>
+                <Text className="text-white font-exoLight text-sm text-center mb-3">
+                  Stage visibility cannot be changed. Lessons are automatically
+                  set to Visible and gamemodes to Hidden
+                </Text>
+                <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl ">
+                  <Text className="text-white font-exoRegular my-2">
+                    Stage Visibility{" "}
+                  </Text>
+                  <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 my-2">
+                    {stageData?.isHidden ? "Hidden" : "Visibile"}
+                  </Text>
+                </View>
+                <DropDownMenu
+                  onSelect={(item) => {
                     dispatch({
                       type: "UPDATE_FIELD",
                       field: "type",
-                      value: String(newValue),
+                      value: item,
                     });
-                    return newValue;
-                  });
-                }}
-              />
+
+                    if (item != "Lesson") {
+                      dispatch({
+                        type: "UPDATE_FIELD",
+                        field: "isHidden",
+                        value: true,
+                      });
+                    } else {
+                      dispatch({
+                        type: "UPDATE_FIELD",
+                        field: "isHidden",
+                        value: false,
+                      });
+                    }
+                    console.log(state.isHidden);
+                  }}
+                  placeHolder={stageData?.type}
+                  value={state.type}
+                />
+                {gameComponents[state.type ? state.type : stageData?.type] ??
+                  null}
+                <View className="flex-row my-3">
+                  <TouchableOpacity className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg">
+                    <Text className="text-white font-exoBold">Delete</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
+                    onPress={() => {
+                      mutation.mutate({ state });
+                    }}
+                  >
+                    <Text className="text-white">Save</Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
             </View>
           </Animated.View>
         </Pressable>

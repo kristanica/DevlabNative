@@ -1,7 +1,5 @@
 import addNewTopic from "@/assets/Hooks/query/mutation/addNewTopic";
-import useModal from "@/assets/Hooks/useModal";
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
-import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import { useIsFocused } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -26,8 +24,6 @@ const AdminLessonContainer = ({
     id: index,
   });
 
-  const setGameIdentifier = gameIdentifier((state) => state.setGameIdentifer);
-
   const mutation = useMutation({
     mutationFn: ({
       subject,
@@ -43,7 +39,6 @@ const AdminLessonContainer = ({
     },
   });
 
-  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   return (
     <Animated.View
       style={onScale}
@@ -56,6 +51,12 @@ const AdminLessonContainer = ({
       <View className="my-2">
         <Text className="text-[#94A1B2] text-sm  text-justify font-exoLight ">
           {item.description}
+        </Text>
+      </View>
+
+      <View className="my-2">
+        <Text className="text-white font-exoBold text-sm">
+          {item?.isHidden ? "Game" : "Lesson"}
         </Text>
       </View>
     </Animated.View>

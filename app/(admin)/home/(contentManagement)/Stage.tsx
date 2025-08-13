@@ -82,7 +82,8 @@ const Stage = () => {
 
             <Text className="text-white font-exoRegular py-2 px-7 text-center">
               The following are the stages for {levelPayload?.lessonId}{" "}
-              {levelPayload?.levelId}, press one of the following to edit them
+              {levelPayload?.levelId}, press one of the following to edit them.
+              Note that Games are hidden to users
             </Text>
             <FlatList
               data={levelsData}
