@@ -10,13 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { collection, getDocs } from "firebase/firestore";
 import React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import DraggableFlatList from "react-native-draggable-flatlist";
 type StageDataProps = {
   id: string;
   title: string;
@@ -27,7 +22,7 @@ type StageDataProps = {
 const Stage = () => {
   const levelPayload = tracker((state) => state.levelPayload);
   const stageTracker = tracker((state) => state.setStage);
-  console.log(levelPayload);
+
   const { data: levelsData, refetch } = useQuery({
     queryKey: [
       "Stages",
@@ -73,45 +68,56 @@ const Stage = () => {
       <View className="flex-[1] bg-accent">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
-            <TouchableOpacity onPress={() => router.back()}>
-              <Text>Back</Text>
-            </TouchableOpacity>
-            <Text className="text-white font-exoBold font-lg m-auto">
-              Currently viewing {levelPayload?.lessonId} {levelPayload?.levelId}
-            </Text>
+            <View>
+              <TouchableOpacity onPress={() => router.back()}>
+                <Text>Back</Text>
+              </TouchableOpacity>
+              <Text className="text-white font-exoBold font-lg m-auto">
+                Currently viewing {levelPayload?.lessonId}{" "}
+                {levelPayload?.levelId}
+              </Text>
 
-            <Text className="text-white font-exoRegular py-2 px-7 text-center">
-              The following are the stages for {levelPayload?.lessonId}{" "}
-              {levelPayload?.levelId}, press one of the following to edit them.
-              Note that Games are hidden to users
-            </Text>
-            <FlatList
-              data={levelsData}
-              showsVerticalScrollIndicator
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <>
-                  <TouchableOpacity
-                    onPress={() => {
-                      stageTracker(item.id);
-                      setVisibility(true);
-                    }}
-                  >
-                    <AdminLessonContainer
-                      item={item}
-                      index={index}
-                    ></AdminLessonContainer>
-                  </TouchableOpacity>
-                </>
+              <Text className="text-white font-exoRegular py-2 px-7 text-center">
+                The following are the stages for {levelPayload?.lessonId}{" "}
+                {levelPayload?.levelId}, press one of the following to edit
+                them. Note that Games are hidden to users
+              </Text>
+              <DraggableFlatList
+                data={levelsData ?? []}
+                showsVerticalScrollIndicator
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, getIndex, drag, isActive }) => {
+                  const index = getIndex();
+                  if (index === undefined) {
+                    return;
+                  }
+                  return (
+                    <>
+                      <TouchableOpacity
+                        onLongPress={drag}
+                        onPress={() => {
+                          stageTracker(item.id);
+                          setVisibility(true);
+                        }}
+                        disabled={isActive}
+                      >
+                        <AdminLessonContainer
+                          item={item}
+                          index={index ?? 0}
+                        ></AdminLessonContainer>
+                      </TouchableOpacity>
+                    </>
+                  );
+                }}
+              ></DraggableFlatList>
+              {visibility && (
+                <EditStageModal
+                  visibility={visibility}
+                  scaleStyle={scaleStyle}
+                  closeModal={closeModal}
+                ></EditStageModal>
               )}
-            ></FlatList>
-            {visibility && (
-              <EditStageModal
-                visibility={visibility}
-                scaleStyle={scaleStyle}
-                closeModal={closeModal}
-              ></EditStageModal>
-            )}
+            </View>
           </CustomGeneralContainer>
         </AnimatedViewContainer>
       </View>

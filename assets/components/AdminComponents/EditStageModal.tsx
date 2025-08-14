@@ -1,8 +1,15 @@
 import { db } from "@/assets/constants/constants";
 import useEditStage from "@/assets/Hooks/useEditStage";
+import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  deleteField,
+  doc,
+  FieldValue,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 import React, { JSX } from "react";
 import {
   Keyboard,
@@ -19,6 +26,7 @@ import DropDownMenu from "./DropDownMenu";
 import BugBust from "./GameModes/BugBust";
 import CodeRush from "./GameModes/CodeRush";
 import Lesson from "./GameModes/Lesson";
+import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
 type EditStageModalProps = {
   visibility: boolean;
   scaleStyle: AnimatedStyle<ViewStyle>;
@@ -69,6 +77,22 @@ const EditStageModal = ({
     },
   });
 
+  const filters: Record<
+    string,
+    { omit: string[]; toNumber?: (item: any) => void; toDelete: string[] }
+  > = {
+    Lesson: {
+      omit: ["hint", "instruction", "timer"],
+      toDelete: ["timer", "hint"],
+    },
+    BugBust: { omit: ["timer"], toDelete: ["instruction", "timer"] },
+    CodeRush: {
+      omit: ["hint"],
+      toNumber: (item) => ({ ...item, timer: Number(item.timer) }),
+      toDelete: ["hint", "instruction"],
+    },
+  };
+
   const mutation = useMutation({
     mutationFn: async ({ state }: { state: any }) => {
       try {
@@ -86,11 +110,32 @@ const EditStageModal = ({
             "Stages",
             stageIdentifier
           );
+
+          let filteredState = state;
+          let filterDelete: Record<string, FieldValue> = {};
+
+          const setFilter = filters[state.type ? state.type : stageData?.type];
+
+          if (setFilter.omit) {
+            filteredState = Object.fromEntries(
+              Object.entries(state).filter(
+                ([key]) => !setFilter.omit!.includes(key)
+              )
+            );
+            setFilter.toDelete.forEach((key) => {
+              filterDelete[key] = deleteField();
+            });
+          }
+
+          if (setFilter.toNumber) {
+            filteredState = setFilter.toNumber(filteredState);
+          }
           await setDoc(
             stageRef,
             {
-              ...state,
-              timer: Number(state.timer),
+              ...filteredState,
+              ...filterDelete,
+              type: state.type ? state.type : stageData?.type,
             },
             { merge: true }
           );
@@ -120,7 +165,6 @@ const EditStageModal = ({
       });
     },
   });
-  console.log(stageData?.type);
 
   const gameComponents: Record<string, JSX.Element> = {
     Lesson: <Lesson dispatch={dispatch} state={state} stageData={stageData} />,
@@ -135,7 +179,12 @@ const EditStageModal = ({
       ></CodeRush>
     ),
   };
-
+  const {
+    visibility: confimationVisibility,
+    setVisibility: setConfirmationVisibility,
+    scaleStyle: confirmationScaleStyle,
+    closeModal: confirmationCloseModal,
+  } = useModal();
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
@@ -165,7 +214,7 @@ const EditStageModal = ({
                 </Text>
                 <Text className="text-white font-exoLight text-sm text-center mb-3">
                   Stage visibility cannot be changed. Lessons are automatically
-                  set to Visible and gamemodes to Hidden
+                  set to Visible, and gamemodes to Hidden.
                 </Text>
                 <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl ">
                   <Text className="text-white font-exoRegular my-2">
@@ -196,7 +245,6 @@ const EditStageModal = ({
                         value: false,
                       });
                     }
-                    console.log(state.isHidden);
                   }}
                   placeHolder={stageData?.type}
                   value={state.type}
@@ -211,6 +259,7 @@ const EditStageModal = ({
                     className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
                     onPress={() => {
                       mutation.mutate({ state });
+                      // setConfirmationVisibility(true);
                     }}
                   >
                     <Text className="text-white">Save</Text>
@@ -218,6 +267,12 @@ const EditStageModal = ({
                 </View>
               </ScrollView>
             </View>
+            <SaveToFirebaseConfirmation
+              state={state}
+              visibility={confimationVisibility}
+              scaleStyle={confirmationScaleStyle}
+              closeModal={confirmationCloseModal}
+            ></SaveToFirebaseConfirmation>
           </Animated.View>
         </Pressable>
       </Pressable>

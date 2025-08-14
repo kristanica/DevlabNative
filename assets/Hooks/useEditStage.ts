@@ -7,7 +7,7 @@ type State = {
   isHidden: boolean;
   type: string;
 
-  codingInterface: string;
+  codingInterface?: string;
 
   //Bug Bust
   instruction?: string;
