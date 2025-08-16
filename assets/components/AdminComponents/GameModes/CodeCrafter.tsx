@@ -1,93 +1,83 @@
-import useAddLesson from "@/assets/deprecated/useAddLesson";
-import useLessonMuation from "@/assets/Hooks/useLessonMutation";
-import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import InputContainer from "../../components/AdminComponents/InputContainer";
+import { StyleSheet, View } from "react-native";
+import InputContainer from "../InputContainer";
+
 type CodeCrafterProps = {
-  data: any;
+  stageData: any;
+  dispatch: any;
+  state: any;
 };
-const CodeCrafter = ({ data }: CodeCrafterProps) => {
-  const { state, dispatch } = useAddLesson();
-  const gameIdenData = gameIdentifier((state) => state.data);
-  const mutation = useLessonMuation();
+const CodeCrafter = ({ stageData, dispatch, state }: CodeCrafterProps) => {
   return (
     <View>
       <InputContainer
-        numeric={false}
-        title={"Gamemode Title"}
+        title={"Title"}
+        placeholder={stageData?.title}
         value={state.title}
-        placeholder={data?.title}
-        setValue={(text) =>
+        setValue={(text) => {
           dispatch({
             type: "UPDATE_FIELD",
             field: "title",
             value: text,
-          })
-        }
-      ></InputContainer>
-      <InputContainer
+          });
+        }}
         numeric={false}
-        title={"Instruction"}
-        placeholder={data?.instruction}
-        value={state.instruction}
-        setValue={(text) =>
-          dispatch({ type: "UPDATE_FIELD", field: "instruction", value: text })
-        }
-      ></InputContainer>
-      <InputContainer
-        numeric={false}
-        title={"Topic"}
-        placeholder={data?.topic}
-        value={state.topic}
-        setValue={(text) =>
-          dispatch({ type: "UPDATE_FIELD", field: "topic", value: text })
-        }
-      ></InputContainer>
-      <InputContainer
-        numeric={false}
-        title={"Coding Interface"}
-        placeholder={data?.preCode}
-        value={state.preCode}
-        setValue={(text) =>
-          dispatch({ type: "UPDATE_FIELD", field: "preCode", value: text })
-        }
-      ></InputContainer>
-
-      <InputContainer
-        numeric={false}
-        title="Hint"
-        placeholder={data?.hint}
-        value={state?.hint || "unudentified"}
-        setValue={(text) =>
-          dispatch({ type: "UPDATE_FIELD", field: "hint", value: text })
-        }
       />
 
-      <View className="justify-evenly items-center flex-row my-7">
-        <TouchableOpacity>
-          <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-red-700 self-start">
-            Delete
-          </Text>
-        </TouchableOpacity>
+      <InputContainer
+        title={"Description"}
+        placeholder={stageData?.description}
+        value={state.description}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "description",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
 
-        <TouchableOpacity
-          onPress={() => {
-            const type = gameIdenData?.gameCategory;
-            dispatch({
-              type: "UPDATE_FIELD",
-              field: "type",
-              value: type as string,
-            });
+      <InputContainer
+        title={"Coding Interface"}
+        placeholder={stageData?.codingInterface}
+        value={state.codingInterface}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "codingInterface",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
+        title={"Instruction"}
+        placeholder={stageData?.instruction}
+        value={state.instruction}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "instruction",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
 
-            mutation.mutate({ state: { ...state, type }, type });
-          }}
-        >
-          <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-green-700 self-start">
-            Save Changes
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <InputContainer
+        title={"Copy Code"}
+        placeholder={stageData.copyCode}
+        value={state.copyCode}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "copyCode",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
     </View>
   );
 };

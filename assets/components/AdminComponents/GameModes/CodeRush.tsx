@@ -52,6 +52,19 @@ const CodeRush = ({ stageData, dispatch, state }: CodeRushProps) => {
         numeric={false}
       />
       <InputContainer
+        title={"Instruction"}
+        placeholder={stageData?.instruction}
+        value={state.instruction}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "instruction",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
         title={"Timer"}
         placeholder={String(stageData?.timer)}
         value={String(state.timer)}

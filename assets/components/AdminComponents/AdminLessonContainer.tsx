@@ -1,4 +1,4 @@
-import addNewTopic from "@/assets/Hooks/query/mutation/addNewTopic";
+import addNewTopic from "@/assets/deprecated/addNewTopic";
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import { useIsFocused } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

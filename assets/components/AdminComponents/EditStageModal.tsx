@@ -1,16 +1,12 @@
-import { db } from "@/assets/constants/constants";
+import customQuery from "@/assets/Hooks/function/customQuery";
+import GameComponent from "@/assets/Hooks/function/GameComponent";
+import getStageData from "@/assets/Hooks/query/getStageData";
+import editStage from "@/assets/Hooks/query/mutation/editStage";
 import useEditStage from "@/assets/Hooks/useEditStage";
 import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  deleteField,
-  doc,
-  FieldValue,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
-import React, { JSX } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import {
   Keyboard,
   Modal,
@@ -23,9 +19,6 @@ import {
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
 import DropDownMenu from "./DropDownMenu";
-import BugBust from "./GameModes/BugBust";
-import CodeRush from "./GameModes/CodeRush";
-import Lesson from "./GameModes/Lesson";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
 type EditStageModalProps = {
   visibility: boolean;
@@ -41,108 +34,33 @@ const EditStageModal = ({
   const levelPayload = tracker((state) => state.levelPayload);
   const stageIdentifier = tracker((state) => state.stageId);
 
+  if (!levelPayload || !stageIdentifier) {
+    return;
+  }
+
   const { state, dispatch } = useEditStage();
   const queryClient = useQueryClient();
-  const { data: stageData } = useQuery({
-    queryKey: [
+
+  const { data: stageData } = customQuery(
+    [
       "stage",
-      levelPayload?.category,
-      levelPayload?.lessonId,
-      levelPayload?.levelId,
+      levelPayload.category,
+      levelPayload.lessonId,
+      levelPayload.levelId,
       stageIdentifier,
     ],
-    queryFn: async () => {
-      if (!levelPayload || !stageIdentifier) {
-        throw new Error("Something went wrong with the payload");
-      }
-
-      try {
-        const stageRef = doc(
-          db,
-          levelPayload.category,
-          levelPayload.lessonId,
-          "Levels",
-          levelPayload.levelId,
-          "Stages",
-          stageIdentifier
-        );
-
-        const stageData = await getDoc(stageRef);
-        if (!stageData.exists()) {
-          throw new Error("Data does not exist");
-        }
-
-        return stageData.data();
-      } catch {}
-    },
-  });
-
-  const filters: Record<
-    string,
-    { omit: string[]; toNumber?: (item: any) => void; toDelete: string[] }
-  > = {
-    Lesson: {
-      omit: ["hint", "instruction", "timer"],
-      toDelete: ["timer", "hint"],
-    },
-    BugBust: { omit: ["timer"], toDelete: ["instruction", "timer"] },
-    CodeRush: {
-      omit: ["hint"],
-      toNumber: (item) => ({ ...item, timer: Number(item.timer) }),
-      toDelete: ["hint", "instruction"],
-    },
-  };
+    getStageData
+  );
 
   const mutation = useMutation({
-    mutationFn: async ({ state }: { state: any }) => {
-      try {
-        if (!levelPayload || !stageIdentifier) {
-          throw new Error("Something went wrong with the payload");
-        }
-
-        try {
-          const stageRef = doc(
-            db,
-            levelPayload.category,
-            levelPayload.lessonId,
-            "Levels",
-            levelPayload.levelId,
-            "Stages",
-            stageIdentifier
-          );
-
-          let filteredState = state;
-          let filterDelete: Record<string, FieldValue> = {};
-
-          const setFilter = filters[state.type ? state.type : stageData?.type];
-
-          if (setFilter.omit) {
-            filteredState = Object.fromEntries(
-              Object.entries(state).filter(
-                ([key]) => !setFilter.omit!.includes(key)
-              )
-            );
-            setFilter.toDelete.forEach((key) => {
-              filterDelete[key] = deleteField();
-            });
-          }
-
-          if (setFilter.toNumber) {
-            filteredState = setFilter.toNumber(filteredState);
-          }
-          await setDoc(
-            stageRef,
-            {
-              ...filteredState,
-              ...filterDelete,
-              type: state.type ? state.type : stageData?.type,
-            },
-            { merge: true }
-          );
-        } catch {}
-      } catch {
-        throw new Error("Something went wwrong...");
-      }
+    mutationFn: async ({
+      state,
+      stageType,
+    }: {
+      state: any;
+      stageType: string;
+    }) => {
+      return await editStage(state, stageType);
     },
 
     onSuccess: () => {
@@ -166,25 +84,22 @@ const EditStageModal = ({
     },
   });
 
-  const gameComponents: Record<string, JSX.Element> = {
-    Lesson: <Lesson dispatch={dispatch} state={state} stageData={stageData} />,
-    BugBust: (
-      <BugBust dispatch={dispatch} state={state} stageData={stageData} />
-    ),
-    CodeRush: (
-      <CodeRush
-        dispatch={dispatch}
-        state={state}
-        stageData={stageData}
-      ></CodeRush>
-    ),
-  };
   const {
     visibility: confimationVisibility,
     setVisibility: setConfirmationVisibility,
     scaleStyle: confirmationScaleStyle,
     closeModal: confirmationCloseModal,
   } = useModal();
+
+  useEffect(() => {
+    if (state.type === "") {
+      dispatch({
+        type: "UPDATE_FIELD",
+        field: "isHidden",
+        value: stageData?.type !== "Lesson",
+      });
+    }
+  }, [state.type]);
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
@@ -232,25 +147,23 @@ const EditStageModal = ({
                       value: item,
                     });
 
-                    if (item != "Lesson") {
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "isHidden",
-                        value: true,
-                      });
-                    } else {
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "isHidden",
-                        value: false,
-                      });
-                    }
+                    dispatch({
+                      type: "UPDATE_FIELD",
+                      field: "isHidden",
+                      value: item !== "Lesson",
+                    });
                   }}
                   placeHolder={stageData?.type}
                   value={state.type}
                 />
-                {gameComponents[state.type ? state.type : stageData?.type] ??
-                  null}
+
+                {/* Identify whether lesson, bugbust, coderush, brainbytes or codecrafter form fields */}
+                <GameComponent
+                  type={state.type ? state.type : stageData?.type}
+                  dispatch={dispatch}
+                  state={state}
+                  stageData={stageData}
+                ></GameComponent>
                 <View className="flex-row my-3">
                   <TouchableOpacity className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg">
                     <Text className="text-white font-exoBold">Delete</Text>
@@ -258,8 +171,10 @@ const EditStageModal = ({
                   <TouchableOpacity
                     className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
                     onPress={() => {
-                      mutation.mutate({ state });
-                      // setConfirmationVisibility(true);
+                      mutation.mutate({
+                        state,
+                        stageType: stageData?.type,
+                      });
                     }}
                   >
                     <Text className="text-white">Save</Text>

@@ -50,6 +50,19 @@ const BugBust = ({ stageData, dispatch, state }: BugBustProps) => {
         numeric={false}
       />
       <InputContainer
+        title={"Instruction"}
+        placeholder={stageData?.instruction}
+        value={state.instruction}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "instruction",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
         title={"Hint"}
         placeholder={stageData?.hint}
         value={state.hint}

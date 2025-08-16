@@ -1,123 +1,126 @@
-import useAddLesson from "@/assets/deprecated/useAddLesson";
-import useLessonMuation from "@/assets/Hooks/useLessonMutation";
-import gameIdentifier from "@/assets/zustand/gameIdentifier";
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import InputContainer from "../../components/AdminComponents/InputContainer";
-type BrainBytesProps = {
-  data: any;
-};
-const BrainBytes = ({ data }: BrainBytesProps) => {
-  const { state, dispatch } = useAddLesson();
-  const gameIdenData = gameIdentifier((state) => state.data);
-  const mutation = useLessonMuation();
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import InputContainer from "../InputContainer";
 
+type BrainBytesProps = {
+  stageData: any;
+  dispatch: any;
+  state: any;
+};
+const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
   return (
     <View>
       <InputContainer
-        numeric={false}
-        title={"Gamemode Title"}
+        title={"Title"}
+        placeholder={stageData?.title}
         value={state.title}
-        placeholder={data?.title}
-        setValue={(text) =>
+        setValue={(text) => {
           dispatch({
             type: "UPDATE_FIELD",
             field: "title",
             value: text,
-          })
-        }
-      ></InputContainer>
-      <InputContainer
+          });
+        }}
         numeric={false}
+      />
+
+      <InputContainer
+        title={"Description"}
+        placeholder={stageData?.description}
+        value={state.description}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "description",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+
+      <InputContainer
+        title={"Coding Interface"}
+        placeholder={stageData?.codingInterface}
+        value={state.codingInterface}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "codingInterface",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
         title={"Instruction"}
-        placeholder={data?.instruction}
+        placeholder={stageData?.instruction}
         value={state.instruction}
-        setValue={(text) =>
-          dispatch({ type: "UPDATE_FIELD", field: "instruction", value: text })
-        }
-      ></InputContainer>
-      <InputContainer
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "instruction",
+            value: text,
+          });
+        }}
         numeric={false}
-        title={"Topic"}
-        placeholder={data?.topic}
-        value={state.topic}
-        setValue={(text) =>
-          dispatch({ type: "UPDATE_FIELD", field: "topic", value: text })
-        }
-      ></InputContainer>
+      />
       <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
         <Text className="text-white my-2">Choices</Text>
         <TextInput
-          placeholder={data?.options?.A}
+          placeholder={stageData?.choices?.a}
           multiline
-          value={state.options?.A}
+          value={state.choices.a}
           onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "A", value: text })
+            dispatch({ type: "UPDATE_FIELD_CHOICES", field: "a", value: text })
           }
           className="rounded-xl p-2 text-white"
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
         <TextInput
-          placeholder={data?.options?.B}
+          placeholder={stageData?.choices?.b}
           multiline
-          value={state.options?.B}
+          value={state.choices?.b}
           onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "B", value: text })
+            dispatch({ type: "UPDATE_FIELD_CHOICES", field: "b", value: text })
           }
           className="rounded-xl p-2 text-white my-2"
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
         <TextInput
-          placeholder={data?.options?.C}
+          placeholder={stageData?.choices?.c}
           multiline
-          value={state.options?.C}
+          value={state.choices?.c}
           onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "C", value: text })
+            dispatch({ type: "UPDATE_FIELD_CHOICES", field: "c", value: text })
           }
           className="rounded-xl p-2 text-white my-2"
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
         <TextInput
-          placeholder={data?.options?.D}
+          placeholder={stageData?.choices?.d}
           multiline
-          value={state.options?.D}
+          value={state.choices?.d}
           onChangeText={(text) =>
-            dispatch({ type: "UPDATE_OPTION", field: "D", value: text })
+            dispatch({ type: "UPDATE_FIELD_CHOICES", field: "d", value: text })
           }
           className="rounded-xl p-2 text-white"
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
-      </View>
 
-      <View className="justify-evenly items-center flex-row my-7">
-        <TouchableOpacity>
-          <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-red-700 self-start">
-            Delete
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            const type = gameIdenData?.gameCategory;
+        <TextInput
+          placeholder={stageData?.choices?.correctAnswer}
+          multiline
+          value={state.choices?.correctAnswer}
+          onChangeText={(text) =>
             dispatch({
-              type: "UPDATE_FIELD",
-              field: "type",
-              value: type as string,
-            });
-
-            mutation.mutate({ state: { ...state, type }, type });
-          }}
-        >
-          <Text className="rounded-xl text-white font-exoBold py-2 px-7 bg-green-700 self-start">
-            Save Changes
-          </Text>
-        </TouchableOpacity>
+              type: "UPDATE_FIELD_CHOICES",
+              field: "correctAnswer",
+              value: text,
+            })
+          }
+          className="rounded-xl p-2 text-white"
+          style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
+        ></TextInput>
       </View>
     </View>
   );
