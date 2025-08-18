@@ -27,12 +27,14 @@ const editStage = async (state: any, stageType: string) => {
 
       const setFilter = filters[state.type ? state.type : stageType];
 
+      //removes unecessary fields before sending
       if (setFilter.omit) {
         filteredState = Object.fromEntries(
           Object.entries(state).filter(
             ([key]) => !setFilter.omit!.includes(key)
           )
         );
+        //deletes unecessary fields on firebase
         setFilter.omit.forEach((key) => {
           filterDelete[key] = deleteField();
         });
@@ -46,6 +48,7 @@ const editStage = async (state: any, stageType: string) => {
         {
           ...filteredState,
           ...filterDelete,
+          //checks wheter useReducuer state.type is empty. If empty, will follow type base on firebase. This avoids empty field on type
           type: state.type ? state.type : stageType,
         },
         { merge: true }

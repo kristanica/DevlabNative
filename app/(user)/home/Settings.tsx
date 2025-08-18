@@ -14,13 +14,12 @@ import React, { useState } from "react";
 import ConfirmationModal from "@/assets/components/SettingsComponents/ConfirmationModal";
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
+import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import {
   Image,
   ImageBackground,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -28,6 +27,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import Animated from "react-native-reanimated";
 
 const Settings = () => {
   const [bio, setBio] = useState<string>("");
@@ -40,15 +40,13 @@ const Settings = () => {
   const { userData } = useGetUserInfo();
   const { pickImageProfile, pickImageBackground } = usePickImage();
 
+  const { keyBoardHandlingStyle } = useKeyBoardHandler();
   return (
     <ProtectedRoutes>
       <View className="bg-accent flex-1">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
-            <KeyboardAvoidingView
-              className="flex-1"
-              behavior={Platform.OS === "ios" ? "padding" : undefined}
-            >
+            <Animated.View className="flex-1" style={[keyBoardHandlingStyle]}>
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View className="flex-[1] bg-accent  rounded-[10px] ">
                   <View className="flex-[.7] justify-center items-center">
@@ -162,7 +160,7 @@ const Settings = () => {
                   </View>
                 </View>
               </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
+            </Animated.View>
             {adminModal.visibility && (
               <AdminModal
                 visibility={adminModal.visibility}

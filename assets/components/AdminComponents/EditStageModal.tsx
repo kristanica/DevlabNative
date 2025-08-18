@@ -1,11 +1,9 @@
-import customQuery from "@/assets/Hooks/function/customQuery";
 import GameComponent from "@/assets/Hooks/function/GameComponent";
-import getStageData from "@/assets/Hooks/query/getStageData";
-import editStage from "@/assets/Hooks/query/mutation/editStage";
 import useEditStage from "@/assets/Hooks/useEditStage";
+import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
+import useStageEditor from "@/assets/Hooks/useStageEditor";
 import tracker from "@/assets/zustand/tracker";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import {
   Keyboard,
@@ -31,58 +29,11 @@ const EditStageModal = ({
   scaleStyle,
   closeModal,
 }: EditStageModalProps) => {
-  const levelPayload = tracker((state) => state.levelPayload);
   const stageIdentifier = tracker((state) => state.stageId);
-
-  if (!levelPayload || !stageIdentifier) {
-    return;
-  }
-
   const { state, dispatch } = useEditStage();
-  const queryClient = useQueryClient();
+  const { mutation, stageData } = useStageEditor();
 
-  const { data: stageData } = customQuery(
-    [
-      "stage",
-      levelPayload.category,
-      levelPayload.lessonId,
-      levelPayload.levelId,
-      stageIdentifier,
-    ],
-    getStageData
-  );
-
-  const mutation = useMutation({
-    mutationFn: async ({
-      state,
-      stageType,
-    }: {
-      state: any;
-      stageType: string;
-    }) => {
-      return await editStage(state, stageType);
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [
-          "stage",
-          levelPayload?.category,
-          levelPayload?.lessonId,
-          levelPayload?.levelId,
-          stageIdentifier,
-        ],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [
-          "Stages",
-          levelPayload?.category,
-          levelPayload?.lessonId,
-          levelPayload?.levelId,
-        ],
-      });
-    },
-  });
+  const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const {
     visibility: confimationVisibility,
@@ -91,6 +42,7 @@ const EditStageModal = ({
     closeModal: confirmationCloseModal,
   } = useModal();
 
+  // Use to make useReducer, state.type, sync.
   useEffect(() => {
     if (state.type === "") {
       dispatch({
@@ -114,7 +66,7 @@ const EditStageModal = ({
         >
           <Animated.View
             className="  bg-accent  border-[2px] h-full border-[#56EBFF]"
-            style={[scaleStyle]}
+            style={[scaleStyle, keyBoardHandlingStyle]}
           >
             <View className="mx-2">
               <ScrollView
@@ -133,20 +85,23 @@ const EditStageModal = ({
                 </Text>
                 <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl ">
                   <Text className="text-white font-exoRegular my-2">
-                    Stage Visibility{" "}
+                    Stage Visibility
                   </Text>
                   <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 my-2">
                     {stageData?.isHidden ? "Hidden" : "Visibile"}
                   </Text>
                 </View>
+
                 <DropDownMenu
                   onSelect={(item) => {
+                    // set type to gamemodes
                     dispatch({
                       type: "UPDATE_FIELD",
                       field: "type",
                       value: item,
                     });
 
+                    //sets gamemodes to hidden and lessons to visible
                     dispatch({
                       type: "UPDATE_FIELD",
                       field: "isHidden",
@@ -164,6 +119,7 @@ const EditStageModal = ({
                   state={state}
                   stageData={stageData}
                 ></GameComponent>
+
                 <View className="flex-row my-3">
                   <TouchableOpacity className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg">
                     <Text className="text-white font-exoBold">Delete</Text>
@@ -171,7 +127,7 @@ const EditStageModal = ({
                   <TouchableOpacity
                     className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
                     onPress={() => {
-                      mutation.mutate({
+                      mutation?.mutate({
                         state,
                         stageType: stageData?.type,
                       });
