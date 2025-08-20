@@ -14,6 +14,7 @@ type HomeLessonProps = {
 const LessonsContainer = ({ name }: HomeLessonProps) => {
   const id = name as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
+
   return (
     // Container iteself
     <View className="w-screen justify-center items-center">
@@ -44,12 +45,12 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
             <View className="w-[50%] bg-[#32FF99] h-4 rounded-xl"></View>
           </View>
           <ButtonAnimated
-            onPressAction={() =>
+            onPressAction={() => {
               router.push({
                 pathname: "/(user)/home/(Lessons)/category/[categoryId]",
-                params: { categoryId: name },
-              })
-            }
+                params: { categoryId: id },
+              });
+            }}
           >
             <Text className="text-white py-2 px-7 bg-accent rounded-2xl font-exoBold">
               Continue

@@ -1,36 +1,39 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LessonContainer from "@/assets/components/LessonsComponent/LessonContainer";
+import ListStages from "@/assets/components/LessonsComponent/ListStages";
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import { lessonMetaData } from "@/assets/constants/constants";
 import { useFetchLessonList } from "@/assets/Hooks/query/useFetchLessonList";
 
 import useModal from "@/assets/Hooks/useModal";
+import tracker from "@/assets/zustand/tracker";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import React from "react";
+import React, { useState } from "react";
 import { Image, Pressable, SectionList, Text, View } from "react-native";
 
 const categoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
 
+  const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
+
+  const setTracker = tracker((state) => state.setTracker);
+  const levelPayload = tracker((state) => state.levelPayload);
+
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
-  let globalAnim: number = 0;
-
-  const { data: lessonData, isLoading } = useQuery({
-    queryKey: ["lesson", id],
+  const { data, isLoading } = useQuery({
+    queryKey: ["lesson user", id],
     queryFn: ({ queryKey }) => {
       const [, categoryId] = queryKey as [string, keyof typeof lessonMetaData];
       return useFetchLessonList({ category: categoryId });
     },
-    enabled: !!id,
   });
-
+  let globalCounter = 0;
   return (
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>
@@ -71,12 +74,19 @@ const categoryScreen = () => {
         ></LockLessonModal>
         {isLoading ? (
           <LoadingAnim />
+        ) : stagesVisibility ? (
+          <>
+            <Pressable onPress={() => setStagesVisibility(false)}>
+              <Text className="text-white text-3xl">BACK</Text>
+            </Pressable>
+            <ListStages />
+          </>
         ) : (
           <SectionList
             sections={
-              lessonData
-                ? lessonData.map((data: any) => ({
-                    title: data.title,
+              data
+                ? data.map((data: any) => ({
+                    title: data.Lesson,
                     data: data.levels.map((level: any) => ({
                       ...level,
                       lessonid: data.id,
@@ -86,30 +96,26 @@ const categoryScreen = () => {
             }
             stickySectionHeadersEnabled={false}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => {
-              globalAnim++;
+              globalCounter++;
               return (
                 <Pressable
-                  className="mx-3"
                   onPress={() => {
-                    if (!item.status) {
+                    if (item.isLocked) {
                       setVisibility(true);
                     } else {
-                      console.log(item);
-                      router.replace({
-                        pathname: "/level/[levelid]",
-                        params: {
-                          levelid: item.id,
-                          title: id,
-                          lessonid: item.lessonid,
-                        },
+                      setTracker({
+                        category: id,
+                        lessonId: item.lessonid,
+                        levelId: item.id,
                       });
+                      setStagesVisibility(true);
                     }
                   }}
                 >
                   <LessonContainer
                     item={item}
+                    index={globalCounter}
                     icon={
                       meta.ionIcon as
                         | "cube"
@@ -117,14 +123,13 @@ const categoryScreen = () => {
                         | "logo-html5"
                         | "logo-css3"
                     }
-                    index={globalAnim}
-                  />
+                  ></LessonContainer>
                 </Pressable>
               );
             }}
             renderSectionHeader={({ section }) => (
               <Text className="text-white text-2xl font-exoBold mx-3 my-5">
-                {section.title}
+                Lesson {section.title}
               </Text>
             )}
           />

@@ -23,7 +23,7 @@ const Stage = () => {
   const levelPayload = tracker((state) => state.levelPayload);
   const stageTracker = tracker((state) => state.setStage);
 
-  const { data: levelsData, refetch } = useQuery({
+  const { data: levelsData } = useQuery({
     queryKey: [
       "Stages",
       levelPayload?.category,

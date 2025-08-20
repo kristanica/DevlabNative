@@ -1,27 +1,16 @@
-import useSignOut from "@/assets/Hooks/useSignOut";
+import { ScaleModalProps } from "@/assets/constants/type";
 import LottieView from "lottie-react-native";
 import React from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle,
-} from "react-native";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 import ButtonAnimated from "../ButtonComponent";
 
-type signOutProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-};
-
-const SignOutModal = ({ visibility, scaleStyle, closeModal }: signOutProps) => {
-  //custom hook
-  const { logOut } = useSignOut();
-
+const SignOutModal = ({
+  visibility,
+  scaleStyle,
+  closeModal,
+  onConfirm,
+}: ScaleModalProps) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1">
@@ -50,7 +39,7 @@ const SignOutModal = ({ visibility, scaleStyle, closeModal }: signOutProps) => {
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
               <ButtonAnimated
                 backgroundColor={"#7F5AF0"}
-                onPressAction={logOut}
+                onPressAction={onConfirm}
               >
                 <Text className="text-white py-2 px-10 font-exoBold">
                   Continue

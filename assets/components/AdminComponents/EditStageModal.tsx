@@ -127,10 +127,7 @@ const EditStageModal = ({
                   <TouchableOpacity
                     className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
                     onPress={() => {
-                      mutation?.mutate({
-                        state,
-                        stageType: stageData?.type,
-                      });
+                      setConfirmationVisibility(true);
                     }}
                   >
                     <Text className="text-white">Save</Text>
@@ -139,7 +136,13 @@ const EditStageModal = ({
               </ScrollView>
             </View>
             <SaveToFirebaseConfirmation
-              state={state}
+              onConfirm={() => {
+                mutation?.mutate({
+                  state,
+                  stageType: stageData?.type,
+                });
+                confirmationCloseModal();
+              }}
               visibility={confimationVisibility}
               scaleStyle={confirmationScaleStyle}
               closeModal={confirmationCloseModal}

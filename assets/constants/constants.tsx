@@ -59,7 +59,7 @@ export const lessonMetaData = {
       color2: "#1E90FF",
     },
   },
-  Html: {
+  sampleHTML: {
     title: "HTML: The Gateway to Web Adventure",
     description: `Every great structure needs a solid foundation—HTML is the skeleton that holds the web together! Without it, web pages would collapse into chaos.`,
     about: `Step into the world of web development! As a novice adventurer, you’ll unlock the powerful language that forms the backbone of the internet—HTML. In this first quest, you’ll discover how to craft the structure of your web pages, using simple tags and elements. Your mission: build your very first web page and lay the foundation for your journey into the digital realm.`,

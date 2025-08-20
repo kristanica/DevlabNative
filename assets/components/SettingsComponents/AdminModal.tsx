@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
 import {
@@ -16,12 +15,14 @@ type adminModalProps = {
   visibility: boolean;
   scaleStyle: AnimatedStyle<ViewStyle>;
   closeModal: () => void;
+  onConfirm: () => void;
 };
 
 const AdminModal = ({
   visibility,
   scaleStyle,
   closeModal,
+  onConfirm,
 }: adminModalProps) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
@@ -50,9 +51,7 @@ const AdminModal = ({
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
               <ButtonAnimated
                 backgroundColor={"#7F5AF0"}
-                onPressAction={() =>
-                  router.replace({ pathname: "/(admin)/AdminLogin" })
-                }
+                onPressAction={onConfirm}
               >
                 <Text className="text-white py-2 px-10 font-exoBold">
                   Continue

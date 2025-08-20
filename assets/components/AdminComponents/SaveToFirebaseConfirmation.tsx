@@ -1,5 +1,6 @@
+import { ScaleModalProps } from "@/assets/constants/type";
 import LottieView from "lottie-react-native";
-import React from "react";
+import React, { BaseSyntheticEvent } from "react";
 import {
   Keyboard,
   Modal,
@@ -8,22 +9,15 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from "react-native";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
-type SaveToFirebaseConfirmation = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-  state: any;
-};
+import Animated from "react-native-reanimated";
 
 const SaveToFirebaseConfirmation = ({
   visibility,
   scaleStyle,
   closeModal,
-  state,
-}: SaveToFirebaseConfirmation) => {
+  onConfirm,
+}: ScaleModalProps) => {
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
@@ -32,8 +26,9 @@ const SaveToFirebaseConfirmation = ({
       >
         <Pressable
           className="w-[70%] h-[30%]"
-          onPress={() => {
+          onPress={(e: BaseSyntheticEvent) => {
             Keyboard.dismiss();
+            e.stopPropagation();
           }}
         >
           <Animated.View
@@ -51,19 +46,7 @@ const SaveToFirebaseConfirmation = ({
               style={{ flex: 1 }}
             ></LottieView>
             <View className="flex-row justify-evenly items-center mb-3">
-              <TouchableOpacity
-                onPress={() => {
-                  if (
-                    state.title === "" ||
-                    state.description === "" ||
-                    state.codingInterface === ""
-                  ) {
-                    console.log("ONe of the fiels is empty");
-                  } else {
-                    console.log("hello");
-                  }
-                }}
-              >
+              <TouchableOpacity onPress={onConfirm}>
                 <Text className="px-7 py-2 self-start bg-green-400 text-white  rounded-2xl font-exoBold">
                   Yes
                 </Text>

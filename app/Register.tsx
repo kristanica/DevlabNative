@@ -26,17 +26,14 @@ const Register = () => {
       className="flex-1 bg-background justify-center items-center"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {/* Title Container */}
       <View>
         <Text className="color-white  mb-5 text-3xl font-[500] font-exoExtraBold">
           DEVLAB
         </Text>
       </View>
-      {/* Dismisses keyboard */}
+
       <TouchableNativeFeedback onPress={Keyboard.dismiss}>
-        {/* Container itself */}
         <View className="h-[590px] rounded-3xl  w-[25rem]  bg-accent flex-col">
-          {/* Icon for the user profile */}
           <View className="flex-[1] justify-center items-center">
             <Ionicons
               name="person-circle"
@@ -47,8 +44,6 @@ const Register = () => {
           </View>
           {/* Input fields for registration */}
           <View className="flex-[2] justify-center items-center">
-            {/*Input field for email */}
-
             <InputBox
               placeHolder={"Email"}
               value={state.email}
@@ -57,7 +52,7 @@ const Register = () => {
               }
               icon={"mail"}
             />
-            {/* Input field for password */}
+
             <InputBox
               placeHolder={"Password"}
               value={state.password}
@@ -71,7 +66,7 @@ const Register = () => {
               icon={"lock-closed"}
               isPassword={true}
             />
-            {/* Input field for confirm password */}
+
             <InputBox
               placeHolder={"ConfirmPassword"}
               value={state.confirmPassword}
@@ -85,7 +80,7 @@ const Register = () => {
               icon={"lock-closed"}
               isPassword={true}
             />
-            {/* Input field for username */}
+
             <InputBox
               placeHolder={"Username"}
               value={state.username}
@@ -107,7 +102,7 @@ const Register = () => {
               icon={"calendar-outline"}
             />
           </View>
-          {/* Button to register */}
+
           <View className="flex-[.5]  justify-center items-center ">
             <TouchableOpacity
               className="bg-button flex-[1] w-[8rem] justify-center items-center my-2 rounded-full "

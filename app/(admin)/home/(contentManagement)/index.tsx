@@ -1,4 +1,5 @@
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
+import CategorySelector from "@/assets/components/AdminComponents/CategorySelector";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import ButtonAnimated from "@/assets/components/ButtonComponent";
@@ -16,7 +17,6 @@ const ContentManagement = () => {
   const [category, setCategory] = useState<string>("sampleHTML");
 
   const setTracker = tracker((state) => state.setTracker);
-  const payload = tracker((state) => state.levelPayload);
 
   const { data: lessonsData, isLoading } = useQuery({
     queryKey: ["lesson admin", category],
@@ -45,18 +45,7 @@ const ContentManagement = () => {
             </View>
 
             <View className="flex-row justify-between px-7 border-[2px] border-white border-x-0 border-t-0 mt-7">
-              <ButtonAnimated onPressAction={() => setCategory("sampleHTML")}>
-                <Text className="text-white font-exoBold ">HTML</Text>
-              </ButtonAnimated>
-              <ButtonAnimated onPressAction={() => setCategory("Css")}>
-                <Text className="text-white font-exoBold ">Css</Text>
-              </ButtonAnimated>
-              <ButtonAnimated onPressAction={() => setCategory("JavaScript")}>
-                <Text className="text-white font-exoBold ">JavaScript</Text>
-              </ButtonAnimated>
-              <ButtonAnimated onPressAction={() => setCategory("Database")}>
-                <Text className="text-white font-exoBold ">Database</Text>
-              </ButtonAnimated>
+              <CategorySelector setCategory={setCategory} />
             </View>
 
             {isLoading ? (

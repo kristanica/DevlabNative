@@ -23,28 +23,23 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
     <Animated.View
       key={item.id}
       style={onScale}
-      className="bg-shopAccent rounded-3xl h-28 flex-row my-2 border-black border-[2px]"
+      className="bg-shopAccent rounded-3xl h-28 flex-row my-2 border-black border-[2px] mx-3"
     >
-      {item.status ? null : (
+      {item.isLocked ? (
         <>
           <View className="absolute w-full z-10 rounded-3xl bg-black opacity-[.6] h-full justify-center items-center"></View>
           <View className="flex-1 justify-center items-center absolute z-20 h-full w-full">
             <Ionicons name={"lock-closed"} color={"white"} size={40} />
           </View>
         </>
-      )}
-
-      <View className="w-[25%] justify-center items-center bg-black rounded-3xl">
-        <Ionicons name={icon} color={"white"} size={50} />
+      ) : null}
+      <View className="justify-center items-center w-[20%] bg-black rounded-3xl">
+        <Ionicons name={icon} color={"white"} size={40} />
       </View>
-
-      <View className="justify-center items-start ml-3">
-        <Text className="text-white text-2xl font-exoBold">{item.title}</Text>
-        <Text
-          numberOfLines={2}
-          className="text-[#94A1B2] text-sm w-[16%] text-justify font-exoLight "
-        >
-          {item.desc}
+      <View className="w-[80%] px-3 py-3">
+        <Text className="text-white font-exoBold text-xl">{item.title}</Text>
+        <Text className="text-[#eeebf29d] font-exoLight text-sm">
+          {item.description}
         </Text>
       </View>
     </Animated.View>

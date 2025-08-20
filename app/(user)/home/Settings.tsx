@@ -15,7 +15,9 @@ import ConfirmationModal from "@/assets/components/SettingsComponents/Confirmati
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
+import useSignOut from "@/assets/Hooks/useSignOut";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { router } from "expo-router";
 import {
   Image,
   ImageBackground,
@@ -39,6 +41,7 @@ const Settings = () => {
   const confirmationModal = useModal();
   const { userData } = useGetUserInfo();
   const { pickImageProfile, pickImageBackground } = usePickImage();
+  const { logOut } = useSignOut();
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
   return (
@@ -163,6 +166,9 @@ const Settings = () => {
             </Animated.View>
             {adminModal.visibility && (
               <AdminModal
+                onConfirm={() => {
+                  router.replace({ pathname: "/(admin)/AdminLogin" });
+                }}
                 visibility={adminModal.visibility}
                 scaleStyle={adminModal.scaleStyle}
                 closeModal={adminModal.closeModal}
@@ -170,6 +176,7 @@ const Settings = () => {
             )}
             {logOutModal.visibility && (
               <SignOutModal
+                onConfirm={logOut}
                 visibility={logOutModal.visibility}
                 scaleStyle={logOutModal.scaleStyle}
                 closeModal={logOutModal.closeModal}

@@ -1,5 +1,5 @@
 import { db } from "@/assets/constants/constants";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
 
 type fetchLessonProps = {
   category: string;
@@ -11,13 +11,13 @@ export const useFetchLessonList = async ({ category }: fetchLessonProps) => {
     const data = await getDocs(Lessonref);
     const lessonData = await Promise.all(
       //any is not FINAL
-      data.docs.map(async (lessonDoc: any) => {
+      data.docs.map(async (lessonDoc: QueryDocumentSnapshot) => {
         const levelRef = collection(db, category, lessonDoc.id, "Levels");
         const data = await getDocs(levelRef);
 
         const levelData = await Promise.all(
           //any is not FINAL
-          data.docs.map(async (levelDoc: any) => ({
+          data.docs.map(async (levelDoc: QueryDocumentSnapshot) => ({
             id: levelDoc.id,
             ...levelDoc.data(),
           }))
