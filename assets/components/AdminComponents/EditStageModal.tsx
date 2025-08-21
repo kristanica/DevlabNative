@@ -1,10 +1,11 @@
+import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import GameComponent from "@/assets/Hooks/function/GameComponent";
 import useEditStage from "@/assets/Hooks/useEditStage";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
 import useStageEditor from "@/assets/Hooks/useStageEditor";
 import tracker from "@/assets/zustand/tracker";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   Modal,
@@ -18,6 +19,8 @@ import {
 import Animated, { AnimatedStyle } from "react-native-reanimated";
 import DropDownMenu from "./DropDownMenu";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
+import SaveToFirebaseResultModal from "./SaveToFirebaseResultModal";
+
 type EditStageModalProps = {
   visibility: boolean;
   scaleStyle: AnimatedStyle<ViewStyle>;
@@ -32,6 +35,7 @@ const EditStageModal = ({
   const stageIdentifier = tracker((state) => state.stageId);
   const { state, dispatch } = useEditStage();
   const { mutation, stageData } = useStageEditor();
+  const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
@@ -40,6 +44,13 @@ const EditStageModal = ({
     setVisibility: setConfirmationVisibility,
     scaleStyle: confirmationScaleStyle,
     closeModal: confirmationCloseModal,
+  } = useModal();
+
+  const {
+    visibility: fireBaseResultVisibility,
+    setVisibility: setFireBaseResultVisibility,
+    scaleStyle: fireBaseResultScaleStyle,
+    closeModal: fireBaseResultVisibilityCloseModal,
   } = useModal();
 
   // Use to make useReducer, state.type, sync.
@@ -135,18 +146,49 @@ const EditStageModal = ({
                 </View>
               </ScrollView>
             </View>
-            <SaveToFirebaseConfirmation
-              onConfirm={() => {
-                mutation?.mutate({
-                  state,
-                  stageType: stageData?.type,
-                });
-                confirmationCloseModal();
-              }}
-              visibility={confimationVisibility}
-              scaleStyle={confirmationScaleStyle}
-              closeModal={confirmationCloseModal}
-            ></SaveToFirebaseConfirmation>
+            {confimationVisibility && (
+              <SaveToFirebaseConfirmation
+                onConfirm={() => {
+                  const type = state.type ? state.type : stageData?.type;
+
+                  if (!type) {
+                    console.log("error");
+                    return;
+                  }
+                  const hasEmpty = CheckEmptyFields(state, type);
+                  confirmationCloseModal();
+                  if (hasEmpty) {
+                    console.log("There is an empty fieldasds");
+
+                    setisFirebaseSuccess(false);
+                    setFireBaseResultVisibility(true);
+                    return;
+                  }
+
+                  mutation?.mutate({
+                    state,
+                    stageType: stageData?.type,
+                  });
+
+                  setisFirebaseSuccess(true);
+                  setFireBaseResultVisibility(true);
+                  dispatch({ type: "RESET_ALL_FIELD" });
+                }}
+                visibility={confimationVisibility}
+                scaleStyle={confirmationScaleStyle}
+                closeModal={confirmationCloseModal}
+              ></SaveToFirebaseConfirmation>
+            )}
+
+            {fireBaseResultVisibility && (
+              <SaveToFirebaseResultModal
+                isFirebaseSuccess={isFirebaseSuccess}
+                visibility={fireBaseResultVisibility}
+                scaleStyle={fireBaseResultScaleStyle}
+                closeModal={fireBaseResultVisibilityCloseModal}
+                onConfirm={() => setFireBaseResultVisibility(false)}
+              ></SaveToFirebaseResultModal>
+            )}
           </Animated.View>
         </Pressable>
       </Pressable>

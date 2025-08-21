@@ -470,24 +470,19 @@ export const filters: Record<
 > = {
   Lesson: {
     omit: ["hint", "timer", "choices", "copyCode"],
-    // toDelete: ["timer", "hint", "choices", "copyCode"],
   },
   BugBust: {
     omit: ["timer", "choices", "copyCode"],
-    // toDelete: ["timer", "choices", "copyCode"],
   },
   CodeRush: {
     omit: ["hint", "choices", "copyCode"],
     toNumber: (item) => ({ ...item, timer: Number(item.timer) }),
-    // toDelete: ["hint", "choices", "copyCode"],
   },
   BrainBytes: {
     omit: ["timer", "hint", "copyCode"],
-    // toDelete: ["timer", "hint", "copyCode"],
   },
 
   CodeCrafter: {
     omit: ["timer", "hint", "choices"],
-    // toDelete: ["timer", "hint", "choices"],
   },
 };

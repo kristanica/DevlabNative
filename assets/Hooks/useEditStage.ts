@@ -30,7 +30,34 @@ type State = {
   //This is a picture
   copyCode: string;
 };
+const initialState = {
+  //general
+  title: "",
+  description: "",
+  isHidden: false,
+  type: "",
+  instruction: "",
+  codingInterface: "",
 
+  //Bug Bust
+  hint: "",
+
+  //Code Rush
+  timer: undefined,
+
+  //BrainBytes
+  choices: {
+    a: "",
+    b: "",
+    c: "",
+    d: "",
+    correctAnswer: "",
+  },
+
+  //CodeCrafter
+  //This is a picture
+  copyCode: "",
+};
 type Action =
   | {
       type: "UPDATE_FIELD";
@@ -41,6 +68,9 @@ type Action =
       type: "UPDATE_FIELD_CHOICES";
       field: keyof BrainBytesChoices;
       value: string;
+    }
+  | {
+      type: "RESET_ALL_FIELD";
     };
 
 const reducer = (state: State, action: Action): State => {
@@ -60,6 +90,12 @@ const reducer = (state: State, action: Action): State => {
         },
       };
     }
+    case "RESET_ALL_FIELD": {
+      return {
+        ...initialState,
+      };
+    }
+
     default: {
       return state;
     }

@@ -8,7 +8,6 @@ type lessonProps = {
 };
 
 const Lesson = ({ stageData, dispatch, state }: lessonProps) => {
-  console.log(stageData);
   return (
     <>
       <InputContainer
