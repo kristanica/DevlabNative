@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Animated from "react-native-reanimated";
 
-const SaveToFirebaseConfirmation = ({
+const DeleteFireBaseConfirmationModal = ({
   visibility,
   scaleStyle,
   closeModal,
@@ -36,11 +36,11 @@ const SaveToFirebaseConfirmation = ({
             style={[scaleStyle]}
           >
             <Text className="text-white font-exoBold mx-auto mt-3 ">
-              Are you sure you want to save this?
+              Are you sure you want to delete this?
             </Text>
 
             <LottieView
-              source={require("@/assets/Lottie/Loading.json")}
+              source={require("@/assets/Lottie/Sad Signout.json")}
               autoPlay
               loop
               style={{ flex: 1 }}
@@ -64,6 +64,6 @@ const SaveToFirebaseConfirmation = ({
   );
 };
 
-export default SaveToFirebaseConfirmation;
+export default DeleteFireBaseConfirmationModal;
 
 const styles = StyleSheet.create({});

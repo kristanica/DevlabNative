@@ -1,7 +1,6 @@
-import addNewTopic from "@/assets/deprecated/addNewTopic";
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import { useIsFocused } from "@react-navigation/native";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -24,20 +23,20 @@ const AdminLessonContainer = ({
     id: index,
   });
 
-  const mutation = useMutation({
-    mutationFn: ({
-      subject,
-      lessonId,
-      levelId,
-    }: {
-      subject: string;
-      lessonId: string;
-      levelId: string;
-    }) => addNewTopic(subject, lessonId, levelId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lesson admin", category] });
-    },
-  });
+  // const mutation = useMutation({
+  //   mutationFn: ({
+  //     subject,
+  //     lessonId,
+  //     levelId,
+  //   }: {
+  //     subject: string;
+  //     lessonId: string;
+  //     levelId: string;
+  //   }) => addNewTopic(subject, lessonId, levelId),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["lesson admin", category] });
+  //   },
+  // });
 
   return (
     <Animated.View

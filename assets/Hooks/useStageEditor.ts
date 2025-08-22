@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import tracker from "../zustand/tracker";
 import customQuery from "./function/customQuery";
 import getStageData from "./query/getStageData";
+import deleteStage from "./query/mutation/deleteStage";
 import editStage from "./query/mutation/editStage";
 
 const useStageEditor = () => {
@@ -52,7 +53,21 @@ const useStageEditor = () => {
     },
   });
 
-  return { stageData, mutation };
+  const deleteMutation = useMutation({
+    mutationFn: async () => deleteStage(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          "Stages",
+          levelPayload?.category,
+          levelPayload?.lessonId,
+          levelPayload?.levelId,
+        ],
+      });
+    },
+  });
+
+  return { stageData, mutation, deleteMutation };
 };
 
 export default useStageEditor;

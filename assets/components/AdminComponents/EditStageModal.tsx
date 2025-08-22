@@ -7,7 +7,6 @@ import useStageEditor from "@/assets/Hooks/useStageEditor";
 import tracker from "@/assets/zustand/tracker";
 import React, { useEffect, useState } from "react";
 import {
-  Keyboard,
   Modal,
   Pressable,
   ScrollView,
@@ -17,6 +16,7 @@ import {
   ViewStyle,
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
+import DeleteFireBaseConfirmationModal from "./DeleteFireBaseConfirmationModal";
 import DropDownMenu from "./DropDownMenu";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
 import SaveToFirebaseResultModal from "./SaveToFirebaseResultModal";
@@ -34,16 +34,16 @@ const EditStageModal = ({
 }: EditStageModalProps) => {
   const stageIdentifier = tracker((state) => state.stageId);
   const { state, dispatch } = useEditStage();
-  const { mutation, stageData } = useStageEditor();
+  const { mutation, stageData, deleteMutation } = useStageEditor();
   const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const {
-    visibility: confimationVisibility,
-    setVisibility: setConfirmationVisibility,
-    scaleStyle: confirmationScaleStyle,
-    closeModal: confirmationCloseModal,
+    visibility: editConfimationVisibility,
+    setVisibility: setEditConfirmationVisibility,
+    scaleStyle: editConfirmationScaleStyle,
+    closeModal: editConfirmationCloseModal,
   } = useModal();
 
   const {
@@ -51,6 +51,13 @@ const EditStageModal = ({
     setVisibility: setFireBaseResultVisibility,
     scaleStyle: fireBaseResultScaleStyle,
     closeModal: fireBaseResultVisibilityCloseModal,
+  } = useModal();
+
+  const {
+    visibility: deleteConfirmationVisibility,
+    setVisibility: setDeleteConfirmationVisibility,
+    scaleStyle: deleteConfirmationScaleStyle,
+    closeModal: deleteConfirmationCloseModal,
   } = useModal();
 
   // Use to make useReducer, state.type, sync.
@@ -66,17 +73,17 @@ const EditStageModal = ({
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
-        className="flex-[1] justify-center items-center"
+        className="flex-[1] justify-center items-center bg-black/30 "
         onPress={closeModal}
       >
         <Pressable
           className="w-[80%] h-[70%]"
-          onPress={() => {
-            Keyboard.dismiss();
+          onPress={(e) => {
+            e.stopPropagation();
           }}
         >
           <Animated.View
-            className="  bg-accent  border-[2px] h-full border-[#56EBFF]"
+            className="  bg-accent  border-[2px] h-full border-[#ffffff43] rounded-xl"
             style={[scaleStyle, keyBoardHandlingStyle]}
           >
             <View className="mx-2">
@@ -132,13 +139,21 @@ const EditStageModal = ({
                 ></GameComponent>
 
                 <View className="flex-row my-3">
-                  <TouchableOpacity className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg">
+                  <TouchableOpacity
+                    className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
+                    onPress={() => {
+                      // deleteMutation?.mutate();
+                      // closeModal();
+
+                      setDeleteConfirmationVisibility(true);
+                    }}
+                  >
                     <Text className="text-white font-exoBold">Delete</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
                     onPress={() => {
-                      setConfirmationVisibility(true);
+                      setEditConfirmationVisibility(true);
                     }}
                   >
                     <Text className="text-white">Save</Text>
@@ -146,7 +161,7 @@ const EditStageModal = ({
                 </View>
               </ScrollView>
             </View>
-            {confimationVisibility && (
+            {editConfimationVisibility && (
               <SaveToFirebaseConfirmation
                 onConfirm={() => {
                   const type = state.type ? state.type : stageData?.type;
@@ -155,11 +170,11 @@ const EditStageModal = ({
                     console.log("error");
                     return;
                   }
+                  //Checks if any of the fields is empty
                   const hasEmpty = CheckEmptyFields(state, type);
-                  confirmationCloseModal();
+                  editConfirmationCloseModal();
                   if (hasEmpty) {
                     console.log("There is an empty fieldasds");
-
                     setisFirebaseSuccess(false);
                     setFireBaseResultVisibility(true);
                     return;
@@ -174,10 +189,23 @@ const EditStageModal = ({
                   setFireBaseResultVisibility(true);
                   dispatch({ type: "RESET_ALL_FIELD" });
                 }}
-                visibility={confimationVisibility}
-                scaleStyle={confirmationScaleStyle}
-                closeModal={confirmationCloseModal}
+                visibility={editConfimationVisibility}
+                scaleStyle={editConfirmationScaleStyle}
+                closeModal={editConfirmationCloseModal}
               ></SaveToFirebaseConfirmation>
+            )}
+
+            {deleteConfirmationVisibility && (
+              <DeleteFireBaseConfirmationModal
+                onConfirm={() => {
+                  deleteConfirmationCloseModal();
+                  closeModal();
+                  deleteMutation?.mutate();
+                }}
+                visibility={deleteConfirmationVisibility}
+                scaleStyle={deleteConfirmationScaleStyle}
+                closeModal={deleteConfirmationCloseModal}
+              ></DeleteFireBaseConfirmationModal>
             )}
 
             {fireBaseResultVisibility && (

@@ -20,17 +20,17 @@ const SaveToFirebaseResultModal = ({
       className="absolute inset-0 justify-center items-center"
     >
       <Pressable
-        className="flex-1 justify-center items-center bg-red-200"
-        onPress={closeModal} // Close when tapping outside
+        className="flex-1 justify-center items-center h-full w-full "
+        onPress={closeModal}
       >
         <Pressable
           className="h-[30%] w-[50%]"
           onPress={(e) => {
             e.stopPropagation();
             closeModal();
-          }} // Prevent closing when tapping inside
+          }}
         >
-          <Animated.View className="flex-1 bg-accent rounded-2xl overflow-hidden">
+          <Animated.View className="flex-1 bg-accent rounded-3xl overflow-hidden border-[2px]  border-[#56EBFF]">
             <LottieView
               source={
                 isFirebaseSuccess
@@ -42,7 +42,7 @@ const SaveToFirebaseResultModal = ({
               style={{ flex: 1 }}
             />
 
-            <Text className="text-white text-lg font-exoBold text-center mb-5">
+            <Text className="text-white text-sm font-exoBold text-center mb-5">
               {isFirebaseSuccess
                 ? "Successfully edited"
                 : "One of the fields is empty"}
