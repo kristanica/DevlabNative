@@ -5,17 +5,13 @@ import React from "react";
 import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-type AdminLessonContainerProps = {
+type StageContainerProps = {
   item: any;
   index: number;
   category?: string;
 };
 
-const AdminLessonContainer = ({
-  item,
-  index,
-  category,
-}: AdminLessonContainerProps) => {
+const StageContainer = ({ item, index, category }: StageContainerProps) => {
   const queryClient = useQueryClient();
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
@@ -52,8 +48,14 @@ const AdminLessonContainer = ({
           {item.description}
         </Text>
       </View>
+
+      <View className="my-2">
+        <Text className="text-white font-exoBold text-sm">
+          {item?.isHidden ? "Game" : "Lesson"}
+        </Text>
+      </View>
     </Animated.View>
   );
 };
 
-export default AdminLessonContainer;
+export default StageContainer;

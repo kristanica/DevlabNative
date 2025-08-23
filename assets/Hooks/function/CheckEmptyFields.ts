@@ -33,6 +33,7 @@ const exemptions: Record<string, string[]> = {
     "choices",
     "type",
   ],
+  Level: [],
 };
 
 const CheckEmptyFields = (state: any, type: string) => {

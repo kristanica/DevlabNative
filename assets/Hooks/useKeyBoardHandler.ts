@@ -10,7 +10,7 @@ const useKeyBoardHandler = () => {
   const keyBoardValue = useSharedValue(0);
   useEffect(() => {
     const keyBoardShow = Keyboard.addListener("keyboardDidShow", (e) => {
-      keyBoardValue.value = withTiming(-e.endCoordinates.height + 120, {
+      keyBoardValue.value = withTiming(-e.endCoordinates.height + 110, {
         duration: 100,
       });
     });

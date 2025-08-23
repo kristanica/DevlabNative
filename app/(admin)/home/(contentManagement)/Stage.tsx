@@ -1,6 +1,6 @@
-import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
 import EditStageModal from "@/assets/components/AdminComponents/EditStageModal";
 import HowToUseStageEditor from "@/assets/components/AdminComponents/HowToUseStageEditor";
+import StageContainer from "@/assets/components/AdminComponents/StageContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
@@ -82,10 +82,10 @@ const Stage = () => {
                           }}
                           disabled={isActive}
                         >
-                          <AdminLessonContainer
+                          <StageContainer
                             item={item}
                             index={index ?? 0}
-                          ></AdminLessonContainer>
+                          ></StageContainer>
                         </TouchableOpacity>
                       </>
                     );
