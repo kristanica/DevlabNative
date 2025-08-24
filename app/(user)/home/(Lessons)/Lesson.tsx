@@ -8,7 +8,7 @@ import { router } from "expo-router";
 import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
-const mock = ["sampleHTML", "Css", "JavaScript", "Database"];
+const mock = ["Html", "Css", "JavaScript", "Database"];
 
 const Lessons = () => {
   return (

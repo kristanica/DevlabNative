@@ -8,7 +8,7 @@ type categorySelectorProps = {
 const CategorySelector = ({ setCategory }: categorySelectorProps) => {
   return (
     <>
-      <ButtonAnimated onPressAction={() => setCategory("sampleHTML")}>
+      <ButtonAnimated onPressAction={() => setCategory("Html")}>
         <Text className="text-white font-exoBold ">HTML</Text>
       </ButtonAnimated>
       <ButtonAnimated onPressAction={() => setCategory("Css")}>

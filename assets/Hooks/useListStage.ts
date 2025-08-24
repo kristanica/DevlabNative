@@ -35,7 +35,7 @@ const useListStage = () => {
       });
       const nextNumber =
         (newStageNumber!.length > 0 ? Math.max(...newStageNumber!) : 0) + 1;
-      const newStageId = `Stage ${nextNumber}`;
+      const newStageId = `Stage${nextNumber}`;
       const stagesRef = collection(
         db,
         levelPayload.category,

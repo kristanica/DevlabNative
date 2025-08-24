@@ -3,7 +3,6 @@ import CategorySelector from "@/assets/components/AdminComponents/CategorySelect
 import EditLessonModal from "@/assets/components/AdminComponents/EditLessonModal";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
-import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import useLessonEditor from "@/assets/Hooks/useLessonEditor";
@@ -15,15 +14,18 @@ import React, { useEffect, useState } from "react";
 import { SectionList, Text, TouchableOpacity, View } from "react-native";
 
 const ContentManagement = () => {
-  const [category, setCategory] = useState<string>("sampleHTML");
+  const [category, setCategory] = useState<string>("Html");
   const [lessonId, setLessonId] = useState<string>("");
 
   const setTracker = tracker((state) => state.setTracker);
 
-  const { lessonsData, isLoading, addLevelMutation } = useLessonEditor(
-    category,
-    lessonId
-  );
+  const {
+    lessonsData,
+    isLoading,
+    addLevelMutation,
+    addLessonMutation,
+    refetch,
+  } = useLessonEditor(category, lessonId);
 
   const editLessonModal = useModal();
 
@@ -38,17 +40,20 @@ const ContentManagement = () => {
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <View className=" items-center flex-row justify-between mx-4">
-              <Text className="text-white font-exoExtraBold text-3xl">
-                Content Management
-              </Text>
-              <ButtonAnimated>
+              <TouchableOpacity onPress={() => refetch()}>
+                <Text className="text-white font-exoExtraBold text-3xl">
+                  Content Management
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => addLessonMutation.mutate()}>
                 <Ionicons
                   name={"add"}
                   size={30}
                   color={"white"}
                   className="bg-[#4CAF50] p-1 rounded-xl "
                 ></Ionicons>
-              </ButtonAnimated>
+              </TouchableOpacity>
             </View>
 
             <View className="flex-row justify-between px-7 border-[2px] border-white border-x-0 border-t-0 mt-7">
