@@ -1,9 +1,10 @@
 import { db } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
 import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs } from "firebase/firestore";
-import React from "react";
-import { FlatList, View } from "react-native";
+import { router } from "expo-router";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import React, { useRef } from "react";
+import { FlatList, Pressable, View } from "react-native";
 import AdminLessonContainer from "../AdminComponents/AdminLessonContainer";
 type StageDataProps = {
   id: string;
@@ -14,6 +15,8 @@ type StageDataProps = {
 };
 const ListStages = () => {
   const levelPayload = tracker((state) => state.levelPayload);
+
+  const stageId = useRef<string>("");
 
   const { data: levelsData } = useQuery({
     queryKey: [
@@ -35,8 +38,8 @@ const ListStages = () => {
           levelPayload.levelId,
           "Stages"
         );
-
-        const stagesDocs = await getDocs(stagesRef);
+        const queryByOrder = query(stagesRef, orderBy("order"));
+        const stagesDocs = await getDocs(queryByOrder);
         const stagesData: StageDataProps[] = stagesDocs.docs.map((doc) => {
           return {
             id: doc.id,
@@ -62,13 +65,36 @@ const ListStages = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           globalCounter++;
+
           return (
-            <>
-              <AdminLessonContainer
-                item={item}
-                index={globalCounter}
-              ></AdminLessonContainer>
-            </>
+            <Pressable
+              onPress={() => {
+                stageId.current = item.id;
+                if (
+                  levelPayload?.category &&
+                  levelPayload?.lessonId &&
+                  levelPayload?.levelId &&
+                  stageId
+                ) {
+                  router.push({
+                    pathname: "/(user)/home/(Lessons)/category/stage/[stageId]",
+                    params: {
+                      stageId: stageId.current,
+                      category: levelPayload.category,
+                      lessonId: levelPayload.lessonId,
+                      levelId: levelPayload.levelId,
+                    },
+                  });
+                }
+              }}
+            >
+              {item.isHidden ? null : (
+                <AdminLessonContainer
+                  item={item}
+                  index={globalCounter}
+                ></AdminLessonContainer>
+              )}
+            </Pressable>
           );
         }}
       ></FlatList>

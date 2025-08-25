@@ -8,7 +8,7 @@ import usePresstoScroll from "@/assets/Hooks/usePresstoScroll";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 const Onboarding = () => {
@@ -55,14 +55,14 @@ const Onboarding = () => {
                 transform: [{ translateX: -75 }],
               }}
             >
-              <ButtonComponent onPressAction={() => scrolLScreen()}>
+              <Pressable onPress={() => scrolLScreen()}>
                 <LottieView
                   source={require("@/assets/Lottie/onboarding/nextButton.json")}
                   autoPlay
                   loop
-                  style={{ width: 50, height: 50 }}
+                  style={{ width: "20%", aspectRatio: 1 }}
                 ></LottieView>
-              </ButtonComponent>
+              </Pressable>
             </Animated.View>
 
             <Animated.View
@@ -71,7 +71,9 @@ const Onboarding = () => {
               className="absolute top-16 right-10"
             >
               <ButtonComponent onPressAction={() => router.replace(path.LOGIN)}>
-                <Text className="text-white text-xl font-exoBold">Skip</Text>
+                <Text className="text-[#ffffff43] xs:text-xs font-exoLight">
+                  Skip
+                </Text>
               </ButtonComponent>
             </Animated.View>
           </>
@@ -80,25 +82,23 @@ const Onboarding = () => {
           <Animated.View
             entering={FadeIn.duration(200)}
             exiting={FadeOut.duration(100)}
-            className="absolute left-1/2 bottom-1/4 w-[150px] items-center  "
+            className="absolute left-1/2 bottom-[100] w-[150px]  items-center  "
             style={{
               transform: [{ translateX: -75 }],
             }}
           >
-            <ButtonComponent
-              onPressAction={() => router.replace({ pathname: path.LOGIN })}
-            >
-              <Text className="text-white text-center rounded-3xl bg-button px-14 py-2 font-exoBold">
+            <Pressable onPress={() => router.replace({ pathname: path.LOGIN })}>
+              <Text className="text-white text-center rounded-2xl bg-button px-7 py-2 xs:text-xs font-exoBold">
                 Login
               </Text>
-            </ButtonComponent>
-            <ButtonComponent
-              onPressAction={() => router.replace({ pathname: path.REGISTER })}
+            </Pressable>
+            <Pressable
+              onPress={() => router.replace({ pathname: path.REGISTER })}
             >
-              <Text className="text-white text-center rounded-3xl bg-accent px-14 py-2 font-exoBold">
+              <Text className="text-white text-center rounded-2xl bg-accent px-7 xs:text-xs py-2 mt-2 font-exoBold">
                 Sign up
               </Text>
-            </ButtonComponent>
+            </Pressable>
           </Animated.View>
         )}
       </AnimatedViewContainer>

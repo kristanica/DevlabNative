@@ -63,7 +63,7 @@ const CustomTabsButton = ({
         />
       </View>
 
-      <Animated.Text className="text-white text-xs" style={onHide}>
+      <Animated.Text className="text-white xs:text-[8px]" style={onHide}>
         {name}
       </Animated.Text>
     </Pressable>

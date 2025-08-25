@@ -4,13 +4,15 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+import stages from "@/assets/zustand/stages";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const EditorView = () => {
   const { webRef, sendToWebView } = useCodeEditor();
-
+  const specificStagePayload = stages((state) => state.specificStagePayload);
+  console.log(specificStagePayload);
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">

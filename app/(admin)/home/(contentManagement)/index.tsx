@@ -1,6 +1,8 @@
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
 import CategorySelector from "@/assets/components/AdminComponents/CategorySelector";
+import DeleteFireBaseConfirmationModal from "@/assets/components/AdminComponents/DeleteFireBaseConfirmationModal";
 import EditLessonModal from "@/assets/components/AdminComponents/EditLessonModal";
+import SaveToFirebaseConfirmation from "@/assets/components/AdminComponents/SaveToFirebaseConfirmation";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
@@ -10,12 +12,13 @@ import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SectionList, Text, TouchableOpacity, View } from "react-native";
 
 const ContentManagement = () => {
   const [category, setCategory] = useState<string>("Html");
   const [lessonId, setLessonId] = useState<string>("");
+  const [lessonIdDeletion, setLessonIdDeletion] = useState<string>("");
 
   const setTracker = tracker((state) => state.setTracker);
 
@@ -24,16 +27,17 @@ const ContentManagement = () => {
     isLoading,
     addLevelMutation,
     addLessonMutation,
+    deleteLessonMutation,
     refetch,
-  } = useLessonEditor(category, lessonId);
+  } = useLessonEditor(category, lessonId, lessonIdDeletion);
 
-  const editLessonModal = useModal();
+  const editLevelModal = useModal();
+  const deleteLessonModal = useModal();
+  const addLevelModal = useModal();
+  const addLessonModal = useModal();
 
   let globalCounter = 0;
 
-  useEffect(() => {
-    addLevelMutation.mutate();
-  }, [lessonId]);
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -46,7 +50,9 @@ const ContentManagement = () => {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => addLessonMutation.mutate()}>
+              <TouchableOpacity
+                onPress={() => addLessonModal.setVisibility(true)}
+              >
                 <Ionicons
                   name={"add"}
                   size={30}
@@ -99,7 +105,7 @@ const ContentManagement = () => {
                             levelId: item.id,
                           });
 
-                          editLessonModal.setVisibility(true);
+                          editLevelModal.setVisibility(true);
                         }}
                       >
                         <AdminLessonContainer
@@ -114,6 +120,7 @@ const ContentManagement = () => {
                         <TouchableOpacity
                           onPress={() => {
                             setLessonId(item.lessonid);
+                            addLevelModal.setVisibility(true);
                           }}
                         >
                           <Ionicons
@@ -128,18 +135,54 @@ const ContentManagement = () => {
                   );
                 }}
                 renderSectionHeader={({ section }) => (
-                  <Text className="text-white text-2xl font-exoBold mx-3 my-5">
-                    {"Lesson "}
-                    {section.title}
-                  </Text>
+                  <TouchableOpacity
+                    onLongPress={() => {
+                      setLessonIdDeletion(`Lesson${section.title}`);
+                      console.log(`Lesson${section.title}`);
+                      deleteLessonModal.setVisibility(true);
+                    }}
+                  >
+                    <Text className="text-white text-2xl font-exoBold mx-3 my-5">
+                      {"Lesson "}
+                      {section.title}
+                    </Text>
+                  </TouchableOpacity>
                 )}
               ></SectionList>
             )}
-            {editLessonModal.visibility && (
+            {editLevelModal.visibility && (
               <EditLessonModal
                 onConfirm={() => {}}
-                {...editLessonModal}
+                {...editLevelModal}
               ></EditLessonModal>
+            )}
+            {deleteLessonModal.visibility && (
+              <DeleteFireBaseConfirmationModal
+                onConfirm={() => {
+                  deleteLessonMutation.mutate();
+                  deleteLessonModal.closeModal();
+                }}
+                {...deleteLessonModal}
+              ></DeleteFireBaseConfirmationModal>
+            )}
+            {addLevelModal.visibility && (
+              <SaveToFirebaseConfirmation
+                onConfirm={() => {
+                  addLevelMutation.mutate();
+                  addLevelModal.closeModal();
+                }}
+                {...addLevelModal}
+              ></SaveToFirebaseConfirmation>
+            )}
+
+            {addLessonModal.visibility && (
+              <SaveToFirebaseConfirmation
+                onConfirm={() => {
+                  addLessonMutation.mutate();
+                  addLessonModal.closeModal();
+                }}
+                {...addLessonModal}
+              ></SaveToFirebaseConfirmation>
             )}
           </CustomGeneralContainer>
         </AnimatedViewContainer>

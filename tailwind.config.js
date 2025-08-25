@@ -22,6 +22,13 @@ module.exports = {
         exoRegular: ["ExoRegular"],
         exoSemiBold: ["ExoSemiBold"],
       },
+      screens: {
+        xs: "320px", // extra small phones
+        sm: "640px", // small devices
+        md: "768px", // tablets
+        lg: "1024px", // large tablets
+        xl: "1280px", // desktops
+      },
     },
   },
   plugins: [],

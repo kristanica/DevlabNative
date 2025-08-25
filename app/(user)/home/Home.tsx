@@ -1,5 +1,4 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
-import ButtonComponent from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
@@ -32,10 +31,10 @@ export default function Home() {
             <View className="flex-[2] py-3">
               <View className="my-3 flex-row justify-between items-center">
                 <View>
-                  <Text className="text-white text-4xl font-exoBold">
+                  <Text className="text-white xs:text-lg font-exoBold">
                     Welcome Aboard,
                   </Text>
-                  <Text className="text-white text-4xl font-exoBold">
+                  <Text className="text-white xs:text-lg font-exoBold">
                     {userData?.username}
                   </Text>
                 </View>
@@ -73,33 +72,27 @@ export default function Home() {
                           : // Default val if profileVal is false
                             require("@/assets/images/profile.png")
                       }
-                      className="w-[100px] h-[100px] rounded-full overflow-hidden border-black border-[1px]"
+                      className="w-[30%] h-[30%] rounded-full overflow-hidden border-black border-[1px]"
                     />
                   )}
 
-                  <Text
-                    className="text-xs text-white font-exoLight"
-                    style={[boxShadow.textShadowLight]}
-                  >
+                  <Text className="xs:text-xs text-white font-exoLight">
                     {userData?.bio}
                   </Text>
                 </View>
                 {/* Renders right side user information */}
                 <View className="flex-[3] justify-center items-star ">
-                  <Text
-                    className="text-white font-exoBold"
-                    style={[boxShadow.textShadowLight]}
-                  >
+                  <Text className="text-white font-exoBold xs:text-xl">
                     Good to see you!
                   </Text>
                   <Text
-                    className="text-white text-4xl font-exoExtraBold"
+                    className="text-white xs:text-lg font-exoExtraBold"
                     style={[boxShadow.textShadow]}
                   >
                     {userData?.username}
                   </Text>
                   <Text
-                    className="text-white font-exoBold"
+                    className="text-white font-exoBold xs:text-xs"
                     style={[boxShadow.textShadowLight]}
                   >
                     {"Level"} {userData?.userLevel}
@@ -111,11 +104,11 @@ export default function Home() {
                   >
                     <View
                       style={boxShadow.shadow}
-                      className="w-[80%] bg-[#32FF99] h-4 rounded-xl"
+                      className="w-[80%] bg-[#32FF99] h-4 rounded-xl "
                     ></View>
                   </View>
                   <Text
-                    className="text-white text-shadow-lg/30 font-exoRegular"
+                    className="text-white text-shadow-lg/30 font-exoRegula xs:text-xs"
                     style={[boxShadow.textShadowLight]}
                   >
                     {userData?.exp} {"EXP"}
@@ -129,26 +122,26 @@ export default function Home() {
               showsVerticalScrollIndicator={false}
               className="flex-[3]  "
             >
-              <Text
-                className="text-white ml-2 text-xl mt-3 font-exoBold"
-                style={[boxShadow.textShadowLight]}
-              >
+              <Text className="text-white ml-2  xs:text-lg mt-3 font-exoBold">
                 JUMP BACK IN
               </Text>
 
               {/* Routes to last  lesson viewed */}
-              <ButtonComponent backgroundColor={""}>
+              <Pressable>
                 <View className="bg-accentContainer mx-3 my-2 flex-row rounded-2xl overflow-hidden">
                   <View className="flex-[.5] justify-center items-center bg-[#070606] rounded-2xl">
                     <Ionicons name="logo-html5" size={50} color={"white"} />
                   </View>
 
                   <View className="flex-1 overflow-hidden p-2 ">
-                    <Text className="text-white text-sm text-justify font-exoBold">
+                    <Text className="text-white xs:text-sm font-exoBold">
                       HTML Explorer - The Foundation
                     </Text>
 
-                    <Text className="text-[#94A1B2] text-xs text-justify font-exoLight">
+                    <Text
+                      className="text-[#94A1B2] text-xs text-justify font-exoLight"
+                      numberOfLines={2}
+                    >
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       Dignissimos, voluptates laudantium sint error deleniti
                       aliquid quasi maiores suscipit a maxime voluptatibus nemo
@@ -156,11 +149,8 @@ export default function Home() {
                     </Text>
                   </View>
                 </View>
-              </ButtonComponent>
-              <Text
-                className="text-white ml-2 text-xl font-exoBold"
-                style={[boxShadow.textShadowLight]}
-              >
+              </Pressable>
+              <Text className="text-white ml-2 xs:text-lg  font-exoBold">
                 VIEW YOUR PROGRESS
               </Text>
               {/* Renders HomeLesson component */}

@@ -1,9 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../constants/constants";
 import fetchLessonAdmin from "./query/fetchLessonAdmin";
 
-const useLevelEditor = (category: string, lessonId: string) => {
+const useLevelEditor = (
+  category: string,
+  lessonId: string,
+  lessonIdDeletion: string
+) => {
   const queryClient = useQueryClient();
   const {
     data: lessonsData,
@@ -24,7 +34,7 @@ const useLevelEditor = (category: string, lessonId: string) => {
         const snapshot = await getDocs(lessonsRef);
 
         const newLevelNumber = snapshot?.docs.map((item) => {
-          const match = item.id.match(/Level (\d+)/);
+          const match = item.id.match(/Level(\d+)/);
           return match ? parseInt(match[1]) : 0;
         });
 
@@ -76,11 +86,25 @@ const useLevelEditor = (category: string, lessonId: string) => {
     },
   });
 
+  const deleteLessonMutation = useMutation({
+    mutationFn: async () => {
+      try {
+        const lessonRef = doc(db, category, lessonIdDeletion);
+        await deleteDoc(lessonRef);
+      } catch {}
+    },
+    onSuccess: () => {
+      // Refresh the data after adding
+      queryClient.invalidateQueries({ queryKey: ["lesson admin", category] });
+    },
+  });
+
   return {
     lessonsData,
     isLoading,
     addLevelMutation,
     addLessonMutation,
+    deleteLessonMutation,
     refetch,
   };
 };

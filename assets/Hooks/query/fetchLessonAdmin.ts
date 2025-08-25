@@ -25,7 +25,9 @@ const fetchLessonAdmin = async (category: string) => {
     );
 
     return data;
-  } catch {}
+  } catch {
+    console.log("Somehting went wrong when fetchig lessons and level");
+  }
 };
 
 export default fetchLessonAdmin;

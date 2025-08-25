@@ -47,19 +47,20 @@ const OnboardingItem = ({ xVal, item, index }: OnboardingItemProps) => {
           interpolateBackground,
         ]}
       ></Animated.View>
+
       <LottieView
         source={item.lottie}
         style={{ width: width / 2, height: "50%" }}
         autoPlay
         loop
       />
-      <Text className="text-white text-4xl font-exoExtraBold">
+      <Text className="text-white xs:text-2xl font-exoExtraBold">
         {item.title}
       </Text>
-      <Text className="text-white text-xl my-3 font-exoSemiBold">
+      <Text className="text-white xs:text-lg my-3 font-exoSemiBold text-center">
         {item.subtitle}
       </Text>
-      <Text className="text-white text-sm text-center mx-5 font-exoMedium">
+      <Text className="text-white xs:text-xs text-center mx-5 font-exoMedium">
         {item.description}
       </Text>
     </View>

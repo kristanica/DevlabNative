@@ -23,7 +23,7 @@ const EditLessonModal = ({
   closeModal,
 }: ScaleModalProps) => {
   const { state, dispatch } = useEditLesson();
-  const { levelData, updateLessonMutation, deleteLessonMutation } =
+  const { levelData, updateLessonMutation, deleteLevelMutation } =
     useLevelEditor();
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
@@ -103,7 +103,7 @@ const EditLessonModal = ({
               <TouchableOpacity
                 className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
                 onPress={() => {
-                  deleteLessonMutation.mutate();
+                  deleteLevelMutation.mutate();
                   closeModal();
                 }}
               >

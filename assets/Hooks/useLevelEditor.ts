@@ -83,7 +83,7 @@ const useLevelEditor = () => {
       });
     },
   });
-  const deleteLessonMutation = useMutation({
+  const deleteLevelMutation = useMutation({
     mutationFn: async () => {
       if (!payload) {
         return null;
@@ -105,6 +105,6 @@ const useLevelEditor = () => {
       });
     },
   });
-  return { levelData, updateLessonMutation, deleteLessonMutation };
+  return { levelData, updateLessonMutation, deleteLevelMutation };
 };
 export default useLevelEditor;

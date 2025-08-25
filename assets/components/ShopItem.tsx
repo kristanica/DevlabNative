@@ -1,6 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsFocused } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -14,8 +13,6 @@ type ShopItemProps = {
   id: number;
 };
 
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
-
 // Shop item component for (Tabs)/Shop.tsx
 const ShopItem = ({
   id,
@@ -28,35 +25,32 @@ const ShopItem = ({
   const { onScale } = useSequentialAppearAnim({ indicator: isFocused, id: id });
   return (
     //Gradient animation is NOT final
-    <AnimatedLinearGradient
-      colors={["#00C6FF", "#009CFF", "#6A1B9A"]}
-      locations={[0, 0.1, 0.8]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-      style={[styles.container, onScale]}
+    <Animated.View
+      style={[onScale]}
+      className="w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 aspect-square my-2 items-center justify-center mx-auto"
     >
-      <View className="bg-shopAccent rounded-xl flex-row flex-[1]   ">
-        <View className="flex-1 flex-row items-center justify-center p-3">
-          <Ionicons name="pricetag" size={50} color={"#FFFFFF"} />
-        </View>
-        <View className="flex-col justify-evenly items-center flex-[3]">
-          {/* Render's Item name */}
-          <Text className="text-white text-xl font-exoExtraBold">{name}</Text>
-          {/* Render's Item Description */}
-          <Text className="text-white text-center font-exoRegular">
+      <View className="bg-shopAccent rounded-xl flex-row flex-[1]  ">
+        <View className="flex-col justify-evenly items-center flex-1 p-3">
+          <Ionicons name="pricetag" size={40} color={"#FFFFFF"} />
+          <Text className="text-white xs:text-sm font-exoExtraBold my-2">
+            {name}
+          </Text>
+
+          <Text className="text-white  xs:text-xs text-center font-exoRegular my-2">
             {description}
           </Text>
-          {/* Render's Item functionality */}
-          <Text className="text-[#00FFBF]">{functionality}</Text>
-          {/* Purchase button */}
+          <Text className="text-[#00FFBF] xs:text-xs  text-center">
+            {functionality}
+          </Text>
+
           <TouchableOpacity>
-            <View className="w-[100px] justify-center items-center bg-[#1ABC9C] px-4 py-1 rounded-xl">
-              <Text className="text-white">{price}</Text>
-            </View>
+            <Text className="text-white xs:text-[8px] bg-[#1ABC9C]  px-7 font-exoRegular py-2 rounded-2xl">
+              {price}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
-    </AnimatedLinearGradient>
+    </Animated.View>
   );
 };
 

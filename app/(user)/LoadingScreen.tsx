@@ -59,17 +59,18 @@ const LoadingScreen = () => {
           >
             <LottieView
               source={require("@/assets/Lottie/Loading.json")}
-              style={{ height: 300, width: 300 }}
+              autoPlay
+              style={{ width: "50%", aspectRatio: 1 }}
             />
             <LottieView
               source={require("@/assets/Lottie/loadingSmall.json")}
-              style={{ height: 50, width: 300 }}
+              style={{ width: "10%", aspectRatio: 1 }}
               autoPlay
             />
-            <Text className="text-white font-exoBold text-center">
+            <Text className="text-white font-exoBold text-center xs:text-xs">
               {bootText}
             </Text>
-            <Text className="text-white font-exoBold text-center px-7 mt-14">
+            <Text className="text-white font-exoLight text-center px-7 mt-14  xs:text-xs">
               {quote}
             </Text>
           </Animated.View>

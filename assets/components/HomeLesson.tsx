@@ -5,7 +5,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
-import { boxShadow } from "../styles/ContainerStyles";
 
 type HomeLessonProps = {
   name: string;
@@ -23,21 +22,21 @@ const HomeLesson = ({ name, color, icon, index }: HomeLessonProps) => {
   });
   return (
     <Animated.View
-      style={[{}, boxShadow.shadow2, onScale]}
-      className=" w-[40%]  h-[200px] bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden "
+      style={[{}, onScale]}
+      className="w-2/5 h-48  bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden "
     >
       <View
         style={{ backgroundColor: color }}
-        className="h-[70%] justify-center items-center rounded-br-none rounded-bl-none"
+        className="h-3/4 justify-center items-center rounded-br-none rounded-bl-none"
       >
         <Ionicons name={icon} size={70} color={"white"} />
       </View>
       {/* Render's Name */}
-      <View className="h-[30%] justify-center items-center text-center">
-        <Text className="text-white font-exoBold">{name}</Text>
+      <View className=" justify-center items-center">
+        <Text className="text-white font-exoBold  xs:text-xs">{name}</Text>
       </View>
     </Animated.View>
   );
 };
 
-export default HomeLesson;
+export default React.memo(HomeLesson);

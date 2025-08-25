@@ -2,9 +2,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { lessonMetaData } from "../constants/constants";
-import ButtonAnimated from "./ButtonComponent";
 
 type HomeLessonProps = {
   name: string;
@@ -20,7 +19,7 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
     <View className="w-screen justify-center items-center">
       {/* Gradient background */}
 
-      <View className="min-w-96 h-[300px] bg-shopAccent rounded-[20px]">
+      <View className="w-3/4 xs:w-11/12 sm:w-10/12 md:w-3/4 xs:h-3/4 bg-shopAccent rounded-2xl">
         <LinearGradient
           colors={[meta.gradient.color1, meta.gradient.color2]}
           locations={[0.1, 0.8]}
@@ -33,29 +32,31 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
             <Ionicons name="logo-html5" size={100} color={"white"} />
           </View>
           <View className="flex-[2] items-center justify-center ">
-            <Text className="text-white text-2xl font-exoBold my-3">
+            <Text className="text-white xs:text-lg font-exoBold my-3">
               {meta.title}
             </Text>
 
-            <Text className="text-white  text-xs">{meta.description}</Text>
+            <Text className="text-white  xs:text-[8px] text-justify">
+              {meta.description}
+            </Text>
           </View>
         </LinearGradient>
-        <View className="h-[20%] items-center justify-evenly flex-row">
-          <View className="w-[70%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
+        <View className="xs:h-1/4 items-center justify-evenly flex-row">
+          {/* <View className="w-[70%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
             <View className="w-[50%] bg-[#32FF99] h-4 rounded-xl"></View>
-          </View>
-          <ButtonAnimated
-            onPressAction={() => {
+          </View> */}
+          <Pressable
+            onPress={() => {
               router.push({
                 pathname: "/(user)/home/(Lessons)/category/[categoryId]",
                 params: { categoryId: id },
               });
             }}
           >
-            <Text className="text-white py-2 px-7 bg-accent rounded-2xl font-exoBold">
+            <Text className="text-white  xs:text-xs py-2 px-7 bg-accent rounded-2xl font-exoBold">
               Continue
             </Text>
-          </ButtonAnimated>
+          </Pressable>
         </View>
       </View>
     </View>

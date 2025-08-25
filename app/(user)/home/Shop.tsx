@@ -13,16 +13,16 @@ const shop = () => {
       <View className="bg-accent flex-1">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
-            <View className="flex-1">
-              <View className="flex-[.5] flex-row  items-center">
-                <Text className="text-4xl text-white font-exoExtraBold">
+            <View className="flex-1 p-3">
+              <View className="flex-row  items-center">
+                <Text className="xs:text-2xl text-white font-exoExtraBold">
                   DEVLAB
                 </Text>
-                <Ionicons name="cart" size={50} color={"#FFFFFF"} />
+                <Ionicons name="cart" size={20} color={"#FFFFFF"} />
               </View>
               {/* Renders shop description */}
-              <View className="flex-[.7] ">
-                <Text className="text-white text-justify font-exoRegular">
+              <View>
+                <Text className="text-white xs:text-xs text-justify font-exoRegular">
                   Welcome to the DevLab Shop, where learning meets gamification!
                   Earn rewards as you code, learn, and complete challenges, then
                   spend them on awesome upgrades to enhance your experience.
@@ -33,7 +33,7 @@ const shop = () => {
               <ScrollView
                 bounces={true}
                 showsVerticalScrollIndicator={false}
-                className="flex-[5] border-[#36334B] border-2 rounded-[10px] p-3 "
+                className="flex-[5] border-[#36334B] border-2 rounded-[10px] p-3"
               >
                 {mockUpShopItem.map((item) => (
                   <ShopItem

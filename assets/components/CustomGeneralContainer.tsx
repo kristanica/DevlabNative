@@ -9,7 +9,7 @@ type CustomGeneralContainerProps = {
 const CustomGeneralContainer = ({ children }: CustomGeneralContainerProps) => {
   let tabHeight = 0;
   try {
-    tabHeight = useBottomTabBarHeight() + 15;
+    tabHeight = useBottomTabBarHeight() + 40;
   } catch {
     tabHeight = 0;
   }
