@@ -8,7 +8,6 @@ import { useBackground } from "@/assets/zustand/BackgroundProvider";
 import { useProfile } from "@/assets/zustand/ProfileProvider";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { router } from "expo-router";
 import {
   Image,
   ImageBackground,
@@ -29,28 +28,6 @@ export default function Home() {
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <View className="flex-[2] py-3">
-              <View className="my-3 flex-row justify-between items-center">
-                <View>
-                  <Text className="text-white xs:text-lg font-exoBold">
-                    Welcome Aboard,
-                  </Text>
-                  <Text className="text-white xs:text-lg font-exoBold">
-                    {userData?.username}
-                  </Text>
-                </View>
-
-                <Pressable
-                  className="mr-4"
-                  onPress={() => router.replace("/(user)/home/Settings")}
-                >
-                  <Ionicons
-                    name={"settings"}
-                    size={22}
-                    color={"white"}
-                  ></Ionicons>
-                </Pressable>
-              </View>
-
               <ImageBackground
                 source={
                   // backgroundVal context usage
@@ -72,7 +49,7 @@ export default function Home() {
                           : // Default val if profileVal is false
                             require("@/assets/images/profile.png")
                       }
-                      className="w-[30%] h-[30%] rounded-full overflow-hidden border-black border-[1px]"
+                      className=" rounded-full xs:w-28 xs:h-28 "
                     />
                   )}
 

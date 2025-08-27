@@ -1,18 +1,20 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import InputBox from "@/assets/components/InputBox";
 import OnSuccessRegisterModal from "@/assets/components/RegisterComponents/OnSuccessRegisterModal";
+import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
 import useRegister from "@/assets/Hooks/useRegister";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 const Register = () => {
   //custom hook
   const { state, dispatch, handleRegister } = useRegister();
+  const [isSucess, setIsSuccess] = useState<boolean>(false);
 
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
@@ -68,20 +70,6 @@ const Register = () => {
                 />
 
                 <InputBox
-                  placeHolder={"Confirm Password"}
-                  value={state.confirmPassword}
-                  setValue={(text) =>
-                    dispatch({
-                      type: "UPDATE_FIELD",
-                      field: "confirmPassword",
-                      value: text,
-                    })
-                  }
-                  icon={"lock-closed"}
-                  isPassword={true}
-                />
-
-                <InputBox
                   placeHolder={"Username"}
                   value={state.username}
                   setValue={(text) =>
@@ -95,7 +83,7 @@ const Register = () => {
                 />
                 <InputBox
                   placeHolder={"Age"}
-                  value={state.age}
+                  value={String(state.age)}
                   setValue={(text) =>
                     dispatch({
                       type: "UPDATE_FIELD",
@@ -103,14 +91,23 @@ const Register = () => {
                       value: text,
                     })
                   }
-                  icon={"calendar-outline"}
+                  icon={"calendar"}
                 />
               </View>
 
               <View className=" justify-center items-center ">
                 <TouchableOpacity
                   onPress={() => {
+                    const hasEmpty = CheckEmptyFields(state, "Register");
+
+                    if (hasEmpty) {
+                      console.log(hasEmpty);
+                      setIsSuccess(false);
+                      setVisibility((prev) => !prev);
+                      return;
+                    }
                     handleRegister();
+                    setIsSuccess(true);
                     setVisibility((prev) => !prev);
                   }}
                 >
@@ -133,6 +130,7 @@ const Register = () => {
 
               {visibility && (
                 <OnSuccessRegisterModal
+                  isSuccess={isSucess}
                   visibility={visibility}
                   scaleStyle={scaleStyle}
                   closeModal={closeModal}

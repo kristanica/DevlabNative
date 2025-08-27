@@ -79,8 +79,9 @@ const Achievements = () => {
 
             <View className="bg-accent flex-[2] ">
               {/* Renders navugation buttons to switch achivements tab (CSS, JS, DB, HTML) */}
-              <View className=" items-center flex-row border-b-2  border-accentContainer px-3">
+              <View className=" items-center flex-row border-b-2  py-2  border-accentContainer px-3">
                 <FlatList
+                  alwaysBounceVertical={false}
                   showsHorizontalScrollIndicator={false}
                   numColumns={4}
                   data={mockData}

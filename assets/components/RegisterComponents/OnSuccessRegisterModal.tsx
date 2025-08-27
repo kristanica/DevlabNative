@@ -3,18 +3,19 @@ import LottieView from "lottie-react-native";
 import React from "react";
 import { Modal, Pressable, Text, View, ViewStyle } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
-import ButtonAnimated from "../ButtonComponent";
 
 type OnSuccessRegisterProps = {
   visibility: boolean;
   scaleStyle: AnimatedStyle<ViewStyle>;
   closeModal: () => void;
+  isSuccess: boolean;
 };
 
 const OnSuccessRegister = ({
   visibility,
   scaleStyle,
   closeModal,
+  isSuccess,
 }: OnSuccessRegisterProps) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
@@ -25,7 +26,11 @@ const OnSuccessRegister = ({
         >
           <View className="justify-center items-center flex-[1] bg-[#2C2C2E] rounded-3xl">
             <LottieView
-              source={require("@/assets/Lottie/sucessRegister.json")}
+              source={
+                isSuccess
+                  ? require("@/assets/Lottie/sucessRegister.json")
+                  : require("@/assets/Lottie/Sad Signout.json")
+              }
               loop={false}
               autoPlay
               style={{
@@ -37,16 +42,25 @@ const OnSuccessRegister = ({
             />
             <View className="flex-[1] justify-center items-center">
               <Text className="text-white text-center font-exoBold">
-                Sucessfully created an account!
+                {isSuccess
+                  ? "Successfully created an account!"
+                  : "Something went wrong when creating your account"}
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <ButtonAnimated
-                backgroundColor={"#7F5AF0"}
-                onPressAction={() => router.replace("/Login")}
-              >
-                <Text className="text-white font-exoBold">Login</Text>
-              </ButtonAnimated>
+              {isSuccess ? (
+                <Pressable onPress={() => router.replace("/Login")}>
+                  <Text className="text-white font-exoBold px-7 py-2 rounded-2xl bg-[#2ECC71]">
+                    Login
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable onPress={() => closeModal()}>
+                  <Text className="bg-[#E63946] text-white font-exoBold px-7 py-2 rounded-2xl ">
+                    Close
+                  </Text>
+                </Pressable>
+              )}
             </View>
           </View>
         </Animated.View>

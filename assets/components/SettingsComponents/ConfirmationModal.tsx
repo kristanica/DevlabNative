@@ -1,9 +1,9 @@
+import { ScaleModalProps } from "@/assets/constants/type";
 import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
 import { useMutation } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import React from "react";
 import {
-  Keyboard,
   Modal,
   Pressable,
   StyleSheet,
@@ -12,7 +12,6 @@ import {
   ViewStyle,
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
-import ButtonAnimated from "../ButtonComponent";
 
 type confirmationModalProps = {
   visibility: boolean;
@@ -26,9 +25,8 @@ const ConfirmationModal = ({
   visibility,
   scaleStyle,
   closeModal,
-  userName,
-  bio,
-}: confirmationModalProps) => {
+  onConfirm,
+}: ScaleModalProps) => {
   const mutation = useMutation({
     mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
       await useEditUserInfo(userName, bio),
@@ -59,24 +57,16 @@ const ConfirmationModal = ({
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <ButtonAnimated
-                backgroundColor={"#7F5AF0"}
-                onPressAction={() => {
-                  Keyboard.dismiss;
-                  mutation.mutate({ userName, bio });
-                  closeModal();
-                }}
-              >
-                <Text className="text-white py-2 px-10 font-exoBold">
+              <Pressable onPress={onConfirm}>
+                <Text className="text-white py-2 px-7 font-exoBold bg-[#7F5AF0]">
                   Continue
                 </Text>
-              </ButtonAnimated>
-              <ButtonAnimated
-                backgroundColor={"#FF6166"}
-                onPressAction={closeModal}
-              >
-                <Text className="text-white py-2 px-10 font-exoBold">No</Text>
-              </ButtonAnimated>
+              </Pressable>
+              <Pressable onPress={closeModal}>
+                <Text className="text-white py-2 px-10 font-exoBold bg-[#FF6166]">
+                  No
+                </Text>
+              </Pressable>
             </View>
           </View>
         </Animated.View>

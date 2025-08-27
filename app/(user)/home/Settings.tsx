@@ -13,9 +13,11 @@ import React, { useState } from "react";
 import ConfirmationModal from "@/assets/components/SettingsComponents/ConfirmationModal";
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
+import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useSignOut from "@/assets/Hooks/useSignOut";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import {
   Image,
@@ -30,6 +32,10 @@ import {
 import Animated from "react-native-reanimated";
 
 const Settings = () => {
+  const mutation = useMutation({
+    mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
+      await useEditUserInfo(userName, bio),
+  });
   const [bio, setBio] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const { backgroundVal } = useBackground();
@@ -53,12 +59,12 @@ const Settings = () => {
                   {profileVal ? (
                     <Image
                       source={{ uri: profileVal }}
-                      className="rounded-full w-[20px] flex-[1]"
+                      className="rounded-full xs:w-40 xs:h-40 "
                     />
                   ) : (
                     <Image
                       source={require("@/assets/images/profile.png")}
-                      className="rounded-full  xs:w-32 xs:h-32  sm:w-20 sm:h-20 md:w-24 md:h-24"
+                      className="rounded-full  xs:w-32 aspect-[3/4] sm:w-20 sm:h-20 md:w-24 md:h-24"
                     />
                   )}
                 </Pressable>
@@ -96,13 +102,13 @@ const Settings = () => {
                         onChangeText={setUserName}
                         // placeholder={"username"}
                         placeholder={userData?.username}
-                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs"
+                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-2xl"
                       />
                     </View>
                   </View>
 
                   <View className="mt-3">
-                    <Text className="text-white mx-5 mb-2 xs:text-xs font-exoBold">
+                    <Text className="text-white mx-5 mb-2 xs:text-xs font-exoBold ">
                       Bio
                     </Text>
 
@@ -111,7 +117,7 @@ const Settings = () => {
                         value={bio}
                         onChangeText={setBio}
                         placeholder={userData?.bio}
-                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs"
+                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-2xl"
                       />
                     </View>
                   </View>
@@ -125,6 +131,7 @@ const Settings = () => {
                         alert("Empty credentials");
                         return;
                       }
+
                       confirmationModal.setVisibility(true);
                     }}
                   >
@@ -171,8 +178,13 @@ const Settings = () => {
 
             {confirmationModal.visibility && (
               <ConfirmationModal
-                userName={userName}
-                bio={bio}
+                onConfirm={() => {
+                  Keyboard.dismiss;
+                  mutation.mutate({ userName, bio });
+                  setBio("");
+                  setUserName("");
+                  confirmationModal.closeModal();
+                }}
                 visibility={confirmationModal.visibility}
                 scaleStyle={confirmationModal.scaleStyle}
                 closeModal={confirmationModal.closeModal}

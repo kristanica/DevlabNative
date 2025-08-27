@@ -6,9 +6,9 @@ import { auth, db } from "../constants/constants";
 type State = {
   email: string;
   password: string;
-  confirmPassword: string;
+  // confirmPassword: string;
   username: string;
-  age: string;
+  age: number;
 };
 
 type Action = {
@@ -29,9 +29,9 @@ const useRegister = () => {
   const [state, dispatch] = useReducer(reducer, {
     email: "",
     password: "",
-    confirmPassword: "",
+    // confirmPassword: "",
     username: "",
-    age: "",
+    age: 0,
   });
 
   const handleRegister = async () => {
@@ -42,7 +42,7 @@ const useRegister = () => {
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,
           username: state.username,
-          age: state.age,
+          age: Number(state.age),
           exp: 0,
           level: 1,
           coins: 0,
