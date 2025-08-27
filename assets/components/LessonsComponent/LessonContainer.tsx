@@ -38,7 +38,10 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
       </View>
       <View className="w-[80%] px-3 py-3">
         <Text className="text-white font-exoBold text-xl">{item.title}</Text>
-        <Text className="text-[#eeebf29d] font-exoLight text-sm">
+        <Text
+          className="text-[#eeebf29d] font-exoLight text-sm"
+          numberOfLines={2}
+        >
           {item.description}
         </Text>
       </View>

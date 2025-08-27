@@ -4,7 +4,7 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
-import stages from "@/assets/zustand/stages";
+import stages from "@/assets/zustand/stageStore";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";

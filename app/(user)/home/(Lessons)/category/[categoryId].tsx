@@ -8,6 +8,7 @@ import { useFetchLessonList } from "@/assets/Hooks/query/useFetchLessonList";
 
 import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -76,8 +77,15 @@ const categoryScreen = () => {
           <LoadingAnim />
         ) : stagesVisibility ? (
           <>
-            <Pressable onPress={() => setStagesVisibility(false)}>
-              <Text className="text-white text-3xl">BACK</Text>
+            <Pressable
+              onPress={() => setStagesVisibility(false)}
+              className="ml-3"
+            >
+              <Ionicons
+                name="arrow-back-circle"
+                size={30}
+                color={"white "}
+              ></Ionicons>
             </Pressable>
             <ListStages />
           </>

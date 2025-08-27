@@ -1,4 +1,5 @@
 import { db } from "@/assets/constants/constants";
+import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
@@ -17,6 +18,7 @@ type StageForNavigation = {
 };
 const ListStages = () => {
   const levelPayload = tracker((state) => state.levelPayload);
+  const setStageData = stageStore((state) => state.setstageData);
 
   const stageId = useRef<string>("");
 
@@ -43,20 +45,22 @@ const ListStages = () => {
         const queryByOrder = query(stagesRef, orderBy("order"));
         const stagesDocs = await getDocs(queryByOrder);
 
-        return stagesDocs.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...(doc.data() as {
-              isHidden: boolean;
-              order: number;
-              codingInterface?: string;
-              description: string;
-              instruction: string;
-              title: string | undefined | null;
-            }),
-          };
-        });
+        const allStages = stagesDocs.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as {
+            isHidden: boolean;
+            order: number;
+            codingInterface?: string;
+            description: string;
+            instruction: string;
+            title: string | undefined | null;
+          }),
+        }));
+
+        setStageData(allStages); // ✅ store the full array
+        return allStages;
       } catch (error) {
+        console.log(error);
         return null;
       }
     },
@@ -67,11 +71,12 @@ const ListStages = () => {
     ),
   });
   let globalCounter = 0;
+
   return (
     <View className="flex-[1]">
       <FlatList
         data={levelsData ?? []}
-        showsVerticalScrollIndicator
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           globalCounter++;
@@ -87,7 +92,7 @@ const ListStages = () => {
                   stageId
                 ) {
                   router.push({
-                    pathname: "/(user)/home/(Lessons)/category/stage/[stageId]",
+                    pathname: "/stage/[stageId]",
                     params: {
                       stageId: stageId.current,
                       category: levelPayload.category,

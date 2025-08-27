@@ -28,7 +28,7 @@ const Lessons = () => {
                   Delve into the realm of web development
                 </Text>
               </View>
-              <View className="flex-row justify-between  items-center mx-2 flex-[1] ">
+              <View className="flex-row justify-between  items-center mx-2 flex-[1.5] px-5">
                 <Pressable
                   onPress={() =>
                     router.replace({ pathname: "/(user)/playground/Coding" })

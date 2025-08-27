@@ -1,7 +1,6 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import InputBox from "@/assets/components/InputBox";
 import OnFailedLogin from "@/assets/components/LoginComponents/OnFailedLogin";
-import { path } from "@/assets/constants/constants";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useLogin from "@/assets/Hooks/useLogin";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -110,7 +109,7 @@ const Login = () => {
                   </Text>
 
                   <TouchableOpacity
-                    onPress={() => router.replace({ pathname: path.REGISTER })}
+                    onPress={() => router.push({ pathname: "/Register" })}
                   >
                     <Text className="color-[#4F80C5] mt-2 font-exoRegula xs:text-xs">
                       Register here

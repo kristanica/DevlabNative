@@ -1,7 +1,10 @@
-import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
+import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
+import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { useQueryClient } from "@tanstack/react-query";
+import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+import stageStore from "@/assets/zustand/stageStore";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -11,45 +14,62 @@ const stageScreen = () => {
 
   const [currentStageIndex, setcurrentStageIndex] = useState<number>(0);
   const [currentStageData, setCurrentStageData] = useState<any>();
-  const queryClient = useQueryClient();
 
-  const stageData: any = queryClient.getQueryData([
-    "Stages",
-    category,
-    lessonId,
-    levelId,
-  ]);
+  const stageData = stageStore((state) => state.stageData);
 
   useEffect(() => {
-    if (!stageData) return;
+    if (!stageData) {
+      console.log("undefined");
+      return;
+    }
     const index: number = stageData.findIndex(
       (stage: any) => stage.id === stageId
     );
     setcurrentStageIndex(index);
     setCurrentStageData(index !== -1 ? stageData[index] : null);
   }, [stageId, stageData]);
-
+  const { webRef, sendToWebView } = useCodeEditor();
   return (
     <ProtectedRoutes>
-      <View className="flex-1 bg-accent p-3">
-        <AnimatedViewContainer>
-          <CustomGeneralContainer>
-            <Text className="text-white font-exoBold text-3xl">
+      <View className="flex-1 bg-background p-3">
+        <CustomGeneralContainer>
+          <View className="flex-row justify-between items-center">
+            <Pressable
+              onPress={() =>
+                router.replace({ pathname: "/(user)/home/(Lessons)/Lesson" })
+              }
+            >
+              <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
+                Back
+              </Text>
+            </Pressable>
+
+            <SelectLanguageNavigation
+              isJs={true}
+              isCss={true}
+              isHtml={true}
+              sendToWebView={sendToWebView}
+            />
+          </View>
+
+          <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor>
+          <SwipeLessonContainer>
+            {/* <ScrollView> */}
+            <Text className="text-white font-exoBold xs:text-xl text-justify">
               {currentStageData?.title}
             </Text>
-            <Text className="text-white font-exoRegular text-xl my-3">
+            <Text className="text-white font-exoRegular xs:text-xs my-3 text-justify">
               {currentStageData?.description}
             </Text>
-
             <View className="bg-accentContainer p-3 rounded-3xl my-3">
-              <Text className="font-exoBold text-2xl text-white">
+              <Text className="font-exoBold text-xl text-white">
                 Instructions
               </Text>
-              <Text className="text-white font-exoRegular text-lg text-justify my-3">
+              <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
                 {currentStageData?.instruction}
               </Text>
               <View className="bg-background p-3 rounded-3xl my-3">
-                <Text className="text-white font-exoRegular text-lg text-justify">
+                <Text className="text-white font-exoRegular xs:text-xs text-justify">
                   {currentStageData?.codingInterface}
                 </Text>
               </View>
@@ -58,7 +78,7 @@ const stageScreen = () => {
               <Pressable
                 onPress={() => {
                   router.push({
-                    pathname: "/(user)/home/(Lessons)/category/stage/[stageId]",
+                    pathname: "/stage/[stageId]",
                     params: {
                       stageId:
                         stageData[
@@ -71,7 +91,7 @@ const stageScreen = () => {
                   });
                 }}
               >
-                <Text className="px-7 py-2 bg-red-300 self-start rounded-3xl">
+                <Text className="px-7 py-2 bg-[#E63946] self-start rounded-3xl font-exoRegular">
                   Prev
                 </Text>
               </Pressable>
@@ -79,8 +99,7 @@ const stageScreen = () => {
                 onPress={() => {
                   if (stageData && currentStageIndex < stageData.length - 1) {
                     router.push({
-                      pathname:
-                        "/(user)/home/(Lessons)/category/stage/[stageId]",
+                      pathname: "/stage/[stageId]",
                       params: {
                         stageId: stageData[currentStageIndex + 1].id,
                         lessonId,
@@ -91,23 +110,14 @@ const stageScreen = () => {
                   }
                 }}
               >
-                <Text className="px-7 py-2 bg-green-300 self-start rounded-3xl">
+                <Text className="px-7 py-2 bg-[#2ECC71] self-start rounded-3xl font-exoRegular">
                   Next
                 </Text>
               </Pressable>
             </View>
-
-            <Pressable
-              onPress={() => {
-                router.push({ pathname: "/home/category/stage/EditorView" });
-              }}
-            >
-              <Text className="px-7 py-2 bg-green-300 self-start rounded-3xl">
-                Code Editor
-              </Text>
-            </Pressable>
-          </CustomGeneralContainer>
-        </AnimatedViewContainer>
+            {/* </ScrollView> */}
+          </SwipeLessonContainer>
+        </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>
   );

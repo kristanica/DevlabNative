@@ -6,7 +6,7 @@ const queryClient = new QueryClient();
 const LessonsLayout = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ headerShown: false, animation: "none" }} />
+      <Stack screenOptions={{ headerShown: false, animation: "none" }}></Stack>
     </QueryClientProvider>
   );
 };
