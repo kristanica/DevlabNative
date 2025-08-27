@@ -50,11 +50,11 @@ const AchievementContainer = ({
     );
   }, []);
   return (
-    <View key={id}>
+    <View className="justify-center items-center w-1/2">
       {/* Border gradient for completed achievements*/}
       <Animated.View
         style={[onScale, changeBackground]}
-        className="w-[170px] h-[250px] rounded-[20px] mb-[10px] m-[3px] "
+        className="w-[90%] aspect-[3/5] rounded-[10px] bg-red-500 my-2"
       >
         {/* If Achievement is incomplete, will render background color as black */}
         <View

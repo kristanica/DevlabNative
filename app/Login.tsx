@@ -25,12 +25,13 @@ const Login = () => {
             <Text className="color-white  mb-5 text-3xl font-[500] font-exoExtraBold">
               DEVLAB
             </Text>
-            <OnFailedLogin trigger={trigger}>
-              <Animated.View
-                className="w-3/4 aspect-[1/2] rounded-3xl bg-accent flex-col items-center justify-center p-2"
-                style={[keyBoardHandlingStyle]}
-              >
-                <View className=" justify-center items-center  ">
+
+            <Animated.View
+              className="w-3/4 aspect-[1/2] rounded-3xl bg-accent flex-col items-center justify-center "
+              style={[keyBoardHandlingStyle]}
+            >
+              <OnFailedLogin trigger={trigger}>
+                <View className=" justify-center items-center  h-[100%] w-[100%]">
                   <View className="">
                     <Ionicons
                       name="person-circle"
@@ -39,7 +40,7 @@ const Login = () => {
                     />
                   </View>
 
-                  <View>
+                  <View className="px-2">
                     <InputBox
                       icon={"person"}
                       placeHolder={"Username"}
@@ -67,56 +68,57 @@ const Login = () => {
                       isPassword={true}
                     />
                   </View>
-                </View>
-                <View className="flex-row">
-                  <BouncyCheckbox
-                    size={20}
-                    fillColor="#00FFBF"
-                    unFillColor="#111827"
-                    iconStyle={{ borderColor: "red" }}
-                    innerIconStyle={{ borderWidth: 1 }}
-                    textStyle={{
-                      textDecorationLine: "none",
-                    }}
-                    onPress={(boolean) => {
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "keepSign",
-                        value: boolean,
+
+                  <View className="flex-row">
+                    <BouncyCheckbox
+                      size={20}
+                      fillColor="#00FFBF"
+                      unFillColor="#111827"
+                      iconStyle={{ borderColor: "red" }}
+                      innerIconStyle={{ borderWidth: 1 }}
+                      textStyle={{
+                        textDecorationLine: "none",
+                      }}
+                      onPress={(boolean) => {
+                        dispatch({
+                          type: "UPDATE_FIELD",
+                          field: "keepSign",
+                          value: boolean,
+                        });
+                      }}
+                    />
+                    <Text className=" text-white opacity-20 xs:text-xs font-exoRegular">
+                      Keep me signed in
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      signIn(() => {
+                        setTrigger(true);
                       });
+                      setTrigger(false);
                     }}
-                  />
-                  <Text className=" text-white opacity-20 xs:text-xs font-exoRegular">
-                    Keep me signed in
+                  >
+                    <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
+                      LOGIN
+                    </Text>
+                  </TouchableOpacity>
+
+                  <Text className="color-[#FFFFFE] font-exoRegular xs: text-xs">
+                    Don't have an account?
                   </Text>
+
+                  <TouchableOpacity
+                    onPress={() => router.replace({ pathname: path.REGISTER })}
+                  >
+                    <Text className="color-[#4F80C5] mt-2 font-exoRegula xs:text-xs">
+                      Register here
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    signIn(() => {
-                      setTrigger(true);
-                    });
-                    setTrigger(false);
-                  }}
-                >
-                  <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
-                    LOGIN
-                  </Text>
-                </TouchableOpacity>
-
-                <Text className="color-[#FFFFFE] font-exoRegular xs: text-xs">
-                  Don't have an account?
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => router.replace({ pathname: path.REGISTER })}
-                >
-                  <Text className="color-[#4F80C5] mt-2 font-exoRegula xs:text-xs">
-                    Register here
-                  </Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </OnFailedLogin>
+              </OnFailedLogin>
+            </Animated.View>
           </View>
         </CustomGeneralContainer>
       </Animated.View>

@@ -140,7 +140,7 @@ export default function Home() {
 
                     <Text
                       className="text-[#94A1B2] text-xs text-justify font-exoLight"
-                      numberOfLines={2}
+                      numberOfLines={3}
                     >
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       Dignissimos, voluptates laudantium sint error deleniti

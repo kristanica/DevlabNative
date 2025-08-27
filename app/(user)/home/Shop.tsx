@@ -20,6 +20,7 @@ const shop = () => {
                 </Text>
                 <Ionicons name="cart" size={20} color={"#FFFFFF"} />
               </View>
+
               {/* Renders shop description */}
               <View>
                 <Text className="text-white xs:text-xs text-justify font-exoRegular">

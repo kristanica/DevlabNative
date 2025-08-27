@@ -68,15 +68,16 @@ export default function CustomTabBar({
 
 const tabBarStyle = StyleSheet.create({
   tabBarStyle: {
-    borderColor: "white",
-    borderWidth: 0.3,
+    borderTopColor: "#FFFFFF",
+    borderWidth: 0.5,
     backgroundColor: "#1E1E2E",
     position: "absolute",
     flexDirection: "row",
-    bottom: 25,
+    bottom: 0,
     justifyContent: "space-evenly",
     alignItems: "center",
-    borderRadius: 30,
-    paddingVertical: 10,
+    paddingTop: 15,
+
+    paddingBottom: 30,
   },
 });

@@ -6,12 +6,14 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import React, { useRef } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import AdminLessonContainer from "../AdminComponents/AdminLessonContainer";
-type StageDataProps = {
+
+type StageForNavigation = {
   id: string;
-  title: string;
+  order: number;
+  codingInterface?: string;
   description: string;
-  type: "lesson" | "game";
-  isHidden?: boolean;
+  instruction: string;
+  title: string | undefined | null;
 };
 const ListStages = () => {
   const levelPayload = tracker((state) => state.levelPayload);
@@ -27,7 +29,7 @@ const ListStages = () => {
     ],
     queryFn: async () => {
       if (!levelPayload) {
-        return;
+        return null;
       }
       try {
         const stagesRef = collection(
@@ -40,15 +42,23 @@ const ListStages = () => {
         );
         const queryByOrder = query(stagesRef, orderBy("order"));
         const stagesDocs = await getDocs(queryByOrder);
-        const stagesData: StageDataProps[] = stagesDocs.docs.map((doc) => {
+
+        return stagesDocs.docs.map((doc) => {
           return {
             id: doc.id,
-            ...(doc.data() as Omit<StageDataProps, "id">),
+            ...(doc.data() as {
+              isHidden: boolean;
+              order: number;
+              codingInterface?: string;
+              description: string;
+              instruction: string;
+              title: string | undefined | null;
+            }),
           };
         });
-
-        return stagesData;
-      } catch (error) {}
+      } catch (error) {
+        return null;
+      }
     },
     enabled: !!(
       levelPayload?.category &&

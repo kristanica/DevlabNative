@@ -12,6 +12,7 @@
       "supportsTablet": true
     },
     "android": {
+      "enableHermes": true,
       "package": "com.devlab.devlabNative",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

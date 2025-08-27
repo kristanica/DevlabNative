@@ -5,7 +5,8 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  withSequence,
+  withTiming,
 } from "react-native-reanimated";
 
 type customTabsButton = {
@@ -27,24 +28,20 @@ const CustomTabsButton = ({
 
   const scaleVal = useSharedValue(1);
 
-  const opacityVal = useSharedValue(1);
-
-  const onHide = useAnimatedStyle(() => ({
-    opacity: opacityVal.value,
-  }));
   const onScale = useAnimatedStyle(() => ({
     transform: [
       {
         scale: interpolate(scaleVal.value, [0, 1], [0, 1]),
       },
     ],
-
-    marginTop: interpolate(scaleVal.value, [0, 1], [0, 7]),
   }));
 
   useEffect(() => {
-    scaleVal.value = withSpring(isFocused ? 1.5 : 1);
-    opacityVal.value = withSpring(isFocused ? 0 : 1, { duration: 500 });
+    scaleVal.value = withSequence(
+      withTiming(1.2, { duration: 100 }),
+      withTiming(1, { duration: 100 })
+    );
+    // scaleVal.value = withSpring(isFocused ? 1.5 : 1);
   }, [isFocused]);
 
   return (
@@ -63,9 +60,7 @@ const CustomTabsButton = ({
         />
       </View>
 
-      <Animated.Text className="text-white xs:text-[8px]" style={onHide}>
-        {name}
-      </Animated.Text>
+      <Animated.Text className="text-white xs:text-[8px]">{name}</Animated.Text>
     </Pressable>
   );
 };

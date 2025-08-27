@@ -90,6 +90,12 @@ const useLevelEditor = (
     mutationFn: async () => {
       try {
         const lessonRef = doc(db, category, lessonIdDeletion);
+
+        const levelRef = collection(lessonRef, "Levels");
+        const levelsSnapshot = await getDocs(levelRef);
+        for (const levelDoc of levelsSnapshot.docs) {
+          await deleteDoc(levelDoc.ref);
+        }
         await deleteDoc(lessonRef);
       } catch {}
     },

@@ -3,14 +3,20 @@ import AchievementsProgressBar from "@/assets/components/AchievementsComponents/
 import React, { useState } from "react";
 
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
-import ButtonComponent from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { htmlMockUp, mockData } from "@/assets/constants/constants";
 import { useBackground } from "@/assets/zustand/BackgroundProvider";
 import { useProfile } from "@/assets/zustand/ProfileProvider";
 
-import { FlatList, Image, ImageBackground, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  ImageBackground,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 
 const Achievements = () => {
   const [category, setCategory] =
@@ -71,9 +77,9 @@ const Achievements = () => {
               </View>
             </ImageBackground>
 
-            <View className="bg-accent flex-[2] rounded-[10px]">
+            <View className="bg-accent flex-[2] ">
               {/* Renders navugation buttons to switch achivements tab (CSS, JS, DB, HTML) */}
-              <View className="flex-[.1] items-center flex-row border-b-2  border-accentContainer">
+              <View className=" items-center flex-row border-b-2  border-accentContainer px-3">
                 <FlatList
                   showsHorizontalScrollIndicator={false}
                   numColumns={4}
@@ -82,24 +88,27 @@ const Achievements = () => {
                     justifyContent: "space-between",
                   }}
                   renderItem={({ item }) => (
-                    <ButtonComponent
-                      onPressAction={() => {
+                    <Pressable
+                      onPress={() => {
                         setCategory(item.data);
                         setSelectedCategory(item.name);
                       }}
                     >
-                      <Text className="text-white font-exoBold">
+                      <Text className="text-white font-exoBold xs:text-lg">
                         {item.name}
                       </Text>
-                    </ButtonComponent>
+                    </Pressable>
                   )}
                 />
               </View>
 
-              {/* Renders AchievementsContainer component */}
-              <View className="flex-[1] m-3 mt-0">
+              <View className="flex-[1] ">
                 <FlatList
                   showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                  }}
                   numColumns={2}
                   columnWrapperStyle={{
                     justifyContent: "space-between",

@@ -27,7 +27,7 @@ const ShopItem = ({
     //Gradient animation is NOT final
     <Animated.View
       style={[onScale]}
-      className="w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 aspect-square my-2 items-center justify-center mx-auto"
+      className="w-[80%] sm:w-3/4 md:w-2/3 lg:w-1/2 min-h-[200px] my-2 items-center justify-center mx-auto"
     >
       <View className="bg-shopAccent rounded-xl flex-row flex-[1]  ">
         <View className="flex-col justify-evenly items-center flex-1 p-3">

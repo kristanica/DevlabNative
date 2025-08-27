@@ -19,7 +19,7 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
     <View className="w-screen justify-center items-center">
       {/* Gradient background */}
 
-      <View className="w-3/4 xs:w-11/12 sm:w-10/12 md:w-3/4 xs:h-3/4 bg-shopAccent rounded-2xl">
+      <View className="w-3/4 xs:w-[90%] sm:w-10/12 md:w-3/4 xs:h-3/5 bg-shopAccent rounded-2xl">
         <LinearGradient
           colors={[meta.gradient.color1, meta.gradient.color2]}
           locations={[0.1, 0.8]}
