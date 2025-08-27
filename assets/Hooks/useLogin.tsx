@@ -48,7 +48,7 @@ const useLogin = () => {
       const data = await getDoc(userRef);
       //check if account is suspended
       if (data.data()?.suspend) {
-        console.log("your account is suspended wtf");
+        console.log("your account is suspended");
         await signOut(auth);
         router.replace({ pathname: path.LOGIN });
         return;

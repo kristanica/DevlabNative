@@ -14,13 +14,15 @@ const Coding = () => {
       <View className="bg-background flex-[1]">
         <CustomGeneralContainer>
           <View className="flex-row justify-between">
-            <Pressable onPress={() => router.replace("/(auth)/home/Home")}>
+            <Pressable
+              onPress={() => router.replace("/(user)/home/(Lessons)/Lesson")}
+            >
               <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB
               </Text>
             </Pressable>
             <Pressable
-              onPress={() => router.replace("/(auth)/playground/Database")}
+              onPress={() => router.replace("/playground/Database")}
               className="justify-center"
             >
               <Text className="text-white mr-3 text-sm font-exoExtraBold">

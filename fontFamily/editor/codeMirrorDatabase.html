@@ -89,7 +89,7 @@
             "CREATE TABLE orders (id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER, name TEXT, product TEXT,amount REAL,order_date TEXT,FOREIGN KEY (user_id) REFERENCES users(id));"
           );
           db.run(
-            "INSERT INTO orders (user_id, name, product, amount, order_date) VALUES (1, 'JOSEPH', 'DILDO', 69, '2025-06-01'),(1, 'Alice', 'Mouse', 19.99, '2025-06-02'),(2, 'Bob', 'Monitor', 199.99, '2025-06-05'),(3, 'Charlie', 'Desk Lamp', 29.99, '2025-06-03'),(3, 'Charlie', 'USB Hub', 14.99, '2025-06-04'),(5, 'Eve', 'Webcam', 89.99, '2025-06-06');"
+            "INSERT INTO orders (user_id, name, product, amount, order_date) VALUES (1, 'Alice', 'Mouse', 19.99, '2025-06-02'),(2, 'Bob', 'Monitor', 199.99, '2025-06-05'),(3, 'Charlie', 'Desk Lamp', 29.99, '2025-06-03'),(3, 'Charlie', 'USB Hub', 14.99, '2025-06-04'),(5, 'Eve', 'Webcam', 89.99, '2025-06-06');"
           );
           const query = "SELECT * FROM orders";
           const result = displaySQLAsTable(query);

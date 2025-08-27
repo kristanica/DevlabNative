@@ -102,7 +102,7 @@ const Settings = () => {
                         onChangeText={setUserName}
                         // placeholder={"username"}
                         placeholder={userData?.username}
-                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-2xl"
+                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]"
                       />
                     </View>
                   </View>
@@ -112,12 +112,12 @@ const Settings = () => {
                       Bio
                     </Text>
 
-                    <View className="flex-row bg-[#1E212F] mx-5">
+                    <View className="flex-row bg-[#1E212F] mx-5 rounded-[10px]">
                       <TextInput
                         value={bio}
                         onChangeText={setBio}
                         placeholder={userData?.bio}
-                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-2xl"
+                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]"
                       />
                     </View>
                   </View>

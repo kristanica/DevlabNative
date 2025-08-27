@@ -27,7 +27,7 @@ export default function Home() {
       <View className="flex-[1] bg-accent">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
-            <View className="flex-[2] py-3">
+            <View className="flex-[2] py-3 ">
               <ImageBackground
                 source={
                   // backgroundVal context usage
@@ -36,7 +36,7 @@ export default function Home() {
                     : // Default val if backgroundVal is false
                       require("@/assets/images/profile.png")
                 }
-                className="flex-row flex-[1] bg-accent  overflow-hidden"
+                className="flex-row flex-[1]  overflow-hidden "
               >
                 {/* Renders left side user information */}
                 <View className="flex-[2]  justify-center items-center">

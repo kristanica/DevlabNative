@@ -1,6 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { path } from "@/assets/constants/constants";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useState } from "react";
@@ -36,16 +35,16 @@ const Database = () => {
     <ProtectedRoutes>
       <View className="bg-background flex-[1]">
         <CustomGeneralContainer>
-          <View className="flex-row justify-between">
-            <Pressable onPress={() => router.replace("/home/Lesson")}>
+          <View className="flex-row justify-between py-3">
+            <Pressable
+              onPress={() => router.replace("/(user)/home/(Lessons)/Lesson")}
+            >
               <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB
               </Text>
             </Pressable>
             <Pressable
-              onPress={() =>
-                router.replace({ pathname: path.CODING_PLAYGROUND })
-              }
+              onPress={() => router.replace({ pathname: "/playground/Coding" })}
               className="justify-center"
             >
               <Text className="text-white mr-3 text-sm font-exoExtraBold">

@@ -35,7 +35,7 @@ const OnFailedLogin = ({ trigger, children }: OnFailedLoginProps) => {
     );
   }, [trigger]);
 
-  return <Animated.View style={onIncorrect}>{children}</Animated.View>;
+  return <Animated.View style={[onIncorrect]}>{children}</Animated.View>;
 };
 
 export default OnFailedLogin;

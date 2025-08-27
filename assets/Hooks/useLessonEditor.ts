@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   collection,
+  CollectionReference,
   deleteDoc,
   doc,
+  DocumentData,
   getDocs,
   setDoc,
 } from "firebase/firestore";
@@ -29,7 +31,8 @@ const useLevelEditor = (
         return [];
       }
       try {
-        const lessonsRef = collection(db, category, lessonId, "Levels");
+        const lessonsRef: CollectionReference<DocumentData, DocumentData> =
+          collection(db, category, lessonId, "Levels");
 
         const snapshot = await getDocs(lessonsRef);
 
@@ -59,7 +62,8 @@ const useLevelEditor = (
   const addLessonMutation = useMutation({
     mutationFn: async () => {
       try {
-        const lessonRef = collection(db, category);
+        const lessonRef: CollectionReference<DocumentData, DocumentData> =
+          collection(db, category);
         const newLessonNumber = lessonsData?.map((item) => {
           const match = item.id.match(/Lesson(\d+)/);
           return match ? parseInt(match[1]) : 0;
@@ -91,7 +95,8 @@ const useLevelEditor = (
       try {
         const lessonRef = doc(db, category, lessonIdDeletion);
 
-        const levelRef = collection(lessonRef, "Levels");
+        const levelRef: CollectionReference<DocumentData, DocumentData> =
+          collection(lessonRef, "Levels");
         const levelsSnapshot = await getDocs(levelRef);
         for (const levelDoc of levelsSnapshot.docs) {
           await deleteDoc(levelDoc.ref);
