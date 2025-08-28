@@ -44,63 +44,69 @@ const Onboarding = () => {
         >
           <Pagination item={onboardingData} xVal={xVal} />
         </View>
-        {currentScreen !== 3 ? (
-          // Will render Skip and Next button if not on the last screen
-          <>
+        <View className="flex-[1]">
+          {currentScreen !== 3 ? (
+            // Will render Skip and Next button if not on the last screen
+            <>
+              <Animated.View
+                entering={FadeIn.duration(200)}
+                exiting={FadeOut.duration(100)}
+                className="absolute left-1/2 bottom-24 w-[150px] items-center "
+                style={{
+                  transform: [{ translateX: -75 }],
+                }}
+              >
+                <Pressable onPress={() => scrolLScreen()}>
+                  <LottieView
+                    source={require("@/assets/Lottie/onboarding/nextButton.json")}
+                    autoPlay
+                    loop
+                    style={{ width: 60, aspectRatio: 1 }}
+                  ></LottieView>
+                </Pressable>
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeIn.duration(200)}
+                exiting={FadeOut.duration(100)}
+                className="absolute top-16 right-10"
+              >
+                <ButtonComponent
+                  onPressAction={() => router.replace(path.LOGIN)}
+                >
+                  <Text className="text-[#ffffff43] xs:text-xs font-exoLight">
+                    Skip
+                  </Text>
+                </ButtonComponent>
+              </Animated.View>
+            </>
+          ) : (
+            // Wiil render if user is at the last page
             <Animated.View
               entering={FadeIn.duration(200)}
               exiting={FadeOut.duration(100)}
-              className="absolute left-1/2 bottom-1/4 w-[150px] items-center "
+              className="absolute left-1/2 bottom-[100] w-[150px]  items-center  "
               style={{
                 transform: [{ translateX: -75 }],
               }}
             >
-              <Pressable onPress={() => scrolLScreen()}>
-                <LottieView
-                  source={require("@/assets/Lottie/onboarding/nextButton.json")}
-                  autoPlay
-                  loop
-                  style={{ width: "20%", aspectRatio: 1 }}
-                ></LottieView>
+              <Pressable
+                onPress={() => router.replace({ pathname: path.LOGIN })}
+              >
+                <Text className="text-white text-center rounded-2xl bg-button px-7 py-2 xs:text-xs font-exoBold">
+                  Login
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => router.replace({ pathname: path.REGISTER })}
+              >
+                <Text className="text-white text-center rounded-2xl bg-accent px-7 xs:text-xs py-2 mt-2 font-exoBold">
+                  Sign up
+                </Text>
               </Pressable>
             </Animated.View>
-
-            <Animated.View
-              entering={FadeIn.duration(200)}
-              exiting={FadeOut.duration(100)}
-              className="absolute top-16 right-10"
-            >
-              <ButtonComponent onPressAction={() => router.replace(path.LOGIN)}>
-                <Text className="text-[#ffffff43] xs:text-xs font-exoLight">
-                  Skip
-                </Text>
-              </ButtonComponent>
-            </Animated.View>
-          </>
-        ) : (
-          // Wiil render if user is at the last page
-          <Animated.View
-            entering={FadeIn.duration(200)}
-            exiting={FadeOut.duration(100)}
-            className="absolute left-1/2 bottom-[100] w-[150px]  items-center  "
-            style={{
-              transform: [{ translateX: -75 }],
-            }}
-          >
-            <Pressable onPress={() => router.replace({ pathname: path.LOGIN })}>
-              <Text className="text-white text-center rounded-2xl bg-button px-7 py-2 xs:text-xs font-exoBold">
-                Login
-              </Text>
-            </Pressable>
-            <Pressable
-              onPress={() => router.replace({ pathname: path.REGISTER })}
-            >
-              <Text className="text-white text-center rounded-2xl bg-accent px-7 xs:text-xs py-2 mt-2 font-exoBold">
-                Sign up
-              </Text>
-            </Pressable>
-          </Animated.View>
-        )}
+          )}
+        </View>
       </AnimatedViewContainer>
     </View>
   );

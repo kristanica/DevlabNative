@@ -70,7 +70,7 @@ const Settings = () => {
                 </Pressable>
               </View>
 
-              <View className=" bg-shopAccent flex-[3] m-3 rounded-2xl">
+              <View className=" bg-shopAccent flex-[4] m-3 rounded-2xl">
                 <Pressable className="" onPress={pickImageBackground}>
                   {backgroundVal ? (
                     <ImageBackground

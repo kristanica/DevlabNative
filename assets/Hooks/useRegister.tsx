@@ -45,6 +45,7 @@ const useRegister = () => {
           age: Number(state.age),
           exp: 0,
           level: 1,
+          suspend: false,
           coins: 0,
           bio: "",
           lastOpenedLevel: {

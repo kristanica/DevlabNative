@@ -1,9 +1,13 @@
 import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsButton";
 import { width } from "@/assets/constants/constants";
+import useModal from "@/assets/Hooks/useModal";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { useState } from "react";
 
-import { StyleSheet } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import LessonModal from "../LessonModal";
 
 type Props = BottomTabBarProps & {
   tabIcon: readonly string[];
@@ -15,6 +19,8 @@ export default function CustomTabBar({
   navigation,
   tabIcon,
 }: Props) {
+  const [lessonTab, setLessonTab] = useState<boolean>(false);
+  const lessonModal = useModal();
   return (
     <Animated.View
       entering={FadeIn.duration(500)}
@@ -31,7 +37,9 @@ export default function CustomTabBar({
             : route.name;
 
         const isFocused = state.index === index;
-
+        if (label === "Lessons") {
+          return null;
+        }
         const onPress = () => {
           const event = navigation.emit({
             type: "tabPress",
@@ -62,6 +70,17 @@ export default function CustomTabBar({
           />
         );
       })}
+
+      <TouchableOpacity onPress={() => lessonModal.setVisibility(true)}>
+        <Ionicons name="add" size={20} color={"white"}></Ionicons>
+      </TouchableOpacity>
+
+      {lessonModal.visibility && (
+        <LessonModal
+          onConfirm={() => console.log("hello")}
+          {...lessonModal}
+        ></LessonModal>
+      )}
     </Animated.View>
   );
 }

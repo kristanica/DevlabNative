@@ -35,9 +35,7 @@ const stageScreen = () => {
         <CustomGeneralContainer>
           <View className="flex-row justify-between items-center">
             <Pressable
-              onPress={() =>
-                router.replace({ pathname: "/(user)/home/(Lessons)/Lesson" })
-              }
+              onPress={() => router.replace({ pathname: "/home/Lesson" })}
             >
               <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
                 Back
@@ -78,7 +76,7 @@ const stageScreen = () => {
               <Pressable
                 onPress={() => {
                   router.push({
-                    pathname: "/stage/[stageId]",
+                    pathname: "/home/category/stage/[stageId]",
                     params: {
                       stageId:
                         stageData[
@@ -99,7 +97,7 @@ const stageScreen = () => {
                 onPress={() => {
                   if (stageData && currentStageIndex < stageData.length - 1) {
                     router.push({
-                      pathname: "/stage/[stageId]",
+                      pathname: "/home/category/stage/[stageId]",
                       params: {
                         stageId: stageData[currentStageIndex + 1].id,
                         lessonId,

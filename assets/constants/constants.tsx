@@ -4,7 +4,7 @@ import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
 import { Dimensions } from "react-native";
 
 //icon for tabs
-export const userIcon = ["home", "cart", "settings", "book", "trophy"] as const;
+export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
 
 //global
