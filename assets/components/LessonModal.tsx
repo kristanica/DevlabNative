@@ -14,7 +14,7 @@ const LessonModal = ({
   return (
     <Modal visible={visibility} animationType="slide" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1 bg-black/50">
-        <View className="   w-full absolute bottom-24  h-[50%] ">
+        <View className="   w-full absolute bottom-0 h-[50%] ">
           <View className="justify-center  flex-[1] bg-background  rounded-3xl">
             <View className="flex-col mx-2 flex-[1.5] px-2 py-3">
               <Pressable

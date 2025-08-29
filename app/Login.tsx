@@ -6,7 +6,7 @@ import useLogin from "@/assets/Hooks/useLogin";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Animated, { FadeIn } from "react-native-reanimated";
 const Login = () => {
@@ -126,15 +126,3 @@ const Login = () => {
 };
 
 export default Login;
-
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 0,
-  },
-});

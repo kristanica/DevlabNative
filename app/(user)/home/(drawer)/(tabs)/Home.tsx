@@ -3,7 +3,7 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
-import { boxShadow } from "@/assets/styles/ContainerStyles";
+
 import { useBackground } from "@/assets/zustand/BackgroundProvider";
 import { useProfile } from "@/assets/zustand/ProfileProvider";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
@@ -62,32 +62,17 @@ export default function Home() {
                   <Text className="text-white font-exoBold xs:text-xl">
                     Good to see you!
                   </Text>
-                  <Text
-                    className="text-white xs:text-lg font-exoExtraBold"
-                    style={[boxShadow.textShadow]}
-                  >
+                  <Text className="text-white xs:text-lg font-exoExtraBold">
                     {userData?.username}
                   </Text>
-                  <Text
-                    className="text-white font-exoBold xs:text-xs"
-                    style={[boxShadow.textShadowLight]}
-                  >
+                  <Text className="text-white font-exoBold xs:text-xs">
                     {"Level"} {userData?.userLevel}
                   </Text>
                   {/* EXP bar */}
-                  <View
-                    style={boxShadow.shadow}
-                    className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs "
-                  >
-                    <View
-                      style={boxShadow.shadow}
-                      className="w-[80%] bg-[#32FF99] h-4 rounded-xl "
-                    ></View>
+                  <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
+                    <View className="w-[80%] bg-[#32FF99] h-4 rounded-xl "></View>
                   </View>
-                  <Text
-                    className="text-white text-shadow-lg/30 font-exoRegula xs:text-xs"
-                    style={[boxShadow.textShadowLight]}
-                  >
+                  <Text className="text-white text-shadow-lg/30 font-exoRegula xs:text-xs">
                     {userData?.exp} {"EXP"}
                   </Text>
                 </View>

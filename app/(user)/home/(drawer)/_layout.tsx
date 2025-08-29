@@ -14,6 +14,7 @@ const drawerLayout = () => {
       <Drawer
         drawerContent={(props) => <CustomDrawer {...props}></CustomDrawer>}
         screenOptions={{
+          headerTransparent: true,
           drawerActiveTintColor: "#4caf50",
           headerLeft: () => {
             const navigation = useNavigation();
@@ -38,13 +39,7 @@ const drawerLayout = () => {
           },
         }}
       >
-        <Drawer.Screen
-          name="(tabs)"
-          options={{
-            title: "",
-            headerTransparent: true,
-          }}
-        ></Drawer.Screen>
+        <Drawer.Screen name="(tabs)" options={{ title: "" }}></Drawer.Screen>
         <Drawer.Screen
           name="Settings"
           options={{

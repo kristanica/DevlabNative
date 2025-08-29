@@ -20,6 +20,7 @@ const index = () => {
   const { width, height } = Dimensions.get("window");
   console.log(width);
   console.log(height);
+
   return (
     <View className="bg-background flex-[1] justify-center items-center p-10">
       <AnimatedAppearContainer opacityVal={opacityVal}>

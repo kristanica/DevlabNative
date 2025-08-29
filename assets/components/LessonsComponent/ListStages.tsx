@@ -92,7 +92,7 @@ const ListStages = () => {
                   stageId
                 ) {
                   router.push({
-                    pathname: "/stage/[stageId]",
+                    pathname: "/home/category/stage/[stageId]",
                     params: {
                       stageId: stageId.current,
                       category: levelPayload.category,

@@ -20,7 +20,7 @@ const CustomGeneralContainer = ({ children }: CustomGeneralContainerProps) => {
       className="flex-1"
       style={{
         marginBottom: tabHeight ? tabHeight : 0,
-        marginTop: actionCenterHeight.top + 35,
+        marginTop: actionCenterHeight.top,
       }}
     >
       {children}
