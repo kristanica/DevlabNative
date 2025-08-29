@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   Pressable,
@@ -20,7 +20,27 @@ const index = () => {
   const { width, height } = Dimensions.get("window");
   console.log(width);
   console.log(height);
+  useEffect(() => {
+    const fetchPing = async () => {
+      try {
+        const response = await fetch(
+          "https://af1103113cfa.ngrok-free.app/evaluate",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: "JOSEPPH,. do you know him?" }),
+          }
+        ); // replace with your server URL
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching ping:", error);
+        console.log("Error fetching ping");
+      }
+    };
 
+    fetchPing();
+  }, []);
   return (
     <View className="bg-background flex-[1] justify-center items-center p-10">
       <AnimatedAppearContainer opacityVal={opacityVal}>

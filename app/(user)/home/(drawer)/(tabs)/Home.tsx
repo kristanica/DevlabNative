@@ -69,10 +69,10 @@ export default function Home() {
                     {"Level"} {userData?.userLevel}
                   </Text>
                   {/* EXP bar */}
-                  <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
+                  <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2">
                     <View className="w-[80%] bg-[#32FF99] h-4 rounded-xl "></View>
                   </View>
-                  <Text className="text-white text-shadow-lg/30 font-exoRegula xs:text-xs">
+                  <Text className="text-whitefont-exoRegula xs:text-xs">
                     {userData?.exp} {"EXP"}
                   </Text>
                 </View>
