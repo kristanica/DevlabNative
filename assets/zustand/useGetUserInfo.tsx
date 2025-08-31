@@ -8,6 +8,7 @@ type userData = {
   exp: number;
   userLevel: number;
   suspend: boolean;
+  id: string;
 };
 
 type InformationProviderProps = {
@@ -42,6 +43,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
               exp: data.exp,
               userLevel: data.userLevel,
               suspend: data.suspend,
+              id: uid,
             },
             loading: false,
           });

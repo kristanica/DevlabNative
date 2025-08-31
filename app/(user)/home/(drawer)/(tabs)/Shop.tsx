@@ -2,12 +2,13 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import ShopItem from "@/assets/components/ShopItem";
-import { mockUpShopItem } from "@/assets/constants/constants";
+import useFetchShopItems from "@/assets/Hooks/query/useFetchShopItems";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const shop = () => {
+  const { shopItems } = useFetchShopItems();
   return (
     <ProtectedRoutes>
       <View className="bg-accent flex-1">
@@ -36,15 +37,8 @@ const shop = () => {
                 showsVerticalScrollIndicator={false}
                 className="flex-[5] border-[#36334B] border-2 rounded-[10px] p-3"
               >
-                {mockUpShopItem.map((item) => (
-                  <ShopItem
-                    id={item.id}
-                    key={item.id}
-                    name={item.name}
-                    description={item.description}
-                    functionality={item.functionality}
-                    price={item.price}
-                  />
+                {shopItems?.map((item, index) => (
+                  <ShopItem {...item} key={item.id} index={index} />
                 ))}
               </ScrollView>
             </View>

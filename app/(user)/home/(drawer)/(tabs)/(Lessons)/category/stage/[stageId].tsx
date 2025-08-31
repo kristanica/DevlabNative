@@ -12,7 +12,6 @@ import stageStore from "@/assets/zustand/stageStore";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-
 const stageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
@@ -89,6 +88,7 @@ const stageScreen = () => {
           {/* Shows modal for first time */}
 
           <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor>
+
           <SwipeLessonContainer>
             <StageGameComponent
               currentStageData={currentStageData}
