@@ -22,6 +22,38 @@ export default function Home() {
   const { profileVal } = useProfile();
   const { userData } = useGetUserInfo();
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const currentUser = auth.currentUser;
+
+  //     const token = await currentUser?.getIdToken(true);
+
+  //     try {
+  //       const res = await fetch(
+  //         "http://localhost:8081/fireBase/getAllData/Html",
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (!res.ok) {
+  //         console.log("It is not ok lol");
+  //         return;
+  //       }
+
+  //       const data = await res.json();
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //       return;
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">

@@ -8,6 +8,7 @@ type stage = {
   codingInterface?: string;
   isHidden: boolean;
   order: number;
+  type: string;
 };
 type Payload = {
   stageData: stage[];

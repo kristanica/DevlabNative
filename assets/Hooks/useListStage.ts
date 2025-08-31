@@ -29,7 +29,7 @@ const useListStage = () => {
         return;
       }
       const newStageNumber = stagesData?.map((item) => {
-        const match = item.id.match(/Stage (\d+)/);
+        const match = item.id.match(/Stage(\d+)/);
 
         return match ? parseInt(match[1]) : 0;
       });
@@ -44,6 +44,7 @@ const useListStage = () => {
         levelPayload.levelId,
         "Stages"
       );
+
       await setDoc(doc(stagesRef, newStageId), {
         title: newStageId,
         createdAt: new Date(),

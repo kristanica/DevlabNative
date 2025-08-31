@@ -1,12 +1,16 @@
 import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
+import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
+import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 const stageScreen = () => {
@@ -15,27 +19,36 @@ const stageScreen = () => {
   const [currentStageIndex, setcurrentStageIndex] = useState<number>(0);
   const [currentStageData, setCurrentStageData] = useState<any>();
 
+  //gets the stageData from zustand to reduce API calls
   const stageData = stageStore((state) => state.stageData);
 
+  const gameIdentifier = useRef<string | undefined>("Lesson");
+
+  //gets the current index of the stageData
   useEffect(() => {
-    if (!stageData) {
-      console.log("undefined");
-      return;
-    }
+    if (!stageData) return;
     const index: number = stageData.findIndex(
       (stage: any) => stage.id === stageId
     );
     setcurrentStageIndex(index);
-    setCurrentStageData(index !== -1 ? stageData[index] : null);
+    const stage = index !== -1 ? stageData[index] : null;
+    setCurrentStageData(stage);
+
+    if (stage?.type !== "Lesson") {
+      gameIdentifier.current = stage?.type;
+    }
   }, [stageId, stageData]);
+
   const { webRef, sendToWebView } = useCodeEditor();
+
+  const finalAnswer = useModal();
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
         <CustomGeneralContainer>
           <View className="flex-row justify-between items-center">
             <Pressable
-              onPress={() => router.replace({ pathname: "/home/Lesson" })}
+              onPress={() => router.replace({ pathname: "/home/Home" })}
             >
               <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
                 Back
@@ -50,28 +63,40 @@ const stageScreen = () => {
             />
           </View>
 
+          {/* Shows answer confirmation before navigating to the next one */}
+          {finalAnswer.visibility && (
+            <FinalAnswerModal
+              onConfirm={() => {
+                if (stageData && currentStageIndex < stageData.length - 1) {
+                  router.push({
+                    pathname: "/home/category/stage/[stageId]",
+                    params: {
+                      stageId: stageData[currentStageIndex + 1].id,
+                      lessonId,
+                      levelId,
+                      category,
+                    },
+                  });
+                }
+                finalAnswer.closeModal();
+              }}
+              {...finalAnswer}
+            ></FinalAnswerModal>
+          )}
+          <StageModalComponent
+            type={gameIdentifier.current}
+          ></StageModalComponent>
+          {/* Shows modal for first time */}
+
           <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor>
           <SwipeLessonContainer>
-            {/* <ScrollView> */}
-            <Text className="text-white font-exoBold xs:text-xl text-justify">
-              {currentStageData?.title}
-            </Text>
-            <Text className="text-white font-exoRegular xs:text-xs my-3 text-justify">
-              {currentStageData?.description}
-            </Text>
-            <View className="bg-accentContainer p-3 rounded-3xl my-3">
-              <Text className="font-exoBold text-xl text-white">
-                Instructions
-              </Text>
-              <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
-                {currentStageData?.instruction}
-              </Text>
-              <View className="bg-background p-3 rounded-3xl my-3">
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface}
-                </Text>
-              </View>
-            </View>
+            <StageGameComponent
+              currentStageData={currentStageData}
+              type={currentStageData?.type}
+            ></StageGameComponent>
+
+            {/* Determines the gamemode */}
+
             <View className="flex-row justify-evenly">
               <Pressable
                 onPress={() => {
@@ -79,7 +104,7 @@ const stageScreen = () => {
                     pathname: "/home/category/stage/[stageId]",
                     params: {
                       stageId:
-                        stageData[
+                        stageData![
                           currentStageIndex === 0 ? 0 : currentStageIndex - 1
                         ].id,
                       lessonId,
@@ -89,12 +114,19 @@ const stageScreen = () => {
                   });
                 }}
               >
-                <Text className="px-7 py-2 bg-[#E63946] self-start rounded-3xl font-exoRegular">
-                  Prev
-                </Text>
+                {/* Alam ko mali, pero tinatamad na ako ayusin */}
+                {gameIdentifier.current === "Lesson" && (
+                  <Text className="px-7 py-2 bg-[#E63946] self-start rounded-3xl font-exoRegular">
+                    Prev
+                  </Text>
+                )}
               </Pressable>
               <Pressable
                 onPress={() => {
+                  if (gameIdentifier.current !== "Lesson") {
+                    finalAnswer.setVisibility(true);
+                    return;
+                  }
                   if (stageData && currentStageIndex < stageData.length - 1) {
                     router.push({
                       pathname: "/home/category/stage/[stageId]",

@@ -142,9 +142,6 @@ const EditStageModal = ({
                   <TouchableOpacity
                     className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
                     onPress={() => {
-                      // deleteMutation?.mutate();
-                      // closeModal();
-
                       setDeleteConfirmationVisibility(true);
                     }}
                   >

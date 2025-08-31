@@ -8,7 +8,14 @@ const exemptions: Record<string, string[]> = {
     "copyCode",
     "type",
   ],
-  BugBust: ["codingInterface", "hint", "isHidden", "timer", "copyCode", "type"],
+  BugBust: [
+    "codingInterface",
+    "isHidden",
+    "timer",
+    "copyCode",
+    "type",
+    "choices",
+  ],
   CodeRush: [
     "codingInterface",
     "hint",
@@ -47,7 +54,7 @@ const CheckEmptyFields = (state: any, type: string) => {
       );
     }
 
-    return value === "" || value === null || value === undefined || value === 0;
+    return value === "" || value === null || value === undefined;
   });
   return hasEmpty;
 };

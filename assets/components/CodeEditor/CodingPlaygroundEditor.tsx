@@ -1,3 +1,5 @@
+import { auth } from "@/assets/constants/constants";
+import { useQuery } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import type { RefObject } from "react";
 import React, { useState } from "react";
@@ -18,6 +20,48 @@ const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
     CodeEditorPayload | undefined
   >(undefined);
 
+  const { data } = useQuery({
+    queryKey: ["Evaluated Code", webRef, recievedCode],
+
+    queryFn: async () => {
+      if (!recievedCode) return null;
+      const currentUser = auth.currentUser;
+
+      const token = await currentUser?.getIdToken(true);
+      const res = await fetch(
+        "https://661f20ad2ca9.ngrok-free.app/OpenAI/evaluate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify({
+            prompt: `
+HTML:
+${recievedCode.html || ""}
+
+CSS:
+${recievedCode.css || ""}
+
+JS:
+${recievedCode.js || ""}
+`,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        console.log("Failed to evaluate code");
+      }
+      const data = await res.json();
+      console.log(data);
+      return data;
+    },
+
+    enabled: !!recievedCode,
+  });
   return (
     <View className="bg-accent flex-[1] rounded-[10px]">
       <View className="flex-1 bg-[#D9D9D9] m-2 rounded-xl">

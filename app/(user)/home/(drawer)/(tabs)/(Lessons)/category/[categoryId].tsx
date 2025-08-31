@@ -4,12 +4,12 @@ import ListStages from "@/assets/components/LessonsComponent/ListStages";
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import { lessonMetaData } from "@/assets/constants/constants";
-import { useFetchLessonList } from "@/assets/Hooks/query/useFetchLessonList";
+import useFetchLessonList from "@/assets/Hooks/query/useFetchLessonList";
+import useFetchLessonProgress from "@/assets/Hooks/query/useFetchLessonProgress";
 
 import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React, { useState } from "react";
@@ -22,18 +22,13 @@ const categoryScreen = () => {
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
 
   const setTracker = tracker((state) => state.setTracker);
-  const levelPayload = tracker((state) => state.levelPayload);
 
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["lesson user", id],
-    queryFn: ({ queryKey }) => {
-      const [, categoryId] = queryKey as [string, keyof typeof lessonMetaData];
-      return useFetchLessonList({ category: categoryId });
-    },
-  });
+  const { fetchedLesson, isLoading } = useFetchLessonList(id);
+  const { lessonWithProgress } = useFetchLessonProgress(id);
+
   let globalCounter = 0;
   return (
     <View className="bg-accent flex-[1]">
@@ -69,6 +64,7 @@ const categoryScreen = () => {
           <Text className="text-white text-justify my-2">{meta.about}</Text>
         </View>
         <LockLessonModal
+          onConfirm={() => closeModal()}
           visibility={visibility}
           scaleStyle={scaleStyle}
           closeModal={closeModal}
@@ -92,12 +88,13 @@ const categoryScreen = () => {
         ) : (
           <SectionList
             sections={
-              data
-                ? data.map((data: any) => ({
+              fetchedLesson
+                ? fetchedLesson.map((data: any) => ({
                     title: data.Lesson,
                     data: data.levels.map((level: any) => ({
                       ...level,
-                      lessonid: data.id,
+                      levelId: level.id, // ensure levelId exists
+                      lessonId: data.id,
                     })),
                   }))
                 : []
@@ -106,22 +103,25 @@ const categoryScreen = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               globalCounter++;
+              const key = `${item.lessonId}-${item.levelId}`;
+              const isLockedLesson = !lessonWithProgress?.allProgress?.[key];
               return (
                 <Pressable
                   onPress={() => {
-                    if (item.isLocked) {
+                    if (isLockedLesson) {
                       setVisibility(true);
                     } else {
                       setTracker({
                         category: id,
-                        lessonId: item.lessonid,
-                        levelId: item.id,
+                        lessonId: item.lessonId,
+                        levelId: item.levelId,
                       });
                       setStagesVisibility(true);
                     }
                   }}
                 >
                   <LessonContainer
+                    isLocked={isLockedLesson}
                     item={item}
                     index={globalCounter}
                     icon={
