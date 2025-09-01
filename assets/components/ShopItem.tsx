@@ -1,6 +1,5 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import React from "react";
 import {
   Image,
@@ -11,9 +10,9 @@ import {
   View,
 } from "react-native";
 import Animated from "react-native-reanimated";
-import { db } from "../constants/constants";
-import fetchUserData from "../Hooks/query/fetchUserData";
+import { auth } from "../constants/constants";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
+import { useGetUserInfo } from "../zustand/useGetUserInfo";
 
 type ShopItemProps = {
   id: string;
@@ -42,44 +41,42 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
     TimeFreeze_Icon: require("../images/iconItems/TimeFreeze_Icon.png"),
   };
 
-  const { userData, refetch } = fetchUserData();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {
-      if (!userData) {
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
         return null;
       }
+      const token = await currentUser?.getIdToken(true);
 
-      try {
-        if (userData?.coins < cost) {
-          console.log("Not enough coins");
-
-          return null;
+      const res = await fetch(
+        "https://83a4e769b3c4.ngrok-free.app/fireBase/purchaseItem",
+        {
+          method: "POST",
+          headers: {
+            authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itemid: id,
+            itemCost: cost,
+          }),
         }
+      );
 
-        const userRef = doc(db, "Users", userData.uid);
-        await updateDoc(userRef, {
-          coins: userData.coins - cost,
-        });
-
-        const inventoryRef = doc(db, "Users", userData.uid, "Inventory", id);
-        const inventorySnap = await getDoc(inventoryRef);
-
-        if (inventorySnap.exists()) {
-          await updateDoc(inventoryRef, {
-            quantity: increment(1),
-          });
-        } else {
-          await setDoc(inventoryRef, {
-            quantity: 1,
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        return null;
+      if (!res.ok) {
+        console.log("Cannot purchase an item" + res.status);
+        return;
       }
+      const data = await res.json();
+      console.log(res.status);
+      return data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["userData"] }),
+    onSuccess: (data) => {
+      useGetUserInfo.getState().setUserData({ ...data, coins: data?.newCoins });
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
+    },
   });
 
   return (

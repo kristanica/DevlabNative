@@ -14,7 +14,7 @@ const fetchUserData = () => {
 
       try {
         const res = await fetch(
-          `https://8be28062e186.ngrok-free.app/fireBase/getSpecificUser/${uid}`,
+          `https://83a4e769b3c4.ngrok-free.app/fireBase/getSpecificUser/${uid}`,
           {
             method: "GET",
             headers: {

@@ -3,12 +3,14 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import ShopItem from "@/assets/components/ShopItem";
 import useFetchShopItems from "@/assets/Hooks/query/useFetchShopItems";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const shop = () => {
   const { shopItems } = useFetchShopItems();
+  const userData = useGetUserInfo((state) => state.userData);
   return (
     <ProtectedRoutes>
       <View className="bg-accent flex-1">
@@ -28,6 +30,9 @@ const shop = () => {
                   Welcome to the DevLab Shop, where learning meets gamification!
                   Earn rewards as you code, learn, and complete challenges, then
                   spend them on awesome upgrades to enhance your experience.
+                </Text>
+                <Text className="text-white xs:text-xs text-justify font-exoRegular">
+                  {userData?.coins}
                 </Text>
               </View>
 

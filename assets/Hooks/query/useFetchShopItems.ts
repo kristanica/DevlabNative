@@ -21,7 +21,7 @@ const useFetchShopItems = () => {
 
       try {
         const res = await fetch(
-          `https://8be28062e186.ngrok-free.app/fireBase/Shop`,
+          `https://83a4e769b3c4.ngrok-free.app/fireBase/Shop`,
           {
             method: "GET",
             headers: {
@@ -38,7 +38,7 @@ const useFetchShopItems = () => {
         }
 
         const data: ItemType[] = await res.json();
-        console.log(data);
+
         return data;
       } catch (error) {
         console.log(error);
