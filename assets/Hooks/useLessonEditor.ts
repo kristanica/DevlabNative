@@ -47,7 +47,7 @@ const useLevelEditor = (
         const newLevelid = `Level${nextNumber}`;
 
         await setDoc(doc(lessonsRef, newLevelid), {
-          Lesson: nextNumber,
+          Level: nextNumber,
           createdAt: new Date(),
         });
       } catch {

@@ -7,10 +7,9 @@ const brainBytes = (choices: {
   d: string;
   correctAnswer: string;
 }) => {
-  const arrayChoices: any =
-    Object.entries(choices)
-      .filter(([key, _]) => key !== "correctAnswer")
-      .map(([_, choices]) => choices) ?? [];
+  const arrayChoices: any = Object.entries(choices).filter(
+    ([key, value]) => key !== "correctAnswer"
+  );
 
   const compareUserAnswer = useCallback(
     (answer: string) => {
@@ -18,13 +17,25 @@ const brainBytes = (choices: {
         console.log("You are correct");
         return;
       }
-
-      console.log("BOB");
     },
     [choices]
   );
+  const brainFilter = async () => {
+    const wrongOptions = arrayChoices.filter(
+      ([key, value]: any) => value !== choices.correctAnswer.trim()
+    );
 
-  return { arrayChoices, compareUserAnswer };
+    const randomIndex = Math.floor(Math.random() * wrongOptions.length);
+    const optionToRemove = wrongOptions[randomIndex][0];
+
+    const removedOneWrongAnswer = arrayChoices
+      .filter(([key]: any) => key !== optionToRemove)
+      .map(([_, value]: any) => value);
+
+    return removedOneWrongAnswer;
+  };
+
+  return { arrayChoices, compareUserAnswer, brainFilter };
 };
 
 export default brainBytes;

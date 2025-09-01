@@ -41,6 +41,7 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
     TimeFreeze_Icon: require("../images/iconItems/TimeFreeze_Icon.png"),
   };
 
+  const userData = useGetUserInfo((state) => state.userData);
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {
@@ -74,7 +75,9 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
       return data;
     },
     onSuccess: (data) => {
-      useGetUserInfo.getState().setUserData({ ...data, coins: data?.newCoins });
+      useGetUserInfo
+        .getState()
+        .setUserData({ ...userData!, coins: data?.newCoins });
       queryClient.invalidateQueries({ queryKey: ["userData"] });
     },
   });
@@ -119,3 +122,36 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
+//  if (!userData) {
+//       return null;
+//     }
+
+//     try {
+//       if (userData?.coins < cost) {
+//         console.log("Not enough coins");
+
+//         return null;
+//       }
+
+//       const userRef = doc(db, "Users", userData.uid);
+//       await updateDoc(userRef, {
+//         coins: userData.coins - cost,
+//       });
+
+//       const inventoryRef = doc(db, "Users", userData.uid, "Inventory", id);
+//       const inventorySnap = await getDoc(inventoryRef);
+
+//       console.log(userData.uid, id);
+//       if (inventorySnap.exists()) {
+//         await updateDoc(inventoryRef, {
+//           quantity: increment(1),
+//         });
+//       } else {
+//         await setDoc(inventoryRef, {
+//           quantity: 1,
+//         });
+//       }
+//     } catch (error) {
+//       console.log(error);
+//       return null;
+//     }

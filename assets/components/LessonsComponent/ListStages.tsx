@@ -1,4 +1,4 @@
-import { auth, URL } from "@/assets/constants/constants";
+import { auth } from "@/assets/constants/constants";
 import useFetchLessonProgress from "@/assets/Hooks/query/useFetchLessonProgress";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
@@ -28,7 +28,7 @@ const ListStages = () => {
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
       const res = await fetch(
-        `${URL}/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
+        `https://83a4e769b3c4.ngrok-free.app/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
         {
           method: "GET",
           headers: {
