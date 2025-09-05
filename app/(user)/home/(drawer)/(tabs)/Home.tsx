@@ -1,5 +1,6 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import InventoryItemContainer from "@/assets/components/HomeComponents/InventoryItemContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
@@ -21,6 +22,8 @@ export default function Home() {
   const { backgroundVal } = useBackground();
   const { profileVal } = useProfile();
   const { userData } = useGetUserInfo();
+
+  const { inventory } = useGetUserInfo();
 
   return (
     <ProtectedRoutes>
@@ -125,6 +128,17 @@ export default function Home() {
                     icon={item.icon as keyof typeof Ionicons.glyphMap}
                     index={index}
                   />
+                ))}
+              </View>
+              <Text className="text-white ml-2 xs:text-lg  font-exoBold">
+                YOUR INVENTORY
+              </Text>
+              <View className="flex-row flex-wrap justify-center">
+                {inventory.map((item) => (
+                  <InventoryItemContainer
+                    key={item.id}
+                    item={item}
+                  ></InventoryItemContainer>
                 ))}
               </View>
             </ScrollView>

@@ -1,11 +1,14 @@
+import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import * as Clipboard from "expo-clipboard";
+// import * as Clipboard from "expo-clipboard";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
   currentStageData: any;
 };
 const StageLesson = ({ currentStageData }: StageLessonprops) => {
+  const location = WhereIsUser((state) => state.location);
+  console.log(location);
   return (
     <>
       <Text className="text-white font-exoBold xs:text-xl text-justify">
@@ -23,15 +26,7 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
           <Text className="text-white font-exoRegular xs:text-xs text-justify">
             {currentStageData?.codingInterface}
           </Text>
-          <TouchableOpacity
-            onPress={async () => {
-              if (currentStageData?.codingInterface) {
-                await Clipboard.setStringAsync(
-                  currentStageData?.codingInterface
-                );
-              }
-            }}
-          >
+          <TouchableOpacity>
             <Ionicons
               name="clipboard-outline"
               size={20}

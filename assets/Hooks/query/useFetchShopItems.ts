@@ -21,7 +21,7 @@ const useFetchShopItems = () => {
 
       try {
         const res = await fetch(
-          `https://83a4e769b3c4.ngrok-free.app/fireBase/Shop`,
+          `https://edf4b4ed47fa.ngrok-free.app/fireBase/Shop`,
           {
             method: "GET",
             headers: {

@@ -2,6 +2,7 @@ import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygro
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
+import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
@@ -9,6 +10,7 @@ import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
+import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -24,6 +26,8 @@ const stageScreen = () => {
   const gameIdentifier = useRef<string | undefined>("Lesson");
 
   //gets the current index of the stageData
+  const setLocation = WhereIsUser((state) => state.setLocation);
+
   useEffect(() => {
     if (!stageData) return;
     const index: number = stageData.findIndex(
@@ -32,9 +36,10 @@ const stageScreen = () => {
     setcurrentStageIndex(index);
     const stage = index !== -1 ? stageData[index] : null;
     setCurrentStageData(stage);
-
+    setLocation(stage?.type! as string);
     if (stage?.type !== "Lesson") {
       gameIdentifier.current = stage?.type;
+      console.log(gameIdentifier.current);
     }
   }, [stageId, stageData]);
 
@@ -88,7 +93,8 @@ const stageScreen = () => {
           {/* Shows modal for first time */}
 
           <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor>
-
+          <View className="h-[10ox] w-[20px] bg-slate-400"></View>
+          <ItemList></ItemList>
           <SwipeLessonContainer>
             <StageGameComponent
               currentStageData={currentStageData}

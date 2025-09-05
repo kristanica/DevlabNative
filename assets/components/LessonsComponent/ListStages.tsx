@@ -24,11 +24,10 @@ const ListStages = () => {
       levelPayload?.levelId,
     ],
     queryFn: async () => {
-      console.log("ran");
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
       const res = await fetch(
-        `https://83a4e769b3c4.ngrok-free.app/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
+        `https://edf4b4ed47fa.ngrok-free.app/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
         {
           method: "GET",
           headers: {
@@ -38,6 +37,7 @@ const ListStages = () => {
       );
 
       if (!res.ok) {
+        console.log("Failed to fetch stages... " + res.status);
         return null;
       }
       const data = await res.json();

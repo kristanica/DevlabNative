@@ -1,9 +1,12 @@
+import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 type NavigatingStageProps = {
   currentStageData: any;
 };
 const StageBugBust = ({ currentStageData }: NavigatingStageProps) => {
+  const location = WhereIsUser((state) => state.location);
+  console.log(location);
   return (
     <>
       <Text className="text-red-500 font-exoBold xs:text-xl text-justify">

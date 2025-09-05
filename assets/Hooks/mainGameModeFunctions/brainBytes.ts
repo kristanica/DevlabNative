@@ -8,7 +8,7 @@ const brainBytes = (choices: {
   correctAnswer: string;
 }) => {
   const arrayChoices: any = Object.entries(choices).filter(
-    ([key, value]) => key !== "correctAnswer"
+    ([key]) => key !== "correctAnswer"
   );
 
   const compareUserAnswer = useCallback(

@@ -20,9 +20,6 @@ const _layout = () => {
         name="(Lessons)"
         options={{
           title: "Lessons",
-          tabBarStyle: {
-            display: "none",
-          },
         }}
       />
       <Tabs.Screen name="Achievements" options={{ title: "Trophies" }} />

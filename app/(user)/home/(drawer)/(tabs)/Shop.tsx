@@ -43,7 +43,7 @@ const shop = () => {
                 className="flex-[5] border-[#36334B] border-2 rounded-[10px] p-3"
               >
                 {shopItems?.map((item, index) => (
-                  <ShopItem {...item} key={item.id} index={index} />
+                  <ShopItem {...item} index={index} key={item.id} />
                 ))}
               </ScrollView>
             </View>

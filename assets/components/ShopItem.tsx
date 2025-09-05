@@ -1,16 +1,9 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import {
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { auth } from "../constants/constants";
+import { auth, itemIcon } from "../constants/constants";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
 import { useGetUserInfo } from "../zustand/useGetUserInfo";
 
@@ -32,15 +25,6 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
   });
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
 
-  const test: Record<string, ImageSourcePropType> = {
-    CodePatch_Icon: require("../images/iconItems/CodePatch_Icon.png"),
-    CodeWhisper_Icon: require("../images/iconItems/CodeWhisper_Icon.png"),
-    CoinSurge_Icon: require("../images/iconItems/CoinSurge_Icon.png"),
-    BrainFilter_Icon: require("../images/iconItems/BrainFilter_Icon.png"),
-    ErrorShield_Icon: require("../images/iconItems/ErrorShield_Icon.png"),
-    TimeFreeze_Icon: require("../images/iconItems/TimeFreeze_Icon.png"),
-  };
-
   const userData = useGetUserInfo((state) => state.userData);
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -52,7 +36,7 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
       const token = await currentUser?.getIdToken(true);
 
       const res = await fetch(
-        "https://83a4e769b3c4.ngrok-free.app/fireBase/purchaseItem",
+        "https://beef492a0efe.ngrok-free.app/fireBase/purchaseItem",
         {
           method: "POST",
           headers: {
@@ -90,7 +74,7 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
       <View className="bg-shopAccent rounded-xl flex-row flex-[1]  ">
         <View className="flex-col justify-evenly items-center flex-1 p-3">
           <Image
-            source={test[iconNameTrimmed]}
+            source={itemIcon[iconNameTrimmed]}
             style={{ width: "100%", height: 100, resizeMode: "contain" }}
           ></Image>
           <Text className="text-white xs:text-sm font-exoExtraBold my-2">
