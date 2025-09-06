@@ -1,8 +1,14 @@
 import { auth, db, height } from "@/assets/constants/constants";
-import itemThatShouldRender from "@/assets/Hooks/function/itemThatShouldRender";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import { arrayUnion, doc, increment, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  deleteDoc,
+  doc,
+  getDoc,
+  increment,
+  updateDoc,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Pressable,
@@ -27,7 +33,7 @@ const ItemList = () => {
   const inventoryX = useSharedValue(300);
   const location = WhereIsUser((state) => state.location);
 
-  const temp = itemThatShouldRender(location!, inventory);
+  // const temp = itemThatShouldRender(location!, inventory);
 
   const [disable, setDisable] = useState<boolean>(true);
   const [toggleInventory, setToggleInventory] = useState<boolean>(false);
@@ -59,9 +65,52 @@ const ItemList = () => {
     await updateDoc(userInventoryRef, {
       quantity: increment(-1),
     });
-    await updateDoc(doc(db, "Users", String(id)), {
-      activeBuffs: arrayUnion(itemName),
-    });
+
+    const snapshot = await getDoc(userInventoryRef);
+    const updatedData = snapshot.data();
+
+    if (itemName) {
+      const userRef = doc(db, "Users", String(id));
+      await updateDoc(userRef, {
+        activeBuffs: arrayUnion(itemName),
+      });
+    }
+
+    if (updatedData?.quantity <= 0) {
+      await deleteDoc(userInventoryRef);
+      return;
+    }
+  };
+
+  const useItemActions: Record<string, (userItem: string) => void> = {
+    "Coin Surge": (itemId) => useItem(itemId, "doubleCoints"),
+    "Code Whisper": async (itemId) => {
+      await useItem(itemId, "revealHint");
+    },
+    "Code Patch++": (itemId) => {
+      if (location !== "CodeRush") {
+        console.log("youre not in code rush");
+        return;
+      }
+      useItem(itemId, "extraTime");
+    },
+    "Time Freeze": (itemId) => {
+      if (location !== "CodeRush") {
+        console.log("youre not in code rush");
+        return;
+      }
+      useItem(itemId, "timeFreeze");
+    },
+    "Error Shield": async (itemId) => {
+      await useItem(itemId, "errorShield");
+    },
+    "Brain Filter": (itemId) => {
+      if (location !== "BrainBytes") {
+        console.log("youre not in Brain Bytes");
+        return;
+      }
+      useItem(itemId, "brainFilter");
+    },
   };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -100,7 +149,7 @@ const ItemList = () => {
         </TouchableOpacity>
         <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
           <View className="flex-row flex-wrap justify-center">
-            {location === "Lesson" ? (
+            {/* {location === "Lesson" ? (
               <Text className="text-white font-exoBold ">
                 Items cannot be used on lessons
               </Text>
@@ -115,7 +164,20 @@ const ItemList = () => {
                   </TouchableOpacity>
                 );
               })
-            )}
+            )} */}
+
+            {inventory?.map((userInvItems: any) => {
+              return (
+                <TouchableOpacity
+                  key={userInvItems.id}
+                  onPress={() =>
+                    useItemActions[userInvItems.title]?.(userInvItems.id)
+                  }
+                >
+                  <UserInventoryItems item={userInvItems} />
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </ScrollView>
       </Animated.View>

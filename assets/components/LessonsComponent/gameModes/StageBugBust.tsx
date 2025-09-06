@@ -1,6 +1,6 @@
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 type NavigatingStageProps = {
   currentStageData: any;
 };
@@ -31,6 +31,4 @@ const StageBugBust = ({ currentStageData }: NavigatingStageProps) => {
   );
 };
 
-export default StageBugBust;
-
-const styles = StyleSheet.create({});
+export default React.memo(StageBugBust);

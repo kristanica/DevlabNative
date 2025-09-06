@@ -2,14 +2,17 @@ import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygro
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
+import GameOverModal from "@/assets/components/LessonsComponent/GameOverModal";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
+import submitAnswer from "@/assets/Hooks/function/submitAnswer";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
+import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
@@ -44,8 +47,11 @@ const stageScreen = () => {
   }, [stageId, stageData]);
 
   const { webRef, sendToWebView } = useCodeEditor();
-
+  const health = userHealthPoints((state) => state.health);
+  const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
   const finalAnswer = useModal();
+  const gameOver = useModal();
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -67,21 +73,48 @@ const stageScreen = () => {
             />
           </View>
 
+          {health === 0 && (
+            <GameOverModal
+              onConfirm={() => {
+                router.push({
+                  pathname: "/home/category/stage/[stageId]",
+                  params: {
+                    stageId: stageData[0].id,
+                    lessonId,
+                    levelId,
+                    category,
+                  },
+                });
+                resetHealthPoints();
+                gameOver.closeModal();
+              }}
+              {...gameOver}
+            ></GameOverModal>
+          )}
+
           {/* Shows answer confirmation before navigating to the next one */}
           {finalAnswer.visibility && (
             <FinalAnswerModal
               onConfirm={() => {
-                if (stageData && currentStageIndex < stageData.length - 1) {
-                  router.push({
-                    pathname: "/home/category/stage/[stageId]",
-                    params: {
-                      stageId: stageData[currentStageIndex + 1].id,
-                      lessonId,
-                      levelId,
-                      category,
-                    },
-                  });
-                }
+                // if (stageData && currentStageIndex < stageData.length - 1) {
+                //   router.push({
+                //     pathname: "/home/category/stage/[stageId]",
+                //     params: {
+                //       stageId: stageData[currentStageIndex + 1].id,
+                //       lessonId,
+                //       levelId,
+                //       category,
+                //     },
+                //   });
+                // }
+                // finalAnswer.closeModal();
+
+                submitAnswer({
+                  stageId: stageData[0].id,
+                  lessonId: String(lessonId),
+                  levelId: String(levelId),
+                  category: String(category),
+                });
                 finalAnswer.closeModal();
               }}
               {...finalAnswer}
@@ -96,13 +129,15 @@ const stageScreen = () => {
           <View className="h-[10ox] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>
+            {currentStageData?.type !== "Lesson" && (
+              <Text className="text-white">HEALTH: {health}</Text>
+            )}
             <StageGameComponent
               currentStageData={currentStageData}
               type={currentStageData?.type}
             ></StageGameComponent>
 
             {/* Determines the gamemode */}
-
             <View className="flex-row justify-evenly">
               <Pressable
                 onPress={() => {

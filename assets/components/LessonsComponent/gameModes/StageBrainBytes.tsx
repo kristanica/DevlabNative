@@ -1,10 +1,7 @@
-import { auth, db } from "@/assets/constants/constants";
 import brainBytes from "@/assets/Hooks/mainGameModeFunctions/brainBytes";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const StageBrainBytes = ({ currentStageData }: any) => {
   const { compareUserAnswer, arrayChoices, brainFilter } = brainBytes(
@@ -12,21 +9,16 @@ const StageBrainBytes = ({ currentStageData }: any) => {
   );
   const [displayChoices, setDisplayChoices] = useState<any>(arrayChoices || []);
   const { activeBuffs } = useGetUserInfo();
-  const location = WhereIsUser((state) => state.location);
-  console.log(location);
+
   useEffect(() => {
     const itemUse = async () => {
-      if (!activeBuffs.includes("Brain Filter")) return;
+      if (!activeBuffs.includes("brainFilter")) return;
       const filtered = await brainFilter();
       setDisplayChoices(filtered);
-      const userRef = doc(db, "Users", String(auth?.currentUser?.uid));
-
-      await updateDoc(userRef, {
-        activeBuffs: arrayRemove("Brain Filter"),
-      }).catch(console.error);
     };
     itemUse();
   }, [activeBuffs]);
+
   return (
     <>
       <TouchableOpacity>
@@ -61,9 +53,4 @@ const StageBrainBytes = ({ currentStageData }: any) => {
   );
 };
 
-export default StageBrainBytes;
-
-const styles = StyleSheet.create({});
-function brainFilter() {
-  throw new Error("Function not implemented.");
-}
+export default React.memo(StageBrainBytes);

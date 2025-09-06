@@ -4,7 +4,7 @@ import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import React, { useCallback, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 const StageCodeRush = ({ currentStageData }: any) => {
   const { timer, codePatch, timeFreeze } = codeRush(currentStageData?.timer);
@@ -72,6 +72,4 @@ const StageCodeRush = ({ currentStageData }: any) => {
   );
 };
 
-export default StageCodeRush;
-
-const styles = StyleSheet.create({});
+export default React.memo(StageCodeRush);

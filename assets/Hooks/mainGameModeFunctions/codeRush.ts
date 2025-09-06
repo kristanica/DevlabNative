@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 const codeRush = (initialTime: number) => {
   const [timer, setTimer] = useState<number>(initialTime);
   const intervalRef = useRef<any>(null);
-
   const [isFreezed, setIsFreezed] = useState<boolean>(false);
   const isFocused = useIsFocused();
   //countdown

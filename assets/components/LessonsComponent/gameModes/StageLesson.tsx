@@ -2,7 +2,7 @@ import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 // import * as Clipboard from "expo-clipboard";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
   currentStageData: any;
 };
@@ -39,6 +39,4 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
   );
 };
 
-export default StageLesson;
-
-const styles = StyleSheet.create({});
+export default React.memo(StageLesson);

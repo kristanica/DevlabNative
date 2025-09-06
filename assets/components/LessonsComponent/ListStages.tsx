@@ -27,7 +27,7 @@ const ListStages = () => {
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
       const res = await fetch(
-        `https://edf4b4ed47fa.ngrok-free.app/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
+        `https://19bd9b5e53e7.ngrok-free.app/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
         {
           method: "GET",
           headers: {
