@@ -1,9 +1,8 @@
-import { auth, db } from "@/assets/constants/constants";
 import { isAnswerCorrect } from "@/assets/zustand/isAnswerCorrect";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { useCallback } from "react";
+import { activeBuffsLocal } from "../function/activeBuffsLocal";
 
-const brainBytes = (choices: {
+const brainFilter = (choices: {
   a: string;
   b: string;
   c: string;
@@ -13,7 +12,7 @@ const brainBytes = (choices: {
   const arrayChoices: any = Object.entries(choices)
     .filter(([key]) => key !== "correctAnswer")
     .map(([_, values]: any) => values);
-
+  const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   const setIsCorrect = isAnswerCorrect((state) => state.setIsCorrect);
 
   const compareUserAnswer = useCallback(
@@ -30,7 +29,7 @@ const brainBytes = (choices: {
     [choices.correctAnswer, setIsCorrect]
   );
 
-  const brainFilter = async () => {
+  const brainFilterItem = () => {
     const wrongOptions = arrayChoices.filter(
       (value: string) => value !== choices.correctAnswer.trim()
     );
@@ -42,16 +41,12 @@ const brainBytes = (choices: {
       (value: string) => value !== optionToRemove
     );
 
-    const userRef = doc(db, "Users", String(auth?.currentUser?.uid));
-
-    await updateDoc(userRef, {
-      activeBuffs: arrayRemove("brainFilter"),
-    }).catch(console.error);
+    removeActiveBuff("brainFilter");
 
     return removedOneWrongAnswer;
   };
 
-  return { arrayChoices, compareUserAnswer, brainFilter };
+  return { arrayChoices, compareUserAnswer, brainFilterItem };
 };
 
-export default brainBytes;
+export default brainFilter;

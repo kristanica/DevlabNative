@@ -1,16 +1,15 @@
-import { auth, db } from "@/assets/constants/constants";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+import { activeBuffsLocal } from "../../function/activeBuffsLocal";
 
 const errorShield = () => {
-  const activeBuffs = useGetUserInfo.getState().activeBuffs;
+  const removeActiveBuffs = activeBuffsLocal.getState().removeActiveBuff;
+  const activeBuffs = activeBuffsLocal.getState().activeBuff;
+
   const hasShield = activeBuffs.includes("errorShield");
   const consumeErrorShield = async () => {
     if (!hasShield) return false;
 
     try {
-      const userRef = doc(db, "Users", String(auth.currentUser?.uid));
-      await updateDoc(userRef, { activeBuffs: arrayRemove("errorShield") });
+      removeActiveBuffs("errorShield");
       return true;
     } catch (error) {
       console.error(error);

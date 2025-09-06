@@ -8,6 +8,7 @@ import useFetchLessonList from "@/assets/Hooks/query/useFetchLessonList";
 import useFetchLessonProgress from "@/assets/Hooks/query/useFetchLessonProgress";
 
 import useModal from "@/assets/Hooks/useModal";
+import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,6 +23,7 @@ const categoryScreen = () => {
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
 
   const setTracker = tracker((state) => state.setTracker);
+  const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
 
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
@@ -116,6 +118,11 @@ const categoryScreen = () => {
                         lessonId: item.lessonId,
                         levelId: item.levelId,
                       });
+                      setCoinsAndExp({
+                        coins: item.coinsReward,
+                        exp: item.expReward,
+                      });
+
                       setStagesVisibility(true);
                     }
                   }}

@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 
-const codeRush = (initialTime: number) => {
+const codePatchTimeFreeze = (initialTime: number) => {
   const [timer, setTimer] = useState<number>(initialTime);
   const intervalRef = useRef<any>(null);
   const [isFreezed, setIsFreezed] = useState<boolean>(false);
@@ -34,4 +34,4 @@ const codeRush = (initialTime: number) => {
   return { timer, codePatch, timeFreeze };
 };
 
-export default codeRush;
+export default codePatchTimeFreeze;

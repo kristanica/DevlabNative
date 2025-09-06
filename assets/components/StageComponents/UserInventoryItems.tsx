@@ -8,7 +8,9 @@ type UserInventoryItems = {
 
 const UserInventoryItems = ({ item }: UserInventoryItems) => {
   const iconNameTrimmed = item.Icon ? item.Icon.replace(".png", "") : "";
-
+  if (item.quantity === 0) {
+    return;
+  }
   return (
     <View className="bg-background my-2 w-[100px] h-28 mx-2 rounded-2xl p-3">
       <Image

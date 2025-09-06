@@ -10,7 +10,7 @@ const GameOverModal = ({
 }: ScaleModalProps) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable className="flex-1">
+      <Pressable className=" bg-blue-300">
         <Animated.View
           style={[scaleStyle]}
           className="   aspect-square w-3/4 m-auto  rounded-[10px]"

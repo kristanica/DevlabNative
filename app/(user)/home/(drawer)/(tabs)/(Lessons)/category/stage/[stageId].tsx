@@ -4,11 +4,11 @@ import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/Sel
 import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
 import GameOverModal from "@/assets/components/LessonsComponent/GameOverModal";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
+import LevelFinishedModal from "@/assets/components/LessonsComponent/LevelFinishedModal";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
-import submitAnswer from "@/assets/Hooks/function/submitAnswer";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
@@ -51,6 +51,7 @@ const stageScreen = () => {
   const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
   const finalAnswer = useModal();
   const gameOver = useModal();
+  const levelFinished = useModal();
 
   return (
     <ProtectedRoutes>
@@ -92,30 +93,45 @@ const stageScreen = () => {
             ></GameOverModal>
           )}
 
+          {levelFinished.visibility && (
+            <LevelFinishedModal
+              onConfirm={() => console.log("levelFinished")}
+              {...levelFinished}
+            ></LevelFinishedModal>
+          )}
+
           {/* Shows answer confirmation before navigating to the next one */}
           {finalAnswer.visibility && (
             <FinalAnswerModal
               onConfirm={() => {
-                // if (stageData && currentStageIndex < stageData.length - 1) {
-                //   router.push({
-                //     pathname: "/home/category/stage/[stageId]",
-                //     params: {
-                //       stageId: stageData[currentStageIndex + 1].id,
-                //       lessonId,
-                //       levelId,
-                //       category,
-                //     },
-                //   });
-                // }
-                // finalAnswer.closeModal();
+                if (stageData.length - 1 === currentStageIndex) {
+                  finalAnswer.closeModal();
+                  setTimeout(() => levelFinished.setVisibility(true), 200);
+                  return;
+                }
+                if (stageData && currentStageIndex < stageData.length - 1) {
+                  finalAnswer.closeModal();
 
-                submitAnswer({
-                  stageId: stageData[0].id,
-                  lessonId: String(lessonId),
-                  levelId: String(levelId),
-                  category: String(category),
-                });
-                finalAnswer.closeModal();
+                  setTimeout(() => {
+                    router.push({
+                      pathname: "/home/category/stage/[stageId]",
+                      params: {
+                        stageId: stageData[currentStageIndex + 1].id,
+                        lessonId,
+                        levelId,
+                        category,
+                      },
+                    });
+                  }, 200);
+                  return;
+                }
+
+                // submitAnswer({
+                //   stageId: stageData[0].id,
+                //   lessonId: String(lessonId),
+                //   levelId: String(levelId),
+                //   category: String(category),
+                // });
               }}
               {...finalAnswer}
             ></FinalAnswerModal>

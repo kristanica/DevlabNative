@@ -1,8 +1,9 @@
 import { auth, db, height } from "@/assets/constants/constants";
+
+import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import {
-  arrayUnion,
   deleteDoc,
   doc,
   getDoc,
@@ -25,7 +26,7 @@ import Animated, {
 } from "react-native-reanimated";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
-const ItemList = () => {
+const ItemList = ({ gameType }: any) => {
   const { inventory } = useGetUserInfo();
   const moveToRight = useSharedValue(-50);
   const opacity = useSharedValue(1);
@@ -59,6 +60,7 @@ const ItemList = () => {
     return () => clearTimeout(unsub);
   }, []);
 
+  const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
   const useItem = async (itemId: string, itemName: string) => {
     const id = auth.currentUser?.uid;
     const userInventoryRef = doc(db, "Users", String(id), "Inventory", itemId);
@@ -70,10 +72,7 @@ const ItemList = () => {
     const updatedData = snapshot.data();
 
     if (itemName) {
-      const userRef = doc(db, "Users", String(id));
-      await updateDoc(userRef, {
-        activeBuffs: arrayUnion(itemName),
-      });
+      addActiveBuff(itemName);
     }
 
     if (updatedData?.quantity <= 0) {
@@ -85,6 +84,10 @@ const ItemList = () => {
   const useItemActions: Record<string, (userItem: string) => void> = {
     "Coin Surge": (itemId) => useItem(itemId, "doubleCoints"),
     "Code Whisper": async (itemId) => {
+      if (location !== "BugBust") {
+        console.log("You're not in bug bust lol");
+        return;
+      }
       await useItem(itemId, "revealHint");
     },
     "Code Patch++": (itemId) => {

@@ -1,14 +1,18 @@
-import { auth, db } from "@/assets/constants/constants";
-import codeRush from "@/assets/Hooks/mainGameModeFunctions/codeRush";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import codePatchTimeFreeze from "@/assets/Hooks/mainGameModeFunctions/codePatchTimeFreeze";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+
 import React, { useCallback, useEffect } from "react";
 import { Text, View } from "react-native";
 
 const StageCodeRush = ({ currentStageData }: any) => {
-  const { timer, codePatch, timeFreeze } = codeRush(currentStageData?.timer);
-  const { activeBuffs } = useGetUserInfo();
+  const { timer, codePatch, timeFreeze } = codePatchTimeFreeze(
+    currentStageData?.timer
+  );
+
+  const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
+  const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
+
   const formatTimer = useCallback(
     (seconds: number) => {
       const mins = Math.floor(seconds / 60);
@@ -24,21 +28,19 @@ const StageCodeRush = ({ currentStageData }: any) => {
   console.log(location);
   useEffect(() => {
     const run = async () => {
-      const useItem = async (name: string, itemName: () => any) => {
-        itemName();
-        const userRef = doc(db, "Users", String(auth?.currentUser?.uid));
-        await updateDoc(userRef, {
-          activeBuffs: arrayRemove(name),
-        }).catch(console.error);
+      const useItem = async (itemName: string, useThisItem: () => any) => {
+        useThisItem();
+        removeActiveBuff(itemName);
       };
-      if (activeBuffs.includes("Time Freeze")) {
-        await useItem("Time Freeze", timeFreeze);
+      if (activeBuffs.includes("timeFreeze")) {
+        await useItem("timeFreeze", timeFreeze);
       }
-      if (activeBuffs.includes("Code Patch++")) {
-        await useItem("Code Patch++", codePatch);
+      if (activeBuffs.includes("extraTime")) {
+        await useItem("extraTime", codePatch);
       }
     };
     run();
+    console.log("ASDSAHGDASDGJH");
   }, [activeBuffs]);
 
   return (

@@ -1,14 +1,38 @@
-import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import React from "react";
+import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import codeWhisper from "@/assets/Hooks/mainGameModeFunctions/globalItems/codeWhisper";
+import useModal from "@/assets/Hooks/useModal";
+import React, { useEffect } from "react";
 import { Text, View } from "react-native";
+import HintModal from "../Modals/HintModal";
 type NavigatingStageProps = {
   currentStageData: any;
 };
 const StageBugBust = ({ currentStageData }: NavigatingStageProps) => {
-  const location = WhereIsUser((state) => state.location);
-  console.log(location);
+  const hintModal = useModal();
+
+  const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
+  const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
+
+  const { codeWhisperItem } = codeWhisper(hintModal.setVisibility);
+  useEffect(() => {
+    const run = async () => {
+      const useItem = async (itemName: string, useThisItem: () => any) => {
+        useThisItem();
+        removeActiveBuff(itemName);
+      };
+      if (activeBuffs.includes("revealHint")) {
+        await useItem("revealHint", codeWhisperItem);
+      }
+    };
+    run();
+  }, [activeBuffs]);
+
   return (
     <>
+      <HintModal
+        onConfirm={() => hintModal.closeModal()}
+        {...hintModal}
+      ></HintModal>
       <Text className="text-red-500 font-exoBold xs:text-xl text-justify">
         {currentStageData?.title}
       </Text>

@@ -1,22 +1,29 @@
-let activeBuff: any = [];
+import { create } from "zustand";
 
-export const activeBuffsLocal = () => {
-  return {
-    activeBuff,
-  };
+type localBuffsPayload = {
+  activeBuff: any[];
+
+  addActiveBuff: (itemName: string) => void;
+  removeActiveBuff: (itemName: string) => void;
 };
 
-export const addActiveBuff = (itemName: string) => {
-  if (!activeBuff.includes(itemName)) {
-    activeBuff.push(itemName);
-    return;
-  }
-};
-
-export const removeActiveBuff = (itemName: string) => {
-  if (activeBuff.includes(itemName)) {
-    activeBuff = activeBuff.filter(
-      (activeItems: string) => activeItems !== itemName
-    );
-  }
-};
+export const activeBuffsLocal = create<localBuffsPayload>((set) => ({
+  activeBuff: [],
+  addActiveBuff: (itemName: string) =>
+    set((state) => {
+      if (!state.activeBuff.includes(itemName)) {
+        return { activeBuff: [...state.activeBuff, itemName] };
+      }
+      return {};
+    }),
+  removeActiveBuff: (itemName: string) =>
+    set((state) => {
+      if (state.activeBuff.includes(itemName)) {
+        const newBuffs = state.activeBuff.filter(
+          (activeItems: string) => activeItems !== itemName
+        );
+        return { activeBuff: [...newBuffs] };
+      }
+      return {};
+    }),
+}));

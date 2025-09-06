@@ -1,23 +1,23 @@
-import brainBytes from "@/assets/Hooks/mainGameModeFunctions/brainBytes";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import brainFilter from "@/assets/Hooks/mainGameModeFunctions/brainFilter";
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const StageBrainBytes = ({ currentStageData }: any) => {
-  const { compareUserAnswer, arrayChoices, brainFilter } = brainBytes(
+  const { compareUserAnswer, arrayChoices, brainFilterItem } = brainFilter(
     currentStageData?.choices
   );
   const [displayChoices, setDisplayChoices] = useState<any>(arrayChoices || []);
-  const { activeBuffs } = useGetUserInfo();
+  const activeBuff = activeBuffsLocal((state) => state.activeBuff);
 
   useEffect(() => {
     const itemUse = async () => {
-      if (!activeBuffs.includes("brainFilter")) return;
-      const filtered = await brainFilter();
+      if (!activeBuff.includes("brainFilter")) return;
+      const filtered = await brainFilterItem();
       setDisplayChoices(filtered);
     };
     itemUse();
-  }, [activeBuffs]);
+  }, [activeBuff]);
 
   return (
     <>
