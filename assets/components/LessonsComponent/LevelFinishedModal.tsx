@@ -1,8 +1,10 @@
 import { ScaleModalProps } from "@/assets/constants/type";
+import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import LottieView from "lottie-react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -14,6 +16,16 @@ const LevelFinishedModal = ({
 }: ScaleModalProps) => {
   const expAndCoins = setCoinsandExp((state) => state.coinsAndExp);
   const userHealth = userHealthPoints((state) => state.health);
+  const { coinSurgeItem } = coinSurge();
+  const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
+  const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);
+
+  useEffect(() => {
+    if (!activeBuffs.includes("doubleCoins")) return;
+    coinSurgeItem();
+
+    removeActiveBuffs("doubleCoins");
+  }, [activeBuffs]);
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>

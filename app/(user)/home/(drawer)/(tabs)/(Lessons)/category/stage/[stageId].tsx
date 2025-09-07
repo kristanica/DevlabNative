@@ -77,7 +77,7 @@ const stageScreen = () => {
           {health === 0 && (
             <GameOverModal
               onConfirm={() => {
-                router.push({
+                router.replace({
                   pathname: "/home/category/stage/[stageId]",
                   params: {
                     stageId: stageData[0].id,
@@ -113,7 +113,7 @@ const stageScreen = () => {
                   finalAnswer.closeModal();
 
                   setTimeout(() => {
-                    router.push({
+                    router.replace({
                       pathname: "/home/category/stage/[stageId]",
                       params: {
                         stageId: stageData[currentStageIndex + 1].id,
@@ -157,7 +157,7 @@ const stageScreen = () => {
             <View className="flex-row justify-evenly">
               <Pressable
                 onPress={() => {
-                  router.push({
+                  router.replace({
                     pathname: "/home/category/stage/[stageId]",
                     params: {
                       stageId:
@@ -185,7 +185,7 @@ const stageScreen = () => {
                     return;
                   }
                   if (stageData && currentStageIndex < stageData.length - 1) {
-                    router.push({
+                    router.replace({
                       pathname: "/home/category/stage/[stageId]",
                       params: {
                         stageId: stageData[currentStageIndex + 1].id,

@@ -5,11 +5,11 @@ import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModa
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import { lessonMetaData } from "@/assets/constants/constants";
 import useFetchLessonList from "@/assets/Hooks/query/useFetchLessonList";
-import useFetchLessonProgress from "@/assets/Hooks/query/useFetchLessonProgress";
 
 import useModal from "@/assets/Hooks/useModal";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import tracker from "@/assets/zustand/tracker";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -29,7 +29,8 @@ const categoryScreen = () => {
   const meta = lessonMetaData[id];
 
   const { fetchedLesson, isLoading } = useFetchLessonList(id);
-  const { lessonWithProgress } = useFetchLessonProgress(id);
+
+  const allLevels = useGetUserInfo((state) => state.allProgressLevels);
 
   let globalCounter = 0;
   return (
@@ -106,7 +107,7 @@ const categoryScreen = () => {
             renderItem={({ item }) => {
               globalCounter++;
               const key = `${item.lessonId}-${item.levelId}`;
-              const isLockedLesson = !lessonWithProgress?.allProgress?.[key];
+              const isLockedLesson = !allLevels[id]?.[key];
               return (
                 <Pressable
                   onPress={() => {

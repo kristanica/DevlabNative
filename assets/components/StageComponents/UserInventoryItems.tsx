@@ -12,7 +12,7 @@ const UserInventoryItems = ({ item }: UserInventoryItems) => {
     return;
   }
   return (
-    <View className="bg-background my-2 w-[100px] h-28 mx-2 rounded-2xl p-3">
+    <View className="bg-background my-2 w-[100px] h-32 mx-2 rounded-2xl p-3 border-[#2a3141] border-[1px]">
       <Image
         source={itemIcon[iconNameTrimmed]}
         style={{

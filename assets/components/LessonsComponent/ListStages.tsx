@@ -1,8 +1,8 @@
-import { auth } from "@/assets/constants/constants";
-import useFetchLessonProgress from "@/assets/Hooks/query/useFetchLessonProgress";
+import { auth, URL } from "@/assets/constants/constants";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React, { useRef } from "react";
@@ -27,7 +27,7 @@ const ListStages = () => {
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
       const res = await fetch(
-        `https://19bd9b5e53e7.ngrok-free.app/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
+        `${URL}/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
         {
           method: "GET",
           headers: {
@@ -57,7 +57,7 @@ const ListStages = () => {
     return null;
   }
 
-  const { lessonWithProgress } = useFetchLessonProgress(levelPayload?.category);
+  const allStages = useGetUserInfo((state) => state.allProgressStages);
 
   const lockedModal = useModal();
 
@@ -76,9 +76,9 @@ const ListStages = () => {
                 stageId.current = item.id;
 
                 if (
-                  !lessonWithProgress?.allStages?.[
+                  allStages[
                     `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                  ]
+                  ]?.status
                 ) {
                   lockedModal.setVisibility(true);
                   return;
@@ -103,9 +103,9 @@ const ListStages = () => {
             >
               <StagesContainer
                 isLocked={
-                  lessonWithProgress?.allStages[
+                  !allStages[
                     `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                  ] ?? false
+                  ]?.status
                 }
                 item={item}
                 index={globalCounter}

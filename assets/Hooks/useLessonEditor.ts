@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { auth } from "../constants/constants";
-const URL = "https://911de444c48e.ngrok-free.app";
+import { auth, URL } from "../constants/constants";
+
 const useLevelEditor = (
   category: string,
   lessonId: string,
@@ -38,7 +38,7 @@ const useLevelEditor = (
       console.log(category, lessonId);
       try {
         const res = await axios.post(
-          `https://911de444c48e.ngrok-free.app/fireBaseAdmin/addLevel`,
+          `${URL}/fireBaseAdmin/addLevel`,
           {
             category,
             lessonId,
@@ -67,7 +67,7 @@ const useLevelEditor = (
       console.log(category, lessonId);
       try {
         const res = await axios.post(
-          `https://911de444c48e.ngrok-free.app/fireBaseAdmin/addLesson`,
+          `${URL}/fireBaseAdmin/addLesson`,
           {
             category,
           },
@@ -94,7 +94,7 @@ const useLevelEditor = (
       const token = await currentUser?.getIdToken(true);
       try {
         const res = await axios.post(
-          "https://911de444c48e.ngrok-free.app/fireBaseAdmin/deleteLessons",
+          `${URL}/fireBaseAdmin/deleteLessons`,
           {
             category,
             lessonId,

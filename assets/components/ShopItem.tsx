@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { auth, itemIcon } from "../constants/constants";
+import { auth, itemIcon, URL } from "../constants/constants";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
 import { useGetUserInfo } from "../zustand/useGetUserInfo";
 
@@ -35,20 +35,17 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
       }
       const token = await currentUser?.getIdToken(true);
 
-      const res = await fetch(
-        "https://beef492a0efe.ngrok-free.app/fireBase/purchaseItem",
-        {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            itemid: id,
-            itemCost: cost,
-          }),
-        }
-      );
+      const res = await fetch(`${URL}/fireBase/purchaseItem`, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          itemid: id,
+          itemCost: cost,
+        }),
+      });
 
       if (!res.ok) {
         console.log("Cannot purchase an item" + res.status);

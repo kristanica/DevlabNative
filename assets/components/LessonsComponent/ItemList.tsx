@@ -3,6 +3,8 @@ import { auth, db, height } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   deleteDoc,
   doc,
@@ -28,7 +30,7 @@ import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
 const ItemList = ({ gameType }: any) => {
   const { inventory } = useGetUserInfo();
-  const moveToRight = useSharedValue(-50);
+  const moveToRight = useSharedValue(100);
   const opacity = useSharedValue(1);
 
   const inventoryX = useSharedValue(300);
@@ -49,15 +51,30 @@ const ItemList = ({ gameType }: any) => {
   }));
 
   useEffect(() => {
-    moveToRight.value = withSequence(
-      withTiming(-50, { duration: 1000 }),
-      withTiming(100, { duration: 1000 })
-    );
-    const unsub = setTimeout(() => {
-      setDisable(false);
-    }, 2000);
+    let timeoutClear: any;
+    const hasSeen = async () => {
+      try {
+        const hasSeenInv = await AsyncStorage.getItem("hasSeenInvAppear");
+        console.log(hasSeenInv);
+        setDisable(false);
+        if (!hasSeenInv) {
+          moveToRight.value = withSequence(
+            withTiming(-50, { duration: 1000 }),
+            withTiming(100, { duration: 1000 })
+          );
+          timeoutClear = setTimeout(() => {
+            setDisable(false);
+          }, 2000);
+          await AsyncStorage.setItem("hasSeenInvAppear", "true");
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    return () => clearTimeout(unsub);
+    hasSeen();
+    return () => clearTimeout(timeoutClear);
   }, []);
 
   const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
@@ -82,7 +99,7 @@ const ItemList = ({ gameType }: any) => {
   };
 
   const useItemActions: Record<string, (userItem: string) => void> = {
-    "Coin Surge": (itemId) => useItem(itemId, "doubleCoints"),
+    "Coin Surge": (itemId) => useItem(itemId, "doubleCoins"),
     "Code Whisper": async (itemId) => {
       if (location !== "BugBust") {
         console.log("You're not in bug bust lol");
@@ -105,6 +122,10 @@ const ItemList = ({ gameType }: any) => {
       useItem(itemId, "timeFreeze");
     },
     "Error Shield": async (itemId) => {
+      if (location === "Lesson") {
+        console.log("You cannot use items in here");
+        return;
+      }
       await useItem(itemId, "errorShield");
     },
     "Brain Filter": (itemId) => {
@@ -134,41 +155,32 @@ const ItemList = ({ gameType }: any) => {
         onPress={showInventory}
         disabled={disable}
         style={moveToRightStyle}
-        className="h-10 w-[30%] bg-slate-400 rounded-tl-2xl rounded-bl-2xl absolute bottom-[50%] right-0 z-40 items-center justify-center"
+        className="h-10 w-[30%] bg-button rounded-tl-2xl rounded-bl-2xl absolute bottom-[50%] right-0 z-40 items-center justify-center"
       >
-        <Text className="text-center">Your items are in here</Text>
+        <Text className="text-center font-exoBold text-xs text-white">
+          Your items are in here
+        </Text>
       </AnimatedPressable>
       <Animated.View
         style={[moveToLeftInventoryStyle, { top: height / 3 }]}
-        className="h-80 w-[70%] top-14 absolute right-0 bg-accent shadow-2xl z-50 p-4"
+        className="h-80 w-[70%] top-14 absolute right-0 bg-modal border-[#2a3141] border-[1px] border-r-0 shadow-2xl z-50 p-4"
         pointerEvents="auto"
       >
-        <TouchableOpacity
-          onPress={() => {
-            showInventory();
-          }}
-        >
-          <Text className="m-auto text-white font-exoBold">Close</Text>
-        </TouchableOpacity>
+        <View className="justify-center items-center flex-row mb-2">
+          <TouchableOpacity
+            onPress={() => {
+              showInventory();
+            }}
+            className="absolute left-0"
+          >
+            <Ionicons name={"close"} size={15} color={"white"}></Ionicons>
+          </TouchableOpacity>
+          <Text className="text-white font-exoBold text-lg">
+            Your Inventory
+          </Text>
+        </View>
         <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
           <View className="flex-row flex-wrap justify-center">
-            {/* {location === "Lesson" ? (
-              <Text className="text-white font-exoBold ">
-                Items cannot be used on lessons
-              </Text>
-            ) : (
-              temp?.map((item: any) => {
-                return (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => useItem(item.id, item.title!)}
-                  >
-                    <UserInventoryItems item={item} />
-                  </TouchableOpacity>
-                );
-              })
-            )} */}
-
             {inventory?.map((userInvItems: any) => {
               return (
                 <TouchableOpacity

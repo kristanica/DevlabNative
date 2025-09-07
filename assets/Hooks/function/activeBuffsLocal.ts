@@ -14,6 +14,7 @@ export const activeBuffsLocal = create<localBuffsPayload>((set) => ({
       if (!state.activeBuff.includes(itemName)) {
         return { activeBuff: [...state.activeBuff, itemName] };
       }
+      console.log("You cannot use this item again!");
       return {};
     }),
   removeActiveBuff: (itemName: string) =>

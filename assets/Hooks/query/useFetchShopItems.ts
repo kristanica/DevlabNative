@@ -1,4 +1,4 @@
-import { auth } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import { useQuery } from "@tanstack/react-query";
 
 type ItemType = {
@@ -20,16 +20,13 @@ const useFetchShopItems = () => {
       const token = await currentUser?.getIdToken(true);
 
       try {
-        const res = await fetch(
-          `https://19bd9b5e53e7.ngrok-free.app/fireBase/Shop`,
-          {
-            method: "GET",
-            headers: {
-              authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const res = await fetch(`${URL}/fireBase/Shop`, {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         if (!res.ok) {
           console.log(
             "Something went wrong when fetching shop items..." + res.status

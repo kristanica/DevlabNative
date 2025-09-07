@@ -1,4 +1,4 @@
-import { auth } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchUserData = () => {
@@ -13,16 +13,13 @@ const fetchUserData = () => {
       const uid = currentUser.uid;
 
       try {
-        const res = await fetch(
-          `https://83a4e769b3c4.ngrok-free.app/fireBase/getSpecificUser/${uid}`,
-          {
-            method: "GET",
-            headers: {
-              authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const res = await fetch(`${URL}/fireBase/getSpecificUser/${uid}`, {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         if (!res.ok) {
           console.log(res.status);
           return null;

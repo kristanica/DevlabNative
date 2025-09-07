@@ -2,12 +2,11 @@
 
 import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL = `https://8be28062e186.ngrok-free.app`;
+export const URL = `https://2ea327df4042.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
 
-//global
 export const { width, height } = Dimensions.get("screen");
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
