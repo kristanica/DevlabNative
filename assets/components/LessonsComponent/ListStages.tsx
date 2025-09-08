@@ -58,7 +58,7 @@ const ListStages = () => {
   }
 
   const allStages = useGetUserInfo((state) => state.allProgressStages);
-
+  console.log(allStages["Html"]);
   const lockedModal = useModal();
 
   return (
@@ -69,17 +69,18 @@ const ListStages = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           globalCounter++;
-
+          if (item.isHidden) {
+            return null;
+          }
           return (
             <Pressable
               onPress={() => {
                 stageId.current = item.id;
-
-                if (
+                const test =
                   allStages[
                     `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                  ]?.status
-                ) {
+                  ]?.status ?? false;
+                if (test) {
                   lockedModal.setVisibility(true);
                   return;
                 }
@@ -103,9 +104,9 @@ const ListStages = () => {
             >
               <StagesContainer
                 isLocked={
-                  !allStages[
+                  allStages[
                     `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                  ]?.status
+                  ]?.status ?? true
                 }
                 item={item}
                 index={globalCounter}

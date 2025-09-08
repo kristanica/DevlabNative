@@ -18,11 +18,14 @@ const useLevelEditor = (
       try {
         const currentUser = auth.currentUser;
         const token = await currentUser?.getIdToken(true);
-        const res = await axios.get(`${URL}/fireBaseAdmin/getAll/${category}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${URL}/fireBaseAdmin/getAllLevel/${category}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         return res.data;
       } catch (error) {

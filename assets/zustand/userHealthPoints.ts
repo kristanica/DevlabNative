@@ -6,7 +6,6 @@ type userHealthPointsProps = {
   incrementUserHealth: () => void;
   resetUserHealth: () => void;
 };
-
 export const userHealthPoints = create<userHealthPointsProps>((set) => ({
   health: 3,
   decrementUserHealth: () => set((state) => ({ health: state.health - 1 })),

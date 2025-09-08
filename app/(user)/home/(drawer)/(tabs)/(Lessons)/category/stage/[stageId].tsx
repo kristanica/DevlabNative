@@ -9,6 +9,8 @@ import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLess
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
+import useSubmitAnswer from "@/assets/Hooks/function/useSubmitAnswer";
+
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
@@ -52,6 +54,7 @@ const stageScreen = () => {
   const finalAnswer = useModal();
   const gameOver = useModal();
   const levelFinished = useModal();
+  const mutate = useSubmitAnswer();
 
   return (
     <ProtectedRoutes>
@@ -109,32 +112,23 @@ const stageScreen = () => {
                   setTimeout(() => levelFinished.setVisibility(true), 200);
                   return;
                 }
+
                 if (stageData && currentStageIndex < stageData.length - 1) {
                   finalAnswer.closeModal();
 
                   setTimeout(() => {
-                    router.replace({
-                      pathname: "/home/category/stage/[stageId]",
-                      params: {
-                        stageId: stageData[currentStageIndex + 1].id,
-                        lessonId,
-                        levelId,
-                        category,
-                      },
+                    mutate.mutate({
+                      stageId: stageData[currentStageIndex].id,
+                      resetStage: stageData[0].id,
+                      lessonId: String(lessonId),
+                      levelId: String(levelId),
+                      category: String(category),
                     });
                   }, 200);
-                  return;
                 }
-
-                // submitAnswer({
-                //   stageId: stageData[0].id,
-                //   lessonId: String(lessonId),
-                //   levelId: String(levelId),
-                //   category: String(category),
-                // });
               }}
               {...finalAnswer}
-            ></FinalAnswerModal>
+            />
           )}
           <StageModalComponent
             type={gameIdentifier.current}

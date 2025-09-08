@@ -8,14 +8,9 @@ import Animated from "react-native-reanimated";
 type StageContainerProps = {
   item: any;
   index: number;
-  isLocked?: boolean | undefined;
+  isLocked?: { status: boolean };
 };
-const StagesContainer = ({
-  item,
-  index,
-
-  isLocked,
-}: StageContainerProps) => {
+const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
@@ -27,7 +22,7 @@ const StagesContainer = ({
       style={onScale}
       className="bg-[#111827] my-2 rounded-2xl border-2 border-black h-40 p-3 mx-3 relative"
     >
-      {!isLocked && (
+      {isLocked?.status && (
         <>
           <View className="absolute inset-0 z-10 rounded-2xl bg-black opacity-60" />
           <View className="absolute inset-0 z-20 flex-1 justify-center items-center">
