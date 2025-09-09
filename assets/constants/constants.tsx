@@ -1,6 +1,10 @@
 //GENERAL CONSTANTS
 
-import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
+import {
+  FIREBASE_AUTH,
+  FIREBASE_STORAGE,
+  FIREBASE_STORE,
+} from "@/firebaseConfig";
 import { Dimensions, ImageSourcePropType } from "react-native";
 export const URL = `https://b71c2cda78b0.ngrok-free.app` as const;
 //icon for tabs
@@ -10,6 +14,7 @@ export const adminIcon = ["people-circle", "archive"] as const;
 export const { width, height } = Dimensions.get("screen");
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
+export const storage = FIREBASE_STORAGE;
 
 export const gameModes = [
   "Lesson",

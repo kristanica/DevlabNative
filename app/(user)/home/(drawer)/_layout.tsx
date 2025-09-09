@@ -1,5 +1,5 @@
 import CustomDrawer from "@/assets/components/TabBarComponents/CustomDrawer";
-import { useProfile } from "@/assets/zustand/ProfileProvider";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { Drawer } from "expo-router/drawer";
@@ -7,7 +7,8 @@ import React from "react";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
 
 const drawerLayout = () => {
-  const { profileVal } = useProfile();
+  const userData = useGetUserInfo((state) => state.userData);
+
   return (
     <Drawer
       drawerContent={(props) => <CustomDrawer {...props}></CustomDrawer>}
@@ -23,8 +24,8 @@ const drawerLayout = () => {
             >
               <Image
                 source={
-                  profileVal
-                    ? { uri: profileVal }
+                  userData?.profileImage
+                    ? { uri: userData?.profileImage }
                     : // Default val if profileVal is false
                       require("@/assets/images/profile.png")
                 } // your image

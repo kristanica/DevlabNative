@@ -10,6 +10,8 @@ type userData = {
   userLevel: number;
   suspend: boolean;
   id: string;
+  profileImage: string;
+  backgroundImage: string;
 };
 
 type allProgressType = Record<
@@ -86,6 +88,8 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
               userLevel: data.userLevel,
               suspend: data.suspend,
               id: uid,
+              profileImage: data.profileImage,
+              backgroundImage: data.backgroundImage,
             },
             loading: false,
           });

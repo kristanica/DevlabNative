@@ -33,22 +33,20 @@ export default function Home() {
             <View className="flex-[2] py-3 ">
               <ImageBackground
                 source={
-                  // backgroundVal context usage
-                  backgroundVal
-                    ? { uri: backgroundVal }
-                    : // Default val if backgroundVal is false
-                      require("@/assets/images/profile.png")
+                  userData?.backgroundImage
+                    ? { uri: userData?.backgroundImage }
+                    : require("@/assets/images/profile.png")
                 }
                 className="flex-row flex-[1]  overflow-hidden "
               >
                 {/* Renders left side user information */}
                 <View className="flex-[2]  justify-center items-center">
-                  {profileVal && (
+                  {userData?.profileImage && (
                     <Image
                       // profileVal context usage
                       source={
-                        profileVal
-                          ? { uri: profileVal }
+                        userData?.profileImage
+                          ? { uri: userData?.profileImage }
                           : // Default val if profileVal is false
                             require("@/assets/images/profile.png")
                       }

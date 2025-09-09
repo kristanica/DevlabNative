@@ -5,14 +5,13 @@ import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useModal from "@/assets/Hooks/useModal";
-import usePickImage from "@/assets/Hooks/usePickImage";
-import { useBackground } from "@/assets/zustand/BackgroundProvider";
-import { useProfile } from "@/assets/zustand/ProfileProvider";
 import React, { useState } from "react";
 
 import ConfirmationModal from "@/assets/components/SettingsComponents/ConfirmationModal";
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
+import LoadingScreen from "@/assets/components/LoadingScreen";
+import { pickImage } from "@/assets/Hooks/query/mutation/pickImage";
 import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useSignOut from "@/assets/Hooks/useSignOut";
@@ -38,13 +37,17 @@ const Settings = () => {
   });
   const [bio, setBio] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-  const { backgroundVal } = useBackground();
-  const { profileVal } = useProfile();
+
+  const { mutate: updateImage, isPending } = pickImage();
+  if (isPending) {
+    console.log("Currently uploading");
+  } else {
+    console.log("uploaded");
+  }
   const logOutModal = useModal();
   const adminModal = useModal();
   const confirmationModal = useModal();
   const { userData } = useGetUserInfo();
-  const { pickImageProfile, pickImageBackground } = usePickImage();
   const { logOut } = useSignOut();
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
@@ -54,11 +57,16 @@ const Settings = () => {
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <Animated.View className="flex-1" style={[keyBoardHandlingStyle]}>
+              {isPending && <LoadingScreen></LoadingScreen>}
               <View className="flex-[1] justify-center items-center">
-                <Pressable onPress={pickImageProfile}>
-                  {profileVal ? (
+                <Pressable
+                  onPress={() => {
+                    updateImage({ type: "profile" });
+                  }}
+                >
+                  {userData?.profileImage ? (
                     <Image
-                      source={{ uri: profileVal }}
+                      source={{ uri: userData?.profileImage }}
                       className="rounded-full xs:w-40 xs:h-40 "
                     />
                   ) : (
@@ -71,11 +79,14 @@ const Settings = () => {
               </View>
 
               <View className=" bg-shopAccent flex-[4] m-3 rounded-2xl">
-                <Pressable className="" onPress={pickImageBackground}>
-                  {backgroundVal ? (
+                <Pressable
+                  className=""
+                  onPress={() => updateImage({ type: "background" })}
+                >
+                  {userData?.backgroundImage ? (
                     <ImageBackground
                       className=" rounded-2xl overflow-hidden rounded-br-none rounded-bl-none xs:h-[100px]"
-                      source={{ uri: backgroundVal }}
+                      source={{ uri: userData?.backgroundImage }}
                     ></ImageBackground>
                   ) : (
                     <ImageBackground
