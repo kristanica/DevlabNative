@@ -1,61 +1,41 @@
-import { db, filters } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
-import { deleteField, doc, FieldValue, setDoc } from "firebase/firestore";
+import axios from "axios";
 
 const editStage = async (state: any, stageType: string) => {
   const levelPayload = tracker.getState().levelPayload;
   const stageIdentifier = tracker.getState().stageId;
 
+  if (!levelPayload || !stageIdentifier) {
+    throw new Error("Something went wrong with the payload");
+  }
+
   try {
-    if (!levelPayload || !stageIdentifier) {
-      throw new Error("Something went wrong with the payload");
-    }
-
-    try {
-      const stageRef = doc(
-        db,
-        levelPayload.category,
-        levelPayload.lessonId,
-        "Levels",
-        levelPayload.levelId,
-        "Stages",
-        stageIdentifier
-      );
-
-      let filteredState = state;
-      let filterDelete: Record<string, FieldValue> = {};
-
-      const setFilter = filters[state.type ? state.type : stageType];
-
-      //removes unecessary fields before sending
-      if (setFilter.omit) {
-        filteredState = Object.fromEntries(
-          Object.entries(state).filter(
-            ([key]) => !setFilter.omit!.includes(key)
-          )
-        );
-        //deletes unecessary fields on firebase
-        setFilter.omit.forEach((key) => {
-          filterDelete[key] = deleteField();
-        });
-      }
-
-      if (setFilter.toNumber) {
-        filteredState = setFilter.toNumber(filteredState);
-      }
-      await setDoc(
-        stageRef,
-        {
-          ...filteredState,
-          ...filterDelete,
-          //checks wheter useReducuer state.type is empty. If empty, will follow type base on firebase. This avoids empty field on type
-          type: state.type ? state.type : stageType,
+    const token = await auth.currentUser?.getIdToken(true);
+    const res = await axios.post(
+      `${URL}/fireBaseAdmin/editStage`,
+      {
+        category: levelPayload?.category,
+        lessonId: levelPayload?.lessonId,
+        levelId: levelPayload?.levelId,
+        stageId: stageIdentifier,
+        state: state,
+        stageType: stageType,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "x-source": "mobile-app",
         },
-        { merge: true }
-      );
-    } catch {}
-  } catch {
-    throw new Error("Something went wwrong...");
+      }
+    );
+    if (res.status === 200) {
+      console.log(res.data.message);
+      return res.data;
+    }
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 };
 

@@ -66,7 +66,7 @@ const Stage = () => {
                   }}
                   data={stagesData ?? []}
                   showsVerticalScrollIndicator={false}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item: any) => item.id}
                   renderItem={({ item, getIndex, drag, isActive }) => {
                     const index = getIndex();
                     if (index === undefined) {

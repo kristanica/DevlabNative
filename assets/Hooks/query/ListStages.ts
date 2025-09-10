@@ -1,6 +1,6 @@
-import { db } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import axios from "axios";
 
 type StageDataProps = {
   id: string;
@@ -12,30 +12,24 @@ type StageDataProps = {
 
 const ListStages = async () => {
   const levelPayload = tracker.getState().levelPayload;
-
+  const token = await auth.currentUser?.getIdToken(true);
   if (!levelPayload) {
     return [];
   }
   try {
-    const stagesRef = collection(
-      db,
-      levelPayload.category,
-      levelPayload.lessonId,
-      "Levels",
-      levelPayload.levelId,
-      "Stages"
+    const res = await axios.get(
+      `${URL}/fireBaseAdmin/listStage/${levelPayload.category}/${levelPayload.lessonId}/${levelPayload.levelId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    const stagesQuery = query(stagesRef, orderBy("order", "asc"));
-    const stagesDocs = await getDocs(stagesQuery);
-    const stagesData = stagesDocs.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...(doc.data() as Omit<StageDataProps, "id">),
-      };
-    });
-
-    return stagesData;
+    if (res.status === 200) {
+      return res.data;
+    }
   } catch (error) {
+    console.log(error);
     return [];
   }
 };

@@ -97,10 +97,10 @@ const useLevelEditor = (
       const token = await currentUser?.getIdToken(true);
       try {
         const res = await axios.post(
-          `${URL}/fireBaseAdmin/deleteLessons`,
+          `${URL}/fireBaseAdmin/deleteLesson`,
           {
             category,
-            lessonId,
+            lessonId: lessonIdDeletion,
           },
           {
             headers: {

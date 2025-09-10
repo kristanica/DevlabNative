@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { db } from "../constants/constants";
+import axios from "axios";
+import { auth, URL } from "../constants/constants";
 import tracker from "../zustand/tracker";
 import ListStages from "./query/ListStages";
 
@@ -25,31 +25,28 @@ const useListStage = () => {
 
   const addNewStageMutation = useMutation({
     mutationFn: async () => {
+      const token = await auth.currentUser?.getIdToken(true);
       if (!levelPayload) {
         return;
       }
-      const newStageNumber = stagesData?.map((item) => {
-        const match = item.id.match(/Stage(\d+)/);
-
-        return match ? parseInt(match[1]) : 0;
-      });
-      const nextNumber =
-        (newStageNumber!.length > 0 ? Math.max(...newStageNumber!) : 0) + 1;
-      const newStageId = `Stage${nextNumber}`;
-      const stagesRef = collection(
-        db,
-        levelPayload.category,
-        levelPayload.lessonId,
-        "Levels",
-        levelPayload.levelId,
-        "Stages"
+      const res = await axios.post(
+        `${URL}/fireBaseAdmin/addStage`,
+        {
+          category: levelPayload.category,
+          lessonId: levelPayload.lessonId,
+          levelId: levelPayload.levelId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      await setDoc(doc(stagesRef, newStageId), {
-        title: newStageId,
-        createdAt: new Date(),
-        order: nextNumber,
-      });
+      if (res.status === 200) {
+        console.log("wow sucess");
+        return res.data;
+      }
     },
     onSuccess: () =>
       queryClient.invalidateQueries({
@@ -64,22 +61,30 @@ const useListStage = () => {
 
   const updateOrderMutation = useMutation({
     mutationFn: async ({ newOrder }: { newOrder: any }) => {
+      const token = await auth.currentUser?.getIdToken(true);
       if (!levelPayload) {
         return;
       }
-      const stagesRef = collection(
-        db,
-        levelPayload.category,
-        levelPayload.lessonId,
-        "Levels",
-        levelPayload.levelId,
-        "Stages"
+
+      const res = await axios.post(
+        `${URL}/fireBaseAdmin/updateOrder`,
+        {
+          newOrderData: newOrder,
+          category: levelPayload.category,
+          lessonId: levelPayload.lessonId,
+          levelId: levelPayload.levelId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      const snapshot = newOrder.map((item: any) => {
-        setDoc(doc(stagesRef, item.id), { order: item.order }, { merge: true });
-      });
-      await Promise.all(snapshot);
+      if (res.status === 200) {
+        console.log("updated order");
+        return res.data;
+      }
     },
   });
 
