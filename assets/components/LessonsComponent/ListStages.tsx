@@ -42,10 +42,10 @@ const ListStages = () => {
       }
       const data = await res.json();
 
-      setStageData(data); // stores in firebase for [stagid] usage reducing unecesarry api calls
+      setStageData(data);
       return data;
     },
-    staleTime: 1000 * 60 * 5,
+
     enabled: !!(
       levelPayload?.category &&
       levelPayload?.lessonId &&

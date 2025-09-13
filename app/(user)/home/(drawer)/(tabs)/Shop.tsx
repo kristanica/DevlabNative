@@ -42,9 +42,10 @@ const shop = () => {
                 showsVerticalScrollIndicator={false}
                 className="flex-[5] border-[#36334B] border-2 rounded-[10px] p-3"
               >
-                {shopItems?.map((item, index) => (
-                  <ShopItem {...item} index={index} key={item.id} />
-                ))}
+                {Array.isArray(shopItems) &&
+                  shopItems!.map((item, index) => (
+                    <ShopItem {...item} index={index} key={item.id} />
+                  ))}
               </ScrollView>
             </View>
           </CustomGeneralContainer>

@@ -1,12 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  deleteDoc,
-  doc,
-  DocumentSnapshot,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
-import { db } from "../constants/constants";
+import axios from "axios";
+import { auth, URL } from "../constants/constants";
 import tracker from "../zustand/tracker";
 type levelDataType = {
   title: string;
@@ -19,62 +13,68 @@ const useLevelEditor = () => {
   const queryClient = useQueryClient();
   const { data: levelData } = useQuery({
     queryKey: [
-      "Edit Lesson",
+      "specificLevelData",
       payload?.category,
       payload?.lessonId,
       payload?.levelId,
     ],
     queryFn: async () => {
+      const token = await auth.currentUser?.getIdToken(true);
       if (!payload) {
         return null;
       }
+
       try {
-        const levelRef = doc(
-          db,
-          payload.category,
-          payload.lessonId,
-          "Levels",
-          payload.levelId
+        const res = await axios.get(
+          `${URL}/fireBaseAdmin/specificLevelData/${payload.category}/${payload.lessonId}/${payload.levelId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
-        const levelData: DocumentSnapshot = await getDoc(levelRef);
-
-        if (!levelData.data()) {
-          return null;
+        if (res.status !== 200) {
+          console.log(
+            "Something went wrong when retriveing specfic level data"
+          );
+          return;
         }
-
-        return levelData.data() as levelDataType;
+        console.log(res.data);
+        return res.data as levelDataType;
       } catch {
         return null;
       }
     },
   });
 
-  const updateLessonMutation = useMutation({
+  const updateLevelMutation = useMutation({
     mutationFn: async ({ state }: { state: any }) => {
-      if (!payload) {
-        return null;
-      }
+      const token = await auth.currentUser?.getIdToken(true);
       try {
-        const levelRef = doc(
-          db,
-          payload.category,
-          payload.lessonId,
-          "Levels",
-          payload.levelId
+        const res = await axios.post(
+          `${URL}/fireBaseAdmin/editLevel`,
+          {
+            category: payload?.category,
+            lessonId: payload?.lessonId,
+            levelId: payload?.levelId,
+            state: state,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
-        await setDoc(
-          levelRef,
-          {
-            ...state,
-            expReward: Number(state.expReward),
-            coinsReward: Number(state.coinsReward),
-          },
-          { merge: true }
-        );
-      } catch {
-        return null;
+        if (res.status !== 200) {
+          console.log("Something went wrong went updating the level");
+          return;
+        }
+
+        return res.data;
+      } catch (error) {
+        console.log(error);
       }
     },
     onSuccess: () => {
@@ -85,19 +85,31 @@ const useLevelEditor = () => {
   });
   const deleteLevelMutation = useMutation({
     mutationFn: async () => {
-      if (!payload) {
-        return null;
-      }
+      const token = await auth.currentUser?.getIdToken(true);
+
       try {
-        const levelRef = doc(
-          db,
-          payload.category,
-          payload.lessonId,
-          "Levels",
-          payload.levelId
+        const res = await axios.post(
+          `${URL}/fireBaseAdmin/deleteLevel`,
+          {
+            category: payload?.category,
+            lessonId: payload?.lessonId,
+            levelId: payload?.levelId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        await deleteDoc(levelRef);
-      } catch {}
+
+        if (res.status !== 200) {
+          console.log("Something went wrong when deleting specfic level data");
+          return;
+        }
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -105,6 +117,6 @@ const useLevelEditor = () => {
       });
     },
   });
-  return { levelData, updateLessonMutation, deleteLevelMutation };
+  return { levelData, updateLevelMutation, deleteLevelMutation };
 };
 export default useLevelEditor;

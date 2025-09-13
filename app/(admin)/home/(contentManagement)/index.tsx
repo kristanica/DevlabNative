@@ -9,6 +9,7 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import useLessonEditor from "@/assets/Hooks/useLessonEditor";
 import useModal from "@/assets/Hooks/useModal";
+import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
@@ -35,6 +36,9 @@ const ContentManagement = () => {
   const deleteLessonModal = useModal();
   const addLevelModal = useModal();
   const addLessonModal = useModal();
+  const setCancelCompression = cancelVideoCompression(
+    (state) => state.setCancelCompression
+  );
 
   let globalCounter = 0;
 
@@ -104,7 +108,7 @@ const ContentManagement = () => {
                             lessonId: item.lessonid,
                             levelId: item.id,
                           });
-
+                          setCancelCompression(true);
                           editLevelModal.setVisibility(true);
                         }}
                       >

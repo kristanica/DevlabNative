@@ -1,13 +1,53 @@
-import React from "react";
-import InputContainer from "../InputContainer";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as DocumentPicker from "expo-document-picker";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Video } from "react-native-compressor";
 
+import LoadingCompression from "../../LoadingCompression";
+import InputContainer from "../InputContainer";
 type lessonProps = {
   stageData: any;
   dispatch: any;
   state: any;
+  setVideoPresentation: any;
 };
 
-const Lesson = ({ stageData, dispatch, state }: lessonProps) => {
+const Lesson = ({
+  stageData,
+  dispatch,
+  state,
+  setVideoPresentation,
+}: lessonProps) => {
+  const [isCompressing, setIsCompressing] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
+  const pickVideo = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "video/*",
+        copyToCacheDirectory: true,
+      });
+      if (!result.canceled) {
+        setIsCompressing(true);
+        const compreesedUri = await Video.compress(
+          result.assets[0].uri,
+          {
+            compressionMethod: "auto",
+          },
+          (progress) => {
+            console.log("Compression Progress: ", progress);
+            setProgress(progress);
+          }
+        );
+
+        setVideoPresentation(compreesedUri);
+        setIsCompressing(false);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <InputContainer
@@ -64,6 +104,29 @@ const Lesson = ({ stageData, dispatch, state }: lessonProps) => {
         }}
         numeric={false}
       />
+      {isCompressing && (
+        <LoadingCompression progress={progress}></LoadingCompression>
+      )}
+      <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+        <View className="flex-row">
+          <Text className="text-white mr-2">Upload a presentation</Text>
+          {progress === 0.9984151721000671 && (
+            <Ionicons
+              name="checkbox-sharp"
+              size={20}
+              color={"green"}
+            ></Ionicons>
+          )}
+        </View>
+
+        <TouchableOpacity onPress={pickVideo}>
+          <Ionicons
+            name="cloud-upload-outline"
+            size={20}
+            color={"white"}
+          ></Ionicons>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };

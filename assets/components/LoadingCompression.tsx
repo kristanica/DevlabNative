@@ -1,7 +1,11 @@
 import LottieView from "lottie-react-native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-const LoadingScreen = () => {
+import * as Progress from "react-native-progress";
+type LoadingScreen = {
+  progress: number;
+};
+const LoadingCompression = ({ progress }: LoadingScreen) => {
   return (
     <View
       className="absolute inset-0 justify-center items-center bg-black/40 z-50"
@@ -17,11 +21,19 @@ const LoadingScreen = () => {
         <Text className="text-white font-exoBold text-xs mx-auto text-center ">
           Your new profile is being updated. Please wait.
         </Text>
+        <Progress.Circle
+          style={{ margin: "auto" }}
+          size={50}
+          progress={progress}
+          showsText={true}
+          thickness={6}
+          color="#6c37a5"
+        />
       </View>
     </View>
   );
 };
 
-export default LoadingScreen;
+export default LoadingCompression;
 
 const styles = StyleSheet.create({});

@@ -32,7 +32,6 @@ const useLevelEditor = (
         console.log(error);
       }
     },
-    staleTime: 1000 * 60 * 5,
   });
   const addLevelMutation = useMutation({
     mutationFn: async () => {

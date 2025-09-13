@@ -12,6 +12,9 @@ const editStage = async (state: any, stageType: string) => {
 
   try {
     const token = await auth.currentUser?.getIdToken(true);
+    console.log(state);
+    console.log(stageType);
+
     const res = await axios.post(
       `${URL}/fireBaseAdmin/editStage`,
       {

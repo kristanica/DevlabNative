@@ -10,12 +10,12 @@ type ItemType = {
 };
 
 const useFetchShopItems = () => {
-  const { data: shopItems } = useQuery({
+  const { data: shopItems = [] } = useQuery({
     queryKey: ["ShopItems"],
     queryFn: async () => {
       const currentUser = auth.currentUser;
       if (!currentUser) {
-        return null;
+        return [];
       }
       const token = await currentUser?.getIdToken(true);
 
@@ -31,15 +31,15 @@ const useFetchShopItems = () => {
           console.log(
             "Something went wrong when fetching shop items..." + res.status
           );
-          return null;
+          return [];
         }
 
         const data: ItemType[] = await res.json();
-
-        return data;
+        console.log(data);
+        return data ?? [];
       } catch (error) {
         console.log(error);
-        return null;
+        return [];
       }
     },
   });
