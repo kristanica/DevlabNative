@@ -6,6 +6,7 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import useListStage from "@/assets/Hooks/useListStage";
 import useModal from "@/assets/Hooks/useModal";
+import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
@@ -20,6 +21,9 @@ import {
 import DraggableFlatList from "react-native-draggable-flatlist";
 
 const Stage = () => {
+  const setCancelCompression = cancelVideoCompression(
+    (state) => state.setCancelCompression
+  );
   const stageTracker = tracker((state) => state.setStage);
   const levelPayload = tracker((state) => state.levelPayload);
 
@@ -66,7 +70,7 @@ const Stage = () => {
                   }}
                   data={stagesData ?? []}
                   showsVerticalScrollIndicator={false}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item: any) => item.id}
                   renderItem={({ item, getIndex, drag, isActive }) => {
                     const index = getIndex();
                     if (index === undefined) {
@@ -79,6 +83,7 @@ const Stage = () => {
                           onPress={() => {
                             stageTracker(item.id);
                             setVisibility(true);
+                            setCancelCompression(true);
                           }}
                           disabled={isActive}
                         >

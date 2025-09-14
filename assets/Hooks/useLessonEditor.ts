@@ -1,15 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  collection,
-  CollectionReference,
-  deleteDoc,
-  doc,
-  DocumentData,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
-import { db } from "../constants/constants";
-import fetchLessonAdmin from "./query/fetchLessonAdmin";
+import axios from "axios";
+import { auth, URL } from "../constants/constants";
 
 const useLevelEditor = (
   category: string,
@@ -23,35 +14,47 @@ const useLevelEditor = (
     refetch,
   } = useQuery({
     queryKey: ["lesson admin", category],
-    queryFn: () => fetchLessonAdmin(category),
+    queryFn: async () => {
+      try {
+        const currentUser = auth.currentUser;
+        const token = await currentUser?.getIdToken(true);
+        const res = await axios.get(
+          `${URL}/fireBaseAdmin/getAllLevel/${category}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   });
   const addLevelMutation = useMutation({
     mutationFn: async () => {
-      if (!lessonsData) {
-        return [];
-      }
+      const currentUser = auth.currentUser;
+      const token = await currentUser?.getIdToken(true);
+      console.log(category, lessonId);
       try {
-        const lessonsRef: CollectionReference<DocumentData, DocumentData> =
-          collection(db, category, lessonId, "Levels");
-
-        const snapshot = await getDocs(lessonsRef);
-
-        const newLevelNumber = snapshot?.docs.map((item) => {
-          const match = item.id.match(/Level(\d+)/);
-          return match ? parseInt(match[1]) : 0;
-        });
-
-        const nextNumber =
-          (newLevelNumber!.length > 0 ? Math.max(...newLevelNumber!) : 0) + 1;
-
-        const newLevelid = `Level${nextNumber}`;
-
-        await setDoc(doc(lessonsRef, newLevelid), {
-          Lesson: nextNumber,
-          createdAt: new Date(),
-        });
-      } catch {
-        return [];
+        const res = await axios.post(
+          `${URL}/fireBaseAdmin/addLevel`,
+          {
+            category,
+            lessonId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return res.data;
+      } catch (error) {
+        console.log(error);
       }
     },
     onSuccess: () => {
@@ -61,48 +64,53 @@ const useLevelEditor = (
   });
   const addLessonMutation = useMutation({
     mutationFn: async () => {
+      const currentUser = auth.currentUser;
+      const token = await currentUser?.getIdToken(true);
+      console.log(category, lessonId);
       try {
-        const lessonRef: CollectionReference<DocumentData, DocumentData> =
-          collection(db, category);
-        const newLessonNumber = lessonsData?.map((item) => {
-          const match = item.id.match(/Lesson(\d+)/);
-          return match ? parseInt(match[1]) : 0;
-        });
-
-        const nextNumber =
-          (newLessonNumber!.length > 0 ? Math.max(...newLessonNumber!) : 0) + 1;
-
-        const newLessonId = `Lesson${nextNumber}`;
-        await setDoc(doc(lessonRef, newLessonId), {
-          Lesson: nextNumber,
-          createdAt: new Date(),
-        });
-
-        await setDoc(doc(lessonRef, newLessonId, "Levels", "Level 1"), {
-          Lesson: 1,
-          createdAt: new Date(),
-        });
-      } catch {}
+        const res = await axios.post(
+          `${URL}/fireBaseAdmin/addLesson`,
+          {
+            category,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     onSuccess: () => {
-      // Refresh the data after adding
       queryClient.invalidateQueries({ queryKey: ["lesson admin", category] });
     },
   });
 
   const deleteLessonMutation = useMutation({
     mutationFn: async () => {
+      const currentUser = auth.currentUser;
+      const token = await currentUser?.getIdToken(true);
       try {
-        const lessonRef = doc(db, category, lessonIdDeletion);
-
-        const levelRef: CollectionReference<DocumentData, DocumentData> =
-          collection(lessonRef, "Levels");
-        const levelsSnapshot = await getDocs(levelRef);
-        for (const levelDoc of levelsSnapshot.docs) {
-          await deleteDoc(levelDoc.ref);
-        }
-        await deleteDoc(lessonRef);
-      } catch {}
+        const res = await axios.post(
+          `${URL}/fireBaseAdmin/deleteLesson`,
+          {
+            category,
+            lessonId: lessonIdDeletion,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     onSuccess: () => {
       // Refresh the data after adding

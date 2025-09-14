@@ -1,21 +1,15 @@
-import { db } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
+import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import React, { useRef } from "react";
 import { FlatList, Pressable, View } from "react-native";
-import AdminLessonContainer from "../AdminComponents/AdminLessonContainer";
+import LockLessonModal from "./LockLessonModal";
+import StagesContainer from "./StagesContainer";
 
-type StageForNavigation = {
-  id: string;
-  order: number;
-  codingInterface?: string;
-  description: string;
-  instruction: string;
-  title: string | undefined | null;
-};
 const ListStages = () => {
   const levelPayload = tracker((state) => state.levelPayload);
   const setStageData = stageStore((state) => state.setstageData);
@@ -30,40 +24,28 @@ const ListStages = () => {
       levelPayload?.levelId,
     ],
     queryFn: async () => {
-      if (!levelPayload) {
+      const currentUser = auth.currentUser;
+      const token = await currentUser?.getIdToken(true);
+      const res = await fetch(
+        `${URL}/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        console.log("Failed to fetch stages... " + res.status);
         return null;
       }
-      try {
-        const stagesRef = collection(
-          db,
-          levelPayload.category,
-          levelPayload.lessonId,
-          "Levels",
-          levelPayload.levelId,
-          "Stages"
-        );
-        const queryByOrder = query(stagesRef, orderBy("order"));
-        const stagesDocs = await getDocs(queryByOrder);
+      const data = await res.json();
 
-        const allStages = stagesDocs.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as {
-            isHidden: boolean;
-            order: number;
-            codingInterface?: string;
-            description: string;
-            instruction: string;
-            title: string | undefined | null;
-          }),
-        }));
-
-        setStageData(allStages); // ✅ store the full array
-        return allStages;
-      } catch (error) {
-        console.log(error);
-        return null;
-      }
+      setStageData(data);
+      return data;
     },
+
     enabled: !!(
       levelPayload?.category &&
       levelPayload?.lessonId &&
@@ -71,6 +53,13 @@ const ListStages = () => {
     ),
   });
   let globalCounter = 0;
+  if (!levelPayload) {
+    return null;
+  }
+
+  const allStages = useGetUserInfo((state) => state.allProgressStages);
+  console.log(allStages["Html"]);
+  const lockedModal = useModal();
 
   return (
     <View className="flex-[1]">
@@ -80,11 +69,21 @@ const ListStages = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           globalCounter++;
-
+          if (item.isHidden) {
+            return null;
+          }
           return (
             <Pressable
               onPress={() => {
                 stageId.current = item.id;
+                const test =
+                  allStages[
+                    `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
+                  ]?.status ?? false;
+                if (test) {
+                  lockedModal.setVisibility(true);
+                  return;
+                }
                 if (
                   levelPayload?.category &&
                   levelPayload?.lessonId &&
@@ -92,7 +91,7 @@ const ListStages = () => {
                   stageId
                 ) {
                   router.push({
-                    pathname: "/home/category/stage/[stageId]",
+                    pathname: "/(user)/home/stage/[stageId]",
                     params: {
                       stageId: stageId.current,
                       category: levelPayload.category,
@@ -103,16 +102,23 @@ const ListStages = () => {
                 }
               }}
             >
-              {item.isHidden ? null : (
-                <AdminLessonContainer
-                  item={item}
-                  index={globalCounter}
-                ></AdminLessonContainer>
-              )}
+              <StagesContainer
+                isLocked={
+                  allStages[
+                    `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
+                  ]?.status ?? true
+                }
+                item={item}
+                index={globalCounter}
+              ></StagesContainer>
             </Pressable>
           );
         }}
       ></FlatList>
+      <LockLessonModal
+        onConfirm={() => lockedModal.closeModal()}
+        {...lockedModal}
+      ></LockLessonModal>
     </View>
   );
 };

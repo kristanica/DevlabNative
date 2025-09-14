@@ -4,6 +4,7 @@ import useEditStage from "@/assets/Hooks/useEditStage";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
 import useStageEditor from "@/assets/Hooks/useStageEditor";
+import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import React, { useEffect, useState } from "react";
 import {
@@ -32,10 +33,23 @@ const EditStageModal = ({
   scaleStyle,
   closeModal,
 }: EditStageModalProps) => {
+  const setCancelCompression = cancelVideoCompression(
+    (state) => state.setCancelCompression
+  );
+
   const stageIdentifier = tracker((state) => state.stageId);
   const { state, dispatch } = useEditStage();
-  const { mutation, stageData, deleteMutation } = useStageEditor();
+  const {
+    editMutation,
+    stageData,
+    deleteMutation,
+    uploadVideoMutation,
+    uploadImageReplication,
+  } = useStageEditor();
   const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
+
+  const [videoPresentation, setvideoPresentation] = useState<string>();
+  const [replicateImage, setReplicateImage] = useState<string>();
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
@@ -74,7 +88,10 @@ const EditStageModal = ({
     <Modal visible={visibility} transparent={true}>
       <Pressable
         className="flex-[1] justify-center items-center bg-black/30 "
-        onPress={closeModal}
+        onPress={() => {
+          setCancelCompression(false);
+          closeModal();
+        }}
       >
         <Pressable
           className="w-[80%] h-[70%]"
@@ -133,18 +150,17 @@ const EditStageModal = ({
                 {/* Identify whether lesson, bugbust, coderush, brainbytes or codecrafter form fields */}
                 <GameComponent
                   type={state.type ? state.type : stageData?.type}
+                  setVideoPresentation={setvideoPresentation}
                   dispatch={dispatch}
                   state={state}
                   stageData={stageData}
+                  setReplicateImage={setReplicateImage}
                 ></GameComponent>
 
                 <View className="flex-row my-3">
                   <TouchableOpacity
                     className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
                     onPress={() => {
-                      // deleteMutation?.mutate();
-                      // closeModal();
-
                       setDeleteConfirmationVisibility(true);
                     }}
                   >
@@ -163,7 +179,7 @@ const EditStageModal = ({
             </View>
             {editConfimationVisibility && (
               <SaveToFirebaseConfirmation
-                onConfirm={() => {
+                onConfirm={async () => {
                   const type = state.type ? state.type : stageData?.type;
 
                   if (!type) {
@@ -180,7 +196,20 @@ const EditStageModal = ({
                     return;
                   }
 
-                  mutation?.mutate({
+                  if (videoPresentation) {
+                    uploadVideoMutation?.mutate({
+                      video: videoPresentation,
+                    });
+                    setvideoPresentation("");
+                  }
+                  if (replicateImage) {
+                    uploadImageReplication?.mutate({
+                      image: replicateImage,
+                    });
+                    setReplicateImage("");
+                  }
+
+                  editMutation?.mutate({
                     state,
                     stageType: stageData?.type,
                   });

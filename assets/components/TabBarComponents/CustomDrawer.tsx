@@ -1,6 +1,6 @@
 import useModal from "@/assets/Hooks/useModal";
 import useSignOut from "@/assets/Hooks/useSignOut";
-import { useProfile } from "@/assets/zustand/ProfileProvider";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
@@ -10,7 +10,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import SignOutModal from "../SettingsComponents/SignOutModal";
 
 const CustomDrawer = (props: DrawerContentComponentProps) => {
-  const { profileVal } = useProfile();
+  const userData = useGetUserInfo((state) => state.userData);
   const { logOut } = useSignOut();
   const logOutModal = useModal();
   return (
@@ -25,8 +25,8 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
       <View className="w-full border-b-[1px] border-white justify-center items-center  pb-5">
         <Image
           source={
-            profileVal
-              ? { uri: profileVal }
+            userData?.profileImage
+              ? { uri: userData?.profileImage }
               : // Default val if profileVal is false
                 require("@/assets/images/profile.png")
           } // your image

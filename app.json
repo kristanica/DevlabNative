@@ -20,11 +20,6 @@
       },
       "edgeToEdgeEnabled": true
     },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
     "plugins": [
       "expo-router",
       [
@@ -46,6 +41,7 @@
         "projectId": "2aceafcd-8273-4c1a-ba4c-a24bb40e9ae8"
       }
     },
-    "owner": "kristanica"
+    "owner": "kristanica",
+    "platforms": ["ios", "android"]
   }
 }

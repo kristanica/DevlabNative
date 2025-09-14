@@ -1,12 +1,15 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { auth, db, storage } from "../constants/constants";
 import { useBackground } from "../zustand/BackgroundProvider";
 import { useProfile } from "../zustand/ProfileProvider";
 
+import { doc, setDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 const usePickImage = () => {
   const { setBackground } = useBackground();
   const { setProfile } = useProfile();
-
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error("No user logged in.");
   const pickImageBackground = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -17,11 +20,22 @@ const usePickImage = () => {
       });
       if (result.canceled) {
         console.log("canceled");
+        return;
       }
 
       if (!result.canceled) {
-        const uri = result.assets[0].uri;
-        setBackground(uri);
+        const imageUri = result.assets[0].uri;
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
+        const fileRef = ref(storage, `userProfiles/${uid}/background.jpg`);
+
+        await uploadBytes(fileRef, blob);
+        const downloadURL = await getDownloadURL(fileRef);
+        await setDoc(
+          doc(db, "Users", uid),
+          { backgroundImage: downloadURL },
+          { merge: true }
+        );
       }
     } catch (error) {
       console.log(error);
@@ -42,9 +56,18 @@ const usePickImage = () => {
       }
 
       if (!result.canceled) {
-        const uri = result.assets[0].uri;
-        await AsyncStorage.setItem("profileUri", uri);
-        setProfile(uri);
+        const imageUri = result.assets[0].uri;
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
+        const fileRef = ref(storage, `userProfiles/${uid}/profileImage.jpg`);
+
+        await uploadBytes(fileRef, blob);
+        const downloadURL = await getDownloadURL(fileRef);
+        await setDoc(
+          doc(db, "Users", uid),
+          { profileImage: downloadURL },
+          { merge: true }
+        );
       }
     } catch (error) {
       console.log(error);

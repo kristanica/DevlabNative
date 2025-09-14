@@ -44,7 +44,10 @@ const StageContainer = ({ item, index, category }: StageContainerProps) => {
       </View>
 
       <View className="mt-2">
-        <Text className="text-[#94A1B2] text-sm  text-justify font-exoLight ">
+        <Text
+          className="text-[#94A1B2] text-sm  text-justify font-exoLight "
+          numberOfLines={2}
+        >
           {item.description}
         </Text>
       </View>

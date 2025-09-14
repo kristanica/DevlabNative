@@ -1,16 +1,20 @@
 //GENERAL CONSTANTS
 
-import { FIREBASE_AUTH, FIREBASE_STORE } from "@/firebaseConfig";
-import { Dimensions } from "react-native";
-
+import {
+  FIREBASE_AUTH,
+  FIREBASE_STORAGE,
+  FIREBASE_STORE,
+} from "@/firebaseConfig";
+import { Dimensions, ImageSourcePropType } from "react-native";
+export const URL = `https://dabe3ff30004.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
 
-//global
 export const { width, height } = Dimensions.get("screen");
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
+export const storage = FIREBASE_STORAGE;
 
 export const gameModes = [
   "Lesson",
@@ -485,4 +489,12 @@ export const filters: Record<
   CodeCrafter: {
     omit: ["timer", "hint", "choices"],
   },
+};
+export const itemIcon: Record<string, ImageSourcePropType> = {
+  CodePatch_Icon: require("../images/iconItems/CodePatch_Icon.png"),
+  CodeWhisper_Icon: require("../images/iconItems/CodeWhisper_Icon.png"),
+  CoinSurge_Icon: require("../images/iconItems/CoinSurge_Icon.png"),
+  BrainFilter_Icon: require("../images/iconItems/BrainFilter_Icon.png"),
+  ErrorShield_Icon: require("../images/iconItems/ErrorShield_Icon.png"),
+  TimeFreeze_Icon: require("../images/iconItems/TimeFreeze_Icon.png"),
 };

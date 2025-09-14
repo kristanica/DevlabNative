@@ -1,6 +1,5 @@
 import LottieView from "lottie-react-native";
 import React from "react";
-import { StyleSheet } from "react-native";
 
 type splashProps = {
   onEnd: () => void;
@@ -19,15 +18,3 @@ const Splash = ({ onEnd }: splashProps) => {
 };
 
 export default Splash;
-// Styles for the shadow effect
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 0,
-  },
-});

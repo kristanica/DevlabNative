@@ -9,9 +9,15 @@ type LessonContainerProps = {
   item: any;
   index: number;
   icon: "cube" | "logo-javascript" | "logo-html5" | "logo-css3";
+  isLocked: boolean | undefined;
 };
 
-const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
+const LessonContainer = ({
+  item,
+  index,
+  icon,
+  isLocked,
+}: LessonContainerProps) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
@@ -25,14 +31,14 @@ const LessonContainer = ({ item, index, icon }: LessonContainerProps) => {
       style={onScale}
       className="bg-shopAccent rounded-3xl h-28 flex-row my-2 border-black border-[2px] mx-3"
     >
-      {item.isLocked ? (
+      {isLocked && (
         <>
-          <View className="absolute w-full z-10 rounded-3xl bg-black opacity-[.6] h-full justify-center items-center"></View>
-          <View className="flex-1 justify-center items-center absolute z-20 h-full w-full">
-            <Ionicons name={"lock-closed"} color={"white"} size={40} />
+          <View className="absolute inset-0 z-10 rounded-2xl bg-black opacity-60" />
+          <View className="absolute inset-0 z-20 flex-1 justify-center items-center">
+            <Ionicons name="lock-closed" color="white" size={40} />
           </View>
         </>
-      ) : null}
+      )}
       <View className="justify-center items-center w-[20%] bg-black rounded-3xl">
         <Ionicons name={icon} color={"white"} size={40} />
       </View>

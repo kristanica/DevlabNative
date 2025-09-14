@@ -1,15 +1,38 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as ImagePicker from "expo-image-picker";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import InputContainer from "../InputContainer";
-
 type CodeCrafterProps = {
   stageData: any;
   dispatch: any;
   state: any;
+  setReplicateImage: any;
 };
-const CodeCrafter = ({ stageData, dispatch, state }: CodeCrafterProps) => {
+const CodeCrafter = ({
+  stageData,
+  dispatch,
+  state,
+  setReplicateImage,
+}: CodeCrafterProps) => {
+  const pickReplicate = async () => {
+    const result: ImagePicker.ImagePickerResult =
+      await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [16, 9],
+        quality: 1,
+      });
+
+    if (result.canceled) return;
+
+    const imageUri: string = result.assets[0].uri;
+    setReplicateImage(imageUri);
+    console.log(imageUri);
+  };
+
   return (
-    <View>
+    <>
       <InputContainer
         title={"Title"}
         placeholder={stageData?.title}
@@ -78,7 +101,18 @@ const CodeCrafter = ({ stageData, dispatch, state }: CodeCrafterProps) => {
         }}
         numeric={false}
       />
-    </View>
+      <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+        <Text className="text-white mr-2">Upload a presentation</Text>
+
+        <TouchableOpacity onPress={pickReplicate}>
+          <Ionicons
+            name="cloud-upload-outline"
+            size={20}
+            color={"white"}
+          ></Ionicons>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 

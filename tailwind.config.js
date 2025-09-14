@@ -12,6 +12,7 @@ module.exports = {
         button: "#7F5AF0",
         offwhite: "#FFFFFE",
         shopAccent: "#111827",
+        modal: "#111828",
       },
       fontFamily: {
         exoBlack: ["ExoBlack"],

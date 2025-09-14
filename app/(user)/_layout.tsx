@@ -9,11 +9,13 @@ import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 
 const TabsLayout = () => {
   const getValidUser = useGetUserInfo((state) => state.getUser);
+  const getUserProgress = useGetUserInfo((state) => state.getAllProgress);
 
   const isMounted = useMounted();
   useEffect(() => {
     if (!isMounted.current) return;
     getValidUser();
+    getUserProgress();
   }, []);
 
   return (

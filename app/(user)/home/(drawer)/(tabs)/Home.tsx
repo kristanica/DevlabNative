@@ -1,5 +1,6 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import InventoryItemContainer from "@/assets/components/HomeComponents/InventoryItemContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
@@ -22,6 +23,8 @@ export default function Home() {
   const { profileVal } = useProfile();
   const { userData } = useGetUserInfo();
 
+  const { inventory } = useGetUserInfo();
+
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -30,22 +33,20 @@ export default function Home() {
             <View className="flex-[2] py-3 ">
               <ImageBackground
                 source={
-                  // backgroundVal context usage
-                  backgroundVal
-                    ? { uri: backgroundVal }
-                    : // Default val if backgroundVal is false
-                      require("@/assets/images/profile.png")
+                  userData?.backgroundImage
+                    ? { uri: userData?.backgroundImage }
+                    : require("@/assets/images/profile.png")
                 }
                 className="flex-row flex-[1]  overflow-hidden "
               >
                 {/* Renders left side user information */}
                 <View className="flex-[2]  justify-center items-center">
-                  {profileVal && (
+                  {userData?.profileImage && (
                     <Image
                       // profileVal context usage
                       source={
-                        profileVal
-                          ? { uri: profileVal }
+                        userData?.profileImage
+                          ? { uri: userData?.profileImage }
                           : // Default val if profileVal is false
                             require("@/assets/images/profile.png")
                       }
@@ -69,10 +70,10 @@ export default function Home() {
                     {"Level"} {userData?.userLevel}
                   </Text>
                   {/* EXP bar */}
-                  <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2 drop-shadow-xs ">
+                  <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2">
                     <View className="w-[80%] bg-[#32FF99] h-4 rounded-xl "></View>
                   </View>
-                  <Text className="text-white text-shadow-lg/30 font-exoRegula xs:text-xs">
+                  <Text className="text-whitefont-exoRegula xs:text-xs">
                     {userData?.exp} {"EXP"}
                   </Text>
                 </View>
@@ -125,6 +126,17 @@ export default function Home() {
                     icon={item.icon as keyof typeof Ionicons.glyphMap}
                     index={index}
                   />
+                ))}
+              </View>
+              <Text className="text-white ml-2 xs:text-lg  font-exoBold">
+                YOUR INVENTORY
+              </Text>
+              <View className="flex-row flex-wrap justify-center">
+                {inventory.map((item) => (
+                  <InventoryItemContainer
+                    key={item.id}
+                    item={item}
+                  ></InventoryItemContainer>
                 ))}
               </View>
             </ScrollView>

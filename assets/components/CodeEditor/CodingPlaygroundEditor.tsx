@@ -1,24 +1,28 @@
 import LottieView from "lottie-react-native";
 import type { RefObject } from "react";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
-
-type CodingPlaygroundEditorProps = {
-  webRef: RefObject<WebView | null>;
-};
-
 type CodeEditorPayload = {
   html?: string;
   css?: string;
   js?: string;
 };
-const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
-  const [recievedCode, setRecievedCode] = useState<
-    CodeEditorPayload | undefined
-  >(undefined);
+type CodingPlaygroundEditorProps = {
+  webRef: RefObject<WebView | null>;
+  recievedCode: CodeEditorPayload | undefined;
+  setRecievedCode: React.Dispatch<
+    React.SetStateAction<CodeEditorPayload | undefined>
+  >;
+};
 
+const CodingPlaygroundEditor = ({
+  webRef,
+  recievedCode,
+  setRecievedCode,
+}: CodingPlaygroundEditorProps) => {
   return (
+    // Renders user's code
     <View className="bg-accent flex-[1] rounded-[10px]">
       <View className="flex-1 bg-[#D9D9D9] m-2 rounded-xl">
         {recievedCode ? (
@@ -62,6 +66,7 @@ const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
           </View>
         )}
       </View>
+      {/* Runs evaluation */}
 
       <View className="flex-[2]">
         <WebView

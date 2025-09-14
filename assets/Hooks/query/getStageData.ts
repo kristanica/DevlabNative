@@ -1,32 +1,29 @@
-import { db } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
-import { doc, getDoc } from "firebase/firestore";
+import axios from "axios";
 
 const getStageData = async () => {
   const levelPayload = tracker.getState().levelPayload;
   const stageIdentifier = tracker.getState().stageId;
+  const token = await auth.currentUser?.getIdToken(true);
   if (!levelPayload || !stageIdentifier) {
     throw new Error("Something went wrong with the payload");
   }
-
   try {
-    const stageRef = doc(
-      db,
-      levelPayload.category,
-      levelPayload.lessonId,
-      "Levels",
-      levelPayload.levelId,
-      "Stages",
-      stageIdentifier
+    const res = await axios.get(
+      `${URL}/fireBaseAdmin/getStage/${levelPayload.category}/${levelPayload?.lessonId}/${levelPayload.levelId}/${stageIdentifier}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-
-    const stageData = await getDoc(stageRef);
-    if (!stageData.exists()) {
-      throw new Error("Data does not exist");
+    if (res.status === 200) {
+      return res.data;
     }
-
-    return stageData.data();
-  } catch {}
+  } catch {
+    return {};
+  }
 };
 
 export default getStageData;

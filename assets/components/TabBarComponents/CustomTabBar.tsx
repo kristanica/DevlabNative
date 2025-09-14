@@ -2,7 +2,6 @@ import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsBut
 import { width } from "@/assets/constants/constants";
 import useModal from "@/assets/Hooks/useModal";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { useState } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, TouchableOpacity } from "react-native";
@@ -19,8 +18,8 @@ export default function CustomTabBar({
   navigation,
   tabIcon,
 }: Props) {
-  const [lessonTab, setLessonTab] = useState<boolean>(false);
   const lessonModal = useModal();
+
   return (
     <Animated.View
       entering={FadeIn.duration(500)}

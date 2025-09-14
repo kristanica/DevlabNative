@@ -4,6 +4,7 @@ import useEditLesson from "@/assets/Hooks/useEditLesson";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useLevelEditor from "@/assets/Hooks/useLevelEditor";
 import useModal from "@/assets/Hooks/useModal";
+import tracker from "@/assets/zustand/tracker";
 import React from "react";
 import {
   Modal,
@@ -23,13 +24,14 @@ const EditLessonModal = ({
   closeModal,
 }: ScaleModalProps) => {
   const { state, dispatch } = useEditLesson();
-  const { levelData, updateLessonMutation, deleteLevelMutation } =
+  const { levelData, updateLevelMutation, deleteLevelMutation } =
     useLevelEditor();
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const confirmationModal = useModal();
-
+  const payload = tracker((state) => state.levelPayload);
+  console.log(payload);
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
@@ -128,7 +130,7 @@ const EditLessonModal = ({
                     console.log("ONe of the fields is empty");
                     return;
                   }
-                  updateLessonMutation.mutate({ state });
+                  updateLevelMutation.mutate({ state });
                   confirmationModal.closeModal();
                 }}
                 visibility={confirmationModal.visibility}

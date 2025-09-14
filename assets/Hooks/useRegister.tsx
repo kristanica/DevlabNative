@@ -39,21 +39,87 @@ const useRegister = () => {
       await createUserWithEmailAndPassword(auth, state.email, state.password);
       const user = auth.currentUser;
       if (user) {
+        // Save main profile data
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,
           username: state.username,
           age: Number(state.age),
           exp: 0,
-          level: 1,
-          suspend: false,
+          userLevel: 1,
           coins: 0,
           bio: "",
+          isAdmin: false,
           lastOpenedLevel: {
-            lessonId: "Html", // Firestore collection
-            lessonDocId: "Lesson1", // Firestore document inside collection
-            levelId: "Level1", // Firestore document inside Levels subcollection
+            subject: "Html",
+            lessonId: "Lesson1",
+            levelId: "Level1",
           },
         });
+        // Optional: Add empty Inventory doc
+        await setDoc(
+          doc(db, "Users", user.uid, "Inventory", "placeholder"),
+          {}
+        );
+        // Initialize Level1 unlocked for each subject, including Stage1
+        const subjects = ["Html", "Css", "JavaScript", "Database"];
+
+        for (const subject of subjects) {
+          // Create Level1 document
+          await setDoc(doc(db, "Users", user.uid, "Progress", subject), {
+            status: true,
+          });
+          await setDoc(
+            doc(
+              db,
+              "Users",
+              user.uid,
+              "Progress",
+              subject,
+              "Lessons",
+              "Lesson1"
+            ),
+            {
+              status: true,
+            }
+          );
+          await setDoc(
+            doc(
+              db,
+              "Users",
+              user.uid,
+              "Progress",
+              subject,
+              "Lessons",
+              "Lesson1",
+              "Levels",
+              "Level1"
+            ),
+            {
+              status: true,
+              rewardClaimed: false,
+            }
+          );
+
+          // Create Stage1 document inside Stages subcollection of Level1
+          await setDoc(
+            doc(
+              db,
+              "Users",
+              user.uid,
+              "Progress",
+              subject,
+              "Lessons",
+              "Lesson1",
+              "Levels",
+              "Level1",
+              "Stages",
+              "Stage1"
+            ),
+            {
+              status: true,
+            }
+          );
+        }
       }
     } catch (error) {
       console.log(error);
