@@ -39,11 +39,7 @@ const Settings = () => {
   const [userName, setUserName] = useState<string>("");
 
   const { mutate: updateImage, isPending } = pickImage();
-  if (isPending) {
-    console.log("Currently uploading");
-  } else {
-    console.log("uploaded");
-  }
+
   const logOutModal = useModal();
   const adminModal = useModal();
   const confirmationModal = useModal();

@@ -1,64 +1,26 @@
-import { auth, URL } from "@/assets/constants/constants";
-import useModal from "@/assets/Hooks/useModal";
-import { useMutation } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import type { RefObject } from "react";
-import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
-import EvaluateModal from "./EvaluateModal";
-
-type CodingPlaygroundEditorProps = {
-  webRef: RefObject<WebView | null>;
-};
-
 type CodeEditorPayload = {
   html?: string;
   css?: string;
   js?: string;
 };
-const CodingPlaygroundEditor = ({ webRef }: CodingPlaygroundEditorProps) => {
-  const [recievedCode, setRecievedCode] = useState<
-    CodeEditorPayload | undefined
-  >(undefined);
+type CodingPlaygroundEditorProps = {
+  webRef: RefObject<WebView | null>;
+  recievedCode: CodeEditorPayload | undefined;
+  setRecievedCode: React.Dispatch<
+    React.SetStateAction<CodeEditorPayload | undefined>
+  >;
+};
 
-  const { mutate: Evaluate, data: gptResponse } = useMutation({
-    mutationFn: async () => {
-      if (!recievedCode) return null;
-      const currentUser = auth.currentUser;
-
-      const token = await currentUser?.getIdToken(true);
-      const res = await fetch(`${URL}/OpenAI/evaluate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-
-        body: JSON.stringify({
-          prompt: `
-HTML:
-${recievedCode.html || ""}
-
-CSS:
-${recievedCode.css || ""}
-
-JS:
-${recievedCode.js || ""}
-`,
-        }),
-      });
-
-      if (!res.ok) {
-        console.log("Failed to evaluate code");
-      }
-      const data = await res.json();
-
-      return data.response;
-    },
-  });
-
-  const evaluateModal = useModal();
+const CodingPlaygroundEditor = ({
+  webRef,
+  recievedCode,
+  setRecievedCode,
+}: CodingPlaygroundEditorProps) => {
   return (
     // Renders user's code
     <View className="bg-accent flex-[1] rounded-[10px]">
@@ -105,25 +67,7 @@ ${recievedCode.js || ""}
         )}
       </View>
       {/* Runs evaluation */}
-      <Pressable
-        onPress={() => {
-          Evaluate();
-          setTimeout(() => {
-            evaluateModal.setVisibility(true);
-          }, 2000);
-        }}
-      >
-        <Text className="font-exoBold self-start mx-auto  my-2 text-white text-xs bg-button px-7 py-2 rounded-2xl">
-          Evaluate
-        </Text>
-      </Pressable>
-      {evaluateModal.visibility && (
-        <EvaluateModal
-          onConfirm={() => evaluateModal.closeModal}
-          gptResponse={gptResponse}
-          {...evaluateModal}
-        ></EvaluateModal>
-      )}
+
       <View className="flex-[2]">
         <WebView
           scrollEnabled={false}

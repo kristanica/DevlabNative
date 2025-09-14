@@ -7,6 +7,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
   currentStageData: any;
 };
+
 const StageLesson = ({ currentStageData }: StageLessonprops) => {
   const location = WhereIsUser((state) => state.location);
   console.log(location);
@@ -19,6 +20,16 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
       <Text className="text-white font-exoRegular xs:text-xs my-3 text-justify">
         {currentStageData?.description}
       </Text>
+
+      {currentStageData?.videoPresentation && (
+        <Video
+          ref={videoRef}
+          source={{ uri: currentStageData.videoPresentation }}
+          style={styles.video}
+          useNativeControls
+          isLooping
+        />
+      )}
       <View className="bg-accentContainer p-3 rounded-3xl my-3">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
@@ -37,22 +48,17 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
           </TouchableOpacity>
         </View>
       </View>
-
-      {currentStageData?.videoPresentation && (
-        <Video
-          ref={videoRef}
-          source={{ uri: currentStageData.videoPresentation }}
-          style={styles.video}
-          useNativeControls
-          isLooping
-        />
-      )}
     </>
   );
 };
 
 export default React.memo(StageLesson);
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+  },
   video: { width: "100%", height: 200 },
 });

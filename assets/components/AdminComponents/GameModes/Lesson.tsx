@@ -29,6 +29,7 @@ const Lesson = ({
       });
       if (!result.canceled) {
         setIsCompressing(true);
+
         const compreesedUri = await Video.compress(
           result.assets[0].uri,
           {

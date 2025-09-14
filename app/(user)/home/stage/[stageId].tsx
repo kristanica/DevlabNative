@@ -1,4 +1,5 @@
 import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
+import EvaluateModal from "@/assets/components/CodeEditor/EvaluateModal";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
@@ -10,6 +11,7 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import useSubmitAnswer from "@/assets/Hooks/function/useSubmitAnswer";
+import useEvaluation from "@/assets/Hooks/query/mutation/useEvaluation";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
@@ -17,8 +19,9 @@ import stageStore from "@/assets/zustand/stageStore";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+
 const stageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
@@ -32,6 +35,8 @@ const stageScreen = () => {
 
   //gets the current index of the stageData
   const setLocation = WhereIsUser((state) => state.setLocation);
+
+  const { evaluationMutation } = useEvaluation();
 
   useEffect(() => {
     if (!stageData) return;
@@ -48,14 +53,120 @@ const stageScreen = () => {
     }
   }, [stageId, stageData]);
 
-  const { webRef, sendToWebView } = useCodeEditor();
+  const { webRef, sendToWebView, recievedCode, setRecievedCode } =
+    useCodeEditor();
   const health = userHealthPoints((state) => state.health);
   const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
   const finalAnswer = useModal();
   const gameOver = useModal();
   const levelFinished = useModal();
-  const mutate = useSubmitAnswer();
+  const evaluateModal = useModal();
 
+  const mutate = useSubmitAnswer();
+  console.log("Rerender!");
+  const handleFinalAnswer = useCallback(() => {
+    if (!recievedCode) {
+      setTimeout(() => {
+        mutate.mutate({
+          stageId: stageData[currentStageIndex].id,
+          resetStage: stageData[0].id,
+          lessonId: String(lessonId),
+          levelId: String(levelId),
+          category: String(category),
+          answer: false,
+        });
+      }, 200);
+      finalAnswer.setVisibility(false);
+      return;
+    }
+
+    evaluationMutation.mutate(
+      {
+        recievedCode: recievedCode,
+        instruction: currentStageData.instruction,
+        description: currentStageData.description,
+      },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          if (stageData.length - 1 === currentStageIndex) {
+            finalAnswer.closeModal();
+            setTimeout(() => levelFinished.setVisibility(true), 200);
+            return;
+          }
+
+          if (stageData && currentStageIndex < stageData.length - 1) {
+            finalAnswer.closeModal();
+
+            mutate.mutate({
+              stageId: stageData[currentStageIndex].id,
+              resetStage: stageData[0].id,
+              lessonId: String(lessonId),
+              levelId: String(levelId),
+              category: String(category),
+              answer: data.correct,
+            });
+          }
+        },
+      }
+    );
+  }, [
+    recievedCode,
+    stageData,
+    currentStageIndex,
+    lessonId,
+    levelId,
+    category,
+    finalAnswer,
+    levelFinished,
+    mutate,
+    evaluationMutation,
+  ]);
+
+  const handleGameOver = useCallback(() => {
+    router.replace({
+      pathname: "/(user)/home/stage/[stageId]",
+      params: {
+        stageId: stageData[0].id,
+        lessonId,
+        levelId,
+        category,
+      },
+    });
+    resetHealthPoints();
+    gameOver.closeModal();
+  }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
+
+  const handlePrevious = useCallback(() => {
+    router.replace({
+      pathname: "/(user)/home/stage/[stageId]",
+      params: {
+        stageId:
+          stageData![currentStageIndex === 0 ? 0 : currentStageIndex - 1].id,
+        lessonId,
+        levelId,
+        category,
+      },
+    });
+  }, [stageData, currentStageIndex, lessonId, levelId, category]);
+
+  const handleNext = useCallback(() => {
+    if (gameIdentifier.current !== "Lesson") {
+      finalAnswer.setVisibility(true);
+      return;
+    }
+    if (stageData && currentStageIndex < stageData.length - 1) {
+      router.replace({
+        pathname: "/(user)/home/stage/[stageId]",
+        params: {
+          stageId: stageData[currentStageIndex + 1].id,
+          lessonId,
+          levelId,
+          category,
+        },
+      });
+    }
+  }, [stageData, currentStageIndex, lessonId, levelId, category, finalAnswer]);
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -77,20 +188,10 @@ const stageScreen = () => {
             />
           </View>
 
-          {health === 0 && (
+          {health === 0 && gameOver.visibility && (
             <GameOverModal
               onConfirm={() => {
-                router.replace({
-                  pathname: "/home/category/stage/[stageId]",
-                  params: {
-                    stageId: stageData[0].id,
-                    lessonId,
-                    levelId,
-                    category,
-                  },
-                });
-                resetHealthPoints();
-                gameOver.closeModal();
+                handleGameOver();
               }}
               {...gameOver}
             ></GameOverModal>
@@ -103,29 +204,19 @@ const stageScreen = () => {
             ></LevelFinishedModal>
           )}
 
+          {evaluateModal.visibility && (
+            <EvaluateModal
+              onConfirm={() => evaluateModal.closeModal()}
+              gptResponse={evaluationMutation.data.feedback}
+              {...evaluateModal}
+            ></EvaluateModal>
+          )}
+
           {/* Shows answer confirmation before navigating to the next one */}
           {finalAnswer.visibility && (
             <FinalAnswerModal
               onConfirm={() => {
-                if (stageData.length - 1 === currentStageIndex) {
-                  finalAnswer.closeModal();
-                  setTimeout(() => levelFinished.setVisibility(true), 200);
-                  return;
-                }
-
-                if (stageData && currentStageIndex < stageData.length - 1) {
-                  finalAnswer.closeModal();
-
-                  setTimeout(() => {
-                    mutate.mutate({
-                      stageId: stageData[currentStageIndex].id,
-                      resetStage: stageData[0].id,
-                      lessonId: String(lessonId),
-                      levelId: String(levelId),
-                      category: String(category),
-                    });
-                  }, 200);
-                }
+                handleFinalAnswer();
               }}
               {...finalAnswer}
             />
@@ -135,8 +226,12 @@ const stageScreen = () => {
           ></StageModalComponent>
           {/* Shows modal for first time */}
 
-          <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor>
-          <View className="h-[10ox] w-[20px] bg-slate-400"></View>
+          <CodingPlaygroundEditor
+            webRef={webRef}
+            recievedCode={recievedCode}
+            setRecievedCode={setRecievedCode}
+          ></CodingPlaygroundEditor>
+          <View className="h-[10px] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>
             {currentStageData?.type !== "Lesson" && (
@@ -151,18 +246,7 @@ const stageScreen = () => {
             <View className="flex-row justify-evenly">
               <Pressable
                 onPress={() => {
-                  router.replace({
-                    pathname: "/home/category/stage/[stageId]",
-                    params: {
-                      stageId:
-                        stageData![
-                          currentStageIndex === 0 ? 0 : currentStageIndex - 1
-                        ].id,
-                      lessonId,
-                      levelId,
-                      category,
-                    },
-                  });
+                  handlePrevious();
                 }}
               >
                 {/* Alam ko mali, pero tinatamad na ako ayusin */}
@@ -174,21 +258,7 @@ const stageScreen = () => {
               </Pressable>
               <Pressable
                 onPress={() => {
-                  if (gameIdentifier.current !== "Lesson") {
-                    finalAnswer.setVisibility(true);
-                    return;
-                  }
-                  if (stageData && currentStageIndex < stageData.length - 1) {
-                    router.replace({
-                      pathname: "/home/category/stage/[stageId]",
-                      params: {
-                        stageId: stageData[currentStageIndex + 1].id,
-                        lessonId,
-                        levelId,
-                        category,
-                      },
-                    });
-                  }
+                  handleNext();
                 }}
               >
                 <Text className="px-7 py-2 bg-[#2ECC71] self-start rounded-3xl font-exoRegular">
@@ -196,7 +266,6 @@ const stageScreen = () => {
                 </Text>
               </Pressable>
             </View>
-            {/* </ScrollView> */}
           </SwipeLessonContainer>
         </CustomGeneralContainer>
       </View>

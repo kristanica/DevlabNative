@@ -119,6 +119,9 @@ const useStageEditor = () => {
           }
         );
 
+        if (res.status === 200) {
+          console.log(res.data.message);
+        }
         return;
       } catch (error) {
         console.log(error);

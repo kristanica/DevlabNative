@@ -2,8 +2,9 @@ import { ScaleModalProps } from "@/assets/constants/type";
 import { Modal, Pressable, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 type EvaluateMoalProps = ScaleModalProps & {
-  gptResponse: string;
+  gptResponse: any;
 };
+
 const EvaluateModal = (props: EvaluateMoalProps) => {
   return (
     <Modal visible={props.visibility} animationType="none" transparent={true}>

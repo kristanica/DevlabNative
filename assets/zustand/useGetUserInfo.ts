@@ -46,7 +46,6 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   completedStages: 0,
   getAllProgress: async () => {
     const uid = await auth.currentUser?.getIdToken(true);
-    console.log(uid);
 
     try {
       const res = await axios.get(`${URL}/fireBase/userProgress`, {

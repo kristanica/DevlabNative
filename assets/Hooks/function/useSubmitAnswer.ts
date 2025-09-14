@@ -11,6 +11,7 @@ type submitAnswerPayload = {
   levelId: string;
   category: string;
   resetStage: string;
+  answer: boolean;
 };
 
 const useSubmitAnswer = () => {
@@ -26,10 +27,11 @@ const useSubmitAnswer = () => {
       levelId,
       category,
       resetStage,
+      answer,
     }: submitAnswerPayload) => {
-      const answer: boolean = true;
       const userHealth = userHealthPoints.getState().health;
       const token = await auth.currentUser?.getIdToken(true);
+      console.log(answer);
       if (hasShield && !answer) {
         const isShieldUsed = await consumeErrorShield();
         if (isShieldUsed) {
@@ -58,7 +60,7 @@ const useSubmitAnswer = () => {
           if (data.nextStageId && data.nextStageType) {
             console.log(data.message);
             router.push({
-              pathname: "/home/category/stage/[stageId]",
+              pathname: "/(user)/home/stage/[stageId]",
               params: {
                 stageId: data.nextStageId,
                 lessonId,
@@ -80,7 +82,7 @@ const useSubmitAnswer = () => {
       if (userHealth <= 1) {
         resetUserHealth();
         router.push({
-          pathname: "/home/category/stage/[stageId]",
+          pathname: "/(user)/home/stage/[stageId]",
           params: {
             stageId: resetStage,
             lessonId,
