@@ -18,26 +18,23 @@ import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-
+import Toast from "react-native-toast-message";
 const stageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
   const [currentStageIndex, setcurrentStageIndex] = useState<number>(0);
-  const [currentStageData, setCurrentStageData] = useState<any>();
 
   //gets the stageData from zustand to reduce API calls
   const stageData = stageStore((state) => state.stageData);
-
+  const currentStageData = stageData?.[currentStageIndex] ?? null;
   const gameIdentifier = useRef<string | undefined>("Lesson");
 
   //gets the current index of the stageData
   const setLocation = WhereIsUser((state) => state.setLocation);
-
-  const { evaluationMutation } = useEvaluation();
-
   useEffect(() => {
     if (!stageData) return;
     const index: number = stageData.findIndex(
@@ -45,7 +42,7 @@ const stageScreen = () => {
     );
     setcurrentStageIndex(index);
     const stage = index !== -1 ? stageData[index] : null;
-    setCurrentStageData(stage);
+
     setLocation(stage?.type! as string);
     if (stage?.type !== "Lesson") {
       gameIdentifier.current = stage?.type;
@@ -53,8 +50,11 @@ const stageScreen = () => {
     }
   }, [stageId, stageData]);
 
+  const { evaluationMutation } = useEvaluation();
+
   const { webRef, sendToWebView, recievedCode, setRecievedCode } =
     useCodeEditor();
+
   const health = userHealthPoints((state) => state.health);
   const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
   const finalAnswer = useModal();
@@ -62,12 +62,14 @@ const stageScreen = () => {
   const levelFinished = useModal();
   const evaluateModal = useModal();
 
-  const mutate = useSubmitAnswer();
-  console.log("Rerender!");
-  const handleFinalAnswer = useCallback(() => {
+  const { nextStage } = useSubmitAnswer();
+
+  //Handlers
+  const handleFinalAnswer = () => {
     if (!recievedCode) {
       setTimeout(() => {
-        mutate.mutate({
+        nextStage.mutate({
+          setcurrentStageIndex: setcurrentStageIndex,
           stageId: stageData[currentStageIndex].id,
           resetStage: stageData[0].id,
           lessonId: String(lessonId),
@@ -76,7 +78,9 @@ const stageScreen = () => {
           answer: false,
         });
       }, 200);
+      showToast("error");
       finalAnswer.setVisibility(false);
+
       return;
     }
 
@@ -88,6 +92,7 @@ const stageScreen = () => {
       },
       {
         onSuccess: (data) => {
+          showToast("success");
           console.log(data);
           if (stageData.length - 1 === currentStageIndex) {
             finalAnswer.closeModal();
@@ -97,76 +102,53 @@ const stageScreen = () => {
 
           if (stageData && currentStageIndex < stageData.length - 1) {
             finalAnswer.closeModal();
-
-            mutate.mutate({
+            const toastResult = data.correct ? "success" : "error";
+            showToast(toastResult);
+            nextStage.mutate({
               stageId: stageData[currentStageIndex].id,
               resetStage: stageData[0].id,
               lessonId: String(lessonId),
               levelId: String(levelId),
               category: String(category),
               answer: data.correct,
+              setcurrentStageIndex,
             });
           }
         },
       }
     );
-  }, [
-    recievedCode,
-    stageData,
-    currentStageIndex,
-    lessonId,
-    levelId,
-    category,
-    finalAnswer,
-    levelFinished,
-    mutate,
-    evaluationMutation,
-  ]);
-
-  const handleGameOver = useCallback(() => {
-    router.replace({
-      pathname: "/(user)/home/stage/[stageId]",
-      params: {
-        stageId: stageData[0].id,
-        lessonId,
-        levelId,
-        category,
-      },
-    });
-    resetHealthPoints();
-    gameOver.closeModal();
-  }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
-
+  };
   const handlePrevious = useCallback(() => {
-    router.replace({
-      pathname: "/(user)/home/stage/[stageId]",
-      params: {
-        stageId:
-          stageData![currentStageIndex === 0 ? 0 : currentStageIndex - 1].id,
-        lessonId,
-        levelId,
-        category,
-      },
-    });
+    setcurrentStageIndex((prev) => prev - 1);
   }, [stageData, currentStageIndex, lessonId, levelId, category]);
 
   const handleNext = useCallback(() => {
+    gameIdentifier.current = currentStageData?.type;
     if (gameIdentifier.current !== "Lesson") {
       finalAnswer.setVisibility(true);
       return;
     }
     if (stageData && currentStageIndex < stageData.length - 1) {
-      router.replace({
-        pathname: "/(user)/home/stage/[stageId]",
-        params: {
-          stageId: stageData[currentStageIndex + 1].id,
-          lessonId,
-          levelId,
-          category,
-        },
-      });
+      setcurrentStageIndex((prev) => prev + 1);
     }
   }, [stageData, currentStageIndex, lessonId, levelId, category, finalAnswer]);
+
+  const handleGameOver = useCallback(() => {
+    setcurrentStageIndex(0);
+
+    gameOver.closeModal();
+  }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
+
+  const showToast = (type: string) => {
+    Toast.show({
+      type: type,
+
+      visibilityTime: 2000,
+      position: "top",
+      topOffset: 20,
+    });
+  };
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -187,7 +169,24 @@ const stageScreen = () => {
               sendToWebView={sendToWebView}
             />
           </View>
-
+          <Toast
+            config={{
+              success: () => (
+                <View className="h-[50px]  w-52 mx-2 z-50 bg-[#1ABC9C] border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
+                  <Text className="text-white xs: text-xs font-exoExtraBold">
+                    🎉 You got that right!
+                  </Text>
+                </View>
+              ),
+              error: () => (
+                <View className="h-[50px]  w-52 mx-2 z-50  bg-[#E63946] border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute">
+                  <Text className="text-white xs: text-xs font-exoExtraBold">
+                    ⚠️ Oops! somethings wrong!
+                  </Text>
+                </View>
+              ),
+            }}
+          />
           {health === 0 && gameOver.visibility && (
             <GameOverModal
               onConfirm={() => {
@@ -234,9 +233,18 @@ const stageScreen = () => {
           <View className="h-[10px] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>
-            {currentStageData?.type !== "Lesson" && (
-              <Text className="text-white">HEALTH: {health}</Text>
-            )}
+            <View className="flex-row">
+              {currentStageData?.type !== "Lesson" &&
+                Array.from({ length: health }).map((_, index) => (
+                  <Ionicons
+                    name="heart"
+                    size={20}
+                    color={"red"}
+                    key={index}
+                  ></Ionicons>
+                ))}
+            </View>
+
             <StageGameComponent
               currentStageData={currentStageData}
               type={currentStageData?.type}
@@ -256,11 +264,7 @@ const stageScreen = () => {
                   </Text>
                 )}
               </Pressable>
-              <Pressable
-                onPress={() => {
-                  handleNext();
-                }}
-              >
+              <Pressable onPress={() => handleNext()}>
                 <Text className="px-7 py-2 bg-[#2ECC71] self-start rounded-3xl font-exoRegular">
                   Next
                 </Text>

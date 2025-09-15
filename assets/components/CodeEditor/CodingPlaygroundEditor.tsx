@@ -23,7 +23,7 @@ const CodingPlaygroundEditor = ({
 }: CodingPlaygroundEditorProps) => {
   return (
     // Renders user's code
-    <View className="bg-accent flex-[1] rounded-[10px]">
+    <View className="bg-accent flex-[1] rounded-[10px] z-0">
       <View className="flex-1 bg-[#D9D9D9] m-2 rounded-xl">
         {recievedCode ? (
           <WebView

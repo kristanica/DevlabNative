@@ -2,7 +2,6 @@ import { auth, URL } from "@/assets/constants/constants";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { router } from "expo-router";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
 
 type submitAnswerPayload = {
@@ -12,6 +11,7 @@ type submitAnswerPayload = {
   category: string;
   resetStage: string;
   answer: boolean;
+  setcurrentStageIndex: any;
 };
 
 const useSubmitAnswer = () => {
@@ -19,18 +19,19 @@ const useSubmitAnswer = () => {
   const decrementUserHealth = userHealthPoints.getState().decrementUserHealth;
 
   const resetUserHealth = userHealthPoints.getState().resetUserHealth;
-
+  let toastResult: string = "success";
   const nextStage = useMutation({
     mutationFn: async ({
       stageId,
       lessonId,
       levelId,
       category,
-      resetStage,
       answer,
+      setcurrentStageIndex,
     }: submitAnswerPayload) => {
       const userHealth = userHealthPoints.getState().health;
       const token = await auth.currentUser?.getIdToken(true);
+
       console.log(answer);
       if (hasShield && !answer) {
         const isShieldUsed = await consumeErrorShield();
@@ -56,18 +57,10 @@ const useSubmitAnswer = () => {
           );
 
           const data = res.data;
-
+          toastResult = "success";
           if (data.nextStageId && data.nextStageType) {
             console.log(data.message);
-            router.push({
-              pathname: "/(user)/home/stage/[stageId]",
-              params: {
-                stageId: data.nextStageId,
-                lessonId,
-                levelId,
-                category,
-              },
-            });
+            setcurrentStageIndex((prev: any) => prev + 1);
             return;
           }
 
@@ -78,22 +71,17 @@ const useSubmitAnswer = () => {
           console.log(error);
         }
       }
+      toastResult = "error";
       decrementUserHealth();
+
       if (userHealth <= 1) {
+        setcurrentStageIndex(0);
+
         resetUserHealth();
-        router.push({
-          pathname: "/(user)/home/stage/[stageId]",
-          params: {
-            stageId: resetStage,
-            lessonId,
-            levelId,
-            category,
-          },
-        });
       }
     },
   });
-  return nextStage;
+  return { nextStage, toastResult };
 };
 
 export default useSubmitAnswer;

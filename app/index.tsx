@@ -8,6 +8,7 @@ import LottieView from "lottie-react-native";
 import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
+
 const index = () => {
   const opacityVal = useSharedValue(0);
 
