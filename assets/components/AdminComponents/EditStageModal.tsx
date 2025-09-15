@@ -45,10 +45,29 @@ const EditStageModal = ({
     deleteMutation,
     uploadVideoMutation,
     uploadImageReplication,
+    isLoading,
   } = useStageEditor();
 
-  const { state, dispatch } = useEditStage(stageData?.blocks || []);
+  const { state, dispatch } = useEditStage();
 
+  useEffect(() => {
+    dispatch({
+      type: "UPDATE_ALL_FIELDS",
+      payload: {
+        title: stageData?.title || "",
+        description: stageData?.description || "",
+        isHidden: stageData?.isHidden || "",
+        type: stageData?.type || "",
+        instruction: stageData?.instruction || "",
+        codingInterface: stageData?.codingInterface || "",
+
+        timer: stageData?.timer || "",
+        choices: stageData?.choices || [],
+        blocks: stageData?.blocks || [],
+        copyCode: stageData?.copyCode || "",
+      },
+    });
+  }, [stageData]);
   const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
   const [videoPresentation, setvideoPresentation] = useState<string>();

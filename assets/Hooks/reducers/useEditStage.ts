@@ -78,6 +78,7 @@ type Action =
   | {
       type: "RESET_ALL_FIELD";
     }
+  | { type: "UPDATE_ALL_FIELDS"; payload: any }
   | {
       type: "ADD_BLOCK";
       payload: Block;
@@ -146,6 +147,12 @@ const reducer = (state: State, action: Action): State => {
         ...initialState,
       };
     }
+    case "UPDATE_ALL_FIELDS": {
+      return {
+        ...initialState,
+        ...action.payload,
+      };
+    }
 
     default: {
       return state;
@@ -153,11 +160,8 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const useEditStage = (blocks: any) => {
-  const [state, dispatch] = useReducer(reducer, {
-    ...initialState,
-    blocks: blocks || [],
-  });
+const useEditStage = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return { state, dispatch };
 };

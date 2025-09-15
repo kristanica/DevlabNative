@@ -23,7 +23,7 @@ const useStageEditor = () => {
   if (!levelPayload || !stageId) {
     return { stageData: undefined, mutation: undefined };
   }
-  const { data: stageData } = customQuery(
+  const { data: stageData, isLoading } = customQuery(
     [
       "stage",
       levelPayload.category,
@@ -104,6 +104,7 @@ const useStageEditor = () => {
     deleteMutation,
     uploadVideoMutation,
     uploadImageReplication,
+    isLoading,
   };
 };
 

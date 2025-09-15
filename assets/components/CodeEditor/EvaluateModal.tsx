@@ -1,6 +1,7 @@
 import { ScaleModalProps } from "@/assets/constants/type";
+import LottieView from "lottie-react-native";
 import { useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -46,31 +47,53 @@ const EvaluateModal = (props: EvaluateMoalProps) => {
   return (
     <Modal visible={props.visibility} animationType="none" transparent={true}>
       <Pressable onPress={props.closeModal} className="flex-1">
+        <LottieView
+          source={require("@/assets/Lottie/Confetti.json")}
+          loop={false}
+          autoPlay
+          style={[StyleSheet.absoluteFillObject]}
+        />
         <Animated.View
           style={[props.scaleStyle]}
           className="   aspect-square w-3/4 m-auto  rounded-[10px]"
         >
-          <View className="justify-center items-center flex-[1] bg-background rounded-3xl px-5">
-            <Text className="text-white font-exoBold text-lg">
-              {props.gptResponse.evaluation
-                ? "🎉Correct🎉"
-                : "❌ Maybe change something ❌ "}
-            </Text>
-            <Pressable onPress={flipCard} className="relative w-full h-36 ">
+          <View className="justify-center border-[#2a3141] border-[1px] items-center flex-[1] bg-background rounded-3xl px-5">
+            <View className="flex-[1] mt-6 justify-center items-center ">
+              <Text className="text-white font-exoBold text-xl m-auto">
+                {props.gptResponse.evaluation
+                  ? "🎉 Correct 🎉"
+                  : "❌ Maybe change something ❌ "}
+              </Text>
+              <Image
+                source={require("@/assets/images/catGif.gif")}
+                className="aspect-[2] h-[100px] rounded-xl"
+              ></Image>
+            </View>
+
+            <Pressable
+              onPress={flipCard}
+              className="relative flex-[1] w-full h-36  my-6"
+            >
               <Animated.View
                 style={frontStyle}
-                className="bg-accent   absolute w-full  h-full"
+                className="bg-accent  border-[#21b3cf] border-[1px] absolute w-full  h-full rounded-2xl"
               >
-                <Text className="text-white text-center font-exoBold xs:text-xs ">
+                <Text className="text-white mx-auto mt-5 text-justify px-2 font-exoBold xs:text-xs ">
+                  Feedback
+                </Text>
+                <Text className="text-white m-auto text-justify px-2 font-exoBold xs:text-xs ">
                   {props.gptResponse.feedback}
                 </Text>
               </Animated.View>
 
               <Animated.View
                 style={backStyle}
-                className="bg-accent  absolute w-full h-full"
+                className="bg-accent  absolute w-full h-full border-[#21b3cf] border-[1px] rounded-2xl"
               >
-                <Text className="text-white text-center font-exoBold xs:text-xs">
+                <Text className="text-white mx-auto mt-5 text-justify px-2 font-exoBold xs:text-xs ">
+                  Suggesions
+                </Text>
+                <Text className="text-white m-auto text-justify px-2 font-exoBold xs:text-xs">
                   {props.gptResponse.suggestion}
                 </Text>
               </Animated.View>

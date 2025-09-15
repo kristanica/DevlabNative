@@ -6,7 +6,7 @@ import {
   FIREBASE_STORE,
 } from "@/firebaseConfig";
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL = `https://7bc4db351c85.ngrok-free.app` as const;
+export const URL = `https://4e59a707448c.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;

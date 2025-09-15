@@ -25,7 +25,6 @@ const Lesson = ({
     ? stageData.blocks[stageData.blocks.length - 1].id
     : 0;
 
-  console.log(lastBlockId);
   const [isCompressing, setIsCompressing] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [selectedItem, setSelectedItem] = useState<string>("");
@@ -81,7 +80,6 @@ const Lesson = ({
     <>
       <InputContainer
         title={"Title"}
-        placeholder={stageData?.title}
         value={state.title}
         setValue={(text) => {
           dispatch({
@@ -95,7 +93,6 @@ const Lesson = ({
 
       <InputContainer
         title={"Description"}
-        placeholder={stageData?.description}
         value={state.description}
         setValue={(text) => {
           dispatch({
@@ -109,7 +106,6 @@ const Lesson = ({
 
       <InputContainer
         title={"Coding Interface"}
-        placeholder={stageData?.codingInterface}
         value={state.codingInterface}
         setValue={(text) => {
           dispatch({
@@ -122,7 +118,6 @@ const Lesson = ({
       />
       <InputContainer
         title={"Instruction"}
-        placeholder={stageData?.instruction}
         value={state.instruction}
         setValue={(text) => {
           dispatch({
