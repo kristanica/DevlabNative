@@ -10,7 +10,7 @@ const InventoryItemContainer = ({ item }: InventoryItemProps) => {
   const iconNameTrimmed = item.Icon ? item.Icon.replace(".png", "") : "";
 
   return (
-    <View className="bg-background my-2 w-2/5 h-32 mx-2 rounded-2xl p-3">
+    <View className="bg-background my-2 w-2/5 h-36 mx-2 rounded-2xl p-3">
       <Image
         source={itemIcon[iconNameTrimmed]}
         style={{

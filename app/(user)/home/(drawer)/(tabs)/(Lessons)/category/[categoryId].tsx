@@ -1,10 +1,10 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import SmallLoading from "@/assets/components/global/SmallLoading";
 import LessonContainer from "@/assets/components/LessonsComponent/LessonContainer";
 import ListStages from "@/assets/components/LessonsComponent/ListStages";
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
-import LoadingAnim from "@/assets/components/LoadingAnim";
 import { lessonMetaData } from "@/assets/constants/constants";
-import useFetchLessonList from "@/assets/Hooks/query/useFetchLessonList";
+import fetchLesson from "@/assets/Hooks/query/fetchLesson";
 
 import useModal from "@/assets/Hooks/useModal";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
@@ -28,7 +28,7 @@ const categoryScreen = () => {
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
-  const { fetchedLesson, isLoading } = useFetchLessonList(id);
+  const { fetchedLesson, isLoading } = fetchLesson(id);
 
   const allLevels = useGetUserInfo((state) => state.allProgressLevels);
 
@@ -73,7 +73,7 @@ const categoryScreen = () => {
           closeModal={closeModal}
         ></LockLessonModal>
         {isLoading ? (
-          <LoadingAnim />
+          <SmallLoading />
         ) : stagesVisibility ? (
           <>
             <Pressable
@@ -92,12 +92,12 @@ const categoryScreen = () => {
           <SectionList
             sections={
               fetchedLesson
-                ? fetchedLesson.map((data: any) => ({
-                    title: data.Lesson,
-                    data: data.levels.map((level: any) => ({
+                ? fetchedLesson.map((lesson: any) => ({
+                    title: lesson.Lesson, // numeric lesson index
+                    data: lesson.levelsData.map((level: any) => ({
                       ...level,
-                      levelId: level.id, // ensure levelId exists
-                      lessonId: data.id,
+                      levelId: level.id,
+                      lessonId: lesson.id,
                     })),
                   }))
                 : []

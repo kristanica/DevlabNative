@@ -1,9 +1,10 @@
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import GameComponent from "@/assets/Hooks/function/GameComponent";
-import useEditStage from "@/assets/Hooks/useEditStage";
+
+import useStageEditor from "@/assets/Hooks/query/mutation/useStageEditor";
+import useEditStage from "@/assets/Hooks/reducers/useEditStage";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
-import useStageEditor from "@/assets/Hooks/useStageEditor";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import {
   ViewStyle,
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
+import FillScreenLoading from "../global/FillScreenLoading";
 import DeleteFireBaseConfirmationModal from "./DeleteFireBaseConfirmationModal";
 import DropDownMenu from "./DropDownMenu";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
@@ -126,7 +128,11 @@ const EditStageModal = ({
                     {stageData?.isHidden ? "Hidden" : "Visibile"}
                   </Text>
                 </View>
-
+                {uploadImageReplication?.isPending && (
+                  <View className="absolute inset-0 z-50">
+                    <FillScreenLoading />
+                  </View>
+                )}
                 <DropDownMenu
                   onSelect={(item) => {
                     // set type to gamemodes

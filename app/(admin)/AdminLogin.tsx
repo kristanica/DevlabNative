@@ -1,7 +1,8 @@
 import InputBox from "@/assets/components/InputBox";
 import OnFailedLogin from "@/assets/components/LoginComponents/OnFailedLogin";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import useAdminLogin from "@/assets/Hooks/useAdminLogin";
+import useAdminLogin from "@/assets/Hooks/reducers/useAdminLogin";
+
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { router } from "expo-router";

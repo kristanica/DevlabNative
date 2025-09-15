@@ -14,9 +14,9 @@ const LessonModal = ({
   return (
     <Modal visible={visibility} animationType="slide" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1 bg-black/50">
-        <View className="   w-full absolute bottom-0 h-[50%] ">
-          <View className="justify-center  flex-[1] bg-background  rounded-3xl">
-            <View className="flex-col mx-2 flex-[1.5] px-2 py-3">
+        <View className="   w-full absolute bottom-0 h-[65%] ">
+          <View className="justify-center  flex-[1] bg-modal  rounded-3xl rounded-bl-none rounded-br-none border-[#2a3141] border-t-[5px]">
+            <View className="flex-col mx-2 flex-[1.5] px-2 py-3 justify-evenly">
               <Pressable
                 onPress={() =>
                   router.replace({ pathname: "/(user)/playground/Coding" })
@@ -24,7 +24,7 @@ const LessonModal = ({
                 className="flex-row"
               >
                 <Ionicons name={"logo-css3"} size={50} color={"white"} />
-                <View className="flex-col justify-center">
+                <View className="flex-col justify-center ml-4">
                   <Text className="text-white font-exoBold xs:text-sm">
                     Coding Playground
                   </Text>
@@ -40,7 +40,7 @@ const LessonModal = ({
                 className="flex-row mt-3"
               >
                 <Ionicons name={"cube"} size={50} color={"white"} />
-                <View className="flex-col justify-center">
+                <View className="flex-col justify-center ml-4">
                   <Text className="text-white font-exoBold xs:text-sm">
                     Database Playground
                   </Text>
@@ -51,7 +51,11 @@ const LessonModal = ({
               </Pressable>
 
               {mock.map((item, index) => (
-                <LessonsContainer key={index} name={item} />
+                <LessonsContainer
+                  key={index}
+                  closeModal={closeModal}
+                  name={item}
+                />
               ))}
             </View>
           </View>

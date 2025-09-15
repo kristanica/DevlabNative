@@ -17,6 +17,7 @@ import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
@@ -27,6 +28,8 @@ const stageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
   const [currentStageIndex, setcurrentStageIndex] = useState<number>(0);
+
+  const healthPoints = userHp((state) => state.userHp);
 
   //gets the stageData from zustand to reduce API calls
   const stageData = stageStore((state) => state.stageData);
@@ -52,7 +55,7 @@ const stageScreen = () => {
 
   const { evaluationMutation } = useEvaluation();
 
-  const { webRef, sendToWebView, recievedCode, setRecievedCode } =
+  const { webRef, sendToWebView, receivedCode, setReceivedCode } =
     useCodeEditor();
 
   const health = userHealthPoints((state) => state.health);
@@ -66,7 +69,7 @@ const stageScreen = () => {
 
   //Handlers
   const handleFinalAnswer = () => {
-    if (!recievedCode) {
+    if (!receivedCode) {
       setTimeout(() => {
         nextStage.mutate({
           setcurrentStageIndex: setcurrentStageIndex,
@@ -86,13 +89,12 @@ const stageScreen = () => {
 
     evaluationMutation.mutate(
       {
-        recievedCode: recievedCode,
+        receivedCode: receivedCode,
         instruction: currentStageData.instruction,
         description: currentStageData.description,
       },
       {
         onSuccess: (data) => {
-          showToast("success");
           console.log(data);
           if (stageData.length - 1 === currentStageIndex) {
             finalAnswer.closeModal();
@@ -227,15 +229,15 @@ const stageScreen = () => {
 
           <CodingPlaygroundEditor
             webRef={webRef}
-            recievedCode={recievedCode}
-            setRecievedCode={setRecievedCode}
+            receivedCode={receivedCode}
+            setReceivedCode={setReceivedCode}
           ></CodingPlaygroundEditor>
           <View className="h-[10px] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>
             <View className="flex-row">
               {currentStageData?.type !== "Lesson" &&
-                Array.from({ length: health }).map((_, index) => (
+                Array.from({ length: healthPoints }).map((_, index) => (
                   <Ionicons
                     name="heart"
                     size={20}
@@ -257,15 +259,28 @@ const stageScreen = () => {
                   handlePrevious();
                 }}
               >
-                {/* Alam ko mali, pero tinatamad na ako ayusin */}
-                {gameIdentifier.current === "Lesson" && (
-                  <Text className="px-7 py-2 bg-[#E63946] self-start rounded-3xl font-exoRegular">
+                {currentStageData?.type === "Lesson" && (
+                  <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular">
                     Prev
                   </Text>
                 )}
               </Pressable>
+
+              <Pressable
+                onPress={() => {
+                  handlePrevious();
+                }}
+                className="mx-auto"
+              >
+                {currentStageData?.type === "Lesson" && (
+                  <Text className="px-7 py-2 bg-button self-start rounded-3xl font-exoRegular text-whte text-white">
+                    Evaluate
+                  </Text>
+                )}
+              </Pressable>
+
               <Pressable onPress={() => handleNext()}>
-                <Text className="px-7 py-2 bg-[#2ECC71] self-start rounded-3xl font-exoRegular">
+                <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
                   Next
                 </Text>
               </Pressable>

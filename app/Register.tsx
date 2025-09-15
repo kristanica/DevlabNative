@@ -2,9 +2,10 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import InputBox from "@/assets/components/InputBox";
 import OnSuccessRegisterModal from "@/assets/components/RegisterComponents/OnSuccessRegisterModal";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
+import useRegister from "@/assets/Hooks/reducers/useRegister";
+
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
-import useRegister from "@/assets/Hooks/useRegister";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React, { useState } from "react";

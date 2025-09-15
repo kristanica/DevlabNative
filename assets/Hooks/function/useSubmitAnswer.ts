@@ -1,7 +1,7 @@
-import { auth, URL } from "@/assets/constants/constants";
-import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
+import { auth } from "@/assets/constants/constants";
+import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
 
 type submitAnswerPayload = {
@@ -16,9 +16,10 @@ type submitAnswerPayload = {
 
 const useSubmitAnswer = () => {
   const { hasShield, consumeErrorShield } = errorShield();
-  const decrementUserHealth = userHealthPoints.getState().decrementUserHealth;
+  const decrementUserHp = userHp.getState().decrementUserHp;
+  const healthPointsTracker = userHp.getState().userHp;
 
-  const resetUserHealth = userHealthPoints.getState().resetUserHealth;
+  const resetUserHp = userHp.getState().resetUserHp;
   let toastResult: string = "success";
   const nextStage = useMutation({
     mutationFn: async ({
@@ -29,10 +30,8 @@ const useSubmitAnswer = () => {
       answer,
       setcurrentStageIndex,
     }: submitAnswerPayload) => {
-      const userHealth = userHealthPoints.getState().health;
       const token = await auth.currentUser?.getIdToken(true);
 
-      console.log(answer);
       if (hasShield && !answer) {
         const isShieldUsed = await consumeErrorShield();
         if (isShieldUsed) {
@@ -40,44 +39,32 @@ const useSubmitAnswer = () => {
         }
       }
       if (answer) {
-        try {
-          const res = await axios.post(
-            `${URL}/fireBase/unlockStage`,
-            {
-              subject: category,
-              lessonId: lessonId,
-              levelId: levelId,
-              currentStageId: stageId,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+        const res = await unlockNextStage({
+          category: category,
+          lessonId: lessonId,
+          levelId: levelId,
+          stageId: stageId,
+        });
 
-          const data = res.data;
-          toastResult = "success";
-          if (data.nextStageId && data.nextStageType) {
-            console.log(data.message);
-            setcurrentStageIndex((prev: any) => prev + 1);
-            return;
-          }
+        const data = res.data;
+        toastResult = "success";
+        if (data.nextStageId && data.nextStageType) {
+          console.log(data.message);
+          setcurrentStageIndex((prev: any) => prev + 1);
+          return;
+        }
 
-          if (data.setLevelComplete) {
-            return;
-          }
-        } catch (error) {
-          console.log(error);
+        if (data.setLevelComplete) {
+          return;
         }
       }
       toastResult = "error";
-      decrementUserHealth();
+      decrementUserHp();
 
-      if (userHealth <= 1) {
+      if (healthPointsTracker <= 1) {
         setcurrentStageIndex(0);
 
-        resetUserHealth();
+        resetUserHp();
       }
     },
   });

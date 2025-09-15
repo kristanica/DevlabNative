@@ -12,10 +12,10 @@ const useCodeEditor = () => {
   const sendToWebView = useCallback((lang: string) => {
     webRef.current?.postMessage(lang);
   }, []);
-  const [recievedCode, setRecievedCode] = useState<
+  const [receivedCode, setReceivedCode] = useState<
     CodeEditorPayload | undefined
   >(undefined);
-  return { webRef, sendToWebView, recievedCode, setRecievedCode };
+  return { webRef, sendToWebView, receivedCode, setReceivedCode };
 };
 
 export default useCodeEditor;

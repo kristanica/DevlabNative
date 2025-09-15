@@ -1,10 +1,10 @@
+import { auth, db, path } from "@/assets/constants/constants";
 import { doc, getDoc } from "@firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useEffect, useReducer } from "react";
 import { Keyboard } from "react-native";
-import { auth, db, path } from "../constants/constants";
 
 type State = {
   email: string;

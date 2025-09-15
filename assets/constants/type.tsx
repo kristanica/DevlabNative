@@ -8,3 +8,10 @@ export type ScaleModalProps = {
 
   onConfirm: () => void;
 };
+
+export type payloadProps = {
+  category: string;
+  lessonId: string;
+  levelId: string;
+  stageId: string;
+};

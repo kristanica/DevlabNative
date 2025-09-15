@@ -106,6 +106,8 @@ const Lesson = ({
         numeric={false}
       />
       {isCompressing && (
+        
+
         <LoadingCompression progress={progress}></LoadingCompression>
       )}
       <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React, { useRef } from "react";
 import { FlatList, Pressable, View } from "react-native";
+import SmallLoading from "../global/SmallLoading";
 import LockLessonModal from "./LockLessonModal";
 import StagesContainer from "./StagesContainer";
 
@@ -16,7 +17,7 @@ const ListStages = () => {
 
   const stageId = useRef<string>("");
 
-  const { data: levelsData } = useQuery({
+  const { data: levelsData, isLoading } = useQuery({
     queryKey: [
       "Stages",
       levelPayload?.category,
@@ -63,58 +64,63 @@ const ListStages = () => {
 
   return (
     <View className="flex-[1]">
-      <FlatList
-        data={levelsData ?? []}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          globalCounter++;
-          if (item.isHidden) {
-            return null;
-          }
-          return (
-            <Pressable
-              onPress={() => {
-                stageId.current = item.id;
-                const test =
-                  allStages[
-                    `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                  ]?.status ?? false;
-                if (test) {
-                  lockedModal.setVisibility(true);
-                  return;
-                }
-                if (
-                  levelPayload?.category &&
-                  levelPayload?.lessonId &&
-                  levelPayload?.levelId &&
-                  stageId
-                ) {
-                  router.push({
-                    pathname: "/(user)/home/stage/[stageId]",
-                    params: {
-                      stageId: stageId.current,
-                      category: levelPayload.category,
-                      lessonId: levelPayload.lessonId,
-                      levelId: levelPayload.levelId,
-                    },
-                  });
-                }
-              }}
-            >
-              <StagesContainer
-                isLocked={
-                  allStages[
-                    `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                  ]?.status ?? true
-                }
-                item={item}
-                index={globalCounter}
-              ></StagesContainer>
-            </Pressable>
-          );
-        }}
-      ></FlatList>
+      {isLoading ? (
+        <SmallLoading />
+      ) : (
+        <FlatList
+          data={levelsData ?? []}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            globalCounter++;
+            if (item.isHidden) {
+              return null;
+            }
+            return (
+              <Pressable
+                onPress={() => {
+                  stageId.current = item.id;
+                  const test =
+                    allStages[
+                      `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
+                    ]?.status ?? false;
+                  if (test) {
+                    lockedModal.setVisibility(true);
+                    return;
+                  }
+                  if (
+                    levelPayload?.category &&
+                    levelPayload?.lessonId &&
+                    levelPayload?.levelId &&
+                    stageId
+                  ) {
+                    router.push({
+                      pathname: "/(user)/home/stage/[stageId]",
+                      params: {
+                        stageId: stageId.current,
+                        category: levelPayload.category,
+                        lessonId: levelPayload.lessonId,
+                        levelId: levelPayload.levelId,
+                      },
+                    });
+                  }
+                }}
+              >
+                <StagesContainer
+                  isLocked={
+                    allStages[
+                      `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
+                    ]?.status ?? true
+                  }
+                  item={item}
+                  index={globalCounter}
+                ></StagesContainer>
+              </Pressable>
+            );
+          }}
+        ></FlatList>
+      )}
+
       <LockLessonModal
         onConfirm={() => lockedModal.closeModal()}
         {...lockedModal}

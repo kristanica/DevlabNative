@@ -1,8 +1,9 @@
 import { ScaleModalProps } from "@/assets/constants/type";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
-import useEditLesson from "@/assets/Hooks/useEditLesson";
+
+import useLevelEditor from "@/assets/Hooks/query/mutation/useLevelEditor";
+import useEditLesson from "@/assets/Hooks/reducers/useEditLesson";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
-import useLevelEditor from "@/assets/Hooks/useLevelEditor";
 import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
 import React from "react";

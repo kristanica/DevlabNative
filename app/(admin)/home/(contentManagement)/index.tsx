@@ -6,8 +6,9 @@ import SaveToFirebaseConfirmation from "@/assets/components/AdminComponents/Save
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import LoadingAnim from "@/assets/components/LoadingAnim";
-import useLessonEditor from "@/assets/Hooks/useLessonEditor";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import SmallLoading from "@/assets/components/global/SmallLoading";
+import useLessonEditor from "@/assets/Hooks/query/mutation/useLessonEditor";
 import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
@@ -69,9 +70,13 @@ const ContentManagement = () => {
             <View className="flex-row justify-between px-7 border-[2px] border-white border-x-0 border-t-0 mt-7">
               <CategorySelector setCategory={setCategory} />
             </View>
-
+            {(addLevelMutation.isPending ||
+              deleteLessonMutation.isPending ||
+              addLessonMutation.isPending) && (
+              <FillScreenLoading></FillScreenLoading>
+            )}
             {isLoading ? (
-              <LoadingAnim></LoadingAnim>
+              <SmallLoading></SmallLoading>
             ) : (
               <SectionList
                 sections={

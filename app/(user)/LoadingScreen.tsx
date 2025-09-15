@@ -1,8 +1,4 @@
-import {
-  devlabBootLines,
-  devlabTips,
-  path,
-} from "@/assets/constants/constants";
+import { devlabBootLines, devlabTips } from "@/assets/constants/constants";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
@@ -41,7 +37,7 @@ const LoadingScreen = () => {
     const timeoutId = setTimeout(() => {
       setVisible(false);
       setTimeout(() => {
-        router.replace({ pathname: path.HOME });
+        router.replace({ pathname: "/home/Home" });
       }, 2500);
     }, 6000);
 
