@@ -11,7 +11,8 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import useSubmitAnswer from "@/assets/Hooks/function/useSubmitAnswer";
-import useEvaluation from "@/assets/Hooks/query/mutation/useEvaluation";
+import useEvaluationGame from "@/assets/Hooks/query/mutation/useEvaluationGame";
+import useEvaluationLesson from "@/assets/Hooks/query/mutation/useEvaluationLesson";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
@@ -53,7 +54,8 @@ const stageScreen = () => {
     }
   }, [stageId, stageData]);
 
-  const { evaluationMutation } = useEvaluation();
+  const { evaluationMutation } = useEvaluationGame();
+  const { evaluationLessonMutation } = useEvaluationLesson();
 
   const { webRef, sendToWebView, receivedCode, setReceivedCode } =
     useCodeEditor();
@@ -68,6 +70,25 @@ const stageScreen = () => {
   const { nextStage } = useSubmitAnswer();
 
   //Handlers
+
+  const handleEvaluation = () => {
+    if (!receivedCode) {
+      return;
+    }
+    evaluationLessonMutation.mutate(
+      {
+        receivedCode: receivedCode,
+        instruction: currentStageData.instruction,
+        description: currentStageData.description,
+      },
+      {
+        onSuccess: () => {
+          evaluateModal.setVisibility(true);
+        },
+      }
+    );
+  };
+
   const handleFinalAnswer = () => {
     if (!receivedCode) {
       setTimeout(() => {
@@ -80,10 +101,10 @@ const stageScreen = () => {
           category: String(category),
           answer: false,
         });
-      }, 200);
+      }, 5000);
       showToast("error");
-      finalAnswer.setVisibility(false);
 
+      setTimeout(() => finalAnswer.closeModal(), 200);
       return;
     }
 
@@ -95,7 +116,6 @@ const stageScreen = () => {
       },
       {
         onSuccess: (data) => {
-          console.log(data);
           if (stageData.length - 1 === currentStageIndex) {
             finalAnswer.closeModal();
             setTimeout(() => levelFinished.setVisibility(true), 200);
@@ -103,18 +123,23 @@ const stageScreen = () => {
           }
 
           if (stageData && currentStageIndex < stageData.length - 1) {
-            finalAnswer.closeModal();
             const toastResult = data.correct ? "success" : "error";
             showToast(toastResult);
-            nextStage.mutate({
-              stageId: stageData[currentStageIndex].id,
-              resetStage: stageData[0].id,
-              lessonId: String(lessonId),
-              levelId: String(levelId),
-              category: String(category),
-              answer: data.correct,
-              setcurrentStageIndex,
-            });
+            finalAnswer.closeModal();
+
+            setTimeout(
+              () =>
+                nextStage.mutate({
+                  stageId: stageData[currentStageIndex].id,
+                  resetStage: stageData[0].id,
+                  lessonId: String(lessonId),
+                  levelId: String(levelId),
+                  category: String(category),
+                  answer: data.correct,
+                  setcurrentStageIndex,
+                }),
+              200
+            );
           }
         },
       }
@@ -208,7 +233,7 @@ const stageScreen = () => {
           {evaluateModal.visibility && (
             <EvaluateModal
               onConfirm={() => evaluateModal.closeModal()}
-              gptResponse={evaluationMutation.data.feedback}
+              gptResponse={evaluationLessonMutation.data}
               {...evaluateModal}
             ></EvaluateModal>
           )}
@@ -222,10 +247,11 @@ const stageScreen = () => {
               {...finalAnswer}
             />
           )}
+
+          {/* Shows modal for first time */}
           <StageModalComponent
             type={gameIdentifier.current}
           ></StageModalComponent>
-          {/* Shows modal for first time */}
 
           <CodingPlaygroundEditor
             webRef={webRef}
@@ -268,7 +294,7 @@ const stageScreen = () => {
 
               <Pressable
                 onPress={() => {
-                  handlePrevious();
+                  handleEvaluation();
                 }}
                 className="mx-auto"
               >

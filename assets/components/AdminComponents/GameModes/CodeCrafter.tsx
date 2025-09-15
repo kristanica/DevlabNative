@@ -28,7 +28,6 @@ const CodeCrafter = ({
 
     const imageUri: string = result.assets[0].uri;
     setReplicateImage(imageUri);
-    console.log(imageUri);
   };
 
   return (

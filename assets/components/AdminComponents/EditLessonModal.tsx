@@ -32,7 +32,7 @@ const EditLessonModal = ({
 
   const confirmationModal = useModal();
   const payload = tracker((state) => state.levelPayload);
-  console.log(payload);
+
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable

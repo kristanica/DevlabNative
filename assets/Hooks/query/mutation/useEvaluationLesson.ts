@@ -1,4 +1,4 @@
-import gamePrompt from "@/assets/API/openAi/gamePrompt";
+import lessonPrompt from "@/assets/API/openAi/lessonPrompt";
 import { useMutation } from "@tanstack/react-query";
 
 type receivedCodePayload = {
@@ -12,21 +12,21 @@ type useEvaluationPayload = {
   instruction: string;
   description: string;
 };
-const useEvaluation = () => {
-  const evaluationMutation = useMutation({
+
+const useEvaluationLesson = () => {
+  const evaluationLessonMutation = useMutation({
     mutationFn: async ({
       receivedCode,
       instruction,
       description,
     }: useEvaluationPayload) =>
-      gamePrompt({
+      lessonPrompt({
         receivedCode,
         instruction,
         description,
       }),
   });
-
-  return { evaluationMutation };
+  return { evaluationLessonMutation };
 };
 
-export default useEvaluation;
+export default useEvaluationLesson;

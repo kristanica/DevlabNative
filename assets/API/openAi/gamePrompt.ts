@@ -51,7 +51,6 @@ const gamePrompt = async ({
         parse = JSON.parse(res.data.response);
       }
     }
-    console.log(parse);
     return parse;
   } catch (error) {
     console.log(error);

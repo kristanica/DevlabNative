@@ -196,7 +196,6 @@ const EditStageModal = ({
                   const hasEmpty = CheckEmptyFields(state, type);
                   editConfirmationCloseModal();
                   if (hasEmpty) {
-                    console.log("There is an empty fieldasds");
                     setisFirebaseSuccess(false);
                     setFireBaseResultVisibility(true);
                     return;

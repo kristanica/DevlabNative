@@ -38,7 +38,7 @@ const AddLessonModal = ({
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const levelPayload = tracker((state) => state.levelPayload);
   const stageTracker = tracker((state) => state.setStage);
-  console.log(levelPayload);
+
   const { data: levelsData, refetch } = useQuery({
     queryKey: [
       "Stages",
@@ -105,7 +105,7 @@ const AddLessonModal = ({
                   <TouchableOpacity
                     onPress={() => {
                       stageTracker(item.id);
-                      console.log(item.id);
+
                       setVisibility(true);
                     }}
                   >

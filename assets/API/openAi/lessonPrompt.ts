@@ -22,7 +22,7 @@ const lessonPrompt = async ({
   const currentUser = auth.currentUser;
 
   const token = await currentUser?.getIdToken(true);
-  console.log(token);
+
   try {
     const res = await axios.post(
       `${URL}/openAI/lessonPrompt`,
@@ -40,19 +40,21 @@ const lessonPrompt = async ({
       }
     );
 
-    if (res.status !== 200) {
-      console.log("Something went wrong");
-      return;
+    let raw = res.data.response;
+
+    // 🧹 Clean response if wrapped in ```json ... ```
+    if (typeof raw === "string") {
+      raw = raw.replace(/```json|```/g, "").trim();
     }
 
-    let parse: any = null;
-    if (typeof res.data === "object") {
-      if (typeof res.data.response === "string") {
-        parse = JSON.parse(res.data.response);
-      }
+    let parsed: any = null;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      console.log("Failed to parse JSON:", e, raw);
     }
-    console.log(parse);
-    return parse;
+
+    return parsed;
   } catch (error) {
     console.log(error);
   }

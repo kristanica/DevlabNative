@@ -24,7 +24,7 @@ const LessonContainer = ({
     indicator: isFocused,
     id: index,
   });
-  console.log(item);
+
   return (
     <Animated.View
       key={item.id}

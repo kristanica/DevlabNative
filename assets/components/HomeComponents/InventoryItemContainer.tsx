@@ -28,6 +28,6 @@ const InventoryItemContainer = ({ item }: InventoryItemProps) => {
   );
 };
 
-export default InventoryItemContainer;
+export default React.memo(InventoryItemContainer);
 
 const styles = StyleSheet.create({});

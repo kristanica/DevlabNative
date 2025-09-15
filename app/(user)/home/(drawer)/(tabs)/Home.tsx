@@ -18,10 +18,7 @@ import * as Progress from "react-native-progress";
 export default function Home() {
   // Recieves background and profile images
 
-  const { userData } = useGetUserInfo();
-  const { completedLevels } = useGetUserInfo();
-
-  const { inventory } = useGetUserInfo();
+  const { userData, completedLevels, inventory } = useGetUserInfo();
 
   return (
     <ProtectedRoutes>

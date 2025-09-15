@@ -59,7 +59,7 @@ const ListStages = () => {
   }
 
   const allStages = useGetUserInfo((state) => state.allProgressStages);
-  console.log(allStages["Html"]);
+
   const lockedModal = useModal();
 
   return (

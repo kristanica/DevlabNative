@@ -19,7 +19,7 @@ const Register = () => {
 
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
-  console.log("hello");
+
   return (
     <View className="flex-1 bg-background ">
       <Animated.View entering={FadeIn.duration(500)} style={{ flex: 1 }}>
@@ -102,7 +102,6 @@ const Register = () => {
                     const hasEmpty = CheckEmptyFields(state, "Register");
 
                     if (hasEmpty) {
-                      console.log(hasEmpty);
                       setIsSuccess(false);
                       setVisibility((prev) => !prev);
                       return;
