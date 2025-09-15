@@ -7,6 +7,11 @@ type BrainBytesChoices = {
   d: string;
   correctAnswer: string;
 };
+type Block = {
+  id: number;
+  type: string;
+  value: string;
+};
 
 type State = {
   //general
@@ -25,7 +30,7 @@ type State = {
 
   //BrainBytes
   choices: BrainBytesChoices;
-
+  blocks: Block[];
   //CodeCrafter
   //This is a picture
   copyCode: string;
@@ -57,6 +62,7 @@ const initialState = {
   //CodeCrafter
   //This is a picture
   copyCode: "",
+  blocks: [],
 };
 type Action =
   | {
@@ -71,6 +77,18 @@ type Action =
     }
   | {
       type: "RESET_ALL_FIELD";
+    }
+  | {
+      type: "ADD_BLOCK";
+      payload: Block;
+    }
+  | {
+      type: "UPDATE_BLOCK";
+      payload: Partial<Block>;
+    }
+  | {
+      type: "REMOVE_BLOCK";
+      id: number;
     };
 
 const reducer = (state: State, action: Action): State => {
@@ -90,6 +108,39 @@ const reducer = (state: State, action: Action): State => {
         },
       };
     }
+    case "ADD_BLOCK": {
+      return {
+        ...state,
+        blocks: [
+          ...state.blocks,
+          {
+            id: action.payload.id,
+            value: action.payload.value,
+            type: action.payload.type,
+          },
+        ],
+      };
+    }
+
+    case "UPDATE_BLOCK": {
+      return {
+        ...state,
+        blocks: state.blocks.map((block) =>
+          block.id === action.payload.id
+            ? {
+                ...block,
+                value: action.payload.value!,
+              }
+            : block
+        ),
+      };
+    }
+    case "REMOVE_BLOCK": {
+      return {
+        ...state,
+        blocks: state.blocks.filter((block) => block.id !== action.id),
+      };
+    }
     case "RESET_ALL_FIELD": {
       return {
         ...initialState,
@@ -102,25 +153,10 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const useEditStage = () => {
+const useEditStage = (blocks: any) => {
   const [state, dispatch] = useReducer(reducer, {
-    title: "",
-    description: "",
-    isHidden: false,
-    type: "",
-
-    codingInterface: "",
-    instruction: "",
-    hint: "",
-    timer: 0,
-    choices: {
-      a: "",
-      b: "",
-      c: "",
-      d: "",
-      correctAnswer: "",
-    },
-    copyCode: "",
+    ...initialState,
+    blocks: blocks || [],
   });
 
   return { state, dispatch };

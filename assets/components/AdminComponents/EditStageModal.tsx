@@ -18,7 +18,6 @@ import {
   ViewStyle,
 } from "react-native";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
-import FillScreenLoading from "../global/FillScreenLoading";
 import DeleteFireBaseConfirmationModal from "./DeleteFireBaseConfirmationModal";
 import DropDownMenu from "./DropDownMenu";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
@@ -40,7 +39,6 @@ const EditStageModal = ({
   );
 
   const stageIdentifier = tracker((state) => state.stageId);
-  const { state, dispatch } = useEditStage();
   const {
     editMutation,
     stageData,
@@ -48,6 +46,9 @@ const EditStageModal = ({
     uploadVideoMutation,
     uploadImageReplication,
   } = useStageEditor();
+
+  const { state, dispatch } = useEditStage(stageData?.blocks || []);
+
   const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
   const [videoPresentation, setvideoPresentation] = useState<string>();
@@ -128,11 +129,7 @@ const EditStageModal = ({
                     {stageData?.isHidden ? "Hidden" : "Visibile"}
                   </Text>
                 </View>
-                {uploadImageReplication?.isPending && (
-                  <View className="absolute inset-0 z-50">
-                    <FillScreenLoading />
-                  </View>
-                )}
+
                 <DropDownMenu
                   onSelect={(item) => {
                     // set type to gamemodes
@@ -228,7 +225,6 @@ const EditStageModal = ({
                 closeModal={editConfirmationCloseModal}
               ></SaveToFirebaseConfirmation>
             )}
-
             {deleteConfirmationVisibility && (
               <DeleteFireBaseConfirmationModal
                 onConfirm={() => {
@@ -241,7 +237,6 @@ const EditStageModal = ({
                 closeModal={deleteConfirmationCloseModal}
               ></DeleteFireBaseConfirmationModal>
             )}
-
             {fireBaseResultVisibility && (
               <SaveToFirebaseResultModal
                 isFirebaseSuccess={isFirebaseSuccess}

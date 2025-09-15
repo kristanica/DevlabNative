@@ -1,11 +1,13 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Video } from "react-native-compressor";
 
 import LoadingCompression from "../../LoadingCompression";
 import InputContainer from "../InputContainer";
+import InputSelector from "../InputSelector";
+import TestDropDownMenu from "../TestDropDownMenu";
 type lessonProps = {
   stageData: any;
   dispatch: any;
@@ -19,8 +21,33 @@ const Lesson = ({
   state,
   setVideoPresentation,
 }: lessonProps) => {
+  const lastBlockId = stageData?.blocks?.length
+    ? stageData.blocks[stageData.blocks.length - 1].id
+    : 0;
+
+  console.log(lastBlockId);
   const [isCompressing, setIsCompressing] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const [selectedItem, setSelectedItem] = useState<string>("");
+
+  const [counter, setCounter] = useState<number>(lastBlockId + 1);
+  const addBlocks = () => {
+    if (selectedItem === "") {
+      console.log("empty");
+      return;
+    }
+    dispatch({
+      type: "ADD_BLOCK",
+      payload: {
+        id: counter,
+        type: selectedItem,
+        value: "",
+      },
+    });
+
+    setCounter((prev) => prev + 1);
+    setSelectedItem("");
+  };
   const pickVideo = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -49,6 +76,7 @@ const Lesson = ({
       console.log(error);
     }
   };
+
   return (
     <>
       <InputContainer
@@ -106,10 +134,29 @@ const Lesson = ({
         numeric={false}
       />
       {isCompressing && (
-        
-
         <LoadingCompression progress={progress}></LoadingCompression>
       )}
+
+      <View className="flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+        <TestDropDownMenu
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+        ></TestDropDownMenu>
+        <Pressable onPress={addBlocks} className="absolute top-6 right-8">
+          <Text className="text-green-400 text-2xl ">+</Text>
+        </Pressable>
+      </View>
+      <View>
+        {state.blocks.map((block: any) => (
+          <InputSelector
+            dispatch={dispatch}
+            key={block.id}
+            block={block}
+            type={block.type}
+          ></InputSelector>
+        ))}
+      </View>
+
       <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
         <View className="flex-row">
           <Text className="text-white mr-2">Upload a presentation</Text>

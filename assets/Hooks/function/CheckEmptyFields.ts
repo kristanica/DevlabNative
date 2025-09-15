@@ -15,6 +15,7 @@ const exemptions: Record<string, string[]> = {
     "copyCode",
     "type",
     "choices",
+    "blocks",
   ],
   CodeRush: [
     "codingInterface",
@@ -23,6 +24,7 @@ const exemptions: Record<string, string[]> = {
     "choices",
     "copyCode",
     "type",
+    "blocks",
   ],
   BrainBytes: [
     "codingInterface",
@@ -31,6 +33,7 @@ const exemptions: Record<string, string[]> = {
     "timer",
     "copyCode",
     "type",
+    "blocks",
   ],
   CodeCrafter: [
     "codingInterface",
@@ -39,6 +42,7 @@ const exemptions: Record<string, string[]> = {
     "timer",
     "choices",
     "type",
+    "blocks",
   ],
   Level: [],
   Register: [],
@@ -47,7 +51,11 @@ const exemptions: Record<string, string[]> = {
 const CheckEmptyFields = (state: any, type: string) => {
   const hasEmpty = Object.entries(state).some(([key, value]) => {
     if (exemptions[type]?.includes(key)) return false;
-
+    if (key === "blocks" && typeof value === "object" && value) {
+      return Object.values(value).some(
+        (choice) => choice === "" || choice === null || choice === undefined
+      );
+    }
     if (key === "choices" && value && typeof value === "object") {
       return Object.values(value).some(
         (choice) => choice === "" || choice === null || choice === undefined
