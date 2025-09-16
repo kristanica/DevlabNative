@@ -27,7 +27,6 @@ const Stage = () => {
   );
   const stageTracker = tracker((state) => state.setStage);
   const levelPayload = tracker((state) => state.levelPayload);
-
   const { stagesData, isLoading, addNewStageMutation, updateOrderMutation } =
     useListStage();
   const tutorial = useModal();
@@ -112,6 +111,7 @@ const Stage = () => {
                   ></DraggableFlatList>
                 )}
               </View>
+
               {tutorial.visibility && (
                 <HowToUseStageEditor
                   onConfirm={() => console.log("test")}

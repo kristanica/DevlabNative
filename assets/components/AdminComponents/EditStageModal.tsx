@@ -45,7 +45,6 @@ const EditStageModal = ({
     deleteMutation,
     uploadVideoMutation,
     uploadImageReplication,
-    isLoading,
   } = useStageEditor();
 
   const { state, dispatch } = useEditStage();
@@ -116,23 +115,17 @@ const EditStageModal = ({
         }}
       >
         <Pressable
-          className="w-[80%] h-[70%]"
+          className="w-[80%] h-[90%]"
           onPress={(e) => {
             e.stopPropagation();
           }}
         >
           <Animated.View
-            className="  bg-accent  border-[2px] h-full border-[#ffffff43] rounded-xl"
+            className="     h-full  rounded-xl"
             style={[scaleStyle, keyBoardHandlingStyle]}
           >
-            <View className="mx-2">
-              <ScrollView
-                contentContainerStyle={{
-                  paddingVertical: 16,
-                  paddingHorizontal: 12,
-                }}
-                showsVerticalScrollIndicator={false}
-              >
+            <View className="px-5 bg-modal pb-5 rounded-2xl border-white border-[2px] mb-5">
+              <View>
                 <Text className="text-white font-exoBold text-lg mx-auto my-3">
                   Currently editing {stageIdentifier}
                 </Text>
@@ -140,15 +133,25 @@ const EditStageModal = ({
                   Stage visibility cannot be changed. Lessons are automatically
                   set to Visible, and gamemodes to Hidden.
                 </Text>
-                <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl ">
-                  <Text className="text-white font-exoRegular my-2">
-                    Stage Visibility
-                  </Text>
-                  <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 my-2">
-                    {stageData?.isHidden ? "Hidden" : "Visibile"}
-                  </Text>
-                </View>
+              </View>
+              <View className="bg-background border-[#56EBFF] border-[2px] p-2 rounded-2xl ">
+                <Text className="text-white font-exoRegular my-2">
+                  Stage Visibility
+                </Text>
+                <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 ">
+                  {stageData?.isHidden ? "Hidden" : "Visibile"}
+                </Text>
+              </View>
+            </View>
 
+            <View className=" flex-[3] bg-modal rounded-2xl border-white border-[2px]">
+              <ScrollView
+                contentContainerStyle={{
+                  paddingVertical: 16,
+                  paddingHorizontal: 12,
+                }}
+                showsVerticalScrollIndicator={false}
+              >
                 <DropDownMenu
                   onSelect={(item) => {
                     // set type to gamemodes

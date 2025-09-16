@@ -132,24 +132,31 @@ const Lesson = ({
         <LoadingCompression progress={progress}></LoadingCompression>
       )}
 
-      <View className="flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
-        <TestDropDownMenu
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-        ></TestDropDownMenu>
-        <Pressable onPress={addBlocks} className="absolute top-6 right-8">
-          <Text className="text-green-400 text-2xl ">+</Text>
+      <View className="bg-slate-600 px-1 my-3 py-3">
+        <View className="flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl ">
+          <TestDropDownMenu
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+          ></TestDropDownMenu>
+        </View>
+        <Pressable
+          onPress={addBlocks}
+          className="flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3"
+        >
+          <Text className="text-white mx-auto font-exoBold text-lg ">
+            ADD A BLOCK
+          </Text>
         </Pressable>
-      </View>
-      <View>
-        {state.blocks.map((block: any) => (
-          <InputSelector
-            dispatch={dispatch}
-            key={block.id}
-            block={block}
-            type={block.type}
-          ></InputSelector>
-        ))}
+        <View>
+          {state.blocks.map((block: any) => (
+            <InputSelector
+              dispatch={dispatch}
+              key={block.id}
+              block={block}
+              type={block.type}
+            ></InputSelector>
+          ))}
+        </View>
       </View>
 
       <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">

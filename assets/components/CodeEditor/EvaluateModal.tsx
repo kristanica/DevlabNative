@@ -60,7 +60,7 @@ const EvaluateModal = (props: EvaluateMoalProps) => {
           <View className="justify-center border-[#2a3141] border-[1px] items-center flex-[1] bg-background rounded-3xl px-5">
             <View className="flex-[1] mt-6 justify-center items-center ">
               <Text className="text-white font-exoBold text-xl m-auto">
-                {props.gptResponse.evaluation
+                {props.gptResponse.correct
                   ? "🎉 Correct 🎉"
                   : "❌ Maybe change something ❌ "}
               </Text>

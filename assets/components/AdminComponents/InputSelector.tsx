@@ -87,6 +87,18 @@ const InputSelector = ({ block, type, dispatch }: InputSelectorProps) => {
         </Pressable>
       </View>
     ),
+    Divider: (
+      <View
+        key={block.id}
+        className=" justify-center items-center py-2 bg-background border-[#56EBFF] border-[2px] p-1 rounded-2xl mt-3 "
+      >
+        <Pressable
+          onPress={() => dispatch({ type: "REMOVE_BLOCK", id: block.id })}
+        >
+          <Ionicons name={"trash-bin"} size={30} color={"red"}></Ionicons>
+        </Pressable>
+      </View>
+    ),
   };
 
   return selectedInput[type] ?? null;

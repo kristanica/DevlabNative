@@ -1,6 +1,7 @@
 import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
 import EvaluateModal from "@/assets/components/CodeEditor/EvaluateModal";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
 import GameOverModal from "@/assets/components/LessonsComponent/GameOverModal";
@@ -222,7 +223,9 @@ const stageScreen = () => {
               {...gameOver}
             ></GameOverModal>
           )}
-
+          {evaluationLessonMutation.isPending && (
+            <FillScreenLoading></FillScreenLoading>
+          )}
           {levelFinished.visibility && (
             <LevelFinishedModal
               onConfirm={() => console.log("levelFinished")}

@@ -19,11 +19,15 @@ const TestDropDownMenu = (props: Props) => {
       id: "3",
       name: "Image",
     },
+    {
+      id: "4",
+      name: "Divider",
+    },
   ];
   return (
     <View className="w-full">
       <Pressable onPress={() => setDropDown((prev) => !prev)}>
-        <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 my-2">
+        <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 my-2 text-center">
           {props.selectedItem.length > 0
             ? props.selectedItem
             : "Select an option"}
