@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import InputContainer from "../InputContainer";
@@ -7,27 +7,24 @@ type CodeCrafterProps = {
   stageData: any;
   dispatch: any;
   state: any;
-  setReplicateImage: any;
+  setReplicateFile: any;
 };
 const CodeCrafter = ({
   stageData,
   dispatch,
   state,
-  setReplicateImage,
+  setReplicateFile,
 }: CodeCrafterProps) => {
   const pickReplicate = async () => {
-    const result: ImagePicker.ImagePickerResult =
-      await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 1,
-      });
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "text/html",
+    });
 
     if (result.canceled) return;
 
     const imageUri: string = result.assets[0].uri;
-    setReplicateImage(imageUri);
+    console.log(imageUri);
+    setReplicateFile(imageUri);
   };
 
   return (

@@ -1,14 +1,14 @@
+import uploadFile from "@/assets/API/fireBase/admin/stage/uploadFile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import deleteStage from "../../../API/fireBase/admin/stage/deleteStage";
 import editStage from "../../../API/fireBase/admin/stage/editStage";
 import getStageData from "../../../API/fireBase/admin/stage/getStageData";
-import uploadImage from "../../../API/fireBase/admin/stage/uploadImage";
 import uploadVideo from "../../../API/fireBase/admin/stage/uploadVideo";
 import tracker from "../../../zustand/tracker";
 import customQuery from "../../function/customQuery";
 
 type uploadImageProps = {
-  image: any;
+  file: any;
 };
 
 type uploadVideoProps = {
@@ -87,10 +87,10 @@ const useStageEditor = () => {
       }),
   });
 
-  const uploadImageReplication = useMutation({
-    mutationFn: async ({ image }: uploadImageProps) =>
-      await uploadImage({
-        image,
+  const uploadFileReplication = useMutation({
+    mutationFn: async ({ file }: uploadImageProps) =>
+      await uploadFile({
+        file,
         category: levelPayload.category,
         lessonId: levelPayload.lessonId,
         levelId: levelPayload.levelId,
@@ -103,7 +103,7 @@ const useStageEditor = () => {
     editMutation,
     deleteMutation,
     uploadVideoMutation,
-    uploadImageReplication,
+    uploadFileReplication,
     isLoading,
   };
 };

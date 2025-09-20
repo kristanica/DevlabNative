@@ -44,7 +44,7 @@ const EditStageModal = ({
     stageData,
     deleteMutation,
     uploadVideoMutation,
-    uploadImageReplication,
+    uploadFileReplication,
   } = useStageEditor();
 
   const { state, dispatch } = useEditStage();
@@ -70,7 +70,7 @@ const EditStageModal = ({
   const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
   const [videoPresentation, setvideoPresentation] = useState<string>();
-  const [replicateImage, setReplicateImage] = useState<string>();
+  const [replicationFile, setReplicateFile] = useState<string>();
 
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
@@ -179,7 +179,7 @@ const EditStageModal = ({
                   dispatch={dispatch}
                   state={state}
                   stageData={stageData}
-                  setReplicateImage={setReplicateImage}
+                  setReplicateFile={setReplicateFile}
                 ></GameComponent>
 
                 <View className="flex-row my-3">
@@ -226,18 +226,21 @@ const EditStageModal = ({
                     });
                     setvideoPresentation("");
                   }
-                  if (replicateImage) {
-                    uploadImageReplication?.mutate({
-                      image: replicateImage,
+                  if (replicationFile) {
+                    uploadFileReplication?.mutate({
+                      file: replicationFile,
                     });
-                    setReplicateImage("");
+                    console.log(replicationFile);
                   }
 
                   editMutation?.mutate({
                     state,
                     stageType: stageData?.type,
                   });
-
+                  setReplicateFile("");
+                  console.log(
+                    "replicate file has been set to: " + replicationFile
+                  );
                   setisFirebaseSuccess(true);
                   setFireBaseResultVisibility(true);
                   dispatch({ type: "RESET_ALL_FIELD" });

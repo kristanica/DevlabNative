@@ -1,35 +1,34 @@
 import { auth } from "@/assets/constants/constants";
 import { payloadProps } from "@/assets/constants/type";
 import axios from "axios";
-type uploadImageProps = payloadProps & {
-  image: any;
-};
 
-const uploadImage = async ({
-  image,
+type uploadImageProps = payloadProps & {
+  file: any;
+};
+const uploadFile = async ({
+  file,
   category,
   lessonId,
   levelId,
   stageId,
 }: uploadImageProps) => {
   const token = await auth.currentUser?.getIdToken(true);
-  const imageForm = new FormData();
+  const fileForm = new FormData();
 
   try {
-    console.log("image on upload call " + image);
-    imageForm.append("replicateFile", {
-      uri: image,
-      type: "image/jpeg",
-      name: "image.jpg",
+    fileForm.append("replicateFile", {
+      uri: file,
+      type: "text/html",
+      name: "file.html",
     } as any);
 
-    imageForm.append("category", category);
-    imageForm.append("lessonId", lessonId);
-    imageForm.append("levelId", levelId);
-    imageForm.append("stageId", stageId);
+    fileForm.append("category", category);
+    fileForm.append("lessonId", lessonId);
+    fileForm.append("levelId", levelId);
+    fileForm.append("stageId", stageId);
     await axios.post(
-      `https://95b59cbdc332.ngrok-free.app/fireBaseAdmin/test`,
-      imageForm,
+      `https://4b93dc49e335.ngrok-free.app/fireBaseAdmin/uploadFile`,
+      fileForm,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -43,4 +42,5 @@ const uploadImage = async ({
     console.log(error);
   }
 };
-export default uploadImage;
+
+export default uploadFile;

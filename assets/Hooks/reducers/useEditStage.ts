@@ -62,6 +62,7 @@ const initialState = {
   //CodeCrafter
   //This is a picture
   copyCode: "",
+
   blocks: [],
 };
 type Action =
