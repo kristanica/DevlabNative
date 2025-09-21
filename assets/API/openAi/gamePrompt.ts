@@ -46,14 +46,21 @@ const gamePrompt = async ({
     }
 
     let parse: any = null;
-    if (typeof res.data === "object") {
-      if (typeof res.data.response === "string") {
-        parse = JSON.parse(res.data.response);
+    if (typeof res.data.response === "string") {
+      const clean = res.data.response
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+
+      try {
+        parse = JSON.parse(clean);
+      } catch (err) {
+        console.error("Still invalid JSON:", clean);
       }
     }
     return parse;
   } catch (error) {
-    console.log(error);
+    console.log("CLient error" + error);
   }
 };
 

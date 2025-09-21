@@ -22,6 +22,7 @@ import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useIsMutating } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -71,7 +72,7 @@ const stageScreen = () => {
   const { nextStage } = useSubmitAnswer();
 
   //Handlers
-
+  const isMutating = useIsMutating();
   const handleEvaluation = () => {
     if (!receivedCode) {
       return;
@@ -108,7 +109,7 @@ const stageScreen = () => {
       setTimeout(() => finalAnswer.closeModal(), 200);
       return;
     }
-
+    finalAnswer.closeModal();
     evaluationMutation.mutate(
       {
         receivedCode: receivedCode,
@@ -126,7 +127,6 @@ const stageScreen = () => {
           if (stageData && currentStageIndex < stageData.length - 1) {
             const toastResult = data.correct ? "success" : "error";
             showToast(toastResult);
-            finalAnswer.closeModal();
 
             setTimeout(
               () =>
@@ -180,6 +180,7 @@ const stageScreen = () => {
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
+        {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
         <CustomGeneralContainer>
           <View className="flex-row justify-between items-center">
             <Pressable

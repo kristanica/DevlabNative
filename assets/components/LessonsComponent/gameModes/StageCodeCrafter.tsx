@@ -26,8 +26,9 @@ const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        <View style={{ height: 300, marginVertical: 10 }}>
-          {currentStageData.replicationFile && (
+
+        {currentStageData.replicationFile && (
+          <View style={{ height: 300, marginVertical: 10 }}>
             <WebView
               injectedJavaScript={`
       setTimeout(() => {
@@ -43,8 +44,8 @@ const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
               style={{ height: webViewHeight, width: "100%" }}
               source={{ uri: currentStageData.replicationFile }}
             />
-          )}
-        </View>
+          </View>
+        )}
 
         <View className="bg-background p-3 rounded-3xl my-3">
           <Text className="text-white font-exoRegular xs:text-xs text-justify">

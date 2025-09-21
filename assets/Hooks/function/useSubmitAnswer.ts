@@ -46,10 +46,11 @@ const useSubmitAnswer = () => {
           stageId: stageId,
         });
 
-        const data = res.data;
+        const data = res;
+
         toastResult = "success";
         if (data.nextStageId && data.nextStageType) {
-          console.log(data.message);
+          console.log("run");
           setcurrentStageIndex((prev: any) => prev + 1);
           return;
         }

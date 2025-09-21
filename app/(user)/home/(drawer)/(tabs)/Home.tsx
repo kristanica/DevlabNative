@@ -53,6 +53,7 @@ export default function Home() {
                     {userData?.bio}
                   </Text>
                 </View>
+
                 {/* Renders right side user information */}
                 <View className="flex-[3] justify-center items-star ">
                   <Text className="text-white font-exoBold xs:text-xl">

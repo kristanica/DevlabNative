@@ -33,7 +33,7 @@ const useLogin = () => {
     keepSign: false,
   });
 
-  const signIn = async (isFailed?: () => void) => {
+  const signIn = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -64,11 +64,10 @@ const useLogin = () => {
       }
 
       router.replace("/(user)/LoadingScreen");
+      return "success";
     } catch (error) {
       console.log(error);
-      if (isFailed) {
-        isFailed();
-      }
+      return "error";
     }
   };
 
