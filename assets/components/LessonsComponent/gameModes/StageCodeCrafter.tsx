@@ -12,6 +12,43 @@ const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
   console.log(location);
   console.log(currentStageData.replicationFile);
   const [webViewHeight, setWebViewHeight] = useState(0);
+  // useEffect(() => {
+  //   if (!currentStageData?.replicationFile) return;
+
+  //   const test = async () => {
+  //     try {
+  //       const currentUser = auth.currentUser;
+  //       if (!currentUser) {
+  //         console.error("No authenticated user found.");
+  //         return;
+  //       }
+
+  //       // ✅ Wait for token
+  //       const token = await currentUser.getIdToken(true);
+
+  //       // ✅ Fetch file contents and wait
+  //       const response = await fetch(currentStageData.replicationFile);
+  //       const text = await response.text();
+
+  //       // ✅ Send to backend
+  //       const res = await axios.post(
+  //         `${URL}/fireBaseAdmin/codeCrafter`,
+  //         { code: text }, // better to send an object instead of raw text
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       console.log("Backend response:", res.data);
+  //     } catch (err) {
+  //       console.error("Error in StageCodeCrafter request:", err);
+  //     }
+  //   };
+
+  //   test();
+  // }, [currentStageData?.replicationFile]);
 
   return (
     <>

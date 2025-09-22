@@ -27,7 +27,7 @@ const uploadFile = async ({
     fileForm.append("levelId", levelId);
     fileForm.append("stageId", stageId);
     await axios.post(
-      `https://4b93dc49e335.ngrok-free.app/fireBaseAdmin/uploadFile`,
+      `https://9b1edf2c2979.ngrok-free.app/fireBaseAdmin/uploadFile`,
       fileForm,
       {
         headers: {
