@@ -1,6 +1,7 @@
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import React from "react";
-import { Image, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
+import WebView from "react-native-webview";
 
 type NavigatingStageProps = {
   currentStageData: any;
@@ -9,6 +10,9 @@ type NavigatingStageProps = {
 const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
   const location = WhereIsUser((state) => state.location);
   console.log(location);
+  console.log(currentStageData.replicationFile);
+  const [webViewHeight, setWebViewHeight] = useState(0);
+
   return (
     <>
       <Text className="font-exoBold xs:text-xl text-justify text-red-500">
@@ -22,12 +26,27 @@ const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        {currentStageData.imageReplication && (
-          <Image
-            source={{ uri: currentStageData.imageReplication }}
-            className=" xs:w-full  xs:h-56 rounded-2xl"
-          />
+
+        {currentStageData.replicationFile && (
+          <View style={{ height: 300, marginVertical: 10 }}>
+            <WebView
+              injectedJavaScript={`
+      setTimeout(() => {
+        window.ReactNativeWebView.postMessage(document.body.scrollHeight);
+      }, 500);
+      true;
+    `}
+              onMessage={(event) =>
+                setWebViewHeight(Number(event.nativeEvent.data))
+              }
+              javaScriptEnabled={true}
+              scrollEnabled={true}
+              style={{ height: webViewHeight, width: "100%" }}
+              source={{ uri: currentStageData.replicationFile }}
+            />
+          </View>
         )}
+
         <View className="bg-background p-3 rounded-3xl my-3">
           <Text className="text-white font-exoRegular xs:text-xs text-justify">
             {currentStageData?.copyCode}

@@ -65,4 +65,4 @@ const CustomTabsButton = ({
   );
 };
 
-export default CustomTabsButton;
+export default React.memo(CustomTabsButton);

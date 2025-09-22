@@ -4,9 +4,6 @@ import InventoryItemContainer from "@/assets/components/HomeComponents/Inventory
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
-
-import { useBackground } from "@/assets/zustand/BackgroundProvider";
-import { useProfile } from "@/assets/zustand/ProfileProvider";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
@@ -17,13 +14,11 @@ import {
   Text,
   View,
 } from "react-native";
+import * as Progress from "react-native-progress";
 export default function Home() {
   // Recieves background and profile images
-  const { backgroundVal } = useBackground();
-  const { profileVal } = useProfile();
-  const { userData } = useGetUserInfo();
 
-  const { inventory } = useGetUserInfo();
+  const { userData, completedLevels, inventory } = useGetUserInfo();
 
   return (
     <ProtectedRoutes>
@@ -37,7 +32,7 @@ export default function Home() {
                     ? { uri: userData?.backgroundImage }
                     : require("@/assets/images/profile.png")
                 }
-                className="flex-row flex-[1]  overflow-hidden "
+                className="flex-row flex-[1]  overflow-hidden border-[#adb2be]  border-b-[2px]"
               >
                 {/* Renders left side user information */}
                 <View className="flex-[2]  justify-center items-center">
@@ -58,6 +53,7 @@ export default function Home() {
                     {userData?.bio}
                   </Text>
                 </View>
+
                 {/* Renders right side user information */}
                 <View className="flex-[3] justify-center items-star ">
                   <Text className="text-white font-exoBold xs:text-xl">
@@ -123,9 +119,18 @@ export default function Home() {
                     key={item.id}
                     name={item.name}
                     color={item.color}
-                    icon={item.icon as keyof typeof Ionicons.glyphMap}
                     index={index}
-                  />
+                  >
+                    <Progress.Circle
+                      style={{ margin: "auto" }}
+                      size={80}
+                      progress={completedLevels ? completedLevels : 0}
+                      showsText={true}
+                      thickness={6}
+                      color="green"
+                      textStyle={{ color: "white", fontWeight: 900 }}
+                    />
+                  </HomeLesson>
                 ))}
               </View>
               <Text className="text-white ml-2 xs:text-lg  font-exoBold">

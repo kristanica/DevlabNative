@@ -1,8 +1,8 @@
+import { auth, db } from "@/assets/constants/constants";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useReducer } from "react";
-import { auth, db } from "../constants/constants";
 
 type State = {
   email: string;

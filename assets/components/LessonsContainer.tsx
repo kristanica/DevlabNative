@@ -1,15 +1,16 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { lessonMetaData } from "../constants/constants";
 
 type HomeLessonProps = {
   name: string;
+  closeModal: any;
 };
 
 // Lesson container component for (tabs)/Lesson.tsx
-const LessonsContainer = ({ name }: HomeLessonProps) => {
+const LessonsContainer = ({ name, closeModal }: HomeLessonProps) => {
   const id = name as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
@@ -20,6 +21,7 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
           pathname: "/home/category/[categoryId]",
           params: { categoryId: id },
         });
+        closeModal();
       }}
       className="mt-3"
     >
@@ -28,7 +30,7 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
           <Ionicons name="logo-html5" size={50} color={"white"} />
         </View>
 
-        <View className="flex-[2]  flex-col">
+        <View className="flex-[2]  flex-col ml-4">
           <Text className="text-white xs:text-lg font-exoBold my-3">
             {meta.title}
           </Text>
@@ -46,15 +48,3 @@ const LessonsContainer = ({ name }: HomeLessonProps) => {
 };
 
 export default LessonsContainer;
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    flex: 2,
-    alignItems: "center",
-    height: "80%",
-    borderRadius: 20,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0,
-  },
-});

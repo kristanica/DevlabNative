@@ -10,22 +10,22 @@ type CodeEditorPayload = {
 };
 type CodingPlaygroundEditorProps = {
   webRef: RefObject<WebView | null>;
-  recievedCode: CodeEditorPayload | undefined;
-  setRecievedCode: React.Dispatch<
+  receivedCode: CodeEditorPayload | undefined;
+  setReceivedCode: React.Dispatch<
     React.SetStateAction<CodeEditorPayload | undefined>
   >;
 };
 
 const CodingPlaygroundEditor = ({
   webRef,
-  recievedCode,
-  setRecievedCode,
+  receivedCode,
+  setReceivedCode,
 }: CodingPlaygroundEditorProps) => {
   return (
     // Renders user's code
-    <View className="bg-accent flex-[1] rounded-[10px]">
+    <View className="bg-accent flex-[1] rounded-[10px] z-0">
       <View className="flex-1 bg-[#D9D9D9] m-2 rounded-xl">
-        {recievedCode ? (
+        {receivedCode ? (
           <WebView
             style={{
               flex: 1,
@@ -42,12 +42,12 @@ const CodingPlaygroundEditor = ({
   />
   <meta charset="UTF-8" />
    <style>
-     ${recievedCode?.css}
+     ${receivedCode?.css}
     </style>
   </head>
   <body>
-      ${recievedCode?.html}
-          <script>${recievedCode?.js}</script>
+      ${receivedCode?.html}
+          <script>${receivedCode?.js}</script>
   </body>
 </html>`,
             }}
@@ -83,7 +83,7 @@ const CodingPlaygroundEditor = ({
             try {
               const val: CodeEditorPayload = JSON.parse(e.nativeEvent.data);
 
-              setRecievedCode(val);
+              setReceivedCode(val);
             } catch (error) {
               alert(error);
             }

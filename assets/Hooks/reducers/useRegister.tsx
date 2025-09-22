@@ -1,7 +1,7 @@
+import { auth, db } from "@/assets/constants/constants";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useReducer } from "react";
-import { auth, db } from "../constants/constants";
 
 type State = {
   email: string;

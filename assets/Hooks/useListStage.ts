@@ -8,7 +8,7 @@ const useListStage = () => {
   const levelPayload = tracker((state) => state.levelPayload);
 
   const queryClient = useQueryClient();
-  const { data: stagesData } = useQuery({
+  const { data: stagesData, isLoading } = useQuery({
     queryKey: [
       "Stages",
       levelPayload?.category,
@@ -88,7 +88,7 @@ const useListStage = () => {
     },
   });
 
-  return { stagesData, addNewStageMutation, updateOrderMutation };
+  return { stagesData, addNewStageMutation, updateOrderMutation, isLoading };
 };
 
 export default useListStage;

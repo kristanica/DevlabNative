@@ -12,7 +12,7 @@ type gameComponentsProps = {
   state: any;
   stageData: any;
   setVideoPresentation: any;
-  setReplicateImage: any;
+  setReplicateFile: any;
 };
 
 const GameComponent = ({
@@ -21,7 +21,7 @@ const GameComponent = ({
   state,
   stageData,
   setVideoPresentation,
-  setReplicateImage,
+  setReplicateFile,
 }: gameComponentsProps) => {
   const gameComponentsMenu: Record<string, JSX.Element> = {
     Lesson: (
@@ -52,7 +52,7 @@ const GameComponent = ({
 
     CodeCrafter: (
       <CodeCrafter
-        setReplicateImage={setReplicateImage}
+        setReplicateFile={setReplicateFile}
         dispatch={dispatch}
         state={state}
         stageData={stageData}

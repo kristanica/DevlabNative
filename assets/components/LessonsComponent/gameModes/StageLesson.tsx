@@ -12,6 +12,7 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
   const location = WhereIsUser((state) => state.location);
   console.log(location);
   const videoRef = useRef<Video>(null);
+  console.log(currentStageData?.blocks);
   return (
     <>
       <Text className="text-white font-exoBold xs:text-xl text-justify">
@@ -30,6 +31,47 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
           isLooping
         />
       )}
+
+      {currentStageData.blocks &&
+        currentStageData.blocks.map((item: any) => {
+          switch (item.type) {
+            case "Header": {
+              return (
+                <Text
+                  key={item.id}
+                  className="text-white text-xl font-exoExtraBold"
+                >
+                  {item.value} header
+                </Text>
+              );
+            }
+            case "Paragraph": {
+              return (
+                <Text
+                  key={item.id}
+                  className=" text-justify text-white font-exoLight my-5"
+                >
+                  {item.value}
+                </Text>
+              );
+            }
+            case "Divider": {
+              return (
+                <View
+                  key={item.id}
+                  className=" border-[#464242a4] border-[1px] border-dashed my-3 mx-5"
+                ></View>
+              );
+            }
+            default: {
+              return (
+                <Text key={item.id} className="text-black">
+                  {item.value}
+                </Text>
+              );
+            }
+          }
+        })}
       <View className="bg-accentContainer p-3 rounded-3xl my-3">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">

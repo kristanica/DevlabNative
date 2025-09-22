@@ -52,7 +52,7 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
         return;
       }
       const data = await res.json();
-      console.log(res.status);
+ 
       return data;
     },
     onSuccess: (data) => {

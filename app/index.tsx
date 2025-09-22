@@ -6,11 +6,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
+
 const index = () => {
   const opacityVal = useSharedValue(0);
-
   return (
     <View className="bg-background flex-[1] justify-center items-center ">
       <AnimatedAppearContainer opacityVal={opacityVal}>
@@ -37,7 +37,7 @@ const index = () => {
                 Proceed
               </Text>
             </Pressable>
-
+            <Image></Image>
             <View className="flex-row">
               <TouchableOpacity
                 onPress={async () => {

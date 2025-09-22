@@ -1,8 +1,10 @@
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import codeWhisper from "@/assets/Hooks/mainGameModeFunctions/globalItems/codeWhisper";
 import useModal from "@/assets/Hooks/useModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Clipboard from "expo-clipboard";
 import React, { useEffect } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import HintModal from "../Modals/HintModal";
 type NavigatingStageProps = {
   currentStageData: any;
@@ -45,9 +47,18 @@ const StageBugBust = ({ currentStageData }: NavigatingStageProps) => {
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        <View className="bg-background p-3 rounded-3xl my-3">
+        <TouchableOpacity
+          onPress={async () => {
+            await Clipboard.setStringAsync(currentStageData.codingInterface);
+            console.log("Copied to clipboard!");
+          }}
+          className="absolute right-5 top-5 w-8 h-8 justify-center items-center"
+        >
+          <Ionicons name="clipboard" color="white" size={20} />
+        </TouchableOpacity>
+        <View className="bg-background p-3  my-3 relative">
           <Text className="text-white font-exoRegular xs:text-xs text-justify">
-            {currentStageData?.hint}
+            {currentStageData.codingInterface}
           </Text>
         </View>
       </View>

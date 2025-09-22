@@ -1,4 +1,4 @@
-import CustomTabBar from "@/assets/components/TabBarComponents/CustomTabBar";
+import CustomTabBarAdmin from "@/assets/components/TabBarComponents/CustomTabBarAdmin";
 import { adminIcon } from "@/assets/constants/constants";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Tabs } from "expo-router";
@@ -10,7 +10,7 @@ const AdminLayout = () => {
     <QueryClientProvider client={query}>
       <Tabs
         screenOptions={{ headerShown: false }}
-        tabBar={(props) => <CustomTabBar {...props} tabIcon={adminIcon} />}
+        tabBar={(props) => <CustomTabBarAdmin {...props} tabIcon={adminIcon} />}
       >
         <Tabs.Screen name="UserManagement"></Tabs.Screen>
         <Tabs.Screen

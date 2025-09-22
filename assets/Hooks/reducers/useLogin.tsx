@@ -1,10 +1,10 @@
+import { auth, db, path } from "@/assets/constants/constants";
 import { doc, getDoc } from "@firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useEffect, useReducer } from "react";
 import { Keyboard } from "react-native";
-import { auth, db, path } from "../constants/constants";
 
 type State = {
   email: string;
@@ -33,7 +33,7 @@ const useLogin = () => {
     keepSign: false,
   });
 
-  const signIn = async (isFailed?: () => void) => {
+  const signIn = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -53,8 +53,7 @@ const useLogin = () => {
         router.replace({ pathname: path.LOGIN });
         return;
       }
-      const userToken = await userCredential.user.getIdToken();
-      await AsyncStorage.setItem("Token", userToken); // use for backend
+
       Keyboard.dismiss();
       // Determine wheter to keep sign in or not
       if (state.keepSign) {
@@ -64,11 +63,10 @@ const useLogin = () => {
       }
 
       router.replace("/(user)/LoadingScreen");
+      return "success";
     } catch (error) {
       console.log(error);
-      if (isFailed) {
-        isFailed();
-      }
+      return "error";
     }
   };
 

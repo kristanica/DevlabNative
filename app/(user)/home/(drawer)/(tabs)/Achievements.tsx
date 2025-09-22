@@ -6,9 +6,8 @@ import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { htmlMockUp, mockData } from "@/assets/constants/constants";
-import { useBackground } from "@/assets/zustand/BackgroundProvider";
-import { useProfile } from "@/assets/zustand/ProfileProvider";
 
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import {
   FlatList,
   Image,
@@ -27,9 +26,7 @@ const Achievements = () => {
     mockData[0].name || "HTML"
   );
 
-  // Recieves background and profile images
-  const { backgroundVal } = useBackground();
-  const { profileVal } = useProfile();
+  const { userData } = useGetUserInfo();
 
   return (
     <ProtectedRoutes>
@@ -37,32 +34,28 @@ const Achievements = () => {
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <ImageBackground
-              // backgroundVal context usage
               source={
-                backgroundVal
-                  ? { uri: backgroundVal }
-                  : // Default val if backgroundVal is false
-                    require("@/assets/images/pink-background-sample.jpg")
+                userData?.backgroundImage
+                  ? { uri: userData?.backgroundImage }
+                  : require("@/assets/images/pink-background-sample.jpg")
               }
               className="flex-[1]"
             >
               <View className="flex-[1] justify-center items-center mt-3 ">
-                {profileVal && (
-                  <Image
-                    // profileVal context usage
-                    source={
-                      profileVal
-                        ? { uri: profileVal }
-                        : // Default val if profileVal is false
-                          require("@/assets/images/profile.png")
-                    }
-                    className="w-[100px] h-[100px] overflow-hidden rounded-[10px]"
-                  />
-                )}
+                <Image
+                  source={
+                    userData?.profileImage
+                      ? { uri: userData?.profileImage }
+                      : require("@/assets/images/profile.png")
+                  }
+                  className="w-[100px] h-[100px] overflow-hidden rounded-full"
+                />
               </View>
               {/* Renders name */}
               <View className="justify-center items-center flex-[.5] ">
-                <Text className="text-white font-exoBold">LAIN</Text>
+                <Text className="text-white font-exoBold">
+                  {userData?.username}
+                </Text>
 
                 <Text className="text-white font-exoBold">
                   Hall of Achievements

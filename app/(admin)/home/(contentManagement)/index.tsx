@@ -6,8 +6,8 @@ import SaveToFirebaseConfirmation from "@/assets/components/AdminComponents/Save
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import LoadingAnim from "@/assets/components/LoadingAnim";
-import useLessonEditor from "@/assets/Hooks/useLessonEditor";
+import SmallLoading from "@/assets/components/global/SmallLoading";
+import useLessonEditor from "@/assets/Hooks/query/mutation/useLessonEditor";
 import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
@@ -71,7 +71,7 @@ const ContentManagement = () => {
             </View>
 
             {isLoading ? (
-              <LoadingAnim></LoadingAnim>
+              <SmallLoading></SmallLoading>
             ) : (
               <SectionList
                 sections={

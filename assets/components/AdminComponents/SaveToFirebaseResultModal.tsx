@@ -17,14 +17,14 @@ const SaveToFirebaseResultModal = ({
   return (
     <Animated.View
       style={scaleStyle}
-      className="absolute inset-0 justify-center items-center"
+      className="absolute inset-0 justify-center items-center w-full h-full bg-black/50"
     >
       <Pressable
         className="flex-1 justify-center items-center h-full w-full "
         onPress={closeModal}
       >
         <Pressable
-          className="h-[30%] w-[50%]"
+          className="h-[30%] w-[70%]"
           onPress={(e) => {
             e.stopPropagation();
             closeModal();

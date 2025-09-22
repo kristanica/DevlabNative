@@ -1,5 +1,4 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { useIsFocused } from "@react-navigation/native";
 import { Text, View } from "react-native";
@@ -11,10 +10,11 @@ type HomeLessonProps = {
   color: string;
   index: number;
   // Recieves icon for <Ionicons>
-  icon: keyof typeof Ionicons.glyphMap;
+
+  children: ReactNode;
 };
 // HomeLesson component for (Tabs)/Home.tsx
-const HomeLesson = ({ name, color, icon, index }: HomeLessonProps) => {
+const HomeLesson = ({ name, color, children, index }: HomeLessonProps) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
@@ -29,7 +29,7 @@ const HomeLesson = ({ name, color, icon, index }: HomeLessonProps) => {
         style={{ backgroundColor: color }}
         className="h-3/4 justify-center items-center rounded-br-none rounded-bl-none"
       >
-        <Ionicons name={icon} size={70} color={"white"} />
+        {children}
       </View>
       {/* Render's Name */}
       <View className=" justify-center items-center">
