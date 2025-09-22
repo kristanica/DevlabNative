@@ -34,7 +34,7 @@ const Login = () => {
               flexGrow: 1,
               justifyContent: "center",
               alignItems: "center",
-              paddingVertical: 20, // add some spacing for keyboard
+              paddingVertical: 20,
             }}
             enableOnAndroid
             extraScrollHeight={20}

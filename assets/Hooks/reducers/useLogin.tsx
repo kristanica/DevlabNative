@@ -53,8 +53,7 @@ const useLogin = () => {
         router.replace({ pathname: path.LOGIN });
         return;
       }
-      const userToken = await userCredential.user.getIdToken();
-      await AsyncStorage.setItem("Token", userToken); // use for backend
+
       Keyboard.dismiss();
       // Determine wheter to keep sign in or not
       if (state.keepSign) {

@@ -11,12 +11,12 @@ import React, { useEffect, useState } from "react";
 import {
   Modal,
   Pressable,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
 import DeleteFireBaseConfirmationModal from "./DeleteFireBaseConfirmationModal";
 import DropDownMenu from "./DropDownMenu";
@@ -115,163 +115,165 @@ const EditStageModal = ({
         }}
       >
         <Pressable
-          className="w-[80%] h-[90%]"
+          className="w-[80%] h-[90%] "
           onPress={(e) => {
             e.stopPropagation();
           }}
         >
-          <Animated.View
-            className="     h-full  rounded-xl"
-            style={[scaleStyle, keyBoardHandlingStyle]}
+          <KeyboardAwareScrollView
+            contentContainerStyle={{}}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            <View className="px-5 bg-modal pb-5 rounded-2xl border-white border-[2px] mb-5">
-              <View>
-                <Text className="text-white font-exoBold text-lg mx-auto my-3">
-                  Currently editing {stageIdentifier}
-                </Text>
-                <Text className="text-white font-exoLight text-sm text-center mb-3">
-                  Stage visibility cannot be changed. Lessons are automatically
-                  set to Visible, and gamemodes to Hidden.
-                </Text>
-              </View>
-              <View className="bg-background border-[#56EBFF] border-[2px] p-2 rounded-2xl ">
-                <Text className="text-white font-exoRegular my-2">
-                  Stage Visibility
-                </Text>
-                <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 ">
-                  {stageData?.isHidden ? "Hidden" : "Visibile"}
-                </Text>
-              </View>
-            </View>
-
-            <View className=" flex-[3] bg-modal rounded-2xl border-white border-[2px]">
-              <ScrollView
-                contentContainerStyle={{
-                  paddingVertical: 16,
-                  paddingHorizontal: 12,
-                }}
-                showsVerticalScrollIndicator={false}
-              >
-                <DropDownMenu
-                  onSelect={(item) => {
-                    // set type to gamemodes
-                    dispatch({
-                      type: "UPDATE_FIELD",
-                      field: "type",
-                      value: item,
-                    });
-
-                    //sets gamemodes to hidden and lessons to visible
-                    dispatch({
-                      type: "UPDATE_FIELD",
-                      field: "isHidden",
-                      value: item !== "Lesson",
-                    });
-                  }}
-                  placeHolder={stageData?.type}
-                  value={state.type}
-                />
-
-                {/* Identify whether lesson, bugbust, coderush, brainbytes or codecrafter form fields */}
-                <GameComponent
-                  type={state.type ? state.type : stageData?.type}
-                  setVideoPresentation={setvideoPresentation}
-                  dispatch={dispatch}
-                  state={state}
-                  stageData={stageData}
-                  setReplicateFile={setReplicateFile}
-                ></GameComponent>
-
-                <View className="flex-row my-3">
-                  <TouchableOpacity
-                    className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
-                    onPress={() => {
-                      setDeleteConfirmationVisibility(true);
-                    }}
-                  >
-                    <Text className="text-white font-exoBold">Delete</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
-                    onPress={() => {
-                      setEditConfirmationVisibility(true);
-                    }}
-                  >
-                    <Text className="text-white">Save</Text>
-                  </TouchableOpacity>
+            <Animated.View
+              className="     h-full  rounded-xl "
+              style={[scaleStyle]}
+            >
+              <View className=" bg-modal pb-5 rounded-2xl border-white border-[2px] mb-5 px-2">
+                <View>
+                  <Text className="text-white font-exoBold text-lg mx-auto my-3">
+                    Currently editing {stageIdentifier}
+                  </Text>
+                  <Text className="text-white font-exoLight text-sm text-center mb-3">
+                    Stage visibility cannot be changed. Lessons are
+                    automatically set to Visible, and gamemodes to Hidden.
+                  </Text>
                 </View>
-              </ScrollView>
-            </View>
-            {editConfimationVisibility && (
-              <SaveToFirebaseConfirmation
-                onConfirm={async () => {
-                  const type = state.type ? state.type : stageData?.type;
+                <View className="bg-background border-[#56EBFF] border-[2px]  rounded-2xl p-2 ">
+                  <Text className="text-white font-exoRegular my-2">
+                    Stage Visibility
+                  </Text>
+                  <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 ">
+                    {stageData?.isHidden ? "Hidden" : "Visibile"}
+                  </Text>
+                </View>
+              </View>
 
-                  if (!type) {
-                    console.log("error");
-                    return;
-                  }
-                  //Checks if any of the fields is empty
-                  const hasEmpty = CheckEmptyFields(state, type);
-                  editConfirmationCloseModal();
-                  if (hasEmpty) {
-                    setisFirebaseSuccess(false);
+              <View className=" flex-[3] bg-modal rounded-2xl border-white border-[2px] px-2">
+                <View>
+                  <DropDownMenu
+                    onSelect={(item) => {
+                      // set type to gamemodes
+                      dispatch({
+                        type: "UPDATE_FIELD",
+                        field: "type",
+                        value: item,
+                      });
+
+                      //sets gamemodes to hidden and lessons to visible
+                      dispatch({
+                        type: "UPDATE_FIELD",
+                        field: "isHidden",
+                        value: item !== "Lesson",
+                      });
+                    }}
+                    placeHolder={stageData?.type}
+                    value={state.type}
+                  />
+
+                  {/* Identify whether lesson, bugbust, coderush, brainbytes or codecrafter form fields */}
+                  <GameComponent
+                    type={state.type ? state.type : stageData?.type}
+                    setVideoPresentation={setvideoPresentation}
+                    dispatch={dispatch}
+                    state={state}
+                    stageData={stageData}
+                    setReplicateFile={setReplicateFile}
+                  ></GameComponent>
+
+                  <View className="flex-row my-3">
+                    <TouchableOpacity
+                      className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
+                      onPress={() => {
+                        setDeleteConfirmationVisibility(true);
+                      }}
+                    >
+                      <Text className="text-white font-exoBold">Delete</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
+                      onPress={() => {
+                        setEditConfirmationVisibility(true);
+                      }}
+                    >
+                      <Text className="text-white">Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+              {editConfimationVisibility && (
+                <SaveToFirebaseConfirmation
+                  onConfirm={async () => {
+                    const type = state.type ? state.type : stageData?.type;
+
+                    if (!type) {
+                      console.log("error");
+                      return;
+                    }
+                    //Checks if any of the fields is empty
+                    const hasEmpty = CheckEmptyFields(state, type);
+                    editConfirmationCloseModal();
+                    if (hasEmpty) {
+                      setisFirebaseSuccess(false);
+                      setFireBaseResultVisibility(true);
+                      return;
+                    }
+
+                    if (videoPresentation) {
+                      uploadVideoMutation?.mutate({
+                        video: videoPresentation,
+                      });
+                      setvideoPresentation("");
+                    }
+                    if (replicationFile) {
+                      uploadFileReplication?.mutate({
+                        file: replicationFile,
+                      });
+                      console.log(replicationFile);
+                    }
+
+                    editMutation?.mutate({
+                      state,
+                      stageType: stageData?.type,
+                    });
+                    setReplicateFile("");
+                    console.log(
+                      "replicate file has been set to: " + replicationFile
+                    );
+                    setisFirebaseSuccess(true);
                     setFireBaseResultVisibility(true);
-                    return;
-                  }
-
-                  if (videoPresentation) {
-                    uploadVideoMutation?.mutate({
-                      video: videoPresentation,
-                    });
-                    setvideoPresentation("");
-                  }
-                  if (replicationFile) {
-                    uploadFileReplication?.mutate({
-                      file: replicationFile,
-                    });
-                    console.log(replicationFile);
-                  }
-
-                  editMutation?.mutate({
-                    state,
-                    stageType: stageData?.type,
-                  });
-                  setReplicateFile("");
-                  console.log(
-                    "replicate file has been set to: " + replicationFile
-                  );
-                  setisFirebaseSuccess(true);
-                  setFireBaseResultVisibility(true);
-                  dispatch({ type: "RESET_ALL_FIELD" });
-                }}
-                visibility={editConfimationVisibility}
-                scaleStyle={editConfirmationScaleStyle}
-                closeModal={editConfirmationCloseModal}
-              ></SaveToFirebaseConfirmation>
-            )}
-            {deleteConfirmationVisibility && (
-              <DeleteFireBaseConfirmationModal
-                onConfirm={() => {
-                  deleteConfirmationCloseModal();
-                  closeModal();
-                  deleteMutation?.mutate();
-                }}
-                visibility={deleteConfirmationVisibility}
-                scaleStyle={deleteConfirmationScaleStyle}
-                closeModal={deleteConfirmationCloseModal}
-              ></DeleteFireBaseConfirmationModal>
-            )}
-            {fireBaseResultVisibility && (
-              <SaveToFirebaseResultModal
-                isFirebaseSuccess={isFirebaseSuccess}
-                visibility={fireBaseResultVisibility}
-                scaleStyle={fireBaseResultScaleStyle}
-                closeModal={fireBaseResultVisibilityCloseModal}
-                onConfirm={() => setFireBaseResultVisibility(false)}
-              ></SaveToFirebaseResultModal>
-            )}
-          </Animated.View>
+                    dispatch({ type: "RESET_ALL_FIELD" });
+                  }}
+                  visibility={editConfimationVisibility}
+                  scaleStyle={editConfirmationScaleStyle}
+                  closeModal={editConfirmationCloseModal}
+                ></SaveToFirebaseConfirmation>
+              )}
+              {deleteConfirmationVisibility && (
+                <DeleteFireBaseConfirmationModal
+                  onConfirm={() => {
+                    deleteConfirmationCloseModal();
+                    closeModal();
+                    deleteMutation?.mutate();
+                  }}
+                  visibility={deleteConfirmationVisibility}
+                  scaleStyle={deleteConfirmationScaleStyle}
+                  closeModal={deleteConfirmationCloseModal}
+                ></DeleteFireBaseConfirmationModal>
+              )}
+              {fireBaseResultVisibility && (
+                <SaveToFirebaseResultModal
+                  isFirebaseSuccess={isFirebaseSuccess}
+                  visibility={fireBaseResultVisibility}
+                  scaleStyle={fireBaseResultScaleStyle}
+                  closeModal={fireBaseResultVisibilityCloseModal}
+                  onConfirm={() => setFireBaseResultVisibility(false)}
+                ></SaveToFirebaseResultModal>
+              )}
+            </Animated.View>
+          </KeyboardAwareScrollView>
         </Pressable>
       </Pressable>
     </Modal>
