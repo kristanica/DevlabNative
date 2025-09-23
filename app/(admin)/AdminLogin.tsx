@@ -8,7 +8,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Animated, { FadeIn } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 const AdminLogin = () => {
   const { state, dispatch, adminLogin } = useAdminLogin();
@@ -16,11 +16,7 @@ const AdminLogin = () => {
 
   return (
     <ProtectedRoutes>
-      <Animated.View
-        entering={FadeIn.duration(500)}
-        style={{ flex: 1 }}
-        className="bg-background"
-      >
+      <View style={{ flex: 1 }} className="bg-background">
         <CustomGeneralContainer>
           <KeyboardAwareScrollView
             contentContainerStyle={{
@@ -97,7 +93,7 @@ const AdminLogin = () => {
             </View>
           </KeyboardAwareScrollView>
         </CustomGeneralContainer>
-      </Animated.View>
+      </View>
     </ProtectedRoutes>
   );
 };

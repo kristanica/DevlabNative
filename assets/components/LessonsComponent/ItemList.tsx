@@ -163,7 +163,7 @@ const ItemList = ({ gameType }: any) => {
       </AnimatedPressable>
       <Animated.View
         style={[moveToLeftInventoryStyle, { top: height / 3 }]}
-        className="h-80 w-[70%] top-14 absolute right-0 bg-modal border-[#2a3141] border-[1px] border-r-0 shadow-2xl z-50 p-4"
+        className="h-80 w-[90%] top-14 absolute right-0 bg-modal border-[#2a3141] border-[1px] border-r-0 shadow-2xl z-50 p-4"
         pointerEvents="auto"
       >
         <View className="justify-center items-center flex-row mb-2">

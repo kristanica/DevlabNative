@@ -1,8 +1,8 @@
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
-// import * as Clipboard from "expo-clipboard";
-import React, { useRef } from "react";
+import * as Clipboard from "expo-clipboard";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
   currentStageData: any;
@@ -13,6 +13,11 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
   console.log(location);
   const videoRef = useRef<Video>(null);
   console.log(currentStageData?.blocks);
+  useEffect(() => {
+    if (currentStageData.videoPresentation) {
+      console.log("Video");
+    }
+  }, []);
   return (
     <>
       <Text className="text-white font-exoBold xs:text-xl text-justify">
@@ -21,16 +26,6 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
       <Text className="text-white font-exoRegular xs:text-xs my-3 text-justify">
         {currentStageData?.description}
       </Text>
-
-      {currentStageData?.videoPresentation && (
-        <Video
-          ref={videoRef}
-          source={{ uri: currentStageData.videoPresentation }}
-          style={styles.video}
-          useNativeControls
-          isLooping
-        />
-      )}
 
       {currentStageData.blocks &&
         currentStageData.blocks.map((item: any) => {
@@ -41,7 +36,7 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
                   key={item.id}
                   className="text-white text-xl font-exoExtraBold"
                 >
-                  {item.value} header
+                  {item.value}
                 </Text>
               );
             }
@@ -72,6 +67,15 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
             }
           }
         })}
+      {currentStageData?.videoPresentation && (
+        <Video
+          ref={videoRef}
+          source={{ uri: currentStageData.videoPresentation }}
+          style={styles.video}
+          useNativeControls
+          isLooping
+        />
+      )}
       <View className="bg-accentContainer p-3 rounded-3xl my-3">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
@@ -81,7 +85,11 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
           <Text className="text-white font-exoRegular xs:text-xs text-justify">
             {currentStageData?.codingInterface}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              await Clipboard.setStringAsync(currentStageData?.codingInterface);
+            }}
+          >
             <Ionicons
               name="clipboard-outline"
               size={20}

@@ -9,6 +9,7 @@ import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import LevelFinishedModal from "@/assets/components/LessonsComponent/LevelFinishedModal";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import { auth } from "@/assets/constants/constants";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import useSubmitAnswer from "@/assets/Hooks/function/useSubmitAnswer";
@@ -23,6 +24,7 @@ import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating } from "@tanstack/react-query";
+import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -150,16 +152,38 @@ const stageScreen = () => {
     setcurrentStageIndex((prev) => prev - 1);
   }, [stageData, currentStageIndex, lessonId, levelId, category]);
 
-  const handleNext = useCallback(() => {
+  const handleNext = async () => {
     gameIdentifier.current = currentStageData?.type;
     if (gameIdentifier.current !== "Lesson") {
       finalAnswer.setVisibility(true);
       return;
     }
     if (stageData && currentStageIndex < stageData.length - 1) {
+      console.log("stage");
+      const token = await auth.currentUser?.getIdToken(true);
       setcurrentStageIndex((prev) => prev + 1);
+      try {
+        const res = await axios.post(
+          `${URL}/fireBase/unlockStage`,
+          {
+            subject: category,
+            lessonId: lessonId,
+            levelId: levelId,
+            currentStageId: stageId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await res.data;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [stageData, currentStageIndex, lessonId, levelId, category, finalAnswer]);
+  };
 
   const handleGameOver = useCallback(() => {
     setcurrentStageIndex(0);

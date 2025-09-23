@@ -16,7 +16,7 @@ type Block = {
 type State = {
   //general
   title: string;
-  description: string;
+  description?: string;
   isHidden: boolean;
   type: string;
   instruction: string;
@@ -33,7 +33,7 @@ type State = {
   blocks: Block[];
   //CodeCrafter
   //This is a picture
-  copyCode: string;
+  copyCode?: string;
 };
 const initialState = {
   //general

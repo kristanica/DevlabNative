@@ -3,19 +3,16 @@ import InputBox from "@/assets/components/InputBox";
 import useLogin from "@/assets/Hooks/reducers/useLogin";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React, { useState } from "react";
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeIn } from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
-const { width, height } = Dimensions.get("window");
 const Login = () => {
-  //custom hook
   const { state, dispatch, signIn } = useLogin();
-  //incorrect animation state
-  const [trigger, setTrigger] = useState<boolean>(false);
+
   const showToast = (type: string) => {
     Toast.show({
       type: type,

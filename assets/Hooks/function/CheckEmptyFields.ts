@@ -22,7 +22,7 @@ const exemptions: Record<string, string[]> = {
     "hint",
     "isHidden",
     "choices",
-    "copyCode",
+
     "type",
     "blocks",
   ],
@@ -48,23 +48,31 @@ const exemptions: Record<string, string[]> = {
   Register: [],
 };
 
-const CheckEmptyFields = (state: any, type: string) => {
-  const hasEmpty = Object.entries(state).some(([key, value]) => {
+type ExemptionType = keyof typeof exemptions;
+
+const isEmptyValue = (val: unknown): boolean =>
+  val === "" || val === null || val === undefined;
+
+const hasEmptyInObject = (obj: Record<string, unknown>): boolean =>
+  Object.values(obj).some(isEmptyValue);
+
+const CheckEmptyFields = (
+  state: Record<string, any>,
+  type: ExemptionType
+): boolean => {
+  return Object.entries(state).some(([key, value]) => {
     if (exemptions[type]?.includes(key)) return false;
-    if (key === "blocks" && typeof value === "object" && value) {
-      return Object.values(value).some(
-        (choice) => choice === "" || choice === null || choice === undefined
-      );
-    }
-    if (key === "choices" && value && typeof value === "object") {
-      return Object.values(value).some(
-        (choice) => choice === "" || choice === null || choice === undefined
-      );
+
+    if (
+      (key === "blocks" || key === "choices") &&
+      value &&
+      typeof value === "object"
+    ) {
+      return hasEmptyInObject(value);
     }
 
-    return value === "" || value === null || value === undefined;
+    return isEmptyValue(value);
   });
-  return hasEmpty;
 };
 
 export default CheckEmptyFields;
