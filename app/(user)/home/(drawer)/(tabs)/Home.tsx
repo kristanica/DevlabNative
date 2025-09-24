@@ -3,9 +3,11 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import InventoryItemContainer from "@/assets/components/HomeComponents/InventoryItemContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { lessons } from "@/assets/constants/constants";
+import { auth, lessons, URL } from "@/assets/constants/constants";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import {
   Image,
   ImageBackground,
@@ -17,8 +19,29 @@ import {
 import * as Progress from "react-native-progress";
 export default function Home() {
   // Recieves background and profile images
+  const setUserProgress = useGetUserInfo((state) => state.setUserProgress);
+  const { data: userProgressData } = useQuery({
+    queryKey: ["userProgress"],
+    queryFn: async () => {
+      const uid = await auth.currentUser?.getIdToken(true);
+      const res = await axios.get(`${URL}/fireBase/userProgress`, {
+        headers: {
+          Authorization: `Bearer ${uid}`,
+        },
+      });
 
-  const { userData, completedLevels, inventory } = useGetUserInfo();
+      setUserProgress({
+        allProgressLevels: res.data.allProgress,
+        allProgressStages: res.data.allStages,
+        completedLevels: res.data.completedLevels,
+        completedStages: res.data.completedStages,
+      });
+      console.log(res.data);
+      return res.data;
+    },
+  });
+
+  const { userData, inventory } = useGetUserInfo();
 
   return (
     <ProtectedRoutes>
@@ -124,7 +147,9 @@ export default function Home() {
                     <Progress.Circle
                       style={{ margin: "auto" }}
                       size={80}
-                      progress={completedLevels ? completedLevels : 0}
+                      progress={
+                        userProgressData ? userProgressData?.completedLevels : 0
+                      }
                       showsText={true}
                       thickness={6}
                       color="green"

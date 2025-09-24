@@ -10,7 +10,7 @@ const FinalAnswerModal = ({
 }: ScaleModalProps) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1 bg-black/50">
+      <Pressable onPress={closeModal} className="flex-1 bg-black/50 z-10">
         <Animated.View
           style={[scaleStyle]}
           className="   aspect-square w-3/4 m-auto  rounded-xl z-50 "

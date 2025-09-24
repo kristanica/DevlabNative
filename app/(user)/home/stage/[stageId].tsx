@@ -1,30 +1,24 @@
 import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
-import EvaluateModal from "@/assets/components/CodeEditor/EvaluateModal";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
-import FinalAnswerModal from "@/assets/components/LessonsComponent/FinalAnswerModal";
-import GameOverModal from "@/assets/components/LessonsComponent/GameOverModal";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
-import LevelFinishedModal from "@/assets/components/LessonsComponent/LevelFinishedModal";
+import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { auth } from "@/assets/constants/constants";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
-import useSubmitAnswer from "@/assets/Hooks/function/useSubmitAnswer";
-import useEvaluationGame from "@/assets/Hooks/query/mutation/useEvaluationGame";
-import useEvaluationLesson from "@/assets/Hooks/query/mutation/useEvaluationLesson";
+import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
+import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating } from "@tanstack/react-query";
-import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -32,7 +26,7 @@ import Toast from "react-native-toast-message";
 const stageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
-  const [currentStageIndex, setcurrentStageIndex] = useState<number>(0);
+  const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
 
   const healthPoints = userHp((state) => state.userHp);
 
@@ -41,6 +35,15 @@ const stageScreen = () => {
   const currentStageData = stageData?.[currentStageIndex] ?? null;
   const gameIdentifier = useRef<string | undefined>("Lesson");
 
+  const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
+
+  useEffect(() => {
+    if (levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed) {
+      showToast("rewardClaimed");
+      return;
+    }
+  }, [levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed]);
+
   //gets the current index of the stageData
   const setLocation = WhereIsUser((state) => state.setLocation);
   useEffect(() => {
@@ -48,7 +51,7 @@ const stageScreen = () => {
     const index: number = stageData.findIndex(
       (stage: any) => stage.id === stageId
     );
-    setcurrentStageIndex(index);
+    setCurrentStageIndex(index);
     const stage = index !== -1 ? stageData[index] : null;
 
     setLocation(stage?.type! as string);
@@ -57,136 +60,43 @@ const stageScreen = () => {
       console.log(gameIdentifier.current);
     }
   }, [stageId, stageData]);
-
-  const { evaluationMutation } = useEvaluationGame();
-  const { evaluationLessonMutation } = useEvaluationLesson();
+  const currentStageType = currentStageData?.type ?? "Lesson"; // default fallback
+  const {
+    handleFinalAnswer,
+    handleEvaluation,
+    evaluateModal,
+    levelFinishedModal,
+    finalAnswerModall,
+    evaluationLessonMutation,
+  } = useHandleFinalAnswer({
+    lessonId: String(lessonId),
+    levelId: String(levelId),
+    stageId: String(stageId),
+    category: String(category),
+    gameIdentifier: gameIdentifier,
+    currentStageDataType: currentStageType,
+    setCurrentStageIndex: setCurrentStageIndex,
+    currentStageIndex: currentStageIndex,
+    currentStageData: currentStageData,
+  });
 
   const { webRef, sendToWebView, receivedCode, setReceivedCode } =
     useCodeEditor();
 
   const health = userHealthPoints((state) => state.health);
   const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
-  const finalAnswer = useModal();
-  const gameOver = useModal();
-  const levelFinished = useModal();
-  const evaluateModal = useModal();
 
-  const { nextStage } = useSubmitAnswer();
+  const gameOver = useModal();
 
   //Handlers
   const isMutating = useIsMutating();
-  const handleEvaluation = () => {
-    if (!receivedCode) {
-      return;
-    }
-    evaluationLessonMutation.mutate(
-      {
-        receivedCode: receivedCode,
-        instruction: currentStageData.instruction,
-        description: currentStageData.description,
-      },
-      {
-        onSuccess: () => {
-          evaluateModal.setVisibility(true);
-        },
-      }
-    );
-  };
 
-  const handleFinalAnswer = () => {
-    if (!receivedCode) {
-      setTimeout(() => {
-        nextStage.mutate({
-          setcurrentStageIndex: setcurrentStageIndex,
-          stageId: stageData[currentStageIndex].id,
-          resetStage: stageData[0].id,
-          lessonId: String(lessonId),
-          levelId: String(levelId),
-          category: String(category),
-          answer: false,
-        });
-      }, 5000);
-      showToast("error");
-
-      setTimeout(() => finalAnswer.closeModal(), 200);
-      return;
-    }
-    finalAnswer.closeModal();
-    evaluationMutation.mutate(
-      {
-        receivedCode: receivedCode,
-        instruction: currentStageData.instruction,
-        description: currentStageData.description,
-      },
-      {
-        onSuccess: (data) => {
-          if (stageData.length - 1 === currentStageIndex) {
-            finalAnswer.closeModal();
-            setTimeout(() => levelFinished.setVisibility(true), 200);
-            return;
-          }
-
-          if (stageData && currentStageIndex < stageData.length - 1) {
-            const toastResult = data.correct ? "success" : "error";
-            showToast(toastResult);
-
-            setTimeout(
-              () =>
-                nextStage.mutate({
-                  stageId: stageData[currentStageIndex].id,
-                  resetStage: stageData[0].id,
-                  lessonId: String(lessonId),
-                  levelId: String(levelId),
-                  category: String(category),
-                  answer: data.correct,
-                  setcurrentStageIndex,
-                }),
-              200
-            );
-          }
-        },
-      }
-    );
-  };
   const handlePrevious = useCallback(() => {
-    setcurrentStageIndex((prev) => prev - 1);
+    setCurrentStageIndex((prev) => prev - 1);
   }, [stageData, currentStageIndex, lessonId, levelId, category]);
 
-  const handleNext = async () => {
-    gameIdentifier.current = currentStageData?.type;
-    if (gameIdentifier.current !== "Lesson") {
-      finalAnswer.setVisibility(true);
-      return;
-    }
-    if (stageData && currentStageIndex < stageData.length - 1) {
-      console.log("stage");
-      const token = await auth.currentUser?.getIdToken(true);
-      setcurrentStageIndex((prev) => prev + 1);
-      try {
-        const res = await axios.post(
-          `${URL}/fireBase/unlockStage`,
-          {
-            subject: category,
-            lessonId: lessonId,
-            levelId: levelId,
-            currentStageId: stageId,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await res.data;
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   const handleGameOver = useCallback(() => {
-    setcurrentStageIndex(0);
+    setCurrentStageIndex(0);
 
     gameOver.closeModal();
   }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
@@ -238,43 +148,31 @@ const stageScreen = () => {
                   </Text>
                 </View>
               ),
+              rewardClaimed: () => (
+                <View className="h-[50px]  w-52 mx-2 z-50  bg-slate-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute">
+                  <Text className="text-white xs: text-xs font-exoExtraBold">
+                    You've already completed this level! No rewards would be
+                    made
+                  </Text>
+                </View>
+              ),
             }}
           />
-          {health === 0 && gameOver.visibility && (
-            <GameOverModal
-              onConfirm={() => {
-                handleGameOver();
-              }}
-              {...gameOver}
-            ></GameOverModal>
-          )}
-          {evaluationLessonMutation.isPending && (
-            <FillScreenLoading></FillScreenLoading>
-          )}
-          {levelFinished.visibility && (
-            <LevelFinishedModal
-              onConfirm={() => console.log("levelFinished")}
-              {...levelFinished}
-            ></LevelFinishedModal>
-          )}
-
-          {evaluateModal.visibility && (
-            <EvaluateModal
-              onConfirm={() => evaluateModal.closeModal()}
-              gptResponse={evaluationLessonMutation.data}
-              {...evaluateModal}
-            ></EvaluateModal>
-          )}
-
-          {/* Shows answer confirmation before navigating to the next one */}
-          {finalAnswer.visibility && (
-            <FinalAnswerModal
-              onConfirm={() => {
-                handleFinalAnswer();
-              }}
-              {...finalAnswer}
-            />
-          )}
+          <ModalHandler
+            lessonId={String(lessonId)}
+            gameOver={gameOver}
+            levelFinishedModal={levelFinishedModal}
+            evaluateModal={evaluateModal}
+            finalAnswerModall={finalAnswerModall}
+            evaluationLessonMutation={evaluationLessonMutation}
+            handleFinalAnswer={handleFinalAnswer}
+            receivedCode={receivedCode}
+            stageData={stageData}
+            showToast={showToast}
+            health={health}
+            handleGameOver={handleGameOver}
+            category={String(category)}
+          ></ModalHandler>
 
           {/* Shows modal for first time */}
           <StageModalComponent
@@ -322,7 +220,7 @@ const stageScreen = () => {
 
               <Pressable
                 onPress={() => {
-                  handleEvaluation();
+                  handleEvaluation(receivedCode);
                 }}
                 className="mx-auto"
               >
@@ -333,7 +231,7 @@ const stageScreen = () => {
                 )}
               </Pressable>
 
-              <Pressable onPress={() => handleNext()}>
+              <Pressable onPress={() => finalAnswerModall.setVisibility(true)}>
                 <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
                   Next
                 </Text>

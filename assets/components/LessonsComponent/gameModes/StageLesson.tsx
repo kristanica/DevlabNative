@@ -1,23 +1,15 @@
-import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
 import * as Clipboard from "expo-clipboard";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
   currentStageData: any;
 };
 
 const StageLesson = ({ currentStageData }: StageLessonprops) => {
-  const location = WhereIsUser((state) => state.location);
-  console.log(location);
   const videoRef = useRef<Video>(null);
-  console.log(currentStageData?.blocks);
-  useEffect(() => {
-    if (currentStageData.videoPresentation) {
-      console.log("Video");
-    }
-  }, []);
+
   return (
     <>
       <Text className="text-white font-exoBold xs:text-xl text-justify">

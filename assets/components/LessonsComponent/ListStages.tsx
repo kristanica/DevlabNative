@@ -25,6 +25,7 @@ const ListStages = () => {
       levelPayload?.levelId,
     ],
     queryFn: async () => {
+      
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
       const res = await fetch(
@@ -46,12 +47,6 @@ const ListStages = () => {
       setStageData(data);
       return data;
     },
-
-    enabled: !!(
-      levelPayload?.category &&
-      levelPayload?.lessonId &&
-      levelPayload?.levelId
-    ),
   });
   let globalCounter = 0;
   if (!levelPayload) {
@@ -59,6 +54,7 @@ const ListStages = () => {
   }
 
   const allStages = useGetUserInfo((state) => state.allProgressStages);
+  console.log(allStages);
 
   const lockedModal = useModal();
 
@@ -72,21 +68,22 @@ const ListStages = () => {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
+            const stageKey = `${levelPayload?.lessonId}-${levelPayload?.levelId}-${item.id}`;
+            const isStageLocked =
+              allStages?.[levelPayload?.category]?.[stageKey]?.status ?? false;
+
             globalCounter++;
             if (item.isHidden) {
               return null;
             }
+
             return (
               <Pressable
                 onPress={() => {
                   stageId.current = item.id;
-                  const test =
-                    allStages[
-                      `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                    ]?.status ?? false;
-                  if (test) {
+                  if (!isStageLocked) {
                     lockedModal.setVisibility(true);
-                    return;
+                    return null;
                   }
                   if (
                     levelPayload?.category &&
@@ -107,11 +104,7 @@ const ListStages = () => {
                 }}
               >
                 <StagesContainer
-                  isLocked={
-                    allStages[
-                      `${levelPayload.lessonId}-${levelPayload.levelId}-${item.id}`
-                    ]?.status ?? true
-                  }
+                  isLocked={isStageLocked}
                   item={item}
                   index={globalCounter}
                 ></StagesContainer>

@@ -28,7 +28,7 @@ const unlockNextStage = async ({
       console.log("Whoops, something went wrong when unlocking the next stage");
       return null;
     }
-    console.log(res.data);
+
     return res.data;
   } catch (error) {
     console.log(error);

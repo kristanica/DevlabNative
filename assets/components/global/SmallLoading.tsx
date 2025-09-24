@@ -7,7 +7,7 @@ const SmallLoading = () => {
   return (
     <Animated.View
       entering={FadeIn.duration(1000)}
-      className="justify-center items-center"
+      className="justify-center items-center z-50"
     >
       <LottieView
         source={require("@/assets/Lottie/loadingSmall.json")}

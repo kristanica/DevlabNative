@@ -6,7 +6,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 const queryClient = new QueryClient();
 const stageLayout = () => {
   const loadUserHp = userHp((state) => state.loadUserHp);
-
   useEffect(() => {
     loadUserHp();
   }, []);

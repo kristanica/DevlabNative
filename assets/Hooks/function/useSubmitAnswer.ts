@@ -1,5 +1,5 @@
 import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
-import { auth } from "@/assets/constants/constants";
+import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
@@ -9,9 +9,10 @@ type submitAnswerPayload = {
   lessonId: string;
   levelId: string;
   category: string;
-  resetStage: string;
   answer: boolean;
-  setcurrentStageIndex: any;
+  setCurrentStageIndex: any;
+  levelFinishedModal: any;
+  finalAnswerModall: any;
 };
 
 const useSubmitAnswer = () => {
@@ -28,16 +29,19 @@ const useSubmitAnswer = () => {
       levelId,
       category,
       answer,
-      setcurrentStageIndex,
+      setCurrentStageIndex,
+      levelFinishedModal,
+      finalAnswerModall,
     }: submitAnswerPayload) => {
-      const token = await auth.currentUser?.getIdToken(true);
-
+      const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
+      const setUnlockNextLesson = unlockNextLevel.getState().unlockNextLesson;
       if (hasShield && !answer) {
         const isShieldUsed = await consumeErrorShield();
         if (isShieldUsed) {
           return;
         }
       }
+
       if (answer) {
         const res = await unlockNextStage({
           category: category,
@@ -47,15 +51,34 @@ const useSubmitAnswer = () => {
         });
 
         const data = res;
-
-        toastResult = "success";
+        console.log(data);
         if (data.nextStageId && data.nextStageType) {
-          console.log("run");
-          setcurrentStageIndex((prev: any) => prev + 1);
+          console.log("HELLO");
+          setCurrentStageIndex((prev: any) => prev + 1);
           return;
-        }
+        } else if (data.isNextLevelUnlocked) {
+          finalAnswerModall.closeModal();
 
-        if (data.setLevelComplete) {
+          setTimeout(() => {
+            levelFinishedModal.setVisibility(true);
+          }, 200);
+          setUnlockNextLevel({
+            lessonId: lessonId,
+            nextLevelId: res.nextLevelId,
+          });
+          return;
+        } else {
+          finalAnswerModall.closeModal();
+
+          setTimeout(() => {
+            levelFinishedModal.setVisibility(true);
+          }, 200);
+          setUnlockNextLevel({
+            lessonId: lessonId,
+            nextLevelId: res.nextLevelId,
+          });
+          console.log("THIS IS THE NEXXCT LESSON ID", res.nextLessonId);
+          setUnlockNextLesson(res.nextLessonId);
           return;
         }
       }
@@ -63,7 +86,7 @@ const useSubmitAnswer = () => {
       decrementUserHp();
 
       if (healthPointsTracker <= 1) {
-        setcurrentStageIndex(0);
+        setCurrentStageIndex(0);
 
         resetUserHp();
       }
@@ -73,3 +96,6 @@ const useSubmitAnswer = () => {
 };
 
 export default useSubmitAnswer;
+// else {
+
+//         }

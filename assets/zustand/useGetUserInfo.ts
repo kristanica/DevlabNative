@@ -1,7 +1,6 @@
-import axios from "axios";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { create } from "zustand";
-import { auth, db, URL } from "../constants/constants";
+import { auth, db } from "../constants/constants";
 type userData = {
   username: string;
   bio: string;
@@ -26,7 +25,12 @@ type InformationProviderProps = {
   userData: userData | null;
   setUserData: (val: userData) => void;
 
-  getAllProgress: () => Promise<void>;
+  setUserProgress: (data: {
+    allProgressLevels: allProgressType;
+    allProgressStages: allStagesType;
+    completedLevels: number;
+    completedStages: number;
+  }) => void;
   inventory: any[];
   allProgressLevels: allProgressType;
   allProgressStages: allStagesType;
@@ -44,25 +48,18 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   allProgressStages: {},
   completedLevels: 0,
   completedStages: 0,
-  getAllProgress: async () => {
-    const uid = await auth.currentUser?.getIdToken(true);
-
-    try {
-      const res = await axios.get(`${URL}/fireBase/userProgress`, {
-        headers: {
-          Authorization: `Bearer ${uid}`,
-        },
-      });
-      if (res.status !== 200) {
-        console.log(res.status);
-      }
-      set({ allProgressLevels: res.data?.allProgress });
-      set({ allProgressStages: res.data?.allStages });
-      set({ completedLevels: res.data?.completedLevels });
-      set({ completedStages: res.data?.completedStages });
-    } catch (error) {
-      console.log(error);
-    }
+  setUserProgress: ({
+    allProgressLevels,
+    allProgressStages,
+    completedLevels,
+    completedStages,
+  }) => {
+    set({
+      allProgressLevels,
+      allProgressStages,
+      completedLevels,
+      completedStages,
+    });
   },
   setUserData: (val: userData) => set({ userData: val }),
   getUser: async () => {

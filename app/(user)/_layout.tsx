@@ -11,14 +11,13 @@ import { useIsMutating } from "@tanstack/react-query";
 
 const TabsLayout = () => {
   const getValidUser = useGetUserInfo((state) => state.getUser);
-  const getUserProgress = useGetUserInfo((state) => state.getAllProgress);
+
   const isMutating = useIsMutating();
 
   const isMounted = useMounted();
   useEffect(() => {
     if (!isMounted.current) return;
     getValidUser();
-    getUserProgress();
   }, []);
 
   return (
