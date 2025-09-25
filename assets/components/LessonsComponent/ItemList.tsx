@@ -26,9 +26,19 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
+import Toast, { BaseToastProps } from "react-native-toast-message";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
-const ItemList = ({ gameType }: any) => {
+const ItemList = () => {
+  const showToast = (type: string, gameMode: string) => {
+    Toast.show({
+      type: type,
+      text1: `You cannot use that, you're in ${gameMode}! `,
+      visibilityTime: 2000,
+      position: "top",
+      topOffset: 20,
+    });
+  };
   const { inventory } = useGetUserInfo();
   const moveToRight = useSharedValue(100);
   const opacity = useSharedValue(1);
@@ -102,6 +112,7 @@ const ItemList = ({ gameType }: any) => {
     "Coin Surge": (itemId) => useItem(itemId, "doubleCoins"),
     "Code Whisper": async (itemId) => {
       if (location !== "BugBust") {
+        showToast("itemError", String(location));
         console.log("You're not in bug bust lol");
         return;
       }
@@ -109,6 +120,7 @@ const ItemList = ({ gameType }: any) => {
     },
     "Code Patch++": (itemId) => {
       if (location !== "CodeRush") {
+        showToast("itemError", String(location));
         console.log("youre not in code rush");
         return;
       }
@@ -116,6 +128,7 @@ const ItemList = ({ gameType }: any) => {
     },
     "Time Freeze": (itemId) => {
       if (location !== "CodeRush") {
+        showToast("itemError", String(location));
         console.log("youre not in code rush");
         return;
       }
@@ -123,6 +136,7 @@ const ItemList = ({ gameType }: any) => {
     },
     "Error Shield": async (itemId) => {
       if (location === "Lesson") {
+        showToast("itemError", String(location));
         console.log("You cannot use items in here");
         return;
       }
@@ -130,6 +144,7 @@ const ItemList = ({ gameType }: any) => {
     },
     "Brain Filter": (itemId) => {
       if (location !== "BrainBytes") {
+        showToast("itemError", String(location));
         console.log("youre not in Brain Bytes");
         return;
       }
@@ -151,6 +166,17 @@ const ItemList = ({ gameType }: any) => {
   };
   return (
     <>
+      <Toast
+        config={{
+          itemError: (props: BaseToastProps) => (
+            <View className="h-[50px]  w-52 mx-2 z-50 bg-red-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
+              <Text className="text-white xs: text-xs text-center font-exoExtraBold">
+                {props.text1}
+              </Text>
+            </View>
+          ),
+        }}
+      />
       <AnimatedPressable
         onPress={showInventory}
         disabled={disable}

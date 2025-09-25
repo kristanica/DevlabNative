@@ -36,7 +36,7 @@ export default function Home() {
         completedLevels: res.data.completedLevels,
         completedStages: res.data.completedStages,
       });
-      console.log(res.data);
+
       return res.data;
     },
   });

@@ -16,7 +16,7 @@ const unlockNextStage = async ({
         subject: category,
         lessonId: lessonId,
         levelId: levelId,
-        currentStageId: stageId,
+        stageId: stageId,
       },
       {
         headers: {
@@ -24,14 +24,21 @@ const unlockNextStage = async ({
         },
       }
     );
-    if (res.status !== 200) {
-      console.log("Whoops, something went wrong when unlocking the next stage");
-      return null;
-    }
 
+    if (res.status === 400) {
+      console.log(res.data.message);
+      return res.data; // still return res.data so caller can handle it
+    }
     return res.data;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.error(
+      "unlockNextStage request failed:",
+      error?.response?.data || error.message
+    );
+    return {
+      error: true,
+      message: error?.response?.data?.message || "Request failed",
+    };
   }
 };
 export default unlockNextStage;

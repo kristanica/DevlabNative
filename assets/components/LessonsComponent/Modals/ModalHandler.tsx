@@ -60,6 +60,8 @@ const ModalHandler = ({
               unlockNextLevel.getState().nextLevelPayload;
             const nextLessonPayload =
               unlockNextLevel.getState().nextLessonPayload;
+            const nextSubjectPayload =
+              unlockNextLevel.getState().nextSubjectPayload;
             const { allProgressLevels, completedLevels, allProgressStages } =
               useGetUserInfo.getState();
             if (!nextLevelPayload) {
@@ -71,7 +73,11 @@ const ModalHandler = ({
               });
               return;
             }
-
+            if (nextLessonPayload) {
+              console.log(
+                "Calm down, youve finished the whole subject already, jeez"
+              );
+            }
             if (nextLevelPayload && !nextLessonPayload) {
               useGetUserInfo.getState().setUserProgress({
                 allProgressLevels: {

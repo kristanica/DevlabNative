@@ -132,32 +132,7 @@ const stageScreen = () => {
               sendToWebView={sendToWebView}
             />
           </View>
-          <Toast
-            config={{
-              success: () => (
-                <View className="h-[50px]  w-52 mx-2 z-50 bg-[#1ABC9C] border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
-                  <Text className="text-white xs: text-xs font-exoExtraBold">
-                    🎉 You got that right!
-                  </Text>
-                </View>
-              ),
-              error: () => (
-                <View className="h-[50px]  w-52 mx-2 z-50  bg-[#E63946] border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute">
-                  <Text className="text-white xs: text-xs font-exoExtraBold">
-                    ⚠️ Oops! somethings wrong!
-                  </Text>
-                </View>
-              ),
-              rewardClaimed: () => (
-                <View className="h-[50px]  w-52 mx-2 z-50  bg-slate-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute">
-                  <Text className="text-white xs: text-xs font-exoExtraBold">
-                    You've already completed this level! No rewards would be
-                    made
-                  </Text>
-                </View>
-              ),
-            }}
-          />
+
           <ModalHandler
             lessonId={String(lessonId)}
             gameOver={gameOver}
@@ -208,6 +183,13 @@ const stageScreen = () => {
             <View className="flex-row justify-evenly">
               <Pressable
                 onPress={() => {
+                  if (
+                    stageData[currentStageIndex - 1] === undefined ||
+                    stageData[currentStageIndex - 1] === null
+                  ) {
+                    showToast("previousButton");
+                    return;
+                  }
                   handlePrevious();
                 }}
               >
@@ -231,7 +213,11 @@ const stageScreen = () => {
                 )}
               </Pressable>
 
-              <Pressable onPress={() => finalAnswerModall.setVisibility(true)}>
+              <Pressable
+                onPress={() => {
+                  finalAnswerModall.setVisibility(true);
+                }}
+              >
                 <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
                   Next
                 </Text>

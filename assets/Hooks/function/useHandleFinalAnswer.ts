@@ -1,5 +1,3 @@
-import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
-import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { RefObject } from "react";
 import useEvaluationGame from "../query/mutation/useEvaluationGame";
@@ -83,33 +81,17 @@ export const useHandleFinalAnswer = ({
     // }
     // Chekcs if the current stage is Lesson, this will ignore answer
     if (currentStageDataType === "Lesson") {
-      try {
-        const res = await unlockNextStage({
-          category,
-          lessonId,
-          levelId,
-          stageId,
-        });
-
-        const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
-        console.log(res);
-        if (res?.nextStageId) {
-          console.log("Youve unlocked next stage!");
-
-          setCurrentStageIndex((prev) => prev + 1);
-          return;
-        } else {
-          levelFinishedModal.setVisibility(true);
-          setUnlockNextLevel({
-            lessonId: lessonId,
-            nextLevelId: res.nextLevelId,
-          });
-        }
-        return;
-      } catch (err) {
-        console.error("unlockNextStage error:", err);
-        levelFinishedModal.setVisibility(true);
-      }
+      console.log(stageId);
+      nextStage.mutate({
+        stageId: currentStageData.id,
+        lessonId: String(lessonId),
+        levelId: levelId,
+        category: category,
+        setCurrentStageIndex,
+        levelFinishedModal,
+        finalAnswerModall,
+        stageType: currentStageData.type,
+      });
     }
 
     if (!receivedCode && currentStageDataType !== "Lesson") {
@@ -137,6 +119,7 @@ export const useHandleFinalAnswer = ({
               setCurrentStageIndex,
               levelFinishedModal,
               finalAnswerModall,
+              stageType: currentStageData.type,
             });
           },
         }
@@ -153,3 +136,49 @@ export const useHandleFinalAnswer = ({
     levelFinishedModal,
   };
 };
+//  try {
+//       const res = await unlockNextStage({
+//         category: category,
+//         lessonId: lessonId,
+//         levelId: levelId,
+//         stageId: stageId,
+//       });
+//       const setUnlockNextLesson = unlockNextLevel.getState().unlockNextLesson;
+//       const setUnlockNextSubject =
+//         unlockNextLevel.getState().unlockNextSubject;
+//       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
+//       console.log(res);
+
+//       if (res.isNextStageUnlocked) {
+//         console.log("HELLO");
+//         setCurrentStageIndex((prev: any) => prev + 1);
+//         return;
+//       } else if (res.isNextLevelUnlocked) {
+//         finalAnswerModall.closeModal();
+
+//         setTimeout(() => {
+//           levelFinishedModal.setVisibility(true);
+//         }, 200);
+//         setUnlockNextLevel({
+//           lessonId: lessonId,
+//           nextLevelId: res.nextLevelId,
+//         });
+//         return;
+//       } else if (res.isNextLessonUnlocked) {
+//         finalAnswerModall.closeModal();
+//         setTimeout(() => {
+//           levelFinishedModal.setVisibility(true);
+//         }, 200);
+//         setUnlockNextLesson(res.nextLessonId);
+//         return;
+//       } else {
+//         setTimeout(() => {
+//           levelFinishedModal.setVisibility(true);
+//         }, 200);
+//         setUnlockNextSubject(res.isWholeTopicFinished);
+//         return;
+//       }
+//     } catch (err) {
+//       console.error("unlockNextStage error:", err);
+//       levelFinishedModal.setVisibility(true);
+//     }

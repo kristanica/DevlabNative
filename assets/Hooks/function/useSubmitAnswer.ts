@@ -9,10 +9,11 @@ type submitAnswerPayload = {
   lessonId: string;
   levelId: string;
   category: string;
-  answer: boolean;
+  answer?: boolean;
   setCurrentStageIndex: any;
   levelFinishedModal: any;
   finalAnswerModall: any;
+  stageType: string;
 };
 
 const useSubmitAnswer = () => {
@@ -32,9 +33,11 @@ const useSubmitAnswer = () => {
       setCurrentStageIndex,
       levelFinishedModal,
       finalAnswerModall,
+      stageType,
     }: submitAnswerPayload) => {
       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
       const setUnlockNextLesson = unlockNextLevel.getState().unlockNextLesson;
+      const setUnlockNextSubject = unlockNextLevel.getState().unlockNextSubject;
       if (hasShield && !answer) {
         const isShieldUsed = await consumeErrorShield();
         if (isShieldUsed) {
@@ -42,7 +45,7 @@ const useSubmitAnswer = () => {
         }
       }
 
-      if (answer) {
+      if (answer || stageType === "Lesson") {
         const res = await unlockNextStage({
           category: category,
           lessonId: lessonId,
@@ -52,7 +55,7 @@ const useSubmitAnswer = () => {
 
         const data = res;
         console.log(data);
-        if (data.nextStageId && data.nextStageType) {
+        if (data.isNextStageUnlocked) {
           console.log("HELLO");
           setCurrentStageIndex((prev: any) => prev + 1);
           return;
@@ -67,22 +70,21 @@ const useSubmitAnswer = () => {
             nextLevelId: res.nextLevelId,
           });
           return;
-        } else {
+        } else if (data.isNextLessonUnlocked) {
           finalAnswerModall.closeModal();
-
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
-          setUnlockNextLevel({
-            lessonId: lessonId,
-            nextLevelId: res.nextLevelId,
-          });
-          console.log("THIS IS THE NEXXCT LESSON ID", res.nextLessonId);
           setUnlockNextLesson(res.nextLessonId);
+          return;
+        } else {
+          setTimeout(() => {
+            levelFinishedModal.setVisibility(true);
+          }, 200);
+          setUnlockNextSubject(res.isWholeTopicFinished);
           return;
         }
       }
-      toastResult = "error";
       decrementUserHp();
 
       if (healthPointsTracker <= 1) {
