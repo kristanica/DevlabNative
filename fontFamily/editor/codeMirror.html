@@ -80,10 +80,9 @@
       document.querySelector(".run").addEventListener("click", () => {
         code[prevLang] = editor.state.doc.toString();
         window.ReactNativeWebView.postMessage(JSON.stringify(code));
-        
       });
 
-      window.addEventListener("message", (e) => {
+      document.addEventListener("message", (e) => {
         const lang = e.data;
         if (!["html", "css", "js"].includes(lang)) return;
 

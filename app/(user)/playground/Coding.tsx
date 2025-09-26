@@ -1,4 +1,3 @@
-import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
@@ -36,7 +35,7 @@ const Coding = () => {
               isHtml={true}
             ></SelectLanguageNavigation>
           </View>
-          <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor>
+          {/* <CodingPlaygroundEditor webRef={webRef}></CodingPlaygroundEditor> */}
         </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>

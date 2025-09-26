@@ -5,9 +5,13 @@ import React, { useState } from "react";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { htmlMockUp, mockData } from "@/assets/constants/constants";
+import { auth, db, mockData } from "@/assets/constants/constants";
 
+import { fetchAchievements } from "@/assets/API/fireBase/user/fetchAchievements";
+import LoadingAnim from "@/assets/components/LoadingAnim";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import {
   FlatList,
   Image,
@@ -16,18 +20,76 @@ import {
   Text,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 const Achievements = () => {
-  const [category, setCategory] =
-    useState<
-      { name: string; description: string; id: number; complete: boolean }[]
-    >(htmlMockUp);
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    mockData[0].name || "HTML"
-  );
+  const category = ["Html", "Css", "JavaScript", "Database"];
+  const [selectedCategory, setSelectedCategory] = useState<string>("Html");
 
   const { userData } = useGetUserInfo();
 
+  const { data: achievementsData, isLoading } = useQuery({
+    queryKey: ["Achievement", selectedCategory],
+    queryFn: () => fetchAchievements(selectedCategory),
+  });
+
+  const userAchievements = useGetUserInfo((state) => state.userAchievements);
+
+  const claimMutation = useMutation({
+    mutationFn: async ({
+      achievementId,
+      expReward,
+      coinsReward,
+    }: {
+      achievementId: string;
+      expReward: number;
+      coinsReward: number;
+    }) => {
+      const uid = auth.currentUser?.uid;
+      Toast.show({
+        type: "claimAchievement",
+        visibilityTime: 2000,
+        position: "top",
+        topOffset: 50,
+        text1: String(coinsReward),
+        text2: String(expReward),
+      });
+      try {
+        const achievementRef = doc(
+          db,
+          "Users",
+          String(uid),
+          "Achievements",
+          achievementId
+        );
+        const userRef = doc(db, "Users", String(uid));
+        const userSnap = (await getDoc(userRef)).data();
+
+        await setDoc(
+          userRef,
+          {
+            exp: userSnap?.exp + expReward,
+            coins: userSnap?.coins + coinsReward,
+          },
+          {
+            merge: true,
+          }
+        );
+
+        await setDoc(
+          achievementRef,
+          {
+            isClaimed: true,
+          },
+          {
+            merge: true,
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-accent">
@@ -41,17 +103,17 @@ const Achievements = () => {
               }
               className="flex-[1]"
             >
-              <View className="flex-[1] justify-center items-center mt-3 ">
+              <View className="flex-[1] justify-center items-center mt-3  -z-1">
                 <Image
                   source={
                     userData?.profileImage
                       ? { uri: userData?.profileImage }
                       : require("@/assets/images/profile.png")
                   }
-                  className="w-[100px] h-[100px] overflow-hidden rounded-full"
+                  className="w-[100px] h-[100px] -z-2 overflow-hidden rounded-full"
                 />
               </View>
-              {/* Renders name */}
+
               <View className="justify-center items-center flex-[.5] ">
                 <Text className="text-white font-exoBold">
                   {userData?.username}
@@ -77,19 +139,18 @@ const Achievements = () => {
                   alwaysBounceVertical={false}
                   showsHorizontalScrollIndicator={false}
                   numColumns={4}
-                  data={mockData}
+                  data={category}
                   columnWrapperStyle={{
                     justifyContent: "space-between",
                   }}
                   renderItem={({ item }) => (
                     <Pressable
                       onPress={() => {
-                        setCategory(item.data);
-                        setSelectedCategory(item.name);
+                        setSelectedCategory(item);
                       }}
                     >
                       <Text className="text-white font-exoBold xs:text-lg">
-                        {item.name}
+                        {item}
                       </Text>
                     </Pressable>
                   )}
@@ -97,27 +158,48 @@ const Achievements = () => {
               </View>
 
               <View className="flex-[1] ">
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{
-                    paddingHorizontal: 10,
-                    paddingVertical: 10,
-                  }}
-                  numColumns={2}
-                  columnWrapperStyle={{
-                    justifyContent: "space-between",
-                  }}
-                  data={category}
-                  renderItem={({ item }) => (
-                    <AchievementContainer
-                      name={item.name}
-                      description={item.description}
-                      id={item.id}
-                      complete={item.complete}
-                      selectedCategory={selectedCategory}
-                    />
-                  )}
-                />
+                {isLoading ? (
+                  <LoadingAnim></LoadingAnim>
+                ) : (
+                  <FlatList
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                      paddingHorizontal: 10,
+                      paddingVertical: 10,
+                    }}
+                    numColumns={2}
+                    columnWrapperStyle={{
+                      justifyContent: "space-between",
+                    }}
+                    keyExtractor={(item) => item.id}
+                    data={achievementsData}
+                    renderItem={({ item, index }) => {
+                      const unlockedAchievement = userAchievements.find(
+                        (achievement: any) => achievement.id === item.id
+                      );
+
+                      const isUnlocked = !!unlockedAchievement;
+                      const isClaimed = unlockedAchievement?.isClaimed ?? false;
+
+                      return (
+                        <AchievementContainer
+                          isUnlocked={isUnlocked}
+                          index={index}
+                          data={item}
+                          claimMutation={() =>
+                            claimMutation.mutate({
+                              achievementId: item.id,
+                              expReward: item.expReward,
+                              coinsReward: item.coinsReward,
+                            })
+                          }
+                          isClaimed={isClaimed}
+                          selectedCategory={selectedCategory}
+                        />
+                      );
+                    }}
+                  />
+                )}
               </View>
             </View>
           </CustomGeneralContainer>

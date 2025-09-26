@@ -60,8 +60,7 @@ const ModalHandler = ({
               unlockNextLevel.getState().nextLevelPayload;
             const nextLessonPayload =
               unlockNextLevel.getState().nextLessonPayload;
-            const nextSubjectPayload =
-              unlockNextLevel.getState().nextSubjectPayload;
+
             const { allProgressLevels, completedLevels, allProgressStages } =
               useGetUserInfo.getState();
             if (!nextLevelPayload) {

@@ -1,6 +1,10 @@
+import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
+import { cssRegex } from "@/assets/Hooks/regexChecker/cssRegex";
+import { htmlRegex } from "@/assets/Hooks/regexChecker/htmlRegex";
+import { jsRegex } from "@/assets/Hooks/regexChecker/jsRegex";
 import LottieView from "lottie-react-native";
 import type { RefObject } from "react";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
 type CodeEditorPayload = {
@@ -15,12 +19,44 @@ type CodingPlaygroundEditorProps = {
     React.SetStateAction<CodeEditorPayload | undefined>
   >;
 };
-
 const CodingPlaygroundEditor = ({
   webRef,
   receivedCode,
   setReceivedCode,
 }: CodingPlaygroundEditorProps) => {
+  useEffect(() => {
+    if (!receivedCode) return;
+    const { html, css, js } = receivedCode;
+    if (html) {
+      const usedTags = htmlRegex(html);
+      console.log("HTml ran");
+      if (usedTags.length > 0) {
+        unlockAchievement("Html", "tagUsed", { usedTags, isCorrect: true });
+        console.log("Woah, ran");
+      }
+    }
+    if (css) {
+      const unlockCssAchievement: any = cssRegex(css);
+
+      if (unlockCssAchievement.length > 0) {
+        unlockCssAchievement.forEach((title: string) => {
+          unlockAchievement("Css", "cssAction", { achievementTitle: title });
+        });
+      }
+      if (js) {
+        console.log("Js ran");
+
+        const unlockJsAchievement: any = jsRegex(js);
+        if (unlockJsAchievement.length > 0) {
+          unlockAchievement("JavaScript", "tagUsed", {
+            unlockJsAchievement,
+            isCorrect: true,
+          });
+        }
+      }
+    }
+  }, [receivedCode]);
+
   return (
     // Renders user's code
     <View className="bg-accent flex-[1] rounded-[10px] z-0">

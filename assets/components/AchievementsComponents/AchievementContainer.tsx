@@ -1,46 +1,36 @@
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import React, { memo, useEffect } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
 
 type AchievementContainerProps = {
-  name: string;
-  description: string;
-  id: number;
-  complete: boolean;
-
+  data: any;
+  index: number;
   selectedCategory: string;
+  isUnlocked: boolean;
+  isClaimed: boolean;
+  claimMutation: any;
 };
 
 //Achievement Container for (Tabs)/Achievements.tsx
 const AchievementContainer = ({
-  name,
-  description,
-  id,
-  complete,
-
+  data,
   selectedCategory,
+  isUnlocked,
+  index,
+  isClaimed,
+  claimMutation,
 }: AchievementContainerProps) => {
   const interpolateVal = useSharedValue(0);
 
   const { onScale } = useSequentialAppearAnim({
     indicator: selectedCategory,
-    id: id,
+    id: index,
   });
-
-  const changeBackground = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      interpolateVal.value,
-      [0, 0.33, 0.66, 1],
-      ["#00FFE0", "#8C52FF", "#FF52A2", "#FFD700"]
-    ),
-  }));
 
   useEffect(() => {
     interpolateVal.value = withRepeat(
@@ -52,50 +42,55 @@ const AchievementContainer = ({
   return (
     <View className="justify-center items-center w-1/2">
       <Animated.View
-        style={[onScale, changeBackground]}
-        className="w-[90%] aspect-[3/5] rounded-[10px] bg-red-500 my-2"
+        style={[onScale]}
+        className="w-[90%] aspect-[3/5] rounded-[10px]  my-2"
       >
         <View
           className=" h-full w-full absolute "
           style={{
-            backgroundColor: complete ? undefined : "black",
+            backgroundColor: isUnlocked ? undefined : "black",
             borderRadius: 20,
           }}
         >
           <View
-            className="bg-[#111827] rounded-3xl m-[1px] flex-col flex-1 "
-            style={[{ opacity: complete ? 1 : 0.5 }]}
+            className="bg-[#111827] rounded-3xl m-[1px] flex-col flex-1 border-blue-400 border-[1px]"
+            style={[{ opacity: isUnlocked ? 1 : 0.5 }]}
           >
             <View className="flex-[2] justify-center items-center">
               <Image
                 source={require("@/assets/images/success.png")}
-                style={{ height: 75, width: 75 }}
+                style={{ height: 70, width: 70 }}
               />
             </View>
-            {/* Render the name of Achievement */}
+
             <View className="flex-[.5] justify-center items-center border-t-2 b-black mx-5">
-              <Text className="text-white font-exoExtraBold text-lg">
-                {name}
+              <Text className="text-white font-exoExtraBold text-lg text-center">
+                {data?.title}
               </Text>
             </View>
             {/* Render the Description of Achievement */}
             <View className="flex-[.5] justify-center items-center">
               <Text className="text-[#94A1B2] text-center font-exoLight text-xs px-2">
-                {description}
+                {data?.description ?? "No description"}
               </Text>
             </View>
 
-            {/* Renders Incomplete or Complete and also background color */}
-            <View
-              // If complete, will render green. If not, will render red
-              style={{
-                backgroundColor: complete ? "#1ABC9C" : "#FF6166",
-              }}
-              className="flex-[.5] justify-center items-center mx-10 my-2 rounded-3xl"
-            >
-              <Text className="text-white text-center text-xs font-exoBold">
-                {complete ? "Completed" : "Inprogress"}
-              </Text>
+            <View className="flex-[.5] justify-center items-center mx-10 my-2 rounded-3xl">
+              {!isUnlocked ? (
+                <Text className="text-white text-center text-xs px-2 rounded-xl py-2  bg-[#F87171] font-exoBold">
+                  In Progress
+                </Text>
+              ) : isClaimed ? (
+                <Text className="text-white bg-[#22C55E]  px-2 rounded-xl py-2  text-center text-xs font-exoBold">
+                  Completed
+                </Text>
+              ) : (
+                <TouchableOpacity onPress={claimMutation}>
+                  <Text className="text-white bg-[#EC4899] px-2 rounded-xl py-2  text-center text-xs font-exoBold">
+                    Claim
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

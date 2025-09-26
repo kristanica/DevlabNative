@@ -32,6 +32,10 @@ type InformationProviderProps = {
     completedStages: number;
   }) => void;
   inventory: any[];
+
+  userAchievements: any;
+  setUserAchievementProgress: any;
+  getUserAchievementProgress: () => Promise<void>;
   allProgressLevels: allProgressType;
   allProgressStages: allStagesType;
   getUser: () => Promise<void>;
@@ -43,6 +47,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   loading: false,
   userData: null,
   inventory: [],
+  userAchievements: [],
   allProgress: [],
   allProgressLevels: {},
   allProgressStages: {},
@@ -60,6 +65,37 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
       completedLevels,
       completedStages,
     });
+  },
+  setUserAchievementProgress: (val: any) => set({ userAchievements: val }),
+
+  getUserAchievementProgress: async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) {
+      console.log("No user UID found");
+    }
+
+    try {
+      const achievmentProgressRef = collection(
+        db,
+        "Users",
+        String(uid),
+        "Achievements"
+      );
+
+      onSnapshot(achievmentProgressRef, (achievementSnapShot) => {
+        if (!achievementSnapShot.empty) {
+          const temp = achievementSnapShot.docs.map((achievementDoc) => ({
+            id: achievementDoc.id,
+            ...achievementDoc.data(),
+          }));
+
+          set({ userAchievements: temp });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   },
   setUserData: (val: userData) => set({ userData: val }),
   getUser: async () => {

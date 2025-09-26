@@ -7,23 +7,25 @@ import { userIcon } from "@/assets/constants/constants";
 
 const _layout = () => {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-      }}
-      tabBar={(props) => <CustomTabBar {...props} tabIcon={userIcon} />}
-    >
-      <Tabs.Screen name="Home" />
-      <Tabs.Screen name="Shop" />
-
-      <Tabs.Screen
-        name="(Lessons)"
-        options={{
-          title: "Lessons",
+    <>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
         }}
-      />
-      <Tabs.Screen name="Achievements" options={{ title: "Trophies" }} />
-    </Tabs>
+        tabBar={(props) => <CustomTabBar {...props} tabIcon={userIcon} />}
+      >
+        <Tabs.Screen name="Home" />
+        <Tabs.Screen name="Shop" />
+
+        <Tabs.Screen
+          name="(Lessons)"
+          options={{
+            title: "Lessons",
+          }}
+        />
+        <Tabs.Screen name="Achievements" options={{ title: "Trophies" }} />
+      </Tabs>
+    </>
   );
 };
 

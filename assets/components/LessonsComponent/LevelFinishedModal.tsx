@@ -1,8 +1,10 @@
+import { auth, db } from "@/assets/constants/constants";
 import { ScaleModalProps } from "@/assets/constants/type";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
@@ -27,6 +29,27 @@ const LevelFinishedModal = ({
     removeActiveBuffs("doubleCoins");
   }, [activeBuffs]);
 
+  useEffect(() => {
+    const giveReward = async () => {
+      const uid = auth?.currentUser?.uid;
+      const userRef = doc(db, "Users", String(uid));
+      const userSnapShot = (await getDoc(userRef)).data();
+
+      await setDoc(
+        userRef,
+        {
+          exp: userSnapShot?.exp + expAndCoins?.exp,
+          coins: userSnapShot?.coins + expAndCoins?.coins,
+        },
+        {
+          merge: true,
+        }
+      );
+      console.log(expAndCoins);
+    };
+    giveReward();
+  }, [expAndCoins]);
+
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable className="flex-1 bg-black/50">
@@ -49,8 +72,7 @@ const LevelFinishedModal = ({
                 🌑 The Terminal Falls Silent You’ve emerged from the
                 code—scarred, but wiser. The system yields, for now, recognizing
                 your resolve. Yet beneath the surface, deeper logic churns…
-                ancient, unrefined, waiting. 🕳️ This is not the end. Only the
-                next beginning.
+                ancient, unrefined,
               </Text>
             </View>
 

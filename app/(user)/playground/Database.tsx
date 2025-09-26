@@ -1,14 +1,28 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
+import { sqlRegex } from "@/assets/Hooks/regexChecker/sqlRegex";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import WebView from "react-native-webview";
 
 const Database = () => {
   const [recievedCode, setRecievedCode] = useState<string>();
   const [query, setQuery] = useState<string>();
+
+  useEffect(() => {
+    if (!recievedCode) return;
+    const unlockSqlAchievement = sqlRegex(recievedCode);
+
+    if (unlockSqlAchievement.length > 0) {
+      unlockAchievement("Database", "tagsUsed", {
+        unlockSqlAchievement,
+        isCorrect: true,
+      });
+    }
+  }, [recievedCode]);
   const tableStyle = `
   body {
     display: flex;

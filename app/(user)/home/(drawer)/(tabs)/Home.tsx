@@ -42,7 +42,6 @@ export default function Home() {
   });
 
   const { userData, inventory } = useGetUserInfo();
-
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">

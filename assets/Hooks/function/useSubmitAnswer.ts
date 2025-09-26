@@ -3,6 +3,7 @@ import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
+import { unlockAchievement } from "./unlockAchievement";
 
 type submitAnswerPayload = {
   stageId: string;
@@ -61,7 +62,13 @@ const useSubmitAnswer = () => {
           return;
         } else if (data.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
-
+          console.log("This is current LevelId" + levelId);
+          if (levelId === "Level1" && lessonId === "Lesson1") {
+            unlockAchievement(category, "firstLevelComplete", {
+              LevelId: levelId,
+              lessonId: lessonId,
+            });
+          }
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);

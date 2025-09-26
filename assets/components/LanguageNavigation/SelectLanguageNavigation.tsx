@@ -1,6 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
-import ButtonAnimated from "../ButtonComponent";
+import { Pressable, Text, View } from "react-native";
 
 type SelectLanguageNavigationProps = {
   isCss: boolean;
@@ -26,14 +25,11 @@ const SelectLanguageNavigation = ({
   return (
     <View className="flex-row">
       {visibleButton.map((val: string, index: number) => (
-        <ButtonAnimated
-          key={index}
-          onPressAction={() => sendToWebView(val.toLowerCase())}
-        >
+        <Pressable key={index} onPress={() => sendToWebView(val.toLowerCase())}>
           <Text className="py-2 px-4 mx-2 rounded-2xl bg-shopAccent text-white font-exoBold">
             {val.toUpperCase()}
           </Text>
-        </ButtonAnimated>
+        </Pressable>
       ))}
     </View>
   );
