@@ -1,6 +1,6 @@
-import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
+import StageCodingEditor from "@/assets/components/CodeEditor/StageCodingEditor";
+import StageCodingEditorDatabase from "@/assets/components/CodeEditor/StageCodingEditorDatabase";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
@@ -11,6 +11,7 @@ import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
@@ -80,8 +81,17 @@ const stageScreen = () => {
     currentStageData: currentStageData,
   });
 
-  const { webRef, sendToWebView, receivedCode, setReceivedCode } =
-    useCodeEditor();
+  const {
+    webRef,
+    sendToWebView,
+    receivedCode,
+    setReceivedCode,
+    setLogs,
+    logs,
+    terminalRef,
+  } = useCodeEditor();
+
+  const databaseQueryingFunctions = useCodeEditorDatabase();
 
   const health = userHealthPoints((state) => state.health);
   const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
@@ -104,7 +114,6 @@ const stageScreen = () => {
   const showToast = (type: string) => {
     Toast.show({
       type: type,
-
       visibilityTime: 2000,
       position: "top",
       topOffset: 20,
@@ -114,9 +123,8 @@ const stageScreen = () => {
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
-        {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
         <CustomGeneralContainer>
-          <View className="flex-row justify-between items-center">
+          <View className="flex-row justify-between items-center mb-5">
             <Pressable
               onPress={() => router.replace({ pathname: "/home/Home" })}
             >
@@ -125,10 +133,15 @@ const stageScreen = () => {
               </Text>
             </Pressable>
 
+            <Pressable
+              onPress={() => {
+                terminalRef.current?.expand();
+              }}
+            >
+              <Ionicons name="terminal" size={20} color="white" />
+            </Pressable>
             <SelectLanguageNavigation
-              isJs={true}
-              isCss={true}
-              isHtml={true}
+              subject={String(category)}
               sendToWebView={sendToWebView}
             />
           </View>
@@ -154,11 +167,21 @@ const stageScreen = () => {
             type={gameIdentifier.current}
           ></StageModalComponent>
 
-          <CodingPlaygroundEditor
-            webRef={webRef}
-            receivedCode={receivedCode}
-            setReceivedCode={setReceivedCode}
-          ></CodingPlaygroundEditor>
+          {category === "Database" ? (
+            <StageCodingEditorDatabase
+              {...databaseQueryingFunctions}
+            ></StageCodingEditorDatabase>
+          ) : (
+            <StageCodingEditor
+              terminalRef={terminalRef}
+              webRef={webRef}
+              receivedCode={receivedCode}
+              setReceivedCode={setReceivedCode}
+              setLogs={setLogs}
+              logs={logs}
+            ></StageCodingEditor>
+          )}
+
           <View className="h-[10px] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>

@@ -1,0 +1,28 @@
+import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import ViteDatabaseCodeEditor from "@/assets/components/LanguageNavigation/ViteDatabaseCodeEditor";
+import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
+import { router } from "expo-router";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+const DatabasePlayground = () => {
+  const databaseQueryingFunctions = useCodeEditorDatabase();
+  return (
+    <View className="bg-background flex-[1]">
+      <CustomGeneralContainer>
+        <Pressable onPress={() => router.push({ pathname: "/home/Home" })}>
+          <Text className="text-white ml-3 text-2xl font-exoExtraBold">
+            DEVLAB
+          </Text>
+        </Pressable>
+        <ViteDatabaseCodeEditor
+          {...databaseQueryingFunctions}
+        ></ViteDatabaseCodeEditor>
+      </CustomGeneralContainer>
+    </View>
+  );
+};
+
+export default DatabasePlayground;
+
+const styles = StyleSheet.create({});

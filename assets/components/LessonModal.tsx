@@ -5,12 +5,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScaleModalProps } from "../constants/type";
 import LessonsContainer from "./LessonsContainer";
 const mock = ["Html", "Css", "JavaScript", "Database"];
-const LessonModal = ({
-  visibility,
-  closeModal,
-  onConfirm,
-  scaleStyle,
-}: ScaleModalProps) => {
+const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
   return (
     <Modal visible={visibility} animationType="slide" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1 bg-black/50">
@@ -19,7 +14,9 @@ const LessonModal = ({
             <View className="flex-col mx-2 flex-[1.5] px-2 py-3 justify-evenly">
               <Pressable
                 onPress={() =>
-                  router.replace({ pathname: "/(user)/playground/Coding" })
+                  router.replace({
+                    pathname: "/(user)/playground/CodingPlayground",
+                  })
                 }
                 className="flex-row"
               >
@@ -35,7 +32,9 @@ const LessonModal = ({
               </Pressable>
               <Pressable
                 onPress={() =>
-                  router.replace({ pathname: "/(user)/playground/Database" })
+                  router.replace({
+                    pathname: "/(user)/playground/DatabasePlayground",
+                  })
                 }
                 className="flex-row mt-3"
               >

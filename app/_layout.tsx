@@ -5,8 +5,13 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { configureReanimatedLogger } from "react-native-reanimated";
 import "../global.css";
 const queryClient = new QueryClient();
+configureReanimatedLogger({
+  strict: false, // 🔥 hides the "Reading from value during render" warnings
+});
+
 export default function RootLayout() {
   const readyFont = useCustomFonts();
 

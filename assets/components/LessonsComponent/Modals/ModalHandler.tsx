@@ -157,9 +157,8 @@ const ModalHandler = ({
             finalAnswerModall.closeModal();
             handleFinalAnswer(
               receivedCode,
-              stageData[0].id,
-              showToast,
-              stageData.length
+
+              showToast
             );
           }}
           {...finalAnswerModall}

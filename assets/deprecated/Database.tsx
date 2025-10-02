@@ -55,10 +55,7 @@ const Database = () => {
                 DEVLAB
               </Text>
             </Pressable>
-            <Pressable
-              onPress={() => router.replace({ pathname: "/playground/Coding" })}
-              className="justify-center"
-            >
+            <Pressable className="justify-center">
               <Text className="text-white mr-3 text-sm font-exoExtraBold">
                 Coding playground
               </Text>

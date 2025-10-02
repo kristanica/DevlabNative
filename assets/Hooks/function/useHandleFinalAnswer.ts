@@ -56,13 +56,7 @@ export const useHandleFinalAnswer = ({
     );
   };
 
-  const handleFinalAnswer = async (
-    receivedCode: any,
-    resetStageId: string,
-
-    showToast: (type: string) => void,
-    stageDataLength: number
-  ) => {
+  const handleFinalAnswer = async (receivedCode: any, showToast: any) => {
     const stageKey = `${lessonId}-${levelId}-${stageId}`;
     const isStageLocked =
       allStages?.[String(category)]?.[stageKey]?.status ?? false;
@@ -95,7 +89,6 @@ export const useHandleFinalAnswer = ({
     }
 
     if (!receivedCode && currentStageDataType !== "Lesson") {
-      showToast("error");
       finalAnswerModall.closeModal();
       return;
     } else {
@@ -107,8 +100,7 @@ export const useHandleFinalAnswer = ({
         },
         {
           onSuccess: (data) => {
-            const toastResult = data.correct ? "success" : "error";
-            showToast(toastResult);
+            showToast("success");
 
             nextStage.mutate({
               stageId: currentStageData.id,

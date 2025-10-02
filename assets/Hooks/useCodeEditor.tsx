@@ -1,3 +1,4 @@
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useCallback, useRef, useState } from "react";
 import WebView from "react-native-webview";
 
@@ -6,16 +7,35 @@ type CodeEditorPayload = {
   css?: string;
   js?: string;
 };
-const useCodeEditor = () => {
-  const webRef = useRef<WebView>(null);
+type logsProps = {
+  logs: {
+    type: string;
+    data: any[];
+  };
+};
 
+const useCodeEditor = () => {
+  const [query, setQuery] = useState<string>();
+  const terminalRef = useRef<BottomSheet>(null);
+  const webRef = useRef<WebView>(null);
+  const [logs, setLogs] = useState<logsProps[]>([]);
   const sendToWebView = useCallback((lang: string) => {
     webRef.current?.postMessage(lang);
   }, []);
   const [receivedCode, setReceivedCode] = useState<
     CodeEditorPayload | undefined
   >(undefined);
-  return { webRef, sendToWebView, receivedCode, setReceivedCode };
+  return {
+    webRef,
+    sendToWebView,
+    receivedCode,
+    setReceivedCode,
+    logs,
+    setLogs,
+    terminalRef,
+    setQuery,
+    query,
+  };
 };
 
 export default useCodeEditor;

@@ -5,14 +5,13 @@ import useAdminLogin from "@/assets/Hooks/reducers/useAdminLogin";
 
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated from "react-native-reanimated";
 
 const AdminLogin = () => {
   const { state, dispatch, adminLogin } = useAdminLogin();
-  const [trigger, setTrigger] = useState<boolean>(false);
 
   return (
     <ProtectedRoutes>
@@ -68,10 +67,7 @@ const AdminLogin = () => {
                   <TouchableOpacity
                     className="bg-button  justify-center items-center my-16 py-2 px-7 rounded-full "
                     onPress={() => {
-                      adminLogin(() => {
-                        setTrigger(true);
-                      });
-                      setTrigger(false);
+                      adminLogin();
                     }}
                   >
                     <Text className="color-white text-sm font-exoBold">

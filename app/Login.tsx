@@ -116,7 +116,7 @@ const Login = () => {
               <TouchableOpacity
                 onPress={() => router.push({ pathname: "/Register" })}
               >
-                <Text className="color-[#4F80C5] mt-2 font-exoRegula xs:text-xs">
+                <Text className=" mt-2 font-exoRegula xs:text-xs text-white">
                   Register here
                 </Text>
               </TouchableOpacity>

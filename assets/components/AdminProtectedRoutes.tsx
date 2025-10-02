@@ -21,7 +21,7 @@ const AdminProtectedRoutes = ({ children }: AdminProtectedRoutesProps) => {
   }
 
   // if not admin, redirect back
-  if (!user) return <Redirect href="/(user)/home/Settings" />;
+  if (!user) return <Redirect href="/home/Settings" />;
 
   // If user is logged in and loaded, render children
   if (user && loaded) return <View className="flex-1">{children}</View>;

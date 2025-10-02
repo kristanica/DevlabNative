@@ -6,6 +6,8 @@ const config = getDefaultConfig(__dirname);
 const {
   wrapWithReanimatedMetroConfig,
 } = require("react-native-reanimated/metro-config");
+
+config.resolver.assetExts.push("wasm");
 config.resolver.sourceExts.push("cjs");
 config.resolver.unstable_enablePackageExports = false;
 

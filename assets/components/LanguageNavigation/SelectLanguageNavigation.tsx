@@ -2,25 +2,30 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 
 type SelectLanguageNavigationProps = {
-  isCss: boolean;
-  isJs: boolean;
-  isHtml: boolean;
-
+  subject: string;
   sendToWebView: (val: string) => void;
 };
 
 const SelectLanguageNavigation = ({
-  isCss,
-  isJs,
-  isHtml,
   sendToWebView,
+
+  subject,
 }: SelectLanguageNavigationProps) => {
-  const visibleButton = ["Html", "Css", "Js"].filter((lang) => {
-    if (lang === "Html" && isHtml) return "Html";
-    if (lang === "Css" && isCss) return "Css";
-    if (lang === "Js" && isJs) return "Js";
-    return false;
-  });
+  let visibleButton: string[] = [];
+
+  switch (subject) {
+    case "Html":
+      visibleButton = ["Html"];
+      break;
+    case "Css":
+      visibleButton = ["Html", "Css"];
+      break;
+    case "JavaScript":
+      visibleButton = ["Html", "Css", "Js"];
+      break;
+    default:
+      visibleButton = []; // or whatever you want for Database/Playground
+  }
 
   return (
     <View className="flex-row">

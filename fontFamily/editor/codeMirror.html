@@ -43,7 +43,7 @@
     </style>
   </head>
   <body>
-    <button class="run">RUN</button>
+    <button class="run">RUasdN</button>
     <div id="editor"></div>
 
     <script type="module">
@@ -54,10 +54,6 @@
       import { css } from "@codemirror/lang-css";
       import { javascript } from "@codemirror/lang-javascript";
       import { autocompletion } from "codemirror/autocomplete";
-
-      const runButton = document.querySelector(".run");
-      const previewArea = document.querySelector(".display");
-      const buttonContainer = document.querySelector(".buttonContainer");
 
       let language = { html: html(), css: css(), js: javascript() };
       const extensionList = [lineNumbers(), autocompletion(), tokyoNight];

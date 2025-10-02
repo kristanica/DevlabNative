@@ -9,11 +9,10 @@ type HomeLessonProps = {
   name: string;
   color: string;
   index: number;
-  // Recieves icon for <Ionicons>
 
   children: ReactNode;
 };
-// HomeLesson component for (Tabs)/Home.tsx
+
 const HomeLesson = ({ name, color, children, index }: HomeLessonProps) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
