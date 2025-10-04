@@ -41,9 +41,15 @@ const useLogin = () => {
         state.password
       );
 
+      await userCredential.user.reload();
+      if (!userCredential.user.emailVerified) {
+        return ["unverifiedEmail", "Your email has not been verified yet!"];
+      }
+
       if (!userCredential.user) {
         return;
       }
+
       const userRef = doc(db, "Users", userCredential?.user.uid);
       const data = await getDoc(userRef);
       //check if account is suspended
@@ -63,10 +69,8 @@ const useLogin = () => {
       }
 
       router.replace("/(user)/LoadingScreen");
-      return "success";
     } catch (error) {
       console.log(error);
-      return "error";
     }
   };
 
@@ -86,6 +90,8 @@ const useLogin = () => {
 
     keepSignIn();
   }, []);
+
+  const forgotPassword = async () => {};
 
   return { state, dispatch, signIn };
 };

@@ -11,6 +11,7 @@ import ConfirmationModal from "@/assets/components/SettingsComponents/Confirmati
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
 import LoadingScreen from "@/assets/components/LoadingScreen";
+import ResetPasswordModal from "@/assets/components/SettingsComponents/ResetPasswordModal";
 import { pickImage } from "@/assets/Hooks/query/mutation/pickImage";
 import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
@@ -35,8 +36,6 @@ const Settings = () => {
     mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
       await useEditUserInfo(userName, bio),
   });
-  const [bio, setBio] = useState<string>("");
-  const [userName, setUserName] = useState<string>("");
 
   const { mutate: updateImage, isPending } = pickImage();
 
@@ -46,6 +45,9 @@ const Settings = () => {
   const { userData } = useGetUserInfo();
   const { logOut } = useSignOut();
 
+  const resetPassword = useModal();
+  const [bio, setBio] = useState<string>(userData?.username!);
+  const [userName, setUserName] = useState<string>(userData?.bio!);
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
   return (
     <ProtectedRoutes>
@@ -129,7 +131,13 @@ const Settings = () => {
                     </View>
                   </View>
                 </View>
-
+                <Pressable
+                  onPress={() => resetPassword.setVisibility((prev) => !prev)}
+                >
+                  <Text className="text-white text-center text-xs font-exoLight opacity-70">
+                    Reset Password
+                  </Text>
+                </Pressable>
                 <View className=" items-center pt-10   ">
                   <Pressable
                     onPress={() => {
@@ -181,6 +189,10 @@ const Settings = () => {
                 scaleStyle={logOutModal.scaleStyle}
                 closeModal={logOutModal.closeModal}
               />
+            )}
+
+            {resetPassword.visibility && (
+              <ResetPasswordModal {...resetPassword}></ResetPasswordModal>
             )}
 
             {confirmationModal.visibility && (

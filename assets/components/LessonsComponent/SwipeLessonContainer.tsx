@@ -17,7 +17,7 @@ type SwipeLessonContainerProps = {
 const SwipeLessonContainer = ({ children }: SwipeLessonContainerProps) => {
   const { height } = Dimensions.get("screen");
 
-  const heightVal = useSharedValue(height / 2);
+  const heightVal = useSharedValue(height - 100);
   const state = useSharedValue<"up" | "down">("up");
 
   const swipeDown = Gesture.Fling()
@@ -33,7 +33,7 @@ const SwipeLessonContainer = ({ children }: SwipeLessonContainerProps) => {
     .direction(Directions.UP)
     .onStart(() => {
       if (state.value === "down") {
-        heightVal.value = withSpring(height / 2, {
+        heightVal.value = withSpring(height - 100, {
           damping: 50,
           stiffness: 50,
         });

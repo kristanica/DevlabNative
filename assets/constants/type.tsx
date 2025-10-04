@@ -6,7 +6,7 @@ export type ScaleModalProps = {
   scaleStyle: AnimatedStyle<ViewStyle>;
   closeModal: () => void;
 
-  onConfirm: () => void;
+  onConfirm?: () => void;
 };
 
 export type payloadProps = {

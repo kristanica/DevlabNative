@@ -1,14 +1,12 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import InputBox from "@/assets/components/InputBox";
-import OnSuccessRegisterModal from "@/assets/components/RegisterComponents/OnSuccessRegisterModal";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import useRegister from "@/assets/Hooks/reducers/useRegister";
 
-import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
-import useModal from "@/assets/Hooks/useModal";
+import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -16,10 +14,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 const Register = () => {
   //custom hook
   const { state, dispatch, handleRegister } = useRegister();
-  const [isSucess, setIsSuccess] = useState<boolean>(false);
-
-  const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
-  const { keyBoardHandlingStyle } = useKeyBoardHandler();
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
 
   return (
     <View className="flex-1 bg-background ">
@@ -111,13 +106,13 @@ const Register = () => {
                       const hasEmpty = CheckEmptyFields(state, "Register");
 
                       if (hasEmpty) {
-                        setIsSuccess(false);
-                        setVisibility((prev) => !prev);
+                        setToastVisibility(
+                          "emptyCredentialField",
+                          "Fill in the following credentials!"
+                        );
                         return;
                       }
                       handleRegister();
-                      setIsSuccess(true);
-                      setVisibility((prev) => !prev);
                     }}
                   >
                     <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
@@ -131,20 +126,11 @@ const Register = () => {
                   </Text>
 
                   <TouchableOpacity onPress={() => router.replace("/")}>
-                    <Text className="color-[#4F80C5] mt-2 font-exoRegula xs:text-[8px]">
+                    <Text className="color-[#4F80C5] mt-2 font-exoRegular xs:text-[8px]">
                       Login here
                     </Text>
                   </TouchableOpacity>
                 </View>
-
-                {visibility && (
-                  <OnSuccessRegisterModal
-                    isSuccess={isSucess}
-                    visibility={visibility}
-                    scaleStyle={scaleStyle}
-                    closeModal={closeModal}
-                  ></OnSuccessRegisterModal>
-                )}
               </Animated.View>
             </View>
           </KeyboardAwareScrollView>

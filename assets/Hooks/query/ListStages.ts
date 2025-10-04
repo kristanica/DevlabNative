@@ -1,4 +1,4 @@
-import { auth, URL } from "@/assets/constants/constants";
+import { auth } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
 import axios from "axios";
 
@@ -18,7 +18,7 @@ const ListStages = async () => {
   }
   try {
     const res = await axios.get(
-      `${URL}/fireBaseAdmin/listStage/${levelPayload.category}/${levelPayload.lessonId}/${levelPayload.levelId}`,
+      `https://8fd2d4f797c4.ngrok-free.app/fireBaseAdmin/listStage/${levelPayload.category}/${levelPayload.lessonId}/${levelPayload.levelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,14 +1,18 @@
 import { auth, db } from "@/assets/constants/constants";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useReducer } from "react";
+import Toast from "react-native-toast-message";
 
 type State = {
   email: string;
   password: string;
-  // confirmPassword: string;
   username: string;
   age: number;
+  isRegitering: boolean;
 };
 
 type Action = {
@@ -22,6 +26,9 @@ const reducer = (state: State, action: Action): State => {
     case "UPDATE_FIELD": {
       return { ...state, [action.field]: action.value };
     }
+    default: {
+      return state;
+    }
   }
 };
 
@@ -29,17 +36,27 @@ const useRegister = () => {
   const [state, dispatch] = useReducer(reducer, {
     email: "",
     password: "",
-    // confirmPassword: "",
     username: "",
     age: 0,
+    isRegitering: false,
   });
 
   const handleRegister = async () => {
+    if (state.isRegitering) return;
+    dispatch({ type: "UPDATE_FIELD", field: "isRegitering", value: "true" });
     try {
       await createUserWithEmailAndPassword(auth, state.email, state.password);
       const user = auth.currentUser;
       if (user) {
-        // Save main profile data
+        await sendEmailVerification(user);
+
+        Toast.show({
+          type: "info",
+          text1: "Please check your email for confirmation",
+          visibilityTime: 2000,
+          position: "top",
+          topOffset: 50,
+        });
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,
           username: state.username,
@@ -49,6 +66,8 @@ const useRegister = () => {
           coins: 0,
           bio: "",
           isAdmin: false,
+          isSuspended: false,
+          healthPoints: 3,
           lastOpenedLevel: {
             subject: "Html",
             lessonId: "Lesson1",
@@ -123,6 +142,8 @@ const useRegister = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch({ type: "UPDATE_FIELD", field: "isRegitering", value: "false" });
     }
   };
 

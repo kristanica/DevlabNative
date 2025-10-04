@@ -24,7 +24,7 @@ const SelectLanguageNavigation = ({
       visibleButton = ["Html", "Css", "Js"];
       break;
     default:
-      visibleButton = []; // or whatever you want for Database/Playground
+      visibleButton = ["Html", "Css", "Js"]; // or whatever you want for Database/Playground
   }
 
   return (

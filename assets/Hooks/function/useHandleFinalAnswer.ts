@@ -1,4 +1,3 @@
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { RefObject } from "react";
 import useEvaluationGame from "../query/mutation/useEvaluationGame";
 import useEvaluationLesson from "../query/mutation/useEvaluationLesson";
@@ -34,7 +33,7 @@ export const useHandleFinalAnswer = ({
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();
   const levelFinishedModal = useModal();
-  const allStages = useGetUserInfo.getState().allProgressStages;
+  // const allStages = useGetUserInfo.getState().allProgressStages;
   const { evaluationLessonMutation } = useEvaluationLesson();
 
   //Handles evaluation for lessons only
@@ -46,7 +45,7 @@ export const useHandleFinalAnswer = ({
       {
         receivedCode: receivedCode,
         instruction: currentStageData.instruction,
-        description: currentStageData.description,
+        description: currentStageData.blocks,
       },
       {
         onSuccess: () => {
@@ -56,11 +55,11 @@ export const useHandleFinalAnswer = ({
     );
   };
 
-  const handleFinalAnswer = async (receivedCode: any, showToast: any) => {
-    const stageKey = `${lessonId}-${levelId}-${stageId}`;
-    const isStageLocked =
-      allStages?.[String(category)]?.[stageKey]?.status ?? false;
-    gameIdentifier.current = currentStageDataType;
+  const handleFinalAnswer = async (receivedCode: any) => {
+    // const stageKey = `${lessonId}-${levelId}-${stageId}`;
+    // const isStageLocked =
+    //   allStages?.[String(category)]?.[stageKey]?.status ?? false;
+    // gameIdentifier.current = currentStageDataType;
     // Checks if the next stage is already unlocked
 
     // if (isStageLocked) {
@@ -74,49 +73,56 @@ export const useHandleFinalAnswer = ({
     //   return;
     // }
     // Chekcs if the current stage is Lesson, this will ignore answer
-    if (currentStageDataType === "Lesson") {
-      console.log(stageId);
-      nextStage.mutate({
-        stageId: currentStageData.id,
-        lessonId: String(lessonId),
-        levelId: levelId,
-        category: category,
-        setCurrentStageIndex,
-        levelFinishedModal,
-        finalAnswerModall,
-        stageType: currentStageData.type,
-      });
-    }
 
-    if (!receivedCode && currentStageDataType !== "Lesson") {
-      finalAnswerModall.closeModal();
-      return;
-    } else {
-      evaluationMutation.mutate(
-        {
-          receivedCode: receivedCode,
-          instruction: currentStageData.instruction,
-          description: currentStageData.description,
-        },
-        {
-          onSuccess: (data) => {
-            showToast("success");
+    return new Promise(async (resolve, reject) => {
+      if (currentStageDataType === "Lesson") {
+        const evaluationResult = nextStage.mutateAsync({
+          stageId: currentStageData.id,
+          lessonId: String(lessonId),
+          levelId: levelId,
+          category: category,
+          setCurrentStageIndex,
+          levelFinishedModal,
+          finalAnswerModall,
+          stageType: currentStageData.type,
+        });
+        resolve(evaluationResult);
+        return;
+      }
 
-            nextStage.mutate({
-              stageId: currentStageData.id,
-              lessonId: String(lessonId),
-              levelId: levelId,
-              category: category,
-              answer: data.correct,
-              setCurrentStageIndex,
-              levelFinishedModal,
-              finalAnswerModall,
-              stageType: currentStageData.type,
-            });
+      if (!receivedCode && currentStageDataType !== "Lesson") {
+        setTimeout(() => finalAnswerModall.closeModal(), 100);
+        resolve(["noAnswer", "Your code field is empty!"]);
+        return;
+      } else {
+        evaluationMutation.mutate(
+          {
+            receivedCode: receivedCode,
+            instruction: currentStageData.instruction,
+            description: currentStageData.description,
           },
-        }
-      );
-    }
+          {
+            onSuccess: async (data) => {
+              setTimeout(() => finalAnswerModall.closeModal(), 100);
+              const evaluationResult = await nextStage.mutateAsync({
+                stageId: currentStageData.id,
+                lessonId: String(lessonId),
+                levelId: levelId,
+                category: category,
+                answer: data.correct,
+                setCurrentStageIndex,
+                levelFinishedModal,
+                finalAnswerModall,
+                stageType: currentStageData.type,
+              });
+              console.log(evaluationResult);
+              resolve(evaluationResult);
+              return;
+            },
+          }
+        );
+      }
+    });
   };
 
   return {
@@ -128,49 +134,3 @@ export const useHandleFinalAnswer = ({
     levelFinishedModal,
   };
 };
-//  try {
-//       const res = await unlockNextStage({
-//         category: category,
-//         lessonId: lessonId,
-//         levelId: levelId,
-//         stageId: stageId,
-//       });
-//       const setUnlockNextLesson = unlockNextLevel.getState().unlockNextLesson;
-//       const setUnlockNextSubject =
-//         unlockNextLevel.getState().unlockNextSubject;
-//       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
-//       console.log(res);
-
-//       if (res.isNextStageUnlocked) {
-//         console.log("HELLO");
-//         setCurrentStageIndex((prev: any) => prev + 1);
-//         return;
-//       } else if (res.isNextLevelUnlocked) {
-//         finalAnswerModall.closeModal();
-
-//         setTimeout(() => {
-//           levelFinishedModal.setVisibility(true);
-//         }, 200);
-//         setUnlockNextLevel({
-//           lessonId: lessonId,
-//           nextLevelId: res.nextLevelId,
-//         });
-//         return;
-//       } else if (res.isNextLessonUnlocked) {
-//         finalAnswerModall.closeModal();
-//         setTimeout(() => {
-//           levelFinishedModal.setVisibility(true);
-//         }, 200);
-//         setUnlockNextLesson(res.nextLessonId);
-//         return;
-//       } else {
-//         setTimeout(() => {
-//           levelFinishedModal.setVisibility(true);
-//         }, 200);
-//         setUnlockNextSubject(res.isWholeTopicFinished);
-//         return;
-//       }
-//     } catch (err) {
-//       console.error("unlockNextStage error:", err);
-//       levelFinishedModal.setVisibility(true);
-//     }

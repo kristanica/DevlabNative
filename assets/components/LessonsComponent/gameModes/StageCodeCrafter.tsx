@@ -23,14 +23,11 @@ const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
   //         return;
   //       }
 
-  //       // ✅ Wait for token
   //       const token = await currentUser.getIdToken(true);
 
-  //       // ✅ Fetch file contents and wait
   //       const response = await fetch(currentStageData.replicationFile);
   //       const text = await response.text();
 
-  //       // ✅ Send to backend
   //       const res = await axios.post(
   //         `${URL}/fireBaseAdmin/codeCrafter`,
   //         { code: text }, // better to send an object instead of raw text

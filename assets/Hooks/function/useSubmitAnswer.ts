@@ -23,7 +23,7 @@ const useSubmitAnswer = () => {
   const healthPointsTracker = userHp.getState().userHp;
 
   const resetUserHp = userHp.getState().resetUserHp;
-  let toastResult: string = "success";
+
   const nextStage = useMutation({
     mutationFn: async ({
       stageId,
@@ -57,9 +57,8 @@ const useSubmitAnswer = () => {
         const data = res;
         console.log(data);
         if (data.isNextStageUnlocked) {
-          console.log("HELLO");
           setCurrentStageIndex((prev: any) => prev + 1);
-          return;
+          return ["stageUnlocked", "You got that one right!"];
         } else if (data.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
           console.log("This is current LevelId" + levelId);
@@ -68,6 +67,7 @@ const useSubmitAnswer = () => {
               LevelId: levelId,
               lessonId: lessonId,
             });
+            return ["levelUnlocked", "You've unlocked a new Level!"];
           }
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
@@ -83,25 +83,30 @@ const useSubmitAnswer = () => {
             levelFinishedModal.setVisibility(true);
           }, 200);
           setUnlockNextLesson(res.nextLessonId);
-          return;
+
+          return ["lessonUnlocked", "You've unlocked a new lesson!"];
         } else {
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
           setUnlockNextSubject(res.isWholeTopicFinished);
-          return;
+          return ["wholeTopicFinished", "You've finished a whole topic!"];
         }
       }
-      decrementUserHp();
 
       if (healthPointsTracker <= 1) {
         setCurrentStageIndex(0);
-
         resetUserHp();
+        console.log("hpReset");
+        return ["reset", "You've ran out of hp!"];
       }
+
+      decrementUserHp();
+      console.log("loseOneHp");
+      return ["loseOneHp", "You got that one wrong!"];
     },
   });
-  return { nextStage, toastResult };
+  return { nextStage };
 };
 
 export default useSubmitAnswer;

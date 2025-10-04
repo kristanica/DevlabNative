@@ -1,6 +1,7 @@
 import StageCodingEditor from "@/assets/components/CodeEditor/StageCodingEditor";
 import StageCodingEditorDatabase from "@/assets/components/CodeEditor/StageCodingEditorDatabase";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
@@ -14,6 +15,7 @@ import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
+
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import userHp from "@/assets/zustand/userHp";
@@ -40,7 +42,7 @@ const stageScreen = () => {
 
   useEffect(() => {
     if (levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed) {
-      showToast("rewardClaimed");
+      Toast.show({});
       return;
     }
   }, [levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed]);
@@ -111,18 +113,10 @@ const stageScreen = () => {
     gameOver.closeModal();
   }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
 
-  const showToast = (type: string) => {
-    Toast.show({
-      type: type,
-      visibilityTime: 2000,
-      position: "top",
-      topOffset: 20,
-    });
-  };
-
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
+        {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
         <CustomGeneralContainer>
           <View className="flex-row justify-between items-center mb-5">
             <Pressable
@@ -145,7 +139,6 @@ const stageScreen = () => {
               sendToWebView={sendToWebView}
             />
           </View>
-
           <ModalHandler
             lessonId={String(lessonId)}
             gameOver={gameOver}
@@ -156,17 +149,14 @@ const stageScreen = () => {
             handleFinalAnswer={handleFinalAnswer}
             receivedCode={receivedCode}
             stageData={stageData}
-            showToast={showToast}
             health={health}
             handleGameOver={handleGameOver}
             category={String(category)}
           ></ModalHandler>
-
           {/* Shows modal for first time */}
           <StageModalComponent
             type={gameIdentifier.current}
           ></StageModalComponent>
-
           {category === "Database" ? (
             <StageCodingEditorDatabase
               {...databaseQueryingFunctions}
@@ -181,7 +171,6 @@ const stageScreen = () => {
               logs={logs}
             ></StageCodingEditor>
           )}
-
           <View className="h-[10px] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>
@@ -210,7 +199,6 @@ const stageScreen = () => {
                     stageData[currentStageIndex - 1] === undefined ||
                     stageData[currentStageIndex - 1] === null
                   ) {
-                    showToast("previousButton");
                     return;
                   }
                   handlePrevious();

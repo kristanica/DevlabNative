@@ -1,3 +1,4 @@
+import toastHandler from "@/assets/zustand/toastHandler";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { router } from "expo-router";
@@ -19,7 +20,7 @@ type ModalHandlerProps = {
   handleFinalAnswer: any;
   receivedCode: any;
   stageData: any;
-  showToast: any;
+
   handleGameOver: any;
   finalAnswerModall: any;
   health: any;
@@ -34,12 +35,12 @@ const ModalHandler = ({
   handleFinalAnswer,
   receivedCode,
   stageData,
-  showToast,
   handleGameOver,
   finalAnswerModall,
   health,
   category,
 }: ModalHandlerProps) => {
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   return (
     <>
       {health === 0 && gameOver.visibility && (
@@ -153,13 +154,11 @@ const ModalHandler = ({
       {/* Shows answer confirmation before navigating to the next one */}
       {finalAnswerModall.visibility && (
         <FinalAnswerModal
-          onConfirm={() => {
+          onConfirm={async () => {
             finalAnswerModall.closeModal();
-            handleFinalAnswer(
-              receivedCode,
-
-              showToast
-            );
+            const toastResult = await handleFinalAnswer(receivedCode);
+            console.log("finalaAnser" + toastResult);
+            setToastVisibility(toastResult[0], toastResult[1]);
           }}
           {...finalAnswerModall}
         />

@@ -23,6 +23,7 @@ export default function Home() {
   const { data: userProgressData } = useQuery({
     queryKey: ["userProgress"],
     queryFn: async () => {
+      console.log(URL);
       const uid = await auth.currentUser?.getIdToken(true);
       const res = await axios.get(`${URL}/fireBase/userProgress`, {
         headers: {

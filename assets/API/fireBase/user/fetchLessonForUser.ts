@@ -3,7 +3,7 @@ import axios from "axios";
 
 const fetchLessonForUser = async (category: string) => {
   const token = await auth.currentUser?.getIdToken(true);
-
+  console.log(URL);
   try {
     const res = await axios.get(`${URL}/fireBase/getLesson/${category}`, {
       headers: {

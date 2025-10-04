@@ -27,9 +27,7 @@ const sample = () => {
               </Text>
             </Pressable>
             <SelectLanguageNavigation
-              isCss={true}
-              isHtml={true}
-              isJs={true}
+              subject=""
               sendToWebView={sendToWebView}
             ></SelectLanguageNavigation>
           </View>

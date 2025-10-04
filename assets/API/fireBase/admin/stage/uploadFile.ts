@@ -1,4 +1,4 @@
-import { auth } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import { payloadProps } from "@/assets/constants/type";
 import axios from "axios";
 
@@ -26,16 +26,12 @@ const uploadFile = async ({
     fileForm.append("lessonId", lessonId);
     fileForm.append("levelId", levelId);
     fileForm.append("stageId", stageId);
-    await axios.post(
-      `https://9b1edf2c2979.ngrok-free.app/fireBaseAdmin/uploadFile`,
-      fileForm,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    await axios.post(`${URL}fireBaseAdmin/uploadFile`, fileForm, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return;
   } catch (error) {

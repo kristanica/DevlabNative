@@ -1,5 +1,4 @@
-import axios from "axios";
-import { auth, URL } from "../../constants/constants";
+import { auth } from "../../constants/constants";
 
 type receivedCodePayload = {
   html?: string;
@@ -10,54 +9,81 @@ type receivedCodePayload = {
 type useEvaluationPayload = {
   receivedCode: receivedCodePayload | undefined;
   instruction: string;
-  description: string;
+  description: {
+    id: number;
+    type: string;
+    value: string;
+  }[];
 };
+
+function* paragraphGenerator(
+  blocks:
+    | {
+        id: number;
+        type: string;
+        value: string;
+      }[]
+    | undefined
+) {
+  if (!blocks) return;
+  for (const block of blocks) {
+    if (block.type === "Paragraph") {
+      yield block.value;
+    }
+  }
+}
+function getInstructionFromBlocks(blocks: any) {
+  const iterator = paragraphGenerator(blocks);
+  return Array.from(iterator).join("\n"); // join paragraphs into one string
+}
+
 const lessonPrompt = async ({
   receivedCode,
   instruction,
   description,
 }: useEvaluationPayload) => {
   if (!receivedCode) return null;
-
+  const instructionText = getInstructionFromBlocks(description);
   const currentUser = auth.currentUser;
+  console.log(instructionText);
 
   const token = await currentUser?.getIdToken(true);
 
-  try {
-    const res = await axios.post(
-      `${URL}/openAI/lessonPrompt`,
-      {
-        html: receivedCode.html,
-        css: receivedCode.css,
-        js: receivedCode.js,
-        instructions: instruction,
-        description,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  // try {
+  //   const res = await axios.post(
+  //     `https://8fd2d4f797c4.ngrok-free.app/openAI/lessonPrompt`,
+  //     {
+  //       html: receivedCode.html,
+  //       css: receivedCode.css,
+  //       js: receivedCode.js,
+  //       instructions: instruction,
+  //       description,
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
 
-    let raw = res.data.response;
+  //   let raw = res.data.response;
 
-    // 🧹 Clean response if wrapped in ```json ... ```
-    if (typeof raw === "string") {
-      raw = raw.replace(/```json|```/g, "").trim();
-    }
+  //   // 🧹 Clean response if wrapped in ```json ... ```
+  //   if (typeof raw === "string") {
+  //     raw = raw.replace(/```json|```/g, "").trim();
+  //   }
 
-    let parsed: any = null;
-    try {
-      parsed = JSON.parse(raw);
-    } catch (e) {
-      console.log("Failed to parse JSON:", e, raw);
-    }
+  //   let parsed: any = null;
+  //   try {
+  //     parsed = JSON.parse(raw);
+  //   } catch (e) {
+  //     console.log("Failed to parse JSON:", e, raw);
+  //   }
 
-    return parsed;
-  } catch (error) {
-    console.log(error);
-  }
+  //   return parsed;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 export default lessonPrompt;

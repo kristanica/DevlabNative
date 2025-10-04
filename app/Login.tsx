@@ -1,6 +1,9 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import InputBox from "@/assets/components/InputBox";
+import ForgotPasswordModal from "@/assets/components/RegisterComponents/ForgotPasswordModal";
 import useLogin from "@/assets/Hooks/reducers/useLogin";
+import useModal from "@/assets/Hooks/useModal";
+import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
@@ -8,20 +11,13 @@ import { Text, TouchableOpacity, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated from "react-native-reanimated";
-import Toast from "react-native-toast-message";
 
 const Login = () => {
   const { state, dispatch, signIn } = useLogin();
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
 
-  const showToast = (type: string) => {
-    Toast.show({
-      type: type,
+  const forgotPassword = useModal();
 
-      visibilityTime: 2000,
-      position: "top",
-      topOffset: 20,
-    });
-  };
   return (
     <View className="flex-1 bg-background ">
       <CustomGeneralContainer>
@@ -74,8 +70,14 @@ const Login = () => {
                   isPassword={true}
                 />
               </View>
-
-              <View className="flex-row">
+              <TouchableOpacity
+                onPress={() => forgotPassword.setVisibility((prev) => !prev)}
+              >
+                <Text className=" color-[#4F80C5] -2 font-exoRegula xs:text-xs ">
+                  Forgot password
+                </Text>
+              </TouchableOpacity>
+              <View className="flex-row mt-5">
                 <BouncyCheckbox
                   size={20}
                   fillColor="#00FFBF"
@@ -93,15 +95,23 @@ const Login = () => {
                     });
                   }}
                 />
-                <Text className=" text-white opacity-20 xs:text-xs font-exoRegular">
+                <Text className=" text-white opacity-20 xs:text-xs font-exoRegular ">
                   Keep me signed in
                 </Text>
               </View>
 
               <TouchableOpacity
                 onPress={async () => {
+                  if (state.email === "" || state.password === "") {
+                    setToastVisibility(
+                      "emptyCredentialField",
+                      "Fill in the following credentials!"
+                    );
+                    return;
+                  }
+
                   const res = await signIn();
-                  showToast(res!);
+                  setToastVisibility(String(res![0]), String(res![1]));
                 }}
               >
                 <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
@@ -116,29 +126,15 @@ const Login = () => {
               <TouchableOpacity
                 onPress={() => router.push({ pathname: "/Register" })}
               >
-                <Text className=" mt-2 font-exoRegula xs:text-xs text-white">
+                <Text className=" color-[#4F80C5] -2 font-exoRegula xs:text-xs ">
                   Register here
                 </Text>
               </TouchableOpacity>
             </View>
-            <Toast
-              config={{
-                success: () => (
-                  <View className="h-[50px]  w-52 mx-2 z-50 bg-[#1ABC9C] border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
-                    <Text className="text-white xs: text-xs font-exoExtraBold">
-                      🎉 You got that right!
-                    </Text>
-                  </View>
-                ),
-                error: () => (
-                  <View className="h-[50px]  w-52 mx-2 z-50  bg-[#E63946] border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute">
-                    <Text className="text-white xs: text-xs font-exoExtraBold">
-                      ⚠️ Oops! somethings wrong!
-                    </Text>
-                  </View>
-                ),
-              }}
-            />
+
+            {forgotPassword.visibility && (
+              <ForgotPasswordModal {...forgotPassword}></ForgotPasswordModal>
+            )}
           </Animated.View>
         </KeyboardAwareScrollView>
       </CustomGeneralContainer>

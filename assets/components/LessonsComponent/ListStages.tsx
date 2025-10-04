@@ -25,7 +25,6 @@ const ListStages = () => {
       levelPayload?.levelId,
     ],
     queryFn: async () => {
-      
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
       const res = await fetch(

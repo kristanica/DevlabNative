@@ -9,6 +9,7 @@ type stage = {
   isHidden: boolean;
   order: number;
   type: string;
+  blocks: [];
 };
 type Payload = {
   stageData: stage[];

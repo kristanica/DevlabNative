@@ -3,6 +3,7 @@ import axios from "axios";
 
 export const fetchAchievements = async (category: string) => {
   const token = await auth.currentUser?.getIdToken(true);
+  console.log(URL);
   try {
     const res = await axios.get(`${URL}/fireBase/achievements/${category}`, {
       headers: {
