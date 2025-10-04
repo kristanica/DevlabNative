@@ -64,29 +64,29 @@ const AchievementContainer = ({
             </View>
 
             <View className="flex-[.5] justify-center items-center border-t-2 b-black mx-5">
-              <Text className="text-white font-exoExtraBold text-lg text-center">
+              <Text className="text-white font-exoExtraBold text-sm xs:text-xs  text-center">
                 {data?.title}
               </Text>
             </View>
             {/* Render the Description of Achievement */}
             <View className="flex-[.5] justify-center items-center">
-              <Text className="text-[#94A1B2] text-center font-exoLight text-xs px-2">
+              <Text className="text-[#94A1B2] text-center font-exoLight text-xs xs:text-[8px] px-2">
                 {data?.description ?? "No description"}
               </Text>
             </View>
 
             <View className="flex-[.5] justify-center items-center mx-10 my-2 rounded-3xl">
               {!isUnlocked ? (
-                <Text className="text-white text-center text-xs px-2 rounded-xl py-2  bg-[#F87171] font-exoBold">
+                <Text className="text-white text-center text-xs xs:text-[9px] px-2 rounded-xl py-2  bg-[#F87171] font-exoBold">
                   In Progress
                 </Text>
               ) : isClaimed ? (
-                <Text className="text-white bg-[#22C55E]  px-2 rounded-xl py-2  text-center text-xs font-exoBold">
+                <Text className="text-white bg-[#22C55E]  px-2 rounded-xl py-2  text-center text-xs xs:text-[9px] font-exoBold">
                   Completed
                 </Text>
               ) : (
                 <TouchableOpacity onPress={claimMutation}>
-                  <Text className="text-white bg-[#EC4899] px-2 rounded-xl py-2  text-center text-xs font-exoBold">
+                  <Text className="text-white bg-[#EC4899] px-2 rounded-xl py-2  text-center text-xs xs:text-[9px] font-exoBold">
                     Claim
                   </Text>
                 </TouchableOpacity>

@@ -43,9 +43,11 @@ const LessonContainer = ({
         <Ionicons name={icon} color={"white"} size={40} />
       </View>
       <View className="w-[80%] px-3 py-3">
-        <Text className="text-white font-exoBold text-xl">{item.title}</Text>
+        <Text className="text-white font-exoBold text-xl xs:text-[12px]">
+          {item.title}
+        </Text>
         <Text
-          className="text-[#eeebf29d] font-exoLight text-sm"
+          className="text-[#eeebf29d] font-exoLight text-xs xs:text-[9px]"
           numberOfLines={2}
         >
           {item.description}

@@ -20,8 +20,11 @@ const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
 
   return (
     <Animated.View
-      style={onScale}
-      className="bg-[#111827] my-2 rounded-2xl border-2 border-black h-40 p-3 mx-3 relative"
+      style={[
+        onScale,
+        { backgroundColor: item.type === "Lesson" ? "#111827" : "#2B1118" },
+      ]}
+      className="my-2 rounded-2xl border-2 border-black h-40 p-3 mx-3 relative"
     >
       {!isLocked && (
         <>

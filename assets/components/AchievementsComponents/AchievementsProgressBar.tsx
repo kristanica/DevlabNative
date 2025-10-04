@@ -5,27 +5,40 @@ import CircularProgress from "react-native-circular-progress-indicator";
 type AchievementContainerProps = {
   name: string;
   id?: number;
+  progress: number;
 };
 
 // Achievement progress bar for (Tabs)/Achievement.tsx
-const AchievementsProgressBar = ({ name, id }: AchievementContainerProps) => {
+const AchievementsProgressBar = ({
+  name,
+  id,
+  progress,
+}: AchievementContainerProps) => {
   return (
     <View
-      key={id}
-      className="flex-[1] flex-col justify-center items-center mx-2 my-2"
+      className="flex-col justify-center items-center mx-2 my-2"
+      style={{ width: 80, height: 80 }}
     >
-      {/* Background opacity */}
-      <View className="absolute bg-slate-200 h-full w-full opacity-15 rounded-xl border-black border-[2px]"></View>
-      <CircularProgress
-        value={20}
-        radius={20}
-        progressValueColor={"#ecf0f1"}
-        maxValue={200}
+      <View
+        className="absolute bg-slate-200 opacity-20 rounded-xl border-black border-[2px]"
+        style={{ width: 80, height: 80 }}
       />
-      {/* Render's Name */}
-      <View className="justify-center items-center">
-        <Text className="text-sm text-white font-exoRegular">{name}</Text>
-        <Text className="text-sm text-white font-exoRegular">Achievements</Text>
+
+      <CircularProgress
+        value={progress}
+        radius={20}
+        progressValueColor="#ecf0f1"
+        maxValue={10}
+      />
+
+      {/* Name */}
+      <View className="justify-center items-center mt-2">
+        <Text className="text-xs xs:text-[9px] text-white font-exoRegular">
+          {name}
+        </Text>
+        <Text className="text-xs xs:text-[9px] text-white font-exoRegular">
+          Achievements
+        </Text>
       </View>
     </View>
   );

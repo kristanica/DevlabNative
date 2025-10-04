@@ -1,6 +1,7 @@
 import { auth, db, height } from "@/assets/constants/constants";
 
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import { playSound } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -30,16 +31,17 @@ import Toast, { BaseToastProps } from "react-native-toast-message";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
 const ItemList = () => {
-  const showToast = (type: string, gameMode: string) => {
+  const showToast = (type: string, message: string) => {
     Toast.show({
       type: type,
-      text1: `You cannot use that, you're in ${gameMode}! `,
+      text1: message,
       visibilityTime: 2000,
       position: "top",
       topOffset: 20,
     });
   };
   const { inventory } = useGetUserInfo();
+  console.log(inventory);
   const moveToRight = useSharedValue(100);
   const opacity = useSharedValue(1);
 
@@ -89,6 +91,7 @@ const ItemList = () => {
 
   const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
   const useItem = async (itemId: string, itemName: string) => {
+    console.log(itemId, itemName);
     const id = auth.currentUser?.uid;
     const userInventoryRef = doc(db, "Users", String(id), "Inventory", itemId);
     await updateDoc(userInventoryRef, {
@@ -109,45 +112,68 @@ const ItemList = () => {
   };
 
   const useItemActions: Record<string, (userItem: string) => void> = {
-    "Coin Surge": (itemId) => useItem(itemId, "doubleCoins"),
-    "Code Whisper": async (itemId) => {
+    CoinSurge: async (itemId) => {
+      await playSound("success");
+      showToast("itemUsed", `You've used Coin Surge!`);
+      useItem(itemId, "doubleCoins");
+    },
+    CodeWhisper: async (itemId) => {
       if (location !== "BugBust") {
-        showToast("itemError", String(location));
+        await playSound("wrongAnswer");
+
+        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("You're not in bug bust lol");
         return;
       }
+      await playSound("success");
+      showToast("itemUsed", `You've used Code Whisper!`);
       await useItem(itemId, "revealHint");
     },
-    "Code Patch++": (itemId) => {
+    CodePatch: async (itemId) => {
       if (location !== "CodeRush") {
-        showToast("itemError", String(location));
+        await playSound("wrongAnswer");
+        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in code rush");
         return;
       }
+      await playSound("success");
+      showToast("itemUsed", `You've used Code Patch!`);
       useItem(itemId, "extraTime");
     },
-    "Time Freeze": (itemId) => {
+    TimeFreeze: async (itemId) => {
       if (location !== "CodeRush") {
-        showToast("itemError", String(location));
+        await playSound("wrongAnswer");
+
+        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in code rush");
         return;
       }
+      await playSound("success");
+      showToast("itemUsed", `You've used Time Freeze!`);
       useItem(itemId, "timeFreeze");
     },
-    "Error Shield": async (itemId) => {
+    ErrorShield: async (itemId) => {
       if (location === "Lesson") {
-        showToast("itemError", String(location));
+        await playSound("wrongAnswer");
+
+        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("You cannot use items in here");
         return;
       }
+      await playSound("success");
+      showToast("itemUsed", `You've used Error Shield!`);
       await useItem(itemId, "errorShield");
     },
-    "Brain Filter": (itemId) => {
+    BrainFilter: async (itemId) => {
       if (location !== "BrainBytes") {
-        showToast("itemError", String(location));
+        await playSound("wrongAnswer");
+
+        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in Brain Bytes");
         return;
       }
+      await playSound("success");
+      showToast("itemUsed", `You've used Brain Filter!`);
       useItem(itemId, "brainFilter");
     },
   };
@@ -170,6 +196,14 @@ const ItemList = () => {
         config={{
           itemError: (props: BaseToastProps) => (
             <View className="h-[50px]  w-52 mx-2 z-50 bg-red-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
+              <Text className="text-white xs: text-xs text-center font-exoExtraBold">
+                {props.text1}
+              </Text>
+            </View>
+          ),
+
+          itemUsed: (props: BaseToastProps) => (
+            <View className="h-[50px]  w-52 mx-2 z-50 bg-green-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
               <Text className="text-white xs: text-xs text-center font-exoExtraBold">
                 {props.text1}
               </Text>
@@ -211,9 +245,9 @@ const ItemList = () => {
               return (
                 <TouchableOpacity
                   key={userInvItems.id}
-                  onPress={() =>
-                    useItemActions[userInvItems.title]?.(userInvItems.id)
-                  }
+                  onPress={() => {
+                    useItemActions[userInvItems.title]?.(userInvItems.id);
+                  }}
                 >
                   <UserInventoryItems item={userInvItems} />
                 </TouchableOpacity>

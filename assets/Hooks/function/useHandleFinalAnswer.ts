@@ -2,6 +2,7 @@ import { RefObject } from "react";
 import useEvaluationGame from "../query/mutation/useEvaluationGame";
 import useEvaluationLesson from "../query/mutation/useEvaluationLesson";
 import useModal from "../useModal";
+import { playSound } from "./soundHandler";
 import useSubmitAnswer from "./useSubmitAnswer";
 
 type useHandleFinalAnswerProps = {
@@ -45,11 +46,12 @@ export const useHandleFinalAnswer = ({
       {
         receivedCode: receivedCode,
         instruction: currentStageData.instruction,
-        description: currentStageData.blocks,
+        description: currentStageData.description,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           evaluateModal.setVisibility(true);
+          await playSound("success");
         },
       }
     );
@@ -92,7 +94,7 @@ export const useHandleFinalAnswer = ({
 
       if (!receivedCode && currentStageDataType !== "Lesson") {
         setTimeout(() => finalAnswerModall.closeModal(), 100);
-        resolve(["noAnswer", "Your code field is empty!"]);
+        resolve(["wrongAnswer", "Your code field is empty!"]);
         return;
       } else {
         evaluationMutation.mutate(

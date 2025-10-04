@@ -1,5 +1,6 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import ExperienceBar from "@/assets/components/HomeComponents/ExperienceBar";
 import InventoryItemContainer from "@/assets/components/HomeComponents/InventoryItemContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
@@ -85,16 +86,14 @@ export default function Home() {
                   <Text className="text-white xs:text-lg font-exoExtraBold">
                     {userData?.username}
                   </Text>
-                  <Text className="text-white font-exoBold xs:text-xs">
-                    {"Level"} {userData?.userLevel}
-                  </Text>
+
                   {/* EXP bar */}
-                  <View className="w-[95%] h-4 rounded-xl bg-[#D9D9D9] overflow-hidden my-2">
-                    <View className="w-[80%] bg-[#32FF99] h-4 rounded-xl "></View>
-                  </View>
-                  <Text className="text-whitefont-exoRegula xs:text-xs">
-                    {userData?.exp} {"EXP"}
-                  </Text>
+
+                  <ExperienceBar
+                    userExp={userData!.exp}
+                    userLevel={userData!.userLevel}
+                    treshold={100}
+                  ></ExperienceBar>
                 </View>
               </ImageBackground>
             </View>

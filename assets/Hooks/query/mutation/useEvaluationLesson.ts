@@ -10,11 +10,12 @@ type receivedCodePayload = {
 type useEvaluationPayload = {
   receivedCode: receivedCodePayload | undefined;
   instruction: string;
-  description: {
-    id: number;
-    type: string;
-    value: string;
-  }[];
+  description: string;
+  // description: {
+  //   id: number;
+  //   type: string;
+  //   value: string;
+  // }[];
 };
 
 const useEvaluationLesson = () => {

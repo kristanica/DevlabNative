@@ -5,10 +5,11 @@ import React, { useState } from "react";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { auth, db, mockData } from "@/assets/constants/constants";
+import { auth, db } from "@/assets/constants/constants";
 
 import { fetchAchievements } from "@/assets/API/fireBase/user/fetchAchievements";
-import LoadingAnim from "@/assets/components/LoadingAnim";
+import SmallLoading from "@/assets/components/global/SmallLoading";
+import { playSound } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -16,6 +17,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  ListRenderItemInfo,
   Pressable,
   Text,
   View,
@@ -46,6 +48,7 @@ const Achievements = () => {
       coinsReward: number;
     }) => {
       const uid = auth.currentUser?.uid;
+      await playSound("achievementUnlocked");
       Toast.show({
         type: "claimAchievement",
         visibilityTime: 2000,
@@ -90,6 +93,27 @@ const Achievements = () => {
       }
     },
   });
+
+  const achievementPlaceHolder = [
+    {
+      id: 1,
+      subject: "Html",
+    },
+    {
+      id: 2,
+      subject: "Css",
+    },
+
+    {
+      id: 3,
+      subject: "JavaScript",
+    },
+
+    {
+      id: 4,
+      subject: "Database",
+    },
+  ];
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-accent">
@@ -116,24 +140,33 @@ const Achievements = () => {
 
               <View className="justify-center items-center flex-[.5] ">
                 <Text className="text-white font-exoBold">
-                  {userData?.username}
-                </Text>
-
-                <Text className="text-white font-exoBold">
                   Hall of Achievements
                 </Text>
               </View>
 
-              {/* Renders AchivementsProgressBar component */}
-              <View className="flex-[1]  flex-row justify-center items-center">
-                {mockData.map((item) => (
-                  <AchievementsProgressBar key={item.id} name={item.name} />
-                ))}
+              <View className="flex-[1]  flex-row justify-between items-center">
+                <FlatList
+                  data={achievementPlaceHolder ?? []}
+                  horizontal={true}
+                  keyExtractor={(item) => String(item.id)}
+                  renderItem={({ item }: ListRenderItemInfo<any>) => {
+                    const totalAchievementsCompleted = userAchievements.filter(
+                      (achievement: any) =>
+                        achievement.id.startsWith(item.subject)
+                    ).length;
+
+                    return (
+                      <AchievementsProgressBar
+                        progress={totalAchievementsCompleted}
+                        name={item.subject}
+                      />
+                    );
+                  }}
+                ></FlatList>
               </View>
             </ImageBackground>
 
             <View className="bg-accent flex-[2] ">
-              {/* Renders navugation buttons to switch achivements tab (CSS, JS, DB, HTML) */}
               <View className=" items-center flex-row border-b-2  py-2  border-accentContainer px-3">
                 <FlatList
                   alwaysBounceVertical={false}
@@ -143,23 +176,30 @@ const Achievements = () => {
                   columnWrapperStyle={{
                     justifyContent: "space-between",
                   }}
-                  renderItem={({ item }) => (
-                    <Pressable
-                      onPress={() => {
-                        setSelectedCategory(item);
-                      }}
-                    >
-                      <Text className="text-white font-exoBold xs:text-lg">
-                        {item}
-                      </Text>
-                    </Pressable>
-                  )}
+                  renderItem={({ item }) => {
+                    const isSelected = item === selectedCategory;
+                    return (
+                      <Pressable
+                        onPress={() => {
+                          setSelectedCategory(item);
+                        }}
+                      >
+                        <Text
+                          className={`font-exoBold text-xs xs:text-[12px] ${
+                            isSelected ? "text-white" : "text-gray-400"
+                          }`}
+                        >
+                          {item}
+                        </Text>
+                      </Pressable>
+                    );
+                  }}
                 />
               </View>
 
               <View className="flex-[1] ">
                 {isLoading ? (
-                  <LoadingAnim></LoadingAnim>
+                  <SmallLoading></SmallLoading>
                 ) : (
                   <FlatList
                     showsVerticalScrollIndicator={false}

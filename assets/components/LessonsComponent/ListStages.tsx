@@ -58,7 +58,7 @@ const ListStages = () => {
   const lockedModal = useModal();
 
   return (
-    <View className="flex-[1]">
+    <View className="h-[40%]">
       {isLoading ? (
         <SmallLoading />
       ) : (
@@ -72,7 +72,7 @@ const ListStages = () => {
               allStages?.[levelPayload?.category]?.[stageKey]?.status ?? false;
 
             globalCounter++;
-            if (item.isHidden) {
+            if (item.isHidden && !isStageLocked) {
               return null;
             }
 

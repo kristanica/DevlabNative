@@ -44,10 +44,10 @@ const categoryScreen = () => {
           style={{ height: "25%", flexDirection: "row" }}
         >
           <View className="flex-[1] justify-center items-center ml-3">
-            <Text className="text-white shadow text-2xl text-justify font-exoBold">
+            <Text className="text-white shadow text-xl text-justify font-exoBold">
               {meta.title}
             </Text>
-            <Text className="text-white shadow font-exoBold">
+            <Text className="text-white shadow font-exoLight text-xs xs:text-[8px] text-justify">
               {meta.description}
             </Text>
           </View>
@@ -57,14 +57,16 @@ const categoryScreen = () => {
         </LinearGradient>
 
         <View className=" items-center mx-3">
-          <Text className="my-5 text-3xl text-white font-exoBold">
-            About {""}
+          <Text className="my-5  text-white text-2xl xs:text-xl font-exoBold">
+            About
             <Text style={{ color: meta.gradient.color1 }}>
               {id.toUpperCase().toString()}
             </Text>
           </Text>
 
-          <Text className="text-white text-justify my-2">{meta.about}</Text>
+          <Text className="text-white  font-exoRegular text-justify my-2 text-xs xs: text-[10px]">
+            {meta.about}
+          </Text>
         </View>
         <LockLessonModal
           onConfirm={() => closeModal()}

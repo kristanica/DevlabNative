@@ -1,3 +1,4 @@
+import { playSound } from "@/assets/Hooks/function/soundHandler";
 import toastHandler from "@/assets/zustand/toastHandler";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
@@ -157,7 +158,9 @@ const ModalHandler = ({
           onConfirm={async () => {
             finalAnswerModall.closeModal();
             const toastResult = await handleFinalAnswer(receivedCode);
-            console.log("finalaAnser" + toastResult);
+
+            await playSound(toastResult[0]);
+            console.log(toastResult[0]);
             setToastVisibility(toastResult[0], toastResult[1]);
           }}
           {...finalAnswerModall}

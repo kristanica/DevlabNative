@@ -3,8 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { auth, itemIcon } from "../constants/constants";
+import purchaseItem from "../API/fireBase/user/purchaseItem";
+import { itemIcon } from "../constants/constants";
+import { playSound } from "../Hooks/function/soundHandler";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
+import toastHandler from "../zustand/toastHandler";
 import { useGetUserInfo } from "../zustand/useGetUserInfo";
 
 type ShopItemProps = {
@@ -24,45 +27,29 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
     id: index,
   });
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
-
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const userData = useGetUserInfo((state) => state.userData);
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: async () => {
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        return null;
-      }
-      const token = await currentUser?.getIdToken(true);
-
-      const res = await fetch(
-        `https://8fd2d4f797c4.ngrok-free.app/fireBase/purchaseItem`,
-        {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            itemid: id,
-            itemCost: cost,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        console.log("Cannot purchase an item" + res.status);
-        return;
-      }
-      const data = await res.json();
-
-      return data;
+    mutationFn: async ({
+      id,
+      cost,
+      itemName,
+    }: {
+      id: string;
+      cost: number;
+      itemName: string;
+    }) => {
+      return purchaseItem({ id: id, cost: cost, itemName: itemName });
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       useGetUserInfo
         .getState()
         .setUserData({ ...userData!, coins: data?.newCoins });
       queryClient.invalidateQueries({ queryKey: ["userData"] });
+      setToastVisibility("success", "You've brought an item!");
+
+      await playSound("purchase");
     },
   });
 
@@ -85,7 +72,11 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
             {desc}
           </Text>
 
-          <TouchableOpacity onPress={() => mutation.mutate()}>
+          <TouchableOpacity
+            onPress={() =>
+              mutation.mutate({ id: id, cost: cost, itemName: iconNameTrimmed })
+            }
+          >
             <Text className="text-white xs:text-[8px] bg-[#1ABC9C]  px-7 font-exoRegular py-2 rounded-2xl">
               ${cost}
             </Text>
