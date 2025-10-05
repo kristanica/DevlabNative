@@ -1,7 +1,4 @@
-import AdminModal from "@/assets/components/SettingsComponents/AdminModal";
-
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
-import ButtonAnimated from "@/assets/components/ButtonComponent";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useModal from "@/assets/Hooks/useModal";
@@ -18,7 +15,6 @@ import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useSignOut from "@/assets/Hooks/useSignOut";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useMutation } from "@tanstack/react-query";
-import { router } from "expo-router";
 import {
   Image,
   ImageBackground,
@@ -40,7 +36,7 @@ const Settings = () => {
   const { mutate: updateImage, isPending } = pickImage();
 
   const logOutModal = useModal();
-  const adminModal = useModal();
+  // const adminModal = useModal();
   const confirmationModal = useModal();
   const { userData } = useGetUserInfo();
   const { logOut } = useSignOut();
@@ -109,9 +105,9 @@ const Settings = () => {
                       <TextInput
                         value={userName}
                         onChangeText={setUserName}
-                        // placeholder={"username"}
                         placeholder={userData?.username}
-                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]"
+                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]  "
+                        placeholderTextColor="rgba(128, 128, 128, 0.5)"
                       />
                     </View>
                   </View>
@@ -126,7 +122,8 @@ const Settings = () => {
                         value={bio}
                         onChangeText={setBio}
                         placeholder={userData?.bio}
-                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]"
+                        className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]  "
+                        placeholderTextColor="rgba(128, 128, 128, 0.5)"
                       />
                     </View>
                   </View>
@@ -161,18 +158,18 @@ const Settings = () => {
                     </Text>
                   </Pressable>
 
-                  <ButtonAnimated
+                  {/* <ButtonAnimated
                     backgroundColor="transparent"
                     onPressAction={() => adminModal.setVisibility(true)}
                   >
                     <Text className="text-white py-2 font-exoLight xs:text-xs">
                       Login as Administrator
                     </Text>
-                  </ButtonAnimated>
+                  </ButtonAnimated> */}
                 </View>
               </View>
             </Animated.View>
-            {adminModal.visibility && (
+            {/* {adminModal.visibility && (
               <AdminModal
                 onConfirm={() => {
                   router.replace({ pathname: "/(admin)/AdminLogin" });
@@ -181,7 +178,7 @@ const Settings = () => {
                 scaleStyle={adminModal.scaleStyle}
                 closeModal={adminModal.closeModal}
               />
-            )}
+            )} */}
             {logOutModal.visibility && (
               <SignOutModal
                 onConfirm={logOut}

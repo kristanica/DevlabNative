@@ -5,7 +5,6 @@ const soundFiles: Record<string, any> = {
   purchase: require("@/assets/sound/purchase.mp3"),
   correctAnswer: require("@/assets/sound/correct.mp3"),
   stageUnlocked: require("@/assets/sound/correct.mp3"),
-
   wrongAnswer: require("@/assets/sound/inCorrect.mp3"),
   levelUp: require("@/assets/sound/levelUp.mp3"),
   achievementUnlocked: require("@/assets/sound/achievementUnlocked.mp3"),

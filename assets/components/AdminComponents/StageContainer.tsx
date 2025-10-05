@@ -40,12 +40,14 @@ const StageContainer = ({ item, index, category }: StageContainerProps) => {
       className="bg-[#111827] my-2 rounded-2xl border-[2px] border-black h-40 p-3 mx-3"
     >
       <View>
-        <Text className="text-white font-exoBold text-2xl">{item.title}</Text>
+        <Text className="text-white font-exoBold text-xl xs:text-[12px]">
+          {item.title}
+        </Text>
       </View>
 
       <View className="mt-2">
         <Text
-          className="text-[#94A1B2] text-sm  text-justify font-exoLight "
+          className="text-[#94A1B2]   text-justify font-exoLight  text-xs xs:text-[9px] "
           numberOfLines={2}
         >
           {item.description}
@@ -53,7 +55,7 @@ const StageContainer = ({ item, index, category }: StageContainerProps) => {
       </View>
 
       <View className="my-2">
-        <Text className="text-white font-exoBold text-sm">
+        <Text className="text-white font-exoBold   text-[9px] xs:text-[8px]">
           {item?.isHidden ? "Game" : "Lesson"}
         </Text>
       </View>

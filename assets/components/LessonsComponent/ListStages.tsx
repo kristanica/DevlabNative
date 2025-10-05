@@ -1,11 +1,13 @@
-import { auth, URL } from "@/assets/constants/constants";
+import { auth, db, URL } from "@/assets/constants/constants";
+import tryCatch from "@/assets/Hooks/function/tryCatch";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
-import React, { useRef } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import React, { useEffect, useRef } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import SmallLoading from "../global/SmallLoading";
 import LockLessonModal from "./LockLessonModal";
@@ -48,14 +50,43 @@ const ListStages = () => {
     },
   });
   let globalCounter = 0;
+
   if (!levelPayload) {
     return null;
   }
 
   const allStages = useGetUserInfo((state) => state.allProgressStages);
-  console.log(allStages);
-
   const lockedModal = useModal();
+
+  const lastOpenedLevel = useMutation({
+    mutationFn: async () => {
+      const uid = auth.currentUser?.uid;
+      const userRef = doc(db, "Users", String(uid));
+
+      const [_, error] = await tryCatch(
+        setDoc(
+          userRef,
+          {
+            lastOpenedLevel: {
+              lessonId: levelPayload.lessonId,
+              levelId: levelPayload.levelId,
+              subject: levelPayload.category,
+            },
+          },
+          { merge: true }
+        )
+      );
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+    },
+  });
+
+  useEffect(() => {
+    lastOpenedLevel.mutate();
+  }, []);
 
   return (
     <View className="h-[40%]">

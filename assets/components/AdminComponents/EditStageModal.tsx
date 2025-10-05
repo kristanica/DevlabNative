@@ -66,6 +66,8 @@ const EditStageModal = ({
         copyCode: stageData?.copyCode || "",
       },
     });
+
+    console.log(state);
   }, [stageData]);
   const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
@@ -239,9 +241,7 @@ const EditStageModal = ({
                       stageType: stageData?.type,
                     });
                     setReplicateFile("");
-                    console.log(
-                      "replicate file has been set to: " + replicationFile
-                    );
+
                     setisFirebaseSuccess(true);
                     setFireBaseResultVisibility(true);
                     dispatch({ type: "RESET_ALL_FIELD" });

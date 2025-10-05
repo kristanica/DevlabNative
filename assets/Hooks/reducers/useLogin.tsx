@@ -41,6 +41,7 @@ const useLogin = () => {
         state.password
       );
 
+      //Checks wether user has verified their username. If not, will show a custom toast.
       await userCredential.user.reload();
       if (!userCredential.user.emailVerified) {
         return ["unverifiedEmail", "Your email has not been verified yet!"];
@@ -53,7 +54,7 @@ const useLogin = () => {
       const userRef = doc(db, "Users", userCredential?.user.uid);
       const data = await getDoc(userRef);
       //check if account is suspended
-      if (data.data()?.suspend) {
+      if (data.data()?.isSuspended) {
         console.log("your account is suspended");
         await signOut(auth);
         router.replace({ pathname: path.LOGIN });
@@ -90,8 +91,6 @@ const useLogin = () => {
 
     keepSignIn();
   }, []);
-
-  const forgotPassword = async () => {};
 
   return { state, dispatch, signIn };
 };

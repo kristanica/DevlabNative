@@ -9,6 +9,7 @@ import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { router } from "expo-router";
 import {
   Image,
   ImageBackground,
@@ -44,6 +45,7 @@ export default function Home() {
   });
 
   const { userData, inventory } = useGetUserInfo();
+
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -108,7 +110,16 @@ export default function Home() {
               </Text>
 
               {/* Routes to last  lesson viewed */}
-              <Pressable>
+              <Pressable
+                onPress={() => {
+                  router.push({
+                    pathname: `/home/category/[categoryId]`,
+                    params: {
+                      categoryId: String(userData?.lastOpenedLevel?.subject),
+                    },
+                  });
+                }}
+              >
                 <View className="bg-accentContainer mx-3 my-2 flex-row rounded-2xl overflow-hidden">
                   <View className="flex-[.5] justify-center items-center bg-[#070606] rounded-2xl">
                     <Ionicons name="logo-html5" size={50} color={"white"} />

@@ -1,7 +1,13 @@
 import BottomSheet from "@gorhom/bottom-sheet";
 import LottieView from "lottie-react-native";
 import React, { RefObject, useMemo } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
 
 type CodeEditorPayload = {
@@ -18,6 +24,7 @@ type CodingPlaygroundEditorProps = {
   >;
   logs: any;
   setLogs: any;
+  terminalRef: RefObject<BottomSheet | null>;
 };
 const ViteCodeEditor = ({
   webRef,
@@ -25,6 +32,7 @@ const ViteCodeEditor = ({
   setReceivedCode,
   logs,
   setLogs,
+  terminalRef,
 }: CodingPlaygroundEditorProps) => {
   const snapPoints = useMemo(() => ["5%", "50%"], []);
   return (
@@ -96,6 +104,12 @@ const ViteCodeEditor = ({
         )}
       </View>
 
+      <TouchableOpacity className="absolute  z-50  bottom-16 left-5 ">
+        <Text className="text-white px-7 py-2 bg-button text-xs rounded-xl font-exoBold">
+          Evaluate
+        </Text>
+      </TouchableOpacity>
+
       <View className="flex-[2]">
         <WebView
           scrollEnabled={false}
@@ -119,7 +133,11 @@ const ViteCodeEditor = ({
           }}
         />
       </View>
+
       <BottomSheet
+        ref={terminalRef}
+        index={-1}
+        enablePanDownToClose={true}
         snapPoints={snapPoints}
         backgroundStyle={{ backgroundColor: "#111828" }}
       >

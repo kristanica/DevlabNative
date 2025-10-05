@@ -5,11 +5,14 @@ export const fetchAchievements = async (category: string) => {
   const token = await auth.currentUser?.getIdToken(true);
   console.log(URL);
   try {
-    const res = await axios.get(`${URL}/fireBase/achievements/${category}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.get(
+      `https://9b41046acf73.ngrok-free.app/fireBase/achievements/${category}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (res.status !== 200) {
       console.log(res.status);
       return;

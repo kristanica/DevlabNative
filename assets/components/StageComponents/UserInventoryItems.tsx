@@ -12,7 +12,7 @@ const UserInventoryItems = ({ item }: UserInventoryItems) => {
     return;
   }
   return (
-    <View className="bg-background my-2 w-[100px] h-32 mx-2 rounded-2xl p-3 border-[#2a3141] border-[1px]">
+    <View className="bg-background my-2 w-[100px] h-32 mx-2 rounded-2xl p-3 border-[#2a3141] border-[1px] ">
       <Image
         source={itemIcon[iconNameTrimmed]}
         style={{
@@ -23,9 +23,7 @@ const UserInventoryItems = ({ item }: UserInventoryItems) => {
         }}
       ></Image>
       <View className="justify-center items-center mt-3">
-        <Text className="text-white font-exoBold text-xs">
-          {item.quantity} X
-        </Text>
+        <Text className="text-white font-exoBold text-xs">{item.quantity}</Text>
         <Text className="text-white font-exoExtraBold text-xs">
           {item.title}
         </Text>

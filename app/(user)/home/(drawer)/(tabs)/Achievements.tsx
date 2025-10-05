@@ -31,7 +31,7 @@ const Achievements = () => {
   const { userData } = useGetUserInfo();
 
   const { data: achievementsData, isLoading } = useQuery({
-    queryKey: ["Achievement", selectedCategory],
+    queryKey: ["Achievement1", selectedCategory],
     queryFn: () => fetchAchievements(selectedCategory),
   });
 

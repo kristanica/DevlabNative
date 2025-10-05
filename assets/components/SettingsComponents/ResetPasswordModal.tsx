@@ -51,6 +51,7 @@ const ResetPasswordModal = ({
       currentPassword
     );
     await reauthenticateWithCredential(user, credential);
+    //Custom tryCatch
     const [_, error] = await tryCatch(updatePassword(user, newPassword));
 
     if (error) {

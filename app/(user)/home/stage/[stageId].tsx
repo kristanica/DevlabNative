@@ -129,7 +129,6 @@ const stageScreen = () => {
 
             <Pressable
               onPress={() => {
-                console.log("asd");
                 terminalRef.current?.expand();
               }}
             >

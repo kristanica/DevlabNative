@@ -7,10 +7,15 @@ type userData = {
   coins: number;
   exp: number;
   userLevel: number;
-  suspend: boolean;
+  isSuspended: boolean;
   id: string;
   profileImage: string;
   backgroundImage: string;
+  lastOpenedLevel: {
+    lessonId: string;
+    levelId: string;
+    subject: string;
+  };
 };
 
 type allProgressType = Record<
@@ -118,10 +123,15 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
               coins: data.coins,
               exp: data.exp,
               userLevel: data.userLevel,
-              suspend: data.suspend,
+              isSuspended: data.isSuspended,
               id: uid,
               profileImage: data.profileImage,
               backgroundImage: data.backgroundImage,
+              lastOpenedLevel: {
+                lessonId: data?.lastOpenedLevel?.lessonId,
+                levelId: data?.lastOpenedLevel?.levelId,
+                subject: data?.lastOpenedLevel?.subject,
+              },
             },
             loading: false,
           });

@@ -19,7 +19,9 @@ const shop = () => {
   return (
     <ProtectedRoutes>
       <View className="bg-accent flex-1">
-        {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
+        {isMutating > 0 && (
+          <FillScreenLoading text="Purachasing an item..."></FillScreenLoading>
+        )}
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <View className="flex-1 p-3 ">

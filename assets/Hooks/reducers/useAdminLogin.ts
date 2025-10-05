@@ -1,6 +1,6 @@
 import { auth, db } from "@/assets/constants/constants";
 import { router } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useReducer } from "react";
 
@@ -32,7 +32,7 @@ const useAdminLogin = () => {
     password: "",
   });
 
-  const adminLogin = async (isFailed?: () => void) => {
+  const adminLogin = async () => {
     try {
       const userCredentials = await signInWithEmailAndPassword(
         auth,
@@ -53,10 +53,22 @@ const useAdminLogin = () => {
         console.log("error!");
       }
     } catch (error) {
-      if (isFailed) {
-        isFailed();
-      }
       console.log(error);
+      const authError = error as AuthError;
+      switch (authError.code) {
+        case "auth/invalid-email":
+          return ["error", "Check your email format"];
+        case "auth/missing-password": {
+          return ["error", "Check your password"];
+        }
+        case "auth/invalid-credential": {
+          return ["error", "Invalid Credentials"];
+        }
+        case "auth/too-many-requests":
+          return ["error", "Too many attempts"];
+        default:
+          return ["error", authError.message];
+      }
     }
   };
 

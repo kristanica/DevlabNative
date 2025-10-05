@@ -130,6 +130,13 @@ const Login = () => {
                   Register here
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.push({ pathname: "/AdminLogin" })}
+              >
+                <Text className=" color-[#4F80C5] -2 font-exoRegula xs:text-xs ">
+                  Login as Administrator
+                </Text>
+              </TouchableOpacity>
             </View>
 
             {forgotPassword.visibility && (

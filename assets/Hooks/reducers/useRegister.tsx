@@ -1,18 +1,19 @@
 import { auth, db } from "@/assets/constants/constants";
 import {
+  AuthError,
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useReducer } from "react";
 import Toast from "react-native-toast-message";
+import { validateEmail, validatePassword } from "../function/validationUtility";
 
 type State = {
   email: string;
   password: string;
   username: string;
   age: number;
-  isRegitering: boolean;
 };
 
 type Action = {
@@ -38,16 +39,29 @@ const useRegister = () => {
     password: "",
     username: "",
     age: 0,
-    isRegitering: false,
   });
 
   const handleRegister = async () => {
-    if (state.isRegitering) return;
-    dispatch({ type: "UPDATE_FIELD", field: "isRegitering", value: "true" });
     try {
+      const isEmailValid = validateEmail(state.email);
+      if (isEmailValid[0] === "error") {
+        console.log(isEmailValid);
+
+        return [isEmailValid[0], isEmailValid[1]];
+      }
+
+      const isPasswordValid = validatePassword(state.password);
+
+      if (isPasswordValid[0] === "error") {
+        console.log(isEmailValid);
+
+        return [isPasswordValid[0], isPasswordValid[1]];
+      }
+
       await createUserWithEmailAndPassword(auth, state.email, state.password);
       const user = auth.currentUser;
       if (user) {
+        //Email verification
         await sendEmailVerification(user);
 
         Toast.show({
@@ -140,10 +154,24 @@ const useRegister = () => {
           );
         }
       }
+      return ["success", "Registration complete!"];
     } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch({ type: "UPDATE_FIELD", field: "isRegitering", value: "false" });
+      const authError = error as AuthError;
+      switch (authError.code) {
+        case "auth/email-already-in-use":
+          return ["error", "This email is already registered"];
+        case "auth/invalid-email":
+          return ["error", "Invalid email format"];
+
+        case "auth/weak-password":
+          return ["error", "Password must be at least 8 characters"];
+        case "auth/network-request-failed":
+          return ["error", "Network error. Check your connection"];
+        case "auth/too-many-requests":
+          return ["error", "Too many attempts"];
+        default:
+          return ["error", authError.message];
+      }
     }
   };
 

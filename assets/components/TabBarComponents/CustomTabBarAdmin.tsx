@@ -1,9 +1,14 @@
 import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsButton";
-import { width } from "@/assets/constants/constants";
+import { auth, width } from "@/assets/constants/constants";
+import useModal from "@/assets/Hooks/useModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-import { StyleSheet } from "react-native";
+import { router } from "expo-router";
+import { signOut } from "firebase/auth";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import SignOutModal from "../SettingsComponents/SignOutModal";
 
 type Props = BottomTabBarProps & {
   tabIcon: readonly string[];
@@ -15,6 +20,8 @@ export default function CustomTabBarAdmin({
   navigation,
   tabIcon,
 }: Props) {
+  const logOutModal = useModal();
+
   return (
     <Animated.View
       entering={FadeIn.duration(500)}
@@ -64,6 +71,27 @@ export default function CustomTabBarAdmin({
           />
         );
       })}
+
+      <Pressable onPress={() => logOutModal.setVisibility((prev) => !prev)}>
+        <View className="w-[20px] h-[30px] m-auto">
+          <Ionicons
+            name={"log-out-outline"}
+            color={"white"}
+            size={20}
+          ></Ionicons>
+        </View>
+        <Text className="text-white xs:text-[8px]">Signout</Text>
+      </Pressable>
+
+      {logOutModal.visibility && (
+        <SignOutModal
+          {...logOutModal}
+          onConfirm={async () => {
+            await signOut(auth);
+            router.replace("/");
+          }}
+        ></SignOutModal>
+      )}
     </Animated.View>
   );
 }

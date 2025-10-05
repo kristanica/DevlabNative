@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { auth } from "../constants/constants";
+import { auth, URL } from "../constants/constants";
 import tracker from "../zustand/tracker";
 import ListStages from "./query/ListStages";
 
@@ -30,7 +30,7 @@ const useListStage = () => {
         return;
       }
       const res = await axios.post(
-        `https://8fd2d4f797c4.ngrok-free.app/fireBaseAdmin/addStage`,
+        `${URL}/fireBaseAdmin/addStage`,
         {
           category: levelPayload.category,
           lessonId: levelPayload.lessonId,
@@ -67,7 +67,7 @@ const useListStage = () => {
       }
 
       const res = await axios.post(
-        `https://8fd2d4f797c4.ngrok-free.app/fireBaseAdmin/updateOrder`,
+        `${URL}/fireBaseAdmin/updateOrder`,
         {
           newOrderData: newOrder,
           category: levelPayload.category,

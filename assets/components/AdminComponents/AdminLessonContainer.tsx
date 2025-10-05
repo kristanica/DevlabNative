@@ -23,11 +23,13 @@ const AdminLessonContainer = ({ item, index }: AdminLessonContainerProps) => {
       className="bg-[#111827] my-2 rounded-2xl border-2 border-black h-40 p-3 mx-3 relative"
     >
       <View>
-        <Text className="text-white font-exoBold text-2xl">{item.title}</Text>
+        <Text className="text-white font-exoBold text-xl xs:text-[12px] ">
+          {item.title}
+        </Text>
       </View>
 
       <View className="mt-2">
-        <Text className="text-[#94A1B2] text-sm text-justify font-exoLight">
+        <Text className="text-[#94A1B2]  text-justify font-exoLight text-xs xs:text-[9px]">
           {item.description}
         </Text>
       </View>

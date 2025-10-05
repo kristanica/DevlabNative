@@ -2,7 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
 import * as Clipboard from "expo-clipboard";
 import React, { useRef } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
   currentStageData: any;
 };
@@ -48,6 +48,23 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
                   key={item.id}
                   className=" border-[#464242a4] border-[1px] border-dashed my-3 mx-5"
                 ></View>
+              );
+            }
+            case "Image": {
+              console.log("Image value:", item.value);
+              console.log("Image value type:", typeof item.value);
+              return (
+                <Image
+                  key={item.id}
+                  source={{ uri: item.value }}
+                  style={{
+                    width: "100%",
+                    height: 200,
+                    borderRadius: 10,
+                    marginVertical: 10,
+                  }}
+                  resizeMode="cover"
+                />
               );
             }
             default: {

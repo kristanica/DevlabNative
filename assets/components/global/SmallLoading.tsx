@@ -3,7 +3,10 @@ import React from "react";
 import { StyleSheet, Text } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
-const SmallLoading = () => {
+type SmallLoadingProps = {
+  text?: string;
+};
+const SmallLoading = ({ text }: SmallLoadingProps) => {
   return (
     <Animated.View
       entering={FadeIn.duration(1000)}
@@ -15,7 +18,9 @@ const SmallLoading = () => {
         autoPlay
       />
 
-      <Text className="text-white text-lg font-exoBold">Please wait...</Text>
+      <Text className="text-white  text-lg xs:text-sm font-exoBold">
+        {text || "Please wait"}
+      </Text>
     </Animated.View>
   );
 };

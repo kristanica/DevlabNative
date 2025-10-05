@@ -1,6 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DocumentPicker from "expo-document-picker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Video } from "react-native-compressor";
 
@@ -75,7 +75,9 @@ const Lesson = ({
       console.log(error);
     }
   };
-
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
   return (
     <>
       <InputContainer
@@ -148,8 +150,9 @@ const Lesson = ({
           </Text>
         </Pressable>
         <View>
-          {state.blocks.map((block: any) => (
+          {state.blocks.map((block: any, index: any) => (
             <InputSelector
+              index={state.blocks[index].value}
               dispatch={dispatch}
               key={block.id}
               block={block}
@@ -171,7 +174,23 @@ const Lesson = ({
           )}
         </View>
 
-        <TouchableOpacity onPress={pickVideo}>
+        <TouchableOpacity onPress={pickVideo} className="flex-row">
+          {stageData?.videoPresentation ? (
+            <Ionicons
+              name="checkbox"
+              size={20}
+              color={"green"}
+              className="mr-5"
+            ></Ionicons>
+          ) : (
+            <Ionicons
+              name="warning"
+              size={20}
+              color={"red"}
+              className="mr-5"
+            ></Ionicons>
+          )}
+
           <Ionicons
             name="cloud-upload-outline"
             size={20}

@@ -24,7 +24,7 @@ const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
         onScale,
         { backgroundColor: item.type === "Lesson" ? "#111827" : "#2B1118" },
       ]}
-      className="my-2 rounded-2xl border-2 border-black h-40 p-3 mx-3 relative"
+      className="my-2 rounded-2xl border-2 border-black h-28 p-3 mx-3 relative"
     >
       {!isLocked && (
         <>
@@ -36,12 +36,14 @@ const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
       )}
 
       <View>
-        <Text className="text-white font-exoBold text-2xl">{item.title}</Text>
+        <Text className="text-white font-exoBold  text-xl xs:text-[12px]">
+          {item.title}
+        </Text>
       </View>
 
       <View className="mt-2">
         <Text
-          className="text-[#94A1B2] text-sm text-justify font-exoLight"
+          className="text-[#94A1B2] text-justify font-exoLight text-xs xs:text-[9px]"
           numberOfLines={3}
         >
           {item.description}

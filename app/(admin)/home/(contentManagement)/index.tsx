@@ -6,12 +6,14 @@ import SaveToFirebaseConfirmation from "@/assets/components/AdminComponents/Save
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SmallLoading from "@/assets/components/global/SmallLoading";
 import useLessonEditor from "@/assets/Hooks/query/mutation/useLessonEditor";
 import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useIsMutating } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { SectionList, Text, TouchableOpacity, View } from "react-native";
@@ -42,8 +44,12 @@ const ContentManagement = () => {
 
   let globalCounter = 0;
 
+  const isMutaing = useIsMutating();
+
   return (
     <AdminProtectedRoutes>
+      {isMutaing > 0 && <FillScreenLoading></FillScreenLoading>}
+
       <View className="flex-[1] bg-accent">
         <AnimatedViewContainer>
           <CustomGeneralContainer>

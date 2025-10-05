@@ -32,6 +32,7 @@ const ForgotPasswordModal = ({
       setToastVisibility("emptyCredentialField", "Fill in your credentials!");
       return;
     }
+    //Custom tryCatch
 
     const [_, error] = await tryCatch(sendPasswordResetEmail(auth, email));
 

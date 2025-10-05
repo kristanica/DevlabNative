@@ -102,7 +102,7 @@ const Register = () => {
 
                 <View className=" justify-center items-center ">
                   <TouchableOpacity
-                    onPress={() => {
+                    onPress={async () => {
                       const hasEmpty = CheckEmptyFields(state, "Register");
 
                       if (hasEmpty) {
@@ -112,7 +112,9 @@ const Register = () => {
                         );
                         return;
                       }
-                      handleRegister();
+                      const result = await handleRegister();
+                      console.log(result);
+                      setToastVisibility(result![0], result![1]);
                     }}
                   >
                     <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
