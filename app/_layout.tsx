@@ -5,7 +5,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import CustomToast from "@/assets/components/global/CustomToast";
-import { loadSounds, unloadSounds } from "@/assets/Hooks/function/soundHandler";
+
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { configureReanimatedLogger } from "react-native-reanimated";
@@ -21,11 +21,6 @@ export default function RootLayout() {
   const getValidUser = Protected((state) => state.getValidUser);
   useEffect(() => {
     getValidUser();
-
-    loadSounds();
-    return () => {
-      unloadSounds();
-    };
   }, []);
 
   if (!readyFont) return null;

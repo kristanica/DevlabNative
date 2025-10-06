@@ -4,7 +4,7 @@ import tryCatch from "./tryCatch";
 const soundFiles: Record<string, any> = {
   purchase: require("@/assets/sound/purchase.mp3"),
   correctAnswer: require("@/assets/sound/correct.mp3"),
-  stageUnlocked: require("@/assets/sound/correct.mp3"),
+  stageUnlocked: require("@/assets/sound/correct.mp3"), // double-check this
   wrongAnswer: require("@/assets/sound/inCorrect.mp3"),
   levelUp: require("@/assets/sound/levelUp.mp3"),
   achievementUnlocked: require("@/assets/sound/achievementUnlocked.mp3"),
@@ -22,35 +22,39 @@ const sounds: Record<string, Audio.Sound | null> = {
 };
 
 export const loadSounds = async () => {
-  for (const key in sounds) {
-    const [sound, error] = await tryCatch(
+  for (const key in soundFiles) {
+    // prevent reloading if already loaded
+
+    const [result, error] = await tryCatch(
       Audio.Sound.createAsync(soundFiles[key])
     );
 
-    if (sound) {
-      sounds[key] = sound.sound;
+    if (result) {
+      sounds[key] = result.sound;
+      console.log(
+        `Status of ${key} has been loaded: ${result.status.isLoaded}`
+      );
     }
+
     if (error) {
-      console.log(error);
-      return;
+      console.error(`Error loading sound "${key}":`, error);
     }
   }
 };
 
 export const playSound = async (soundName: string) => {
-  const sound = sounds[soundName];
-
-  if (!sound) return;
-  const [, error] = await tryCatch(sound.replayAsync());
-
-  if (error) {
-    console.log(error);
-    return;
+  if (!sounds[soundName]) {
+    const { sound } = await Audio.Sound.createAsync(soundFiles[soundName]);
+    sounds[soundName] = sound;
   }
+  await sounds[soundName]?.replayAsync();
 };
 
 export const unloadSounds = async () => {
   for (const key in sounds) {
-    await sounds[key]?.unloadAsync();
+    if (sounds[key]) {
+      await sounds[key]?.unloadAsync();
+      sounds[key] = null;
+    }
   }
 };

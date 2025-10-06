@@ -11,7 +11,7 @@ import {
 export const pickImage = () => {
   return useMutation({
     mutationFn: async ({ type }: { type: string }) => {
-      const uid: string | undefined = auth.currentUser?.uid;
+      const uid = auth.currentUser?.uid;
       if (!uid) throw new Error("No user logged in.");
 
       try {
@@ -24,6 +24,7 @@ export const pickImage = () => {
           });
         if (result.canceled) return;
 
+        console.log(uid);
         const imageUri: string = result.assets[0].uri;
         const response: Response = await fetch(imageUri);
         const blob: Blob = await response.blob();

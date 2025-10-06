@@ -4,7 +4,7 @@ import LottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import ProtectedRoutes from "../../assets/components/ProtectedRoutes";
+import ProtectedRoutes from "../components/ProtectedRoutes";
 
 const LoadingScreen = () => {
   const [bootText, setBootText] = useState<string>(

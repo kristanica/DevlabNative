@@ -1,15 +1,12 @@
 import { path } from "@/assets/constants/constants";
-import useNavigate from "@/assets/Hooks/useNavigate";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
 
 const index = () => {
-  const opacityVal = useSharedValue(0);
   return (
     <View className="bg-background flex-[1] justify-center items-center ">
       <View className="flex-[1] ">
@@ -26,6 +23,7 @@ const index = () => {
           <Text className="text-white  font-exoBold  xs:text-2xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl">
             🖥️ DEVLAB
           </Text>
+
           <Text className="text-white  xs:text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-2xl xs:text-center  my-2 font-exoMedium">
             Where gamification meets web development
           </Text>
@@ -52,7 +50,9 @@ const index = () => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => useNavigate(opacityVal)}>
+            <TouchableOpacity
+              onPress={() => router.replace({ pathname: "/Login" })}
+            >
               <Text className="text-pink-400 ml-3 font-exoRegular xs:text-xs sm:text-sm md:text-xl lg:text-2xl xl:text-2xl">
                 Login
               </Text>

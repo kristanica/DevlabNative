@@ -1,17 +1,21 @@
+import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import ShopItem from "@/assets/components/ShopItem";
-import useFetchShopItems from "@/assets/Hooks/query/useFetchShopItems";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsMutating } from "@tanstack/react-query";
+import { useIsMutating, useQuery } from "@tanstack/react-query";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const shop = () => {
-  const { shopItems } = useFetchShopItems();
+  const { data: shopItems } = useQuery({
+    queryKey: ["shopItems"],
+    queryFn: fetchShopItems,
+    staleTime: 10 * 60 * 1000,
+  });
   const userData = useGetUserInfo((state) => state.userData);
 
   const isMutating = useIsMutating();

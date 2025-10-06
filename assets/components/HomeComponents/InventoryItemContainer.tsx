@@ -8,7 +8,6 @@ type InventoryItemProps = {
 
 const InventoryItemContainer = ({ item }: InventoryItemProps) => {
   const iconNameTrimmed = item.Icon ? item.Icon.replace(".png", "") : "";
-  console.log(iconNameTrimmed);
 
   return (
     <View className="bg-background my-2 w-2/5 h-36 mx-2 rounded-2xl p-3 justify-between border-[#6c37a5] border-[1px] ">

@@ -16,6 +16,25 @@ const Register = () => {
   const { state, dispatch, handleRegister } = useRegister();
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
 
+  const registerUser = async () => {
+    const hasEmpty = CheckEmptyFields(state, "Register");
+
+    if (hasEmpty) {
+      setToastVisibility(
+        "emptyCredentialField",
+        "Fill in the following credentials!"
+      );
+      return;
+    }
+    const result = await handleRegister();
+    if (!result) {
+      setToastVisibility("error", "Registration failed. Please try again.");
+      return;
+    }
+
+    setToastVisibility(result![0], result![1]);
+  };
+
   return (
     <View className="flex-1 bg-background ">
       <Animated.View entering={FadeIn.duration(500)} style={{ flex: 1 }}>
@@ -101,22 +120,7 @@ const Register = () => {
                 </View>
 
                 <View className=" justify-center items-center ">
-                  <TouchableOpacity
-                    onPress={async () => {
-                      const hasEmpty = CheckEmptyFields(state, "Register");
-
-                      if (hasEmpty) {
-                        setToastVisibility(
-                          "emptyCredentialField",
-                          "Fill in the following credentials!"
-                        );
-                        return;
-                      }
-                      const result = await handleRegister();
-                      console.log(result);
-                      setToastVisibility(result![0], result![1]);
-                    }}
-                  >
+                  <TouchableOpacity onPress={registerUser}>
                     <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
                       REGISTER
                     </Text>
@@ -127,7 +131,7 @@ const Register = () => {
                     Already have an Account?
                   </Text>
 
-                  <TouchableOpacity onPress={() => router.replace("/")}>
+                  <TouchableOpacity onPress={() => router.replace("/Login")}>
                     <Text className="color-[#4F80C5] mt-2 font-exoRegular xs:text-[8px]">
                       Login here
                     </Text>

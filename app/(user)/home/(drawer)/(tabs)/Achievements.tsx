@@ -5,14 +5,13 @@ import React, { useState } from "react";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { auth, db } from "@/assets/constants/constants";
+import { achievementPlaceHolder } from "@/assets/constants/constants";
 
-import { fetchAchievements } from "@/assets/API/fireBase/user/fetchAchievements";
+import { fetchAchievements } from "@/assets/API/fireBase/user/achievement/fetchAchievements";
 import SmallLoading from "@/assets/components/global/SmallLoading";
-import { playSound } from "@/assets/Hooks/function/soundHandler";
+import claimAchievementMutation from "@/assets/Hooks/query/mutation/claimAchievementMutation";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useQuery } from "@tanstack/react-query";
 import {
   FlatList,
   Image,
@@ -22,98 +21,18 @@ import {
   Text,
   View,
 } from "react-native";
-import Toast from "react-native-toast-message";
 
 const Achievements = () => {
   const category = ["Html", "Css", "JavaScript", "Database"];
   const [selectedCategory, setSelectedCategory] = useState<string>("Html");
-
   const { userData } = useGetUserInfo();
-
   const { data: achievementsData, isLoading } = useQuery({
     queryKey: ["Achievement1", selectedCategory],
     queryFn: () => fetchAchievements(selectedCategory),
   });
-
   const userAchievements = useGetUserInfo((state) => state.userAchievements);
+  const claimAchievement = claimAchievementMutation();
 
-  const claimMutation = useMutation({
-    mutationFn: async ({
-      achievementId,
-      expReward,
-      coinsReward,
-    }: {
-      achievementId: string;
-      expReward: number;
-      coinsReward: number;
-    }) => {
-      const uid = auth.currentUser?.uid;
-      await playSound("achievementUnlocked");
-      Toast.show({
-        type: "claimAchievement",
-        visibilityTime: 2000,
-        position: "top",
-        topOffset: 50,
-        text1: String(coinsReward),
-        text2: String(expReward),
-      });
-      try {
-        const achievementRef = doc(
-          db,
-          "Users",
-          String(uid),
-          "Achievements",
-          achievementId
-        );
-        const userRef = doc(db, "Users", String(uid));
-        const userSnap = (await getDoc(userRef)).data();
-
-        await setDoc(
-          userRef,
-          {
-            exp: userSnap?.exp + expReward,
-            coins: userSnap?.coins + coinsReward,
-          },
-          {
-            merge: true,
-          }
-        );
-
-        await setDoc(
-          achievementRef,
-          {
-            isClaimed: true,
-          },
-          {
-            merge: true,
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
-
-  const achievementPlaceHolder = [
-    {
-      id: 1,
-      subject: "Html",
-    },
-    {
-      id: 2,
-      subject: "Css",
-    },
-
-    {
-      id: 3,
-      subject: "JavaScript",
-    },
-
-    {
-      id: 4,
-      subject: "Database",
-    },
-  ];
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-accent">
@@ -227,7 +146,7 @@ const Achievements = () => {
                           index={index}
                           data={item}
                           claimMutation={() =>
-                            claimMutation.mutate({
+                            claimAchievement.mutate({
                               achievementId: item.id,
                               expReward: item.expReward,
                               coinsReward: item.coinsReward,

@@ -6,7 +6,7 @@ import {
   FIREBASE_STORAGE,
   FIREBASE_STORE,
 } from "../../firebaseConfig";
-export const URL = `https://2f357dc96c49.ngrok-free.app` as const;
+export const URL = `https://3916a0727333.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -15,7 +15,26 @@ export const { width, height } = Dimensions.get("screen");
 export const auth = FIREBASE_AUTH;
 export const db = FIREBASE_STORE;
 export const storage = FIREBASE_STORAGE;
+export const achievementPlaceHolder = [
+  {
+    id: 1,
+    subject: "Html",
+  },
+  {
+    id: 2,
+    subject: "Css",
+  },
 
+  {
+    id: 3,
+    subject: "JavaScript",
+  },
+
+  {
+    id: 4,
+    subject: "Database",
+  },
+];
 export const gameModes = [
   "Lesson",
   "BugBust",

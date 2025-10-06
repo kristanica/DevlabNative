@@ -1,30 +1,14 @@
 import { Stack } from "expo-router";
-import React, { useEffect } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 
 import { BackgroundProvider } from "@/assets/zustand/BackgroundProvider";
 // import { InformationProvider } from "@/assets/Provider/InformationProvider";
-import useMounted from "@/assets/Hooks/useMounted";
 import { ProfileProvider } from "@/assets/zustand/ProfileProvider";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import LottieView from "lottie-react-native";
 import Toast, { BaseToastProps } from "react-native-toast-message";
 
 const TabsLayout = () => {
-  const getValidUser = useGetUserInfo((state) => state.getUser);
-  const getUserAchivementProgress = useGetUserInfo(
-    (state) => state.getUserAchievementProgress
-  );
-
-  // const isMutating = useIsMutating();
-
-  const isMounted = useMounted();
-  useEffect(() => {
-    if (!isMounted.current) return;
-    getValidUser();
-    getUserAchivementProgress();
-  }, []);
-
   return (
     <ProfileProvider>
       <BackgroundProvider>

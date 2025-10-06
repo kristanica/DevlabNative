@@ -4,7 +4,7 @@ import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import CodingPlaygroundEditor from "../../assets/deprecated/CodingPlaygroundEditor";
+import CodingPlaygroundEditor from "./CodingPlaygroundEditor";
 
 const Coding = () => {
   const { webRef, sendToWebView, receivedCode, setReceivedCode } =

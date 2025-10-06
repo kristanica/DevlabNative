@@ -1,15 +1,16 @@
+import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ExperienceBar from "@/assets/components/HomeComponents/ExperienceBar";
 import InventoryItemContainer from "@/assets/components/HomeComponents/InventoryItemContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { auth, lessons, URL } from "@/assets/constants/constants";
+import { lessons } from "@/assets/constants/constants";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import {
   Image,
   ImageBackground,
@@ -20,29 +21,20 @@ import {
 } from "react-native";
 import * as Progress from "react-native-progress";
 export default function Home() {
-  // Recieves background and profile images
   const setUserProgress = useGetUserInfo((state) => state.setUserProgress);
   const { data: userProgressData } = useQuery({
     queryKey: ["userProgress"],
-    queryFn: async () => {
-      console.log(URL);
-      const uid = await auth.currentUser?.getIdToken(true);
-      const res = await axios.get(`${URL}/fireBase/userProgress`, {
-        headers: {
-          Authorization: `Bearer ${uid}`,
-        },
-      });
-
-      setUserProgress({
-        allProgressLevels: res.data.allProgress,
-        allProgressStages: res.data.allStages,
-        completedLevels: res.data.completedLevels,
-        completedStages: res.data.completedStages,
-      });
-
-      return res.data;
-    },
+    queryFn: userProgress,
   });
+
+  useEffect(() => {
+    setUserProgress({
+      allProgressLevels: userProgressData.allProgress,
+      allProgressStages: userProgressData.allStages,
+      completedLevels: userProgressData.completedLevels,
+      completedStages: userProgressData.completedStages,
+    });
+  }, [userProgressData]);
 
   const { userData, inventory } = useGetUserInfo();
 
@@ -168,6 +160,7 @@ export default function Home() {
                   </HomeLesson>
                 ))}
               </View>
+
               <Text className="text-white ml-2 xs:text-lg  font-exoBold">
                 YOUR INVENTORY
               </Text>

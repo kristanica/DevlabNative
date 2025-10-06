@@ -69,7 +69,9 @@ const useLogin = () => {
         await AsyncStorage.removeItem("isLoggin");
       }
 
-      router.replace("/(user)/LoadingScreen");
+      router.replace({
+        pathname: "/(user)/home/(drawer)/(tabs)/Home",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +84,7 @@ const useLogin = () => {
         const val = await AsyncStorage.getItem("isLoggin");
         if (val === "true") {
           // redirects first to LoadingScreen to simulate loading and avoid seeing userinformation as blank as it is being fetched first
-          router.replace("/(user)/LoadingScreen");
+          router.replace("/home/Home");
         }
       } catch (error) {
         console.log(error);

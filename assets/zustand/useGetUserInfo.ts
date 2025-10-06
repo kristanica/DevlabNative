@@ -46,6 +46,7 @@ type InformationProviderProps = {
   getUser: () => Promise<void>;
   completedLevels: number;
   completedStages: number;
+  userUid: string;
 };
 
 export const useGetUserInfo = create<InformationProviderProps>((set) => ({
@@ -58,6 +59,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   allProgressStages: {},
   completedLevels: 0,
   completedStages: 0,
+  userUid: "",
   setUserProgress: ({
     allProgressLevels,
     allProgressStages,
@@ -109,6 +111,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
       console.log("No user UID found");
       return;
     }
+    set({ userUid: String(uid) });
     try {
       set({ loading: true });
       const userRef = doc(db, "Users", uid);
