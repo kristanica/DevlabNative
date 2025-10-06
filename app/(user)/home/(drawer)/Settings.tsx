@@ -9,8 +9,8 @@ import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
 import LoadingScreen from "@/assets/components/LoadingScreen";
 import ResetPasswordModal from "@/assets/components/SettingsComponents/ResetPasswordModal";
+import editUserInfo from "@/assets/Hooks/query/editUserInfo";
 import { pickImage } from "@/assets/Hooks/query/mutation/pickImage";
-import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useSignOut from "@/assets/Hooks/useSignOut";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
@@ -28,7 +28,7 @@ import Animated from "react-native-reanimated";
 const Settings = () => {
   const mutation = useMutation({
     mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
-      await useEditUserInfo(userName, bio),
+      await editUserInfo(userName, bio),
   });
 
   const { mutate: updateImage, isPending } = pickImage();

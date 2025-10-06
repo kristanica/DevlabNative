@@ -5,7 +5,7 @@ import ViteCodeEditor from "@/assets/components/LanguageNavigation/ViteCodeEdito
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { router } from "expo-router";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 const OfflineCodeEditor = () => {
   const {
@@ -48,5 +48,3 @@ const OfflineCodeEditor = () => {
 };
 
 export default OfflineCodeEditor;
-
-const styles = StyleSheet.create({});

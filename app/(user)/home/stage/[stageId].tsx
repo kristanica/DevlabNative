@@ -26,7 +26,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
-const stageScreen = () => {
+const StageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
@@ -40,12 +40,14 @@ const stageScreen = () => {
 
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
 
+  const isRewardClaimed =
+    levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed;
   useEffect(() => {
     if (levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed) {
       Toast.show({});
       return;
     }
-  }, [levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed]);
+  }, [isRewardClaimed, lessonId, levelId, levelProgress]);
 
   //gets the current index of the stageData
   const setLocation = WhereIsUser((state) => state.setLocation);
@@ -62,7 +64,7 @@ const stageScreen = () => {
       gameIdentifier.current = stage?.type;
       console.log(gameIdentifier.current);
     }
-  }, [stageId, stageData]);
+  }, [stageId, stageData, setLocation]);
   const currentStageType = currentStageData?.type ?? "Lesson"; // default fallback
   const {
     handleFinalAnswer,
@@ -96,7 +98,6 @@ const stageScreen = () => {
   const databaseQueryingFunctions = useCodeEditorDatabase();
 
   const health = userHealthPoints((state) => state.health);
-  const resetHealthPoints = userHealthPoints((state) => state.resetUserHealth);
 
   const gameOver = useModal();
 
@@ -105,13 +106,13 @@ const stageScreen = () => {
 
   const handlePrevious = useCallback(() => {
     setCurrentStageIndex((prev) => prev - 1);
-  }, [stageData, currentStageIndex, lessonId, levelId, category]);
+  }, []);
 
   const handleGameOver = useCallback(() => {
     setCurrentStageIndex(0);
 
     gameOver.closeModal();
-  }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
+  }, [gameOver]);
   console.log(currentStageData);
   return (
     <ProtectedRoutes>
@@ -241,4 +242,4 @@ const stageScreen = () => {
   );
 };
 
-export default stageScreen;
+export default StageScreen;

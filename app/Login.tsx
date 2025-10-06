@@ -120,7 +120,7 @@ const Login = () => {
               </TouchableOpacity>
 
               <Text className="color-[#FFFFFE] font-exoRegular xs: text-xs">
-                Don't have an account?
+                {"Don't have an account?"}
               </Text>
 
               <TouchableOpacity

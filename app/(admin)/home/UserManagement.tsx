@@ -5,7 +5,7 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import LoadingAnim from "@/assets/components/LoadingAnim";
 import setSuspended from "@/assets/Hooks/query/mutation/setSuspended";
 import useFetchUsers from "@/assets/Hooks/query/useFetchUsers";
-import useSearchUserFireStore from "@/assets/Hooks/searchUserFireStore";
+import searchUserFireStore from "@/assets/Hooks/searchUserFireStore";
 import useDebounce from "@/assets/Hooks/useDebounce";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -23,7 +23,7 @@ const UserManagement = () => {
   const debounce = useDebounce(1000, searchUser);
   const { data: searchedUser, isFetching: searchUserLoading } = useQuery({
     queryKey: ["searchedUser", debounce],
-    queryFn: () => useSearchUserFireStore(debounce),
+    queryFn: () => searchUserFireStore(debounce),
     staleTime: 0,
 
     enabled: !!debounce,

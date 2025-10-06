@@ -3,7 +3,7 @@ import ViteDatabaseCodeEditor from "@/assets/components/LanguageNavigation/ViteD
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import { router } from "expo-router";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 const OfflineDatabaseCodeEditor = () => {
   const databaseQueryingFunctions = useCodeEditorDatabase();
@@ -26,5 +26,3 @@ const OfflineDatabaseCodeEditor = () => {
 };
 
 export default OfflineDatabaseCodeEditor;
-
-const styles = StyleSheet.create({});

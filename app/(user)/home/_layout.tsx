@@ -1,11 +1,8 @@
 import { Stack } from "expo-router";
 import React from "react";
-import { StyleSheet } from "react-native";
 
-const homeLayout = () => {
+const HomeLayout = () => {
   return <Stack screenOptions={{ headerShown: false }}></Stack>;
 };
 
-export default homeLayout;
-
-const styles = StyleSheet.create({});
+export default HomeLayout;

@@ -16,8 +16,7 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import React, { useState } from "react";
 import { Image, Pressable, SectionList, Text, View } from "react-native";
 
-const categoryScreen = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+const CategoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
@@ -153,4 +152,4 @@ const categoryScreen = () => {
   );
 };
 
-export default categoryScreen;
+export default CategoryScreen;

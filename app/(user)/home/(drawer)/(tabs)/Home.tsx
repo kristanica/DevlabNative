@@ -34,7 +34,7 @@ export default function Home() {
       completedLevels: userProgressData.completedLevels,
       completedStages: userProgressData.completedStages,
     });
-  }, [userProgressData]);
+  }, [userProgressData, setUserProgress]);
 
   const { userData, inventory } = useGetUserInfo();
 

@@ -6,11 +6,11 @@ import React, { useEffect } from "react";
 import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 const queryClient = new QueryClient();
-const stageLayout = () => {
+const StageLayout = () => {
   const loadUserHp = userHp((state) => state.loadUserHp);
   useEffect(() => {
     loadUserHp();
-  }, []);
+  }, [loadUserHp]);
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -27,4 +27,4 @@ const stageLayout = () => {
   );
 };
 
-export default stageLayout;
+export default StageLayout;

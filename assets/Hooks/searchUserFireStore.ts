@@ -7,14 +7,7 @@ import {
   startAt,
 } from "firebase/firestore";
 import { db } from "../constants/constants";
-type useSearchUserFireStoreProps = {
-  username: string;
-  email: string;
-  userLevel: number;
-  isSuspended: boolean;
-  uid?: string;
-  isAdmin: boolean;
-};
+
 const searchUserFireStore = async (debounce: string) => {
   const searchRef = query(
     collection(db, "Users"),
@@ -23,8 +16,8 @@ const searchUserFireStore = async (debounce: string) => {
     endAt(debounce + "\uf8ff")
   );
   const data = await getDocs(searchRef);
-  const result: useSearchUserFireStoreProps[] = data.docs.map((doc) => ({
-    ...(doc.data() as useSearchUserFireStoreProps),
+  const result: SearchUserFireStorePayload[] = data.docs.map((doc) => ({
+    ...(doc.data() as SearchUserFireStorePayload),
   }));
   return result;
 };

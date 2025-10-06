@@ -1,7 +1,7 @@
 import { auth, db } from "@/assets/constants/constants";
 import { doc, updateDoc } from "firebase/firestore";
 
-const useEditUserInfo = async (userName: string, bio: string) => {
+const editUserInfo = async (userName: string, bio: string) => {
   const user = auth.currentUser;
   if (!user) return;
   try {
@@ -15,4 +15,4 @@ const useEditUserInfo = async (userName: string, bio: string) => {
     console.log(error);
   }
 };
-export default useEditUserInfo;
+export default editUserInfo;

@@ -42,3 +42,12 @@ type ScaleModalProps = {
   closeModal: () => void;
   onConfirm?: () => void;
 };
+
+type SearchUserFireStorePayload = {
+  username: string;
+  email: string;
+  userLevel: number;
+  isSuspended: boolean;
+  uid?: string;
+  isAdmin: boolean;
+};

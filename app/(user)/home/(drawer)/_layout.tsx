@@ -9,9 +9,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 
-const drawerLayout = () => {
+const DrawerLayout = () => {
   const userData = useGetUserInfo((state) => state.userData);
   const [isReady, setIsReady] = useState(false);
   const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ const drawerLayout = () => {
       }
     };
     loadProgress();
-  }, []);
+  }, [getUserAchivementProgress, getValidUser, queryClient]);
 
   if (!isReady) {
     return (
@@ -68,6 +68,7 @@ const drawerLayout = () => {
         headerTransparent: true,
         drawerActiveTintColor: "#4caf50",
         headerLeft: () => {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           const navigation = useNavigation();
           return (
             <TouchableOpacity
@@ -103,6 +104,4 @@ const drawerLayout = () => {
   );
 };
 
-export default drawerLayout;
-
-const styles = StyleSheet.create({});
+export default DrawerLayout;

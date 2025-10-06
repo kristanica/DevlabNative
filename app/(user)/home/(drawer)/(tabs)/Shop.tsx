@@ -8,9 +8,9 @@ import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating, useQuery } from "@tanstack/react-query";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
-const shop = () => {
+const Shop = () => {
   const { data: shopItems } = useQuery({
     queryKey: ["shopItems"],
     queryFn: fetchShopItems,
@@ -73,6 +73,4 @@ const shop = () => {
   );
 };
 
-export default shop;
-
-const styles = StyleSheet.create({});
+export default Shop;

@@ -21,7 +21,7 @@ export default function RootLayout() {
   const getValidUser = Protected((state) => state.getValidUser);
   useEffect(() => {
     getValidUser();
-  }, []);
+  }, [getValidUser]);
 
   if (!readyFont) return null;
 

@@ -16,7 +16,7 @@ const OfflineScreen = () => {
             style={{ width: "100%", aspectRatio: 1.5 }}
           ></LottieView>
           <Text className="text-white font-exoBold text-center">
-            Whoops! seems like you're offline. But dont worry! you can still
+            Whoops! seems like {"you're"} offline. But dont worry! you can still
             access some of the functions that devlab offers.
           </Text>
 

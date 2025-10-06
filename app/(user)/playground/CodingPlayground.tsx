@@ -6,9 +6,9 @@ import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
-const sample = () => {
+const CodingPlayground = () => {
   const {
     webRef,
     sendToWebView,
@@ -56,6 +56,4 @@ const sample = () => {
   );
 };
 
-export default sample;
-
-const styles = StyleSheet.create({});
+export default CodingPlayground;
