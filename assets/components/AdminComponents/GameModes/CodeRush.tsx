@@ -2,17 +2,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import InputContainer from "../InputContainer";
 
-type CodeRushProps = {
-  stageData: any;
-  dispatch: any;
-  state: any;
-};
-const CodeRush = ({ stageData, dispatch, state }: CodeRushProps) => {
+const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
   return (
     <>
       <InputContainer
         title={"Title"}
-        placeholder={stageData?.title}
         value={state.title}
         setValue={(text) => {
           dispatch({
@@ -26,7 +20,6 @@ const CodeRush = ({ stageData, dispatch, state }: CodeRushProps) => {
 
       <InputContainer
         title={"Description"}
-        placeholder={stageData?.description}
         value={state.description}
         setValue={(text) => {
           dispatch({
@@ -40,7 +33,6 @@ const CodeRush = ({ stageData, dispatch, state }: CodeRushProps) => {
 
       <InputContainer
         title={"Coding Interface"}
-        placeholder={stageData?.codingInterface}
         value={state.codingInterface}
         setValue={(text) => {
           dispatch({
@@ -53,7 +45,6 @@ const CodeRush = ({ stageData, dispatch, state }: CodeRushProps) => {
       />
       <InputContainer
         title={"Instruction"}
-        placeholder={stageData?.instruction}
         value={state.instruction}
         setValue={(text) => {
           dispatch({
@@ -66,7 +57,6 @@ const CodeRush = ({ stageData, dispatch, state }: CodeRushProps) => {
       />
       <InputContainer
         title={"Timer"}
-        placeholder={String(stageData?.timer)}
         value={String(state.timer)}
         setValue={(text) => {
           dispatch({

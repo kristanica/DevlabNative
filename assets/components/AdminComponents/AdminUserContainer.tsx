@@ -3,23 +3,12 @@ import { useIsFocused } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
-type AdminUserContainerProps = {
-  item: {
-    username: string;
-    email: string;
-    userLeveL: number;
-    suspend: boolean;
-    uid?: any;
-    isAdmin: boolean;
-  };
-  mutation: () => void;
-  index: number;
-};
+
 const AdminUserContainer = ({
-  item,
+  allUsersInformation,
   mutation,
   index,
-}: AdminUserContainerProps) => {
+}: AdminUserContainerPayload) => {
   const [visible, setVisible] = useState<boolean>(false);
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
@@ -86,26 +75,33 @@ const AdminUserContainer = ({
           >
             <Text className="text-white font-exoBold">
               USERNAME:
-              <Text className="text-white font-exoLight"> {item.username}</Text>
+              <Text className="text-white font-exoLight">
+                {" "}
+                {allUsersInformation.username}
+              </Text>
             </Text>
             <Text className="my-3 text-white font-exoBold">
               EMAIL:
-              <Text className="font-exoLight"> {item.email}</Text>
+              <Text className="font-exoLight">
+                {" "}
+                {allUsersInformation.email}
+              </Text>
             </Text>
 
             <Text className="text-white font-exoBold">
               STATUS:
               <Text
                 className="font-exoLight "
-                style={{ color: item.suspend ? "red" : "green" }}
+                style={{
+                  color: allUsersInformation.isSuspended ? "red" : "green",
+                }}
               >
-                {"  "}
-                {item.suspend ? "Suspended" : "Active"}
+                {allUsersInformation.isSuspended ? "Suspended" : "Active"}
               </Text>
             </Text>
             <View className="flex-row justify-evenly items-center flex-[1]">
               <TouchableOpacity
-                disabled={item.suspend}
+                disabled={allUsersInformation.isSuspended}
                 onPress={() => mutation()}
               >
                 <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
@@ -114,7 +110,7 @@ const AdminUserContainer = ({
               </TouchableOpacity>
 
               <TouchableOpacity
-                disabled={!item.suspend}
+                disabled={!allUsersInformation.isSuspended}
                 onPress={() => mutation()}
               >
                 <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">

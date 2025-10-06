@@ -2,12 +2,12 @@ import { itemIcon } from "@/assets/constants/constants";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-type InventoryItemProps = {
-  item: any;
-};
-
-const InventoryItemContainer = ({ item }: InventoryItemProps) => {
-  const iconNameTrimmed = item.Icon ? item.Icon.replace(".png", "") : "";
+const InventoryItemContainer = ({
+  Icon,
+  quantity,
+  title,
+}: UserInventoryItemsPayload) => {
+  const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
 
   return (
     <View className="bg-background my-2 w-2/5 h-36 mx-2 rounded-2xl p-3 justify-between border-[#6c37a5] border-[1px] ">
@@ -22,11 +22,9 @@ const InventoryItemContainer = ({ item }: InventoryItemProps) => {
       ></Image>
       <View className="justify-center items-center mt-3">
         <Text className="text-white font-exoBold text-[12px]">
-          {item.quantity} x
+          {quantity} x
         </Text>
-        <Text className="text-white font-exoMedium text-xs">
-          {iconNameTrimmed.replace("_Icon", "")}
-        </Text>
+        <Text className="text-white font-exoMedium text-xs">{title}</Text>
       </View>
     </View>
   );

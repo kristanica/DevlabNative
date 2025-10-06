@@ -18,9 +18,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   Image,
   ImageBackground,
-  Keyboard,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -138,7 +136,7 @@ const Settings = () => {
                 <View className=" items-center pt-10   ">
                   <Pressable
                     onPress={() => {
-                      Keyboard.dismiss;
+                      // Keyboard.dismiss;
                       if (!userName.trim() && !bio.trim()) {
                         alert("Empty credentials");
                         return;
@@ -195,7 +193,7 @@ const Settings = () => {
             {confirmationModal.visibility && (
               <ConfirmationModal
                 onConfirm={() => {
-                  Keyboard.dismiss;
+                  // Keyboard.dismiss;
                   mutation.mutate({ userName, bio });
                   setBio("");
                   setUserName("");
@@ -214,5 +212,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
-const styles = StyleSheet.create({});

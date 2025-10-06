@@ -5,19 +5,12 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-type LessonContainerProps = {
-  item: any;
-  index: number;
-  icon: "cube" | "logo-javascript" | "logo-html5" | "logo-css3";
-  isLocked: boolean | undefined;
-};
-
 const LessonContainer = ({
-  item,
+  levelInformation,
   index,
   icon,
   isLocked,
-}: LessonContainerProps) => {
+}: LessonContainerPayload) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
@@ -27,7 +20,7 @@ const LessonContainer = ({
 
   return (
     <Animated.View
-      key={item.id}
+      key={levelInformation.id}
       style={onScale}
       className="bg-shopAccent rounded-3xl h-28 flex-row my-2 border-black border-[2px] mx-3"
     >
@@ -44,13 +37,13 @@ const LessonContainer = ({
       </View>
       <View className="w-[80%] px-3 py-3">
         <Text className="text-white font-exoBold text-xl xs:text-[12px]">
-          {item.title}
+          {levelInformation.title}
         </Text>
         <Text
           className="text-[#eeebf29d] font-exoLight text-xs xs:text-[9px]"
           numberOfLines={2}
         >
-          {item.description}
+          {levelInformation.description}
         </Text>
       </View>
     </Animated.View>

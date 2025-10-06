@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -7,7 +6,7 @@ const GameOverModal = ({
   visibility,
   scaleStyle,
   onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable className=" bg-blue-300">

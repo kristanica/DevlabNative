@@ -3,37 +3,25 @@ import GameComponent from "@/assets/Hooks/function/GameComponent";
 
 import useStageEditor from "@/assets/Hooks/query/mutation/useStageEditor";
 import useEditStage from "@/assets/Hooks/reducers/useEditStage";
-import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
+import toastHandler from "@/assets/zustand/toastHandler";
 import tracker from "@/assets/zustand/tracker";
+import { useIsMutating } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
+import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+import FillScreenLoading from "../global/FillScreenLoading";
 import DeleteFireBaseConfirmationModal from "./DeleteFireBaseConfirmationModal";
 import DropDownMenu from "./DropDownMenu";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
-import SaveToFirebaseResultModal from "./SaveToFirebaseResultModal";
-
-type EditStageModalProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-};
 
 const EditStageModal = ({
   visibility,
   scaleStyle,
   closeModal,
-}: EditStageModalProps) => {
+}: ScaleModalPayload) => {
   const setCancelCompression = cancelVideoCompression(
     (state) => state.setCancelCompression
   );
@@ -48,7 +36,7 @@ const EditStageModal = ({
   } = useStageEditor();
 
   const { state, dispatch } = useEditStage();
-
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   useEffect(() => {
     dispatch({
       type: "UPDATE_ALL_FIELDS",
@@ -69,25 +57,15 @@ const EditStageModal = ({
 
     console.log(state);
   }, [stageData]);
-  const [isFirebaseSuccess, setisFirebaseSuccess] = useState<boolean>(false);
 
   const [videoPresentation, setvideoPresentation] = useState<string>();
   const [replicationFile, setReplicateFile] = useState<string>();
-
-  const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const {
     visibility: editConfimationVisibility,
     setVisibility: setEditConfirmationVisibility,
     scaleStyle: editConfirmationScaleStyle,
     closeModal: editConfirmationCloseModal,
-  } = useModal();
-
-  const {
-    visibility: fireBaseResultVisibility,
-    setVisibility: setFireBaseResultVisibility,
-    scaleStyle: fireBaseResultScaleStyle,
-    closeModal: fireBaseResultVisibilityCloseModal,
   } = useModal();
 
   const {
@@ -107,8 +85,52 @@ const EditStageModal = ({
       });
     }
   }, [state.type]);
+
+  const handleSaveToFirebase = async () => {
+    const type = state.type ? state.type : stageData?.type;
+    const Promises: Promise<any>[] = [];
+    if (!type) {
+      console.log("error");
+      return;
+    }
+    const hasEmpty = CheckEmptyFields(state, type);
+    editConfirmationCloseModal();
+    if (hasEmpty) {
+      closeModal();
+      setToastVisibility("error", "Some fields are empty");
+      //TODO: add toast if empty fields
+      return;
+    }
+
+    if (videoPresentation) {
+      Promises.push(
+        uploadVideoMutation!.mutateAsync({ video: videoPresentation })
+      );
+    }
+    if (replicationFile) {
+      Promises.push(
+        uploadFileReplication!.mutateAsync({
+          file: replicationFile,
+        })
+      );
+    }
+
+    await Promise.all(Promises);
+
+    editMutation?.mutate({
+      state,
+      stageType: stageData?.type,
+    });
+
+    dispatch({ type: "RESET_ALL_FIELD" });
+    setvideoPresentation("");
+    setReplicateFile("");
+  };
+
+  const isMutating = useIsMutating();
   return (
     <Modal visible={visibility} transparent={true}>
+      {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
       <Pressable
         className="flex-[1] justify-center items-center bg-black/30 "
         onPress={() => {
@@ -189,6 +211,10 @@ const EditStageModal = ({
                     <TouchableOpacity
                       className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
                       onPress={() => {
+                        if (stageData?.order === 1) {
+                          console.log("youcannot delete this!");
+                          return;
+                        }
                         setDeleteConfirmationVisibility(true);
                       }}
                     >
@@ -207,45 +233,7 @@ const EditStageModal = ({
               </View>
               {editConfimationVisibility && (
                 <SaveToFirebaseConfirmation
-                  onConfirm={async () => {
-                    const type = state.type ? state.type : stageData?.type;
-
-                    if (!type) {
-                      console.log("error");
-                      return;
-                    }
-                    //Checks if any of the fields is empty
-                    const hasEmpty = CheckEmptyFields(state, type);
-                    editConfirmationCloseModal();
-                    if (hasEmpty) {
-                      setisFirebaseSuccess(false);
-                      setFireBaseResultVisibility(true);
-                      return;
-                    }
-
-                    if (videoPresentation) {
-                      uploadVideoMutation?.mutate({
-                        video: videoPresentation,
-                      });
-                      setvideoPresentation("");
-                    }
-                    if (replicationFile) {
-                      uploadFileReplication?.mutate({
-                        file: replicationFile,
-                      });
-                      console.log(replicationFile);
-                    }
-
-                    editMutation?.mutate({
-                      state,
-                      stageType: stageData?.type,
-                    });
-                    setReplicateFile("");
-
-                    setisFirebaseSuccess(true);
-                    setFireBaseResultVisibility(true);
-                    dispatch({ type: "RESET_ALL_FIELD" });
-                  }}
+                  onConfirm={handleSaveToFirebase}
                   visibility={editConfimationVisibility}
                   scaleStyle={editConfirmationScaleStyle}
                   closeModal={editConfirmationCloseModal}
@@ -262,15 +250,6 @@ const EditStageModal = ({
                   scaleStyle={deleteConfirmationScaleStyle}
                   closeModal={deleteConfirmationCloseModal}
                 ></DeleteFireBaseConfirmationModal>
-              )}
-              {fireBaseResultVisibility && (
-                <SaveToFirebaseResultModal
-                  isFirebaseSuccess={isFirebaseSuccess}
-                  visibility={fireBaseResultVisibility}
-                  scaleStyle={fireBaseResultScaleStyle}
-                  closeModal={fireBaseResultVisibilityCloseModal}
-                  onConfirm={() => setFireBaseResultVisibility(false)}
-                ></SaveToFirebaseResultModal>
               )}
             </Animated.View>
           </KeyboardAwareScrollView>

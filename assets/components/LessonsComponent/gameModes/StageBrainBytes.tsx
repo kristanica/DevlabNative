@@ -3,9 +3,9 @@ import brainFilter from "@/assets/Hooks/mainGameModeFunctions/brainFilter";
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-const StageBrainBytes = ({ currentStageData }: any) => {
+const StageBrainBytes = ({ currentStageData }: CurrentStageDataPayload) => {
   const { compareUserAnswer, arrayChoices, brainFilterItem } = brainFilter(
-    currentStageData?.choices
+    currentStageData?.choices!
   );
   const [displayChoices, setDisplayChoices] = useState<any>(arrayChoices || []);
   const activeBuff = activeBuffsLocal((state) => state.activeBuff);

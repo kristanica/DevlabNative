@@ -112,7 +112,7 @@ const stageScreen = () => {
 
     gameOver.closeModal();
   }, [stageData, lessonId, levelId, category, resetHealthPoints, gameOver]);
-
+  console.log(currentStageData);
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">

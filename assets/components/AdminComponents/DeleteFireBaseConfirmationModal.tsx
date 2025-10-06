@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import LottieView from "lottie-react-native";
 import React, { BaseSyntheticEvent } from "react";
 import {
@@ -17,7 +16,7 @@ const DeleteFireBaseConfirmationModal = ({
   scaleStyle,
   closeModal,
   onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable

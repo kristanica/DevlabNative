@@ -20,6 +20,7 @@ const drawerLayout = () => {
     (state) => state.getUserAchievementProgress
   );
 
+  //Prefetch
   useEffect(() => {
     const loadProgress = async () => {
       const result = await Promise.allSettled([

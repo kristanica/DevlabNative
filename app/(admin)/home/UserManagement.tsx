@@ -53,10 +53,6 @@ const UserManagement = () => {
               }}
             />
 
-            {/* UNFINISHED - When searching another user, it renders the previous searched results before rendering the new one. Might swtich to  Algolia, Typesense, or Meilisearch if remained unfixsable*/}
-            {/* Might just add search button */}
-
-            {/* Renders all list first */}
             {!searchUser ? (
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -64,11 +60,11 @@ const UserManagement = () => {
                 data={users}
                 renderItem={({ item, index }) => (
                   <AdminUserContainer
-                    item={item}
+                    allUsersInformation={item}
                     mutation={() =>
                       mutation.mutate({
                         uid: item.uid,
-                        isSuspended: item.suspend,
+                        isSuspended: item.isSuspended,
                       })
                     }
                     index={index}
@@ -86,11 +82,11 @@ const UserManagement = () => {
                 renderItem={({ item, index }) => (
                   <AdminUserContainer
                     index={index}
-                    item={item}
+                    allUsersInformation={item}
                     mutation={() =>
                       mutation.mutate({
                         uid: item.uid,
-                        isSuspended: item.suspend,
+                        isSuspended: item.isSuspended,
                       })
                     }
                   ></AdminUserContainer>

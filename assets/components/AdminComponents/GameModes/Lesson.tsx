@@ -150,15 +150,24 @@ const Lesson = ({
           </Text>
         </Pressable>
         <View>
-          {state.blocks.map((block: any, index: any) => (
-            <InputSelector
-              index={state.blocks[index].value}
-              dispatch={dispatch}
-              key={block.id}
-              block={block}
-              type={block.type}
-            ></InputSelector>
-          ))}
+          {state.blocks.map(
+            (
+              block: {
+                id: number;
+                type: string;
+                value: string;
+              },
+              index: number
+            ) => (
+              <InputSelector
+                index={state.blocks[index].value}
+                dispatch={dispatch}
+                key={block.id}
+                block={block}
+                blockType={block.type}
+              ></InputSelector>
+            )
+          )}
         </View>
       </View>
 

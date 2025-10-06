@@ -81,8 +81,6 @@ export default function Home() {
                     {userData?.username}
                   </Text>
 
-                  {/* EXP bar */}
-
                   <ExperienceBar
                     userExp={userData!.exp}
                     userLevel={userData!.userLevel}
@@ -168,7 +166,7 @@ export default function Home() {
                 {inventory.map((item) => (
                   <InventoryItemContainer
                     key={item.id}
-                    item={item}
+                    {...item}
                   ></InventoryItemContainer>
                 ))}
               </View>

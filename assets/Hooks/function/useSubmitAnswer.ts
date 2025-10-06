@@ -5,18 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
 import { unlockAchievement } from "./unlockAchievement";
 
-type submitAnswerPayload = {
-  stageId: string;
-  lessonId: string;
-  levelId: string;
-  category: string;
-  answer?: boolean;
-  setCurrentStageIndex: any;
-  levelFinishedModal: any;
-  finalAnswerModall: any;
-  stageType: string;
-};
-
 const useSubmitAnswer = () => {
   const { hasShield, consumeErrorShield } = errorShield();
   const decrementUserHp = userHp.getState().decrementUserHp;

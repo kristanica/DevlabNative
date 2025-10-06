@@ -1,5 +1,4 @@
 import { auth, URL } from "@/assets/constants/constants";
-import { payloadProps } from "@/assets/constants/type";
 import axios from "axios";
 
 const unlockNextStage = async ({
@@ -7,7 +6,7 @@ const unlockNextStage = async ({
   lessonId,
   levelId,
   stageId,
-}: payloadProps) => {
+}: generalTrackerPayload) => {
   const token = await auth.currentUser?.getIdToken(true);
   try {
     const res = await axios.post(

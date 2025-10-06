@@ -4,13 +4,10 @@ import React from "react";
 import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-type AdminLessonContainerProps = {
-  item: any;
-  index: number;
-  isUnlocked?: boolean | undefined;
-};
-
-const AdminLessonContainer = ({ item, index }: AdminLessonContainerProps) => {
+const AdminLessonContainer = ({
+  itemContents,
+  index,
+}: AdminLessonContainerPayload) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
@@ -24,13 +21,13 @@ const AdminLessonContainer = ({ item, index }: AdminLessonContainerProps) => {
     >
       <View>
         <Text className="text-white font-exoBold text-xl xs:text-[12px] ">
-          {item.title}
+          {itemContents.title}
         </Text>
       </View>
 
       <View className="mt-2">
         <Text className="text-[#94A1B2]  text-justify font-exoLight text-xs xs:text-[9px]">
-          {item.description}
+          {itemContents.description}
         </Text>
       </View>
     </Animated.View>

@@ -12,14 +12,12 @@ const editStage = async (state: any, stageType: string) => {
 
   console.log("Original state:", JSON.stringify(state, null, 2));
 
-  // Normalize existing images: convert {url, fieldName} objects to just the URL string
   const normalizedBlocks = state.blocks?.map((block: any) => {
     if (
       block.type === "Image" &&
       block.value &&
       typeof block.value === "object"
     ) {
-      // If value is an object with url property, extract just the URL
       return { ...block, value: block.value.url };
     }
     return block;
@@ -30,7 +28,6 @@ const editStage = async (state: any, stageType: string) => {
     blocks: normalizedBlocks || state.blocks,
   };
 
-  // Check if there are images with local file URIs to upload
   const hasLocalImages = normalizedState.blocks?.some(
     (block: any) =>
       block.type === "Image" &&
@@ -43,7 +40,6 @@ const editStage = async (state: any, stageType: string) => {
   try {
     const token = await auth.currentUser?.getIdToken(true);
 
-    // If no local images, send as JSON
     if (!hasLocalImages) {
       console.log("No local images, sending as JSON");
 
@@ -73,7 +69,6 @@ const editStage = async (state: any, stageType: string) => {
       return;
     }
 
-    // If there are local images, use FormData
     console.log("Local images detected, sending as FormData");
     const formData = new FormData();
     formData.append("category", levelPayload?.category);

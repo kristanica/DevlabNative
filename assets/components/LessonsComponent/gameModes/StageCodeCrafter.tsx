@@ -1,51 +1,9 @@
-import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import WebView from "react-native-webview";
 
-type NavigatingStageProps = {
-  currentStageData: any;
-};
-
-const StageCodeCrafter = ({ currentStageData }: NavigatingStageProps) => {
-  const location = WhereIsUser((state) => state.location);
-  console.log(location);
-  console.log(currentStageData.replicationFile);
+const StageCodeCrafter = ({ currentStageData }: CurrentStageDataPayload) => {
   const [webViewHeight, setWebViewHeight] = useState(0);
-  // useEffect(() => {
-  //   if (!currentStageData?.replicationFile) return;
-
-  //   const test = async () => {
-  //     try {
-  //       const currentUser = auth.currentUser;
-  //       if (!currentUser) {
-  //         console.error("No authenticated user found.");
-  //         return;
-  //       }
-
-  //       const token = await currentUser.getIdToken(true);
-
-  //       const response = await fetch(currentStageData.replicationFile);
-  //       const text = await response.text();
-
-  //       const res = await axios.post(
-  //         `${URL}/fireBaseAdmin/codeCrafter`,
-  //         { code: text }, // better to send an object instead of raw text
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       console.log("Backend response:", res.data);
-  //     } catch (err) {
-  //       console.error("Error in StageCodeCrafter request:", err);
-  //     }
-  //   };
-
-  //   test();
-  // }, [currentStageData?.replicationFile]);
 
   return (
     <>

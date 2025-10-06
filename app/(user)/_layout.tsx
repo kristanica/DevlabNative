@@ -29,7 +29,7 @@ const TabsLayout = () => {
                   />
                   <View>
                     <Text className="text-black xs: text-xs font-exoExtraBold">
-                      You've claimed an Achivement!
+                      {"You've claimed an Achivement!"}
                     </Text>
                     <Text className="text-[#4e4747]  xs: text-[8px] font-exoExtraBold">
                       Coins Reward: {props.text1} 🪙

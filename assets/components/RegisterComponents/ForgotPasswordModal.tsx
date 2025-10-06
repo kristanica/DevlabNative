@@ -3,28 +3,15 @@ import tryCatch from "@/assets/Hooks/function/tryCatch";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
-import {
-  Modal,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
+import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import Animated from "react-native-reanimated";
 import InputBox from "../InputBox";
-
-type ForgotPasswordProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-};
 
 const ForgotPasswordModal = ({
   visibility,
   scaleStyle,
   closeModal,
-}: ForgotPasswordProps) => {
+}: ScaleModalPayload) => {
   const [email, setEmail] = useState<string>("");
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const handleForgotPassword = async (email: string) => {

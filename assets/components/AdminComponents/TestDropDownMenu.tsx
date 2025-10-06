@@ -7,7 +7,12 @@ type Props = {
   setSelectedItem: any;
 };
 
-const TestDropDownMenu = (props: Props) => {
+type DropDownItemProps = {
+  selectedItem: string;
+  setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const TestDropDownMenu = (props: DropDownItemProps) => {
   const [isDropDownOpen, setDropDown] = useState<boolean>(false);
   const dropDownItem = [
     {

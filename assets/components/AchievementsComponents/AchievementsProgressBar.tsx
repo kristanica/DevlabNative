@@ -2,18 +2,11 @@ import React, { memo } from "react";
 import { Text, View } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 
-type AchievementContainerProps = {
-  name: string;
-  id?: number;
-  progress: number;
-};
-
 // Achievement progress bar for (Tabs)/Achievement.tsx
 const AchievementsProgressBar = ({
   name,
-  id,
   progress,
-}: AchievementContainerProps) => {
+}: AchievementProgressBarProps) => {
   return (
     <View
       className="flex-col justify-center items-center mx-2 my-2"

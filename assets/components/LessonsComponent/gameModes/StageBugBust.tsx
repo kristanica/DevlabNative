@@ -6,10 +6,8 @@ import * as Clipboard from "expo-clipboard";
 import React, { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import HintModal from "../Modals/HintModal";
-type NavigatingStageProps = {
-  currentStageData: any;
-};
-const StageBugBust = ({ currentStageData }: NavigatingStageProps) => {
+
+const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
   const hintModal = useModal();
 
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
@@ -49,7 +47,7 @@ const StageBugBust = ({ currentStageData }: NavigatingStageProps) => {
         </Text>
         <TouchableOpacity
           onPress={async () => {
-            await Clipboard.setStringAsync(currentStageData.codingInterface);
+            await Clipboard.setStringAsync(currentStageData.codingInterface!);
             console.log("Copied to clipboard!");
           }}
           className="absolute right-5 top-5 w-8 h-8 justify-center items-center"

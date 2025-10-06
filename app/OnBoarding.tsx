@@ -1,8 +1,8 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
-import ButtonComponent from "@/assets/components/ButtonComponent";
 import OnboardingItem from "@/assets/components/OnBoardingComponents/OnboardingItem";
 import Pagination from "@/assets/components/OnBoardingComponents/Pagination";
 import { onboardingData, path, width } from "@/assets/constants/constants";
+import ButtonComponent from "@/assets/deprecated/ButtonComponent";
 import usePresstoScroll from "@/assets/Hooks/usePresstoScroll";
 
 import { router } from "expo-router";

@@ -119,7 +119,7 @@ const ContentManagement = () => {
                         }}
                       >
                         <AdminLessonContainer
-                          item={item}
+                          itemContents={item}
                           key={index}
                           index={globalCounter}
                         />

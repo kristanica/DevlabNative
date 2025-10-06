@@ -10,7 +10,10 @@ type InputSelectorProps = {
   index: any;
 };
 
-const selectImage = async (block: any, dispatch: any) => {
+const selectImage = async (
+  blockId: number,
+  dispatch: React.ActionDispatch<any>
+) => {
   const result: ImagePicker.ImagePickerResult =
     await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -26,7 +29,7 @@ const selectImage = async (block: any, dispatch: any) => {
   dispatch({
     type: "UPDATE_BLOCK",
     payload: {
-      id: block.id,
+      id: blockId,
       value: imageUri,
     },
   });
@@ -34,10 +37,10 @@ const selectImage = async (block: any, dispatch: any) => {
 
 const InputSelector = ({
   block,
-  type,
+  blockType,
   dispatch,
   index,
-}: InputSelectorProps) => {
+}: BlockInputSelectorPayload) => {
   const selectedInput: Record<string, JSX.Element> = {
     Paragraph: (
       <View
@@ -122,7 +125,7 @@ const InputSelector = ({
         )}
         <Pressable
           className="flex-row"
-          onPress={() => selectImage(block, dispatch)}
+          onPress={() => selectImage(block.id, dispatch)}
         >
           <Text className="text-white my-2 mr-5">{block.type}</Text>
           <Ionicons name="cloud-upload" size={15} color={"white"}></Ionicons>
@@ -149,7 +152,7 @@ const InputSelector = ({
     ),
   };
 
-  return selectedInput[type] ?? null;
+  return selectedInput[blockType] ?? null;
 };
 
 export default InputSelector;

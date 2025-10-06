@@ -2,15 +2,7 @@ import { auth, URL } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
 import axios from "axios";
 
-const purchaseItem = async ({
-  id,
-  cost,
-  itemName,
-}: {
-  id: string;
-  cost: number;
-  itemName: string;
-}) => {
+const purchaseItem = async ({ id, cost, itemName }: purchaseItemPayload) => {
   const token = await auth.currentUser?.getIdToken(true);
 
   const [res, error] = await tryCatch(

@@ -3,9 +3,9 @@ import { collection, getDocs } from "firebase/firestore";
 type userDataProps = {
   username: string;
   email: string;
-  userLeveL: number;
-  suspend: boolean;
-  uid?: any;
+  userLevel: number;
+  isSuspended: boolean;
+  uid?: string;
   isAdmin: boolean;
 };
 const useFetchUsers = async () => {
@@ -23,21 +23,5 @@ const useFetchUsers = async () => {
     console.log(err);
   }
 };
-
-// const useFetchUsers = async () => {
-//   try {
-//     const userRef = collection(db, "Users");
-//     const temp = await getDocs(userRef);
-//     const data: userDataProps[] = temp.docs.map((temp) => {
-//       return {
-//         uid: temp.id,
-//         ...(temp.data() as userDataProps),
-//       };
-//     });
-//     return data;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
 
 export default useFetchUsers;

@@ -5,12 +5,11 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-type StageContainerProps = {
-  item: any;
-  index: number;
-  isLocked?: boolean;
-};
-const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
+const StagesContainer = ({
+  stageInformation,
+  index,
+  isLocked,
+}: StagesContainerPayload) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
@@ -22,7 +21,10 @@ const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
     <Animated.View
       style={[
         onScale,
-        { backgroundColor: item.type === "Lesson" ? "#111827" : "#2B1118" },
+        {
+          backgroundColor:
+            stageInformation.type === "Lesson" ? "#111827" : "#2B1118",
+        },
       ]}
       className="my-2 rounded-2xl border-2 border-black h-28 p-3 mx-3 relative"
     >
@@ -37,7 +39,7 @@ const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
 
       <View>
         <Text className="text-white font-exoBold  text-xl xs:text-[12px]">
-          {item.title}
+          {stageInformation.title}
         </Text>
       </View>
 
@@ -46,7 +48,7 @@ const StagesContainer = ({ item, index, isLocked }: StageContainerProps) => {
           className="text-[#94A1B2] text-justify font-exoLight text-xs xs:text-[9px]"
           numberOfLines={3}
         >
-          {item.description}
+          {stageInformation.description}
         </Text>
       </View>
     </Animated.View>

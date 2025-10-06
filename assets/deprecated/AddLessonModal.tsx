@@ -22,8 +22,8 @@ type StageDataProps = {
 
 import useModal from "@/assets/Hooks/useModal";
 import tracker from "@/assets/zustand/tracker";
-import AdminLessonContainer from "./AdminLessonContainer";
-import EditStageModal from "./EditStageModal";
+import AdminLessonContainer from "../components/AdminComponents/AdminLessonContainer";
+import EditStageModal from "../components/AdminComponents/EditStageModal";
 
 type AddLessonModalProps = {
   Vvisibility: boolean;

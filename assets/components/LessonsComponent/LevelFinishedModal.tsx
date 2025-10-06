@@ -1,5 +1,4 @@
 import { auth, db } from "@/assets/constants/constants";
-import { ScaleModalProps } from "@/assets/constants/type";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
@@ -15,7 +14,7 @@ const LevelFinishedModal = ({
   visibility,
   scaleStyle,
   onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   const expAndCoins = setCoinsandExp((state) => state.coinsAndExp);
   const userHealth = userHealthPoints((state) => state.health);
   const { coinSurgeItem } = coinSurge();

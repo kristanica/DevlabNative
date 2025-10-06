@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import React from "react";
 import { Modal, Pressable, ScrollView, StyleSheet, Text } from "react-native";
 import Animated from "react-native-reanimated";
@@ -7,8 +6,7 @@ const HowToUseStageEditor = ({
   visibility,
   scaleStyle,
   closeModal,
-  onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} transparent>
       <Pressable

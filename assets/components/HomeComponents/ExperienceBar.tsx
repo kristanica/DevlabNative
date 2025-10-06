@@ -9,16 +9,11 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-type ExperienceBarProps = {
-  userExp: number;
-  treshold: number;
-  userLevel: number;
-};
 const ExperienceBar = ({
   userExp,
   treshold,
   userLevel,
-}: ExperienceBarProps) => {
+}: ExperienceBarPayload) => {
   const progressValue = useSharedValue(0);
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const progress = Math.min(userExp / treshold, 1);

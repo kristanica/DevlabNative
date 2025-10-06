@@ -7,7 +7,7 @@ import React, { JSX } from "react";
 import { StyleSheet } from "react-native";
 
 type StageGameComponentProps = {
-  currentStageData: any;
+  currentStageData: stageDataPayload;
   type: string;
 };
 

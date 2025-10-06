@@ -1,28 +1,14 @@
 import LottieView from "lottie-react-native";
 import React from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle,
-} from "react-native";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
-
-type adminModalProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-  onConfirm: () => void;
-};
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const AdminModal = ({
   visibility,
   scaleStyle,
   closeModal,
   onConfirm,
-}: adminModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1">

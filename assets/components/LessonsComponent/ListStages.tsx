@@ -48,6 +48,7 @@ const ListStages = () => {
       setStageData(data);
       return data;
     },
+    staleTime: 10 * 60 * 1000,
   });
   let globalCounter = 0;
 
@@ -87,7 +88,6 @@ const ListStages = () => {
   useEffect(() => {
     lastOpenedLevel.mutate();
   }, []);
-
   return (
     <View className="h-[40%]">
       {isLoading ? (
@@ -135,7 +135,7 @@ const ListStages = () => {
               >
                 <StagesContainer
                   isLocked={isStageLocked}
-                  item={item}
+                  stageInformation={item}
                   index={globalCounter}
                 ></StagesContainer>
               </Pressable>

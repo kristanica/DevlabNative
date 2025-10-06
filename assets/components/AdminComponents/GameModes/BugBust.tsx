@@ -2,17 +2,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import InputContainer from "../InputContainer";
 
-type BugBustProps = {
-  stageData: any;
-  dispatch: any;
-  state: any;
-};
-const BugBust = ({ stageData, dispatch, state }: BugBustProps) => {
+const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
   return (
     <>
       <InputContainer
         title={"Title"}
-        placeholder={stageData?.title}
         value={state.title}
         setValue={(text) => {
           dispatch({
@@ -25,7 +19,6 @@ const BugBust = ({ stageData, dispatch, state }: BugBustProps) => {
       />
       <InputContainer
         title={"Description"}
-        placeholder={stageData?.description}
         value={state.description}
         setValue={(text) => {
           dispatch({
@@ -38,7 +31,6 @@ const BugBust = ({ stageData, dispatch, state }: BugBustProps) => {
       />
       <InputContainer
         title={"Coding Interface"}
-        placeholder={stageData?.codingInterface}
         value={state.codingInterface}
         setValue={(text) => {
           dispatch({
@@ -51,7 +43,6 @@ const BugBust = ({ stageData, dispatch, state }: BugBustProps) => {
       />
       <InputContainer
         title={"Instruction"}
-        placeholder={stageData?.instruction}
         value={state.instruction}
         setValue={(text) => {
           dispatch({
@@ -64,7 +55,6 @@ const BugBust = ({ stageData, dispatch, state }: BugBustProps) => {
       />
       <InputContainer
         title={"Hint"}
-        placeholder={stageData?.hint}
         value={state.hint}
         setValue={(text) => {
           dispatch({

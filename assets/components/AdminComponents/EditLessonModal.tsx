@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 
 import useLevelEditor from "@/assets/Hooks/query/mutation/useLevelEditor";
@@ -23,7 +22,7 @@ const EditLessonModal = ({
   visibility,
   scaleStyle,
   closeModal,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   const { state, dispatch } = useEditLesson();
   const { levelData, updateLevelMutation, deleteLevelMutation } =
     useLevelEditor();

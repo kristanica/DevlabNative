@@ -5,10 +5,6 @@ import React from "react";
 
 const AdminRootLayout = () => {
   const isMutating = useIsMutating();
-  // const getValidAdmin = adminAuthentication((state) => state.getAdmin);
-  // useEffect(() => {
-  //   getValidAdmin();
-  // }, [getValidAdmin]);
   return (
     <>
       {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}

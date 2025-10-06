@@ -3,16 +3,14 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import InputContainer from "../InputContainer";
 
 type BrainBytesProps = {
-  stageData: any;
   dispatch: any;
   state: any;
 };
-const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
+const BrainBytes = ({ dispatch, state }: BrainBytesProps) => {
   return (
     <View>
       <InputContainer
         title={"Title"}
-        placeholder={stageData?.title}
         value={state.title}
         setValue={(text) => {
           dispatch({
@@ -26,7 +24,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
 
       <InputContainer
         title={"Description"}
-        placeholder={stageData?.description}
         value={state.description}
         setValue={(text) => {
           dispatch({
@@ -40,7 +37,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
 
       <InputContainer
         title={"Coding Interface"}
-        placeholder={stageData?.codingInterface}
         value={state.codingInterface}
         setValue={(text) => {
           dispatch({
@@ -53,7 +49,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
       />
       <InputContainer
         title={"Instruction"}
-        placeholder={stageData?.instruction}
         value={state.instruction}
         setValue={(text) => {
           dispatch({
@@ -67,7 +62,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
       <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
         <Text className="text-white my-2">Choices</Text>
         <TextInput
-          placeholder={stageData?.choices?.a}
           multiline
           value={state.choices.a}
           onChangeText={(text) =>
@@ -77,7 +71,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
         <TextInput
-          placeholder={stageData?.choices?.b}
           multiline
           value={state.choices?.b}
           onChangeText={(text) =>
@@ -87,7 +80,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
         <TextInput
-          placeholder={stageData?.choices?.c}
           multiline
           value={state.choices?.c}
           onChangeText={(text) =>
@@ -97,7 +89,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
           style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
         ></TextInput>
         <TextInput
-          placeholder={stageData?.choices?.d}
           multiline
           value={state.choices?.d}
           onChangeText={(text) =>
@@ -108,7 +99,6 @@ const BrainBytes = ({ stageData, dispatch, state }: BrainBytesProps) => {
         ></TextInput>
 
         <TextInput
-          placeholder={stageData?.choices?.correctAnswer}
           multiline
           value={state.choices?.correctAnswer}
           onChangeText={(text) =>

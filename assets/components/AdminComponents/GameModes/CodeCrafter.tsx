@@ -3,18 +3,12 @@ import * as DocumentPicker from "expo-document-picker";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import InputContainer from "../InputContainer";
-type CodeCrafterProps = {
-  stageData: any;
-  dispatch: any;
-  state: any;
-  setReplicateFile: any;
-};
+
 const CodeCrafter = ({
-  stageData,
   dispatch,
   state,
   setReplicateFile,
-}: CodeCrafterProps) => {
+}: CodeCrafterPayload) => {
   const pickReplicate = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "text/html",
@@ -31,7 +25,6 @@ const CodeCrafter = ({
     <>
       <InputContainer
         title={"Title"}
-        placeholder={stageData?.title}
         value={state.title}
         setValue={(text) => {
           dispatch({
@@ -45,7 +38,6 @@ const CodeCrafter = ({
 
       <InputContainer
         title={"Description"}
-        placeholder={stageData?.description}
         value={state.description}
         setValue={(text) => {
           dispatch({
@@ -59,7 +51,6 @@ const CodeCrafter = ({
 
       <InputContainer
         title={"Coding Interface"}
-        placeholder={stageData?.codingInterface}
         value={state.codingInterface}
         setValue={(text) => {
           dispatch({
@@ -72,7 +63,6 @@ const CodeCrafter = ({
       />
       <InputContainer
         title={"Instruction"}
-        placeholder={stageData?.instruction}
         value={state.instruction}
         setValue={(text) => {
           dispatch({
@@ -86,7 +76,6 @@ const CodeCrafter = ({
 
       <InputContainer
         title={"Copy Code"}
-        placeholder={stageData.copyCode}
         value={state.copyCode}
         setValue={(text) => {
           dispatch({

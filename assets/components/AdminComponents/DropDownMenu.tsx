@@ -8,13 +8,11 @@ import {
 } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
-type DropDownMenuProps = {
-  onSelect: (item: string) => void;
-  placeHolder: string;
-  value: string;
-};
-
-const DropDownMenu = ({ onSelect, placeHolder, value }: DropDownMenuProps) => {
+const DropDownMenu = ({
+  onSelect,
+  placeHolder,
+  value,
+}: DropDownMenuPayload) => {
   const [openDropDown, setOpenDropDown] = useState<boolean>(false);
   const dropDown = [
     { id: "1", name: "Lesson" },

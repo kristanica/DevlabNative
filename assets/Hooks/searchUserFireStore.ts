@@ -10,9 +10,9 @@ import { db } from "../constants/constants";
 type useSearchUserFireStoreProps = {
   username: string;
   email: string;
-  userLeveL: number;
-  suspend: boolean;
-  uid?: any;
+  userLevel: number;
+  isSuspended: boolean;
+  uid?: string;
   isAdmin: boolean;
 };
 const searchUserFireStore = async (debounce: string) => {

@@ -12,13 +12,7 @@ import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
 const Stage = () => {
@@ -79,10 +73,12 @@ const Stage = () => {
                       if (index === undefined) {
                         return;
                       }
+
+                      const isFirstItem = index === 0;
                       return (
                         <>
                           <TouchableOpacity
-                            onLongPress={drag}
+                            onLongPress={isFirstItem ? undefined : drag}
                             onPress={() => {
                               stageTracker(item.id);
                               setVisibility(true);
@@ -91,7 +87,7 @@ const Stage = () => {
                             disabled={isActive}
                           >
                             <StageContainer
-                              item={item}
+                              stageInformation={item}
                               index={index ?? 0}
                             ></StageContainer>
                           </TouchableOpacity>
@@ -113,10 +109,7 @@ const Stage = () => {
               </View>
 
               {tutorial.visibility && (
-                <HowToUseStageEditor
-                  onConfirm={() => console.log("test")}
-                  {...tutorial}
-                ></HowToUseStageEditor>
+                <HowToUseStageEditor {...tutorial}></HowToUseStageEditor>
               )}
               {visibility && (
                 <EditStageModal
@@ -134,5 +127,3 @@ const Stage = () => {
 };
 
 export default Stage;
-
-const styles = StyleSheet.create({});

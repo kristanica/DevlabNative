@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
@@ -9,7 +8,7 @@ const SignOutModal = ({
   scaleStyle,
   closeModal,
   onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1">

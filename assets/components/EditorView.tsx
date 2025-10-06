@@ -1,4 +1,4 @@
-import ButtonAnimated from "@/assets/components/ButtonComponent";
+import ButtonAnimated from "@/assets/deprecated/ButtonComponent";
 // import CodingPlaygroundEditor from "@/assets/components/CodeEditor/CodingPlaygroundEditor";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";

@@ -4,26 +4,10 @@ import { htmlRegex } from "@/assets/Hooks/regexChecker/htmlRegex";
 import { jsRegex } from "@/assets/Hooks/regexChecker/jsRegex";
 import BottomSheet from "@gorhom/bottom-sheet";
 import LottieView from "lottie-react-native";
-import React, { RefObject, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
 
-type CodeEditorPayload = {
-  html?: string;
-  css?: string;
-  js?: string;
-};
-
-type CodingPlaygroundEditorProps = {
-  webRef: RefObject<WebView | null>;
-  receivedCode: CodeEditorPayload | undefined;
-  setReceivedCode: React.Dispatch<
-    React.SetStateAction<CodeEditorPayload | undefined>
-  >;
-  logs: any;
-  setLogs: any;
-  terminalRef: RefObject<BottomSheet | null>;
-};
 const StageCodingEditor = ({
   webRef,
   receivedCode,
@@ -31,7 +15,7 @@ const StageCodingEditor = ({
   logs,
   setLogs,
   terminalRef,
-}: CodingPlaygroundEditorProps) => {
+}: CodeMirrorPayload) => {
   const snapPoints = useMemo(() => ["5%", "50%"], []);
 
   useEffect(() => {
@@ -54,8 +38,6 @@ const StageCodingEditor = ({
         });
       }
       if (js) {
-     
-
         const unlockJsAchievement: any = jsRegex(js);
         if (unlockJsAchievement.length > 0) {
           unlockAchievement("JavaScript", "tagUsed", {

@@ -5,26 +5,10 @@ import { Text, View } from "react-native";
 import Animated, {
   Extrapolation,
   interpolate,
-  SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-type OnboardingItemProps = {
-  xVal: SharedValue<number>;
-  item: {
-    id: number;
-    lottie: string;
-    title: string;
-    subtitle: string;
-    description: string;
-
-    background: string;
-  };
-
-  index: number;
-};
-
-const OnboardingItem = ({ xVal, item, index }: OnboardingItemProps) => {
+const OnboardingItem = ({ xVal, item, index }: OnboardingItemPayload) => {
   const interpolateBackground = useAnimatedStyle(() => ({
     transform: [
       {

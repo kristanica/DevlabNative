@@ -6,15 +6,6 @@ import CodeCrafter from "@/assets/components/AdminComponents/GameModes/CodeCraft
 import CodeRush from "@/assets/components/AdminComponents/GameModes/CodeRush";
 import Lesson from "@/assets/components/AdminComponents/GameModes/Lesson";
 
-type gameComponentsProps = {
-  type: any;
-  dispatch: any;
-  state: any;
-  stageData: any;
-  setVideoPresentation: any;
-  setReplicateFile: any;
-};
-
 const GameComponent = ({
   type,
   dispatch,
@@ -22,7 +13,7 @@ const GameComponent = ({
   stageData,
   setVideoPresentation,
   setReplicateFile,
-}: gameComponentsProps) => {
+}: gameComponentPayload) => {
   const gameComponentsMenu: Record<string, JSX.Element> = {
     Lesson: (
       <Lesson
@@ -32,30 +23,15 @@ const GameComponent = ({
         setVideoPresentation={setVideoPresentation}
       />
     ),
-    BugBust: (
-      <BugBust dispatch={dispatch} state={state} stageData={stageData} />
-    ),
-    CodeRush: (
-      <CodeRush
-        dispatch={dispatch}
-        state={state}
-        stageData={stageData}
-      ></CodeRush>
-    ),
-    BrainBytes: (
-      <BrainBytes
-        dispatch={dispatch}
-        state={state}
-        stageData={stageData}
-      ></BrainBytes>
-    ),
+    BugBust: <BugBust dispatch={dispatch} state={state} />,
+    CodeRush: <CodeRush dispatch={dispatch} state={state}></CodeRush>,
+    BrainBytes: <BrainBytes dispatch={dispatch} state={state}></BrainBytes>,
 
     CodeCrafter: (
       <CodeCrafter
         setReplicateFile={setReplicateFile}
         dispatch={dispatch}
         state={state}
-        stageData={stageData}
       ></CodeCrafter>
     ),
   };

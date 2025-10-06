@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import ButtonAnimated from "../ButtonComponent";
+import ButtonAnimated from "../../deprecated/ButtonComponent";
 
 type categorySelectorProps = {
   setCategory: (category: string) => void;

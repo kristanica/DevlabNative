@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import LottieView from "lottie-react-native";
 import { useState } from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
@@ -7,7 +6,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-type EvaluateMoalProps = ScaleModalProps & {
+type EvaluateMoalProps = ScaleModalPayload & {
   gptResponse: any;
 };
 

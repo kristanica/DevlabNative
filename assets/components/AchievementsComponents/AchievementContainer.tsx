@@ -7,16 +7,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-type AchievementContainerProps = {
-  data: any;
-  index: number;
-  selectedCategory: string;
-  isUnlocked: boolean;
-  isClaimed: boolean;
-  claimMutation: any;
-};
-
-//Achievement Container for (Tabs)/Achievements.tsx
 const AchievementContainer = ({
   data,
   selectedCategory,
@@ -24,7 +14,7 @@ const AchievementContainer = ({
   index,
   isClaimed,
   claimMutation,
-}: AchievementContainerProps) => {
+}: AchievementContainerPayload) => {
   const interpolateVal = useSharedValue(0);
 
   const { onScale } = useSequentialAppearAnim({

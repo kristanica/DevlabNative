@@ -15,6 +15,7 @@ const OfflineCodeEditor = () => {
     setReceivedCode,
     logs,
     setLogs,
+    terminalRef,
   } = useCodeEditor();
   return (
     <View className="bg-accent flex-[1] rounded-[10px] z-0">
@@ -34,6 +35,7 @@ const OfflineCodeEditor = () => {
         </View>
 
         <ViteCodeEditor
+          terminalRef={terminalRef}
           webRef={webRef}
           receivedCode={receivedCode}
           setReceivedCode={setReceivedCode}

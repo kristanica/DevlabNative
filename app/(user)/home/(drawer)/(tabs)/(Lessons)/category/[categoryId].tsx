@@ -17,19 +17,15 @@ import React, { useState } from "react";
 import { Image, Pressable, SectionList, Text, View } from "react-native";
 
 const categoryScreen = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
-
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
-
   const setTracker = tracker((state) => state.setTracker);
   const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
-
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
-
   const { fetchedLesson, isLoading } = fetchLesson(id);
-
   const allLevels = useGetUserInfo((state) => state.allProgressLevels);
 
   let globalCounter = 0;
@@ -132,7 +128,7 @@ const categoryScreen = () => {
                 >
                   <LessonContainer
                     isLocked={isLockedLesson}
-                    item={item}
+                    levelInformation={item}
                     index={globalCounter}
                     icon={
                       meta.ionIcon as

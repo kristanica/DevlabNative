@@ -2,13 +2,13 @@ import { itemIcon } from "@/assets/constants/constants";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-type UserInventoryItems = {
-  item: any;
-};
-
-const UserInventoryItems = ({ item }: UserInventoryItems) => {
-  const iconNameTrimmed = item.Icon ? item.Icon.replace(".png", "") : "";
-  if (item.quantity === 0) {
+const UserInventoryItems = ({
+  title,
+  Icon,
+  quantity,
+}: UserInventoryItemsPayload) => {
+  const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
+  if (quantity === 0) {
     return;
   }
   return (
@@ -23,10 +23,8 @@ const UserInventoryItems = ({ item }: UserInventoryItems) => {
         }}
       ></Image>
       <View className="justify-center items-center mt-3">
-        <Text className="text-white font-exoBold text-xs">{item.quantity}</Text>
-        <Text className="text-white font-exoExtraBold text-xs">
-          {item.title}
-        </Text>
+        <Text className="text-white font-exoBold text-xs">{quantity} X</Text>
+        <Text className="text-white font-exoExtraBold text-xs">{title}</Text>
       </View>
     </View>
   );

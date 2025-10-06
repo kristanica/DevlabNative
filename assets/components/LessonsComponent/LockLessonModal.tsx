@@ -1,16 +1,15 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-import ButtonAnimated from "../ButtonComponent";
+import ButtonAnimated from "../../deprecated/ButtonComponent";
 
 const LockLessonModal = ({
   visibility,
   scaleStyle,
   closeModal,
   onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable className="flex-1" onPress={() => closeModal()}>

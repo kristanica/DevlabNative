@@ -9,20 +9,18 @@ const getStageData = async () => {
   if (!levelPayload || !stageIdentifier) {
     throw new Error("Something went wrong with the payload");
   }
-  try {
-    const res = await axios.get(
-      `${URL}/fireBaseAdmin/getStage/${levelPayload.category}/${levelPayload?.lessonId}/${levelPayload.levelId}/${stageIdentifier}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (res.status === 200) {
-      return res.data;
+
+  const res = await axios.get(
+    `${URL}/fireBaseAdmin/getStage/${levelPayload.category}/${levelPayload?.lessonId}/${levelPayload.levelId}/${stageIdentifier}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-  } catch {
-    return {};
+  );
+  console.log(res.data);
+  if (res.status === 200) {
+    return res.data;
   }
 };
 

@@ -1,4 +1,3 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import { Modal, Pressable, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -7,7 +6,7 @@ const FinalAnswerModal = ({
   visibility,
   scaleStyle,
   onConfirm,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1 bg-black/50 z-10">

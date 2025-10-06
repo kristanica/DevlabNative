@@ -1,39 +1,18 @@
 import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import { useIsFocused } from "@react-navigation/native";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-type StageContainerProps = {
-  item: any;
-  index: number;
-  category?: string;
-};
-
-const StageContainer = ({ item, index, category }: StageContainerProps) => {
-  const queryClient = useQueryClient();
+const StageContainer = ({
+  stageInformation,
+  index,
+}: StagesContainerPayload) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
     id: index,
   });
-
-  // const mutation = useMutation({
-  //   mutationFn: ({
-  //     subject,
-  //     lessonId,
-  //     levelId,
-  //   }: {
-  //     subject: string;
-  //     lessonId: string;
-  //     levelId: string;
-  //   }) => addNewTopic(subject, lessonId, levelId),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["lesson admin", category] });
-  //   },
-  // });
-
   return (
     <Animated.View
       style={onScale}
@@ -41,7 +20,7 @@ const StageContainer = ({ item, index, category }: StageContainerProps) => {
     >
       <View>
         <Text className="text-white font-exoBold text-xl xs:text-[12px]">
-          {item.title}
+          {stageInformation.title}
         </Text>
       </View>
 
@@ -50,13 +29,13 @@ const StageContainer = ({ item, index, category }: StageContainerProps) => {
           className="text-[#94A1B2]   text-justify font-exoLight  text-xs xs:text-[9px] "
           numberOfLines={2}
         >
-          {item.description}
+          {stageInformation.description}
         </Text>
       </View>
 
       <View className="my-2">
         <Text className="text-white font-exoBold   text-[9px] xs:text-[8px]">
-          {item?.isHidden ? "Game" : "Lesson"}
+          {stageInformation.isHidden ? "Game" : "Lesson"}
         </Text>
       </View>
     </Animated.View>

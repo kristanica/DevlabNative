@@ -29,6 +29,7 @@ const Achievements = () => {
   const { data: achievementsData, isLoading } = useQuery({
     queryKey: ["Achievement1", selectedCategory],
     queryFn: () => fetchAchievements(selectedCategory),
+    staleTime: 5 * 60 * 1000,
   });
   const userAchievements = useGetUserInfo((state) => state.userAchievements);
   const claimAchievement = claimAchievementMutation();

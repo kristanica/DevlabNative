@@ -1,36 +1,18 @@
-import { ScaleModalProps } from "@/assets/constants/type";
-import useEditUserInfo from "@/assets/Hooks/query/useEditUserInfo";
-import { useMutation } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import React from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle,
-} from "react-native";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
-
-type confirmationModalProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-  userName: string;
-  bio: string;
-};
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 const ConfirmationModal = ({
   visibility,
   scaleStyle,
   closeModal,
   onConfirm,
-}: ScaleModalProps) => {
-  const mutation = useMutation({
-    mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
-      await useEditUserInfo(userName, bio),
-  });
+}: ScaleModalPayload) => {
+  // const mutation = useMutation({
+  //   mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
+  //     await useEditUserInfo(userName, bio),
+  // });
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>

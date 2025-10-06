@@ -2,13 +2,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
-type InputBoxProps = {
-  placeHolder: string;
-  value: string;
-  setValue: (value: string) => void;
+type InputBoxProps = InputBoxPayload & {
   icon: keyof typeof Ionicons.glyphMap;
-
-  isPassword?: boolean;
 };
 
 const InputBox = ({

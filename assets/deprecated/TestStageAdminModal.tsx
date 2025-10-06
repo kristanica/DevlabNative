@@ -1,8 +1,8 @@
 import useAddBlocks from "@/assets/Hooks/reducers/useAddBlocks";
 import React, { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import InputSelector from "./InputSelector";
-import TestDropDownMenu from "./TestDropDownMenu";
+import InputSelector from "../components/AdminComponents/InputSelector";
+import TestDropDownMenu from "../components/AdminComponents/TestDropDownMenu";
 
 const TestStageAdminModal = () => {
   const [selectedItem, setSelectedItem] = useState<string>("");

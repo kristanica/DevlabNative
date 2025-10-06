@@ -4,22 +4,14 @@ import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import WebView from "react-native-webview";
-type StageCodingEditorDatabaseProps = {
-  queryRecievedCode: string | undefined;
-  setQueryRecievedCode: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
-  query: string | undefined;
-  setQuery: React.Dispatch<React.SetStateAction<string | undefined>>;
-  tableStyle: string;
-};
+
 const StageCodingEditorDatabase = ({
   queryRecievedCode,
   setQueryRecievedCode,
   query,
   setQuery,
   tableStyle,
-}: StageCodingEditorDatabaseProps) => {
+}: CodeMirrorDatabasePayload) => {
   useEffect(() => {
     if (!queryRecievedCode) return;
     const unlockSqlAchievement = sqlRegex(queryRecievedCode);

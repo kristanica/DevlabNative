@@ -4,7 +4,7 @@ import * as Clipboard from "expo-clipboard";
 import React, { useRef } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type StageLessonprops = {
-  currentStageData: any;
+  currentStageData: stageDataPayload;
 };
 
 const StageLesson = ({ currentStageData }: StageLessonprops) => {
@@ -96,7 +96,9 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
           </Text>
           <TouchableOpacity
             onPress={async () => {
-              await Clipboard.setStringAsync(currentStageData?.codingInterface);
+              await Clipboard.setStringAsync(
+                currentStageData?.codingInterface!
+              );
             }}
           >
             <Ionicons

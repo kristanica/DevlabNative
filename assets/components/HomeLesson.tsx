@@ -1,19 +1,11 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import { useIsFocused } from "@react-navigation/native";
 import { Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
 
-type HomeLessonProps = {
-  name: string;
-  color: string;
-  index: number;
-
-  children: ReactNode;
-};
-
-const HomeLesson = ({ name, color, children, index }: HomeLessonProps) => {
+const HomeLesson = ({ name, color, children, index }: HomeLessonPayload) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,

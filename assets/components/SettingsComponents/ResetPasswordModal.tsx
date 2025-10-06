@@ -1,5 +1,4 @@
 import { auth } from "@/assets/constants/constants";
-import { ScaleModalProps } from "@/assets/constants/type";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
 import toastHandler from "@/assets/zustand/toastHandler";
 import {
@@ -8,26 +7,15 @@ import {
   updatePassword,
 } from "firebase/auth";
 import { useState } from "react";
-import {
-  Modal,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
+import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import Animated from "react-native-reanimated";
 import InputBox from "../InputBox";
-type ResetPasswordModalProps = {
-  visibility: boolean;
-  scaleStyle: AnimatedStyle<ViewStyle>;
-  closeModal: () => void;
-};
+
 const ResetPasswordModal = ({
   visibility,
   scaleStyle,
   closeModal,
-}: ScaleModalProps) => {
+}: ScaleModalPayload) => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);

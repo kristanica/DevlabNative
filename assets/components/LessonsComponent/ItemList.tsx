@@ -249,7 +249,7 @@ const ItemList = () => {
                     useItemActions[userInvItems.title]?.(userInvItems.id);
                   }}
                 >
-                  <UserInventoryItems item={userInvItems} />
+                  <UserInventoryItems {...userInvItems} />
                 </TouchableOpacity>
               );
             })}

@@ -5,9 +5,9 @@ import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import React, { useCallback, useEffect } from "react";
 import { Text, View } from "react-native";
 
-const StageCodeRush = ({ currentStageData }: any) => {
+const StageCodeRush = ({ currentStageData }: CurrentStageDataPayload) => {
   const { timer, codePatch, timeFreeze } = codePatchTimeFreeze(
-    currentStageData?.timer
+    currentStageData?.timer!
   );
 
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
