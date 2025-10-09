@@ -15,6 +15,11 @@ const AdminUserContainer = ({
     indicator: isFocused,
     id: index,
   });
+
+  const toUse = allUsersInformation?.profileImage
+    ? { uri: allUsersInformation.profileImage }
+    : require("@/assets/images/profile.png");
+
   return (
     <>
       <Animated.View
@@ -28,7 +33,7 @@ const AdminUserContainer = ({
               width: 100,
               borderRadius: 40,
             }}
-            source={require("@/assets/images/profile.png")}
+            source={toUse}
           ></Image>
         </View>
         {visible ? (
@@ -64,7 +69,6 @@ const AdminUserContainer = ({
         ) : (
           <View
             className="flex-[2] p-2 "
-            //border left does not work on native wind idk why
             style={[
               {
                 borderColor: "#C1ADAD",
@@ -102,7 +106,7 @@ const AdminUserContainer = ({
             <View className="flex-row justify-evenly items-center flex-[1]">
               <TouchableOpacity
                 disabled={allUsersInformation.isSuspended}
-                onPress={() => mutation()}
+                onPress={mutation}
               >
                 <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
                   Suspend
@@ -111,7 +115,7 @@ const AdminUserContainer = ({
 
               <TouchableOpacity
                 disabled={!allUsersInformation.isSuspended}
-                onPress={() => mutation()}
+                onPress={mutation}
               >
                 <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
                   Activate

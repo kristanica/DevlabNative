@@ -16,7 +16,7 @@ import StagesContainer from "./StagesContainer";
 const ListStages = () => {
   const levelPayload = tracker((state) => state.levelPayload);
   const setStageData = stageStore((state) => state.setstageData);
-
+  console.log(levelPayload);
   const stageId = useRef<string>("");
 
   const { data: levelsData, isLoading } = useQuery({
@@ -48,7 +48,6 @@ const ListStages = () => {
       setStageData(data);
       return data;
     },
-    staleTime: 10 * 60 * 1000,
   });
   let globalCounter = 0;
 
@@ -96,14 +95,20 @@ const ListStages = () => {
         <FlatList
           data={levelsData ?? []}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => item.id}
           renderItem={({ item }) => {
+            if (!item || !item.id) {
+              console.warn("Null or invalid item in levelsData");
+              return null;
+            }
             const stageKey = `${levelPayload?.lessonId}-${levelPayload?.levelId}-${item.id}`;
             const isStageLocked =
-              allStages?.[levelPayload?.category]?.[stageKey]?.status ?? false;
-
+              (allStages?.[levelPayload?.category]?.[stageKey]?.isActive &&
+                allStages?.[levelPayload.category]?.[stageKey]?.isCompleted) ??
+              false;
+            console.log(isStageLocked);
             globalCounter++;
-            if (item.isHidden && !isStageLocked) {
+            if (item.type !== "Lesson") {
               return null;
             }
 

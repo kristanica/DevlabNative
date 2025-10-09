@@ -1,9 +1,10 @@
 import claimAchievements from "@/assets/API/clientSide/claimAchievement";
+import toastHandler from "@/assets/zustand/toastHandler";
 import { useMutation } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
 import { playSound } from "../../function/soundHandler";
 
 const claimAchievementMutation = () => {
+  const setToastVisibility = toastHandler.getState().setToastVisibility;
   return useMutation({
     mutationFn: async ({
       achievementId,
@@ -14,14 +15,7 @@ const claimAchievementMutation = () => {
     onSuccess: async (data) => {
       console.log(data);
       await playSound("achievementUnlocked");
-      Toast.show({
-        type: "claimAchievement",
-        visibilityTime: 2000,
-        position: "top",
-        topOffset: 50,
-        text1: String(data!.coinsReward),
-        text2: String(data!.expReward),
-      });
+      setToastVisibility("success", `You've uncloked an achievement!`);
     },
   });
 };

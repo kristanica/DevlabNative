@@ -10,13 +10,13 @@ type receivedCodePayload = {
 type useEvaluationPayload = {
   receivedCode: receivedCodePayload | undefined;
   instruction: string;
-  // description: {
-  //   id: number;
-  //   type: string;
-  //   value: string;
-  // }[];
+  description: {
+    id: number;
+    type: string;
+    value: string;
+  }[];
 
-  description: string;
+  // description: string;
 };
 
 function* paragraphGenerator(
@@ -46,9 +46,9 @@ const lessonPrompt = async ({
   description,
 }: useEvaluationPayload) => {
   if (!receivedCode) return null;
-  // const instructionText = getInstructionFromBlocks(description);
+  const instructionText = getInstructionFromBlocks(description);
   const currentUser = auth.currentUser;
-  // console.log(instructionText);
+  console.log(instructionText);
 
   const token = await currentUser?.getIdToken(true);
 
@@ -60,7 +60,7 @@ const lessonPrompt = async ({
         css: receivedCode.css,
         js: receivedCode.js,
         instructions: instruction,
-        description,
+        description: instructionText,
       },
       {
         headers: {

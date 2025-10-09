@@ -1,3 +1,4 @@
+import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import StageCodingEditor from "@/assets/components/CodeEditor/StageCodingEditor";
 import StageCodingEditorDatabase from "@/assets/components/CodeEditor/StageCodingEditorDatabase";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
@@ -15,17 +16,17 @@ import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
+import toastHandler from "@/assets/zustand/toastHandler";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsMutating } from "@tanstack/react-query";
+import { useIsMutating, useMutation } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import Toast from "react-native-toast-message";
 const StageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
@@ -40,14 +41,35 @@ const StageScreen = () => {
 
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
 
-  const isRewardClaimed =
-    levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed;
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   useEffect(() => {
-    if (levelProgress["Html"][`${lessonId}-${levelId}`].rewardClaimed) {
-      Toast.show({});
+    if (!stageData || stageData.length === 0 || !stageId) {
+      console.warn("No stage data, redirecting to home");
+      router.replace("/home");
+    }
+  }, [stageData, stageId]);
+  const isRewardClaimed =
+    levelProgress[`${category}`][`${lessonId}-${levelId}`].isRewardClaimed;
+  useEffect(() => {
+    if (isRewardClaimed) {
+      setToastVisibility(
+        "success",
+        "You've already claimed the rewards for this level"
+      );
       return;
     }
   }, [isRewardClaimed, lessonId, levelId, levelProgress]);
+
+  const allStages = useGetUserInfo.getState().allProgressStages;
+  useEffect(() => {
+    const stageKey = `${lessonId}-${levelId}-${currentStageData?.id}`;
+    const isStageLocked =
+      allStages?.[String(category)]?.[stageKey]?.isCompleted ?? false;
+    if (isStageLocked) {
+      setToastVisibility("success", "Youve already completed this stage!");
+      return;
+    }
+  }, [currentStageData.id]);
 
   //gets the current index of the stageData
   const setLocation = WhereIsUser((state) => state.setLocation);
@@ -113,7 +135,11 @@ const StageScreen = () => {
 
     gameOver.closeModal();
   }, [gameOver]);
-  console.log(currentStageData);
+
+  const userProgressMutation = useMutation({
+    mutationFn: userProgress,
+  });
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -121,7 +147,10 @@ const StageScreen = () => {
         <CustomGeneralContainer>
           <View className="flex-row justify-between items-center mb-5">
             <Pressable
-              onPress={() => router.replace({ pathname: "/home/Home" })}
+              onPress={async () => {
+                userProgressMutation.mutate();
+                router.replace({ pathname: "/home/Home" });
+              }}
             >
               <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
                 Back
@@ -212,18 +241,18 @@ const StageScreen = () => {
                 )}
               </Pressable>
 
-              <Pressable
-                onPress={() => {
-                  handleEvaluation(receivedCode);
-                }}
-                className="mx-auto"
-              >
-                {currentStageData?.type === "Lesson" && (
+              {currentStageData?.type === "Lesson" && (
+                <Pressable
+                  onPress={() => {
+                    handleEvaluation(receivedCode);
+                  }}
+                  className="mx-auto"
+                >
                   <Text className="px-7 py-2 bg-button self-start rounded-3xl font-exoRegular text-whte text-white">
                     Evaluate
                   </Text>
-                )}
-              </Pressable>
+                </Pressable>
+              )}
 
               <Pressable
                 onPress={() => {

@@ -1,9 +1,7 @@
-import { auth, db } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
@@ -28,26 +26,26 @@ const LevelFinishedModal = ({
     removeActiveBuffs("doubleCoins");
   }, [activeBuffs]);
 
-  useEffect(() => {
-    const giveReward = async () => {
-      const uid = auth?.currentUser?.uid;
-      const userRef = doc(db, "Users", String(uid));
-      const userSnapShot = (await getDoc(userRef)).data();
+  // useEffect(() => {
+  //   const giveReward = async () => {
+  //     const uid = auth?.currentUser?.uid;
+  //     const userRef = doc(db, "Users", String(uid));
+  //     const userSnapShot = (await getDoc(userRef)).data();
 
-      await setDoc(
-        userRef,
-        {
-          exp: userSnapShot?.exp + expAndCoins?.exp,
-          coins: userSnapShot?.coins + expAndCoins?.coins,
-        },
-        {
-          merge: true,
-        }
-      );
-      console.log(expAndCoins);
-    };
-    giveReward();
-  }, [expAndCoins]);
+  //     await setDoc(
+  //       userRef,
+  //       {
+  //         exp: userSnapShot?.exp + expAndCoins?.exp,
+  //         coins: userSnapShot?.coins + expAndCoins?.coins,
+  //       },
+  //       {
+  //         merge: true,
+  //       }
+  //     );
+  //     console.log(expAndCoins);
+  //   };
+  //   giveReward();
+  // }, [expAndCoins]);
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
@@ -98,12 +96,6 @@ const LevelFinishedModal = ({
               <Pressable onPress={onConfirm}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
                   Back to Main
-                </Text>
-              </Pressable>
-
-              <Pressable onPress={closeModal}>
-                <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
-                  Continue
                 </Text>
               </Pressable>
             </View>

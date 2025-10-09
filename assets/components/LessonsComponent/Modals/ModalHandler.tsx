@@ -1,7 +1,6 @@
+import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { playSound } from "@/assets/Hooks/function/soundHandler";
 import toastHandler from "@/assets/zustand/toastHandler";
-import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet } from "react-native";
@@ -57,82 +56,93 @@ const ModalHandler = ({
       )}
       {levelFinishedModal.visibility && (
         <LevelFinishedModal
-          onConfirm={() => {
-            const nextLevelPayload =
-              unlockNextLevel.getState().nextLevelPayload;
-            const nextLessonPayload =
-              unlockNextLevel.getState().nextLessonPayload;
+          onConfirm={async () => {
+            await userProgress();
+            // const nextLevelPayload =
+            //   unlockNextLevel.getState().nextLevelPayload;
+            // const nextLessonPayload =
+            //   unlockNextLevel.getState().nextLessonPayload;
 
-            const { allProgressLevels, completedLevels, allProgressStages } =
-              useGetUserInfo.getState();
-            if (!nextLevelPayload) {
-              router.push({
-                pathname: "/home/category/[categoryId]",
-                params: {
-                  categoryId: category,
-                },
-              });
-              return;
-            }
-            if (nextLessonPayload) {
-              console.log(
-                "Calm down, youve finished the whole subject already, jeez"
-              );
-            }
-            if (nextLevelPayload && !nextLessonPayload) {
-              useGetUserInfo.getState().setUserProgress({
-                allProgressLevels: {
-                  ...allProgressLevels,
-                  [category]: {
-                    ...allProgressLevels[category],
-                    [`${nextLevelPayload!.lessonId}-${
-                      nextLevelPayload!.nextLevelId
-                    }`]: {
-                      status: true,
-                      rewardClaimed: false,
-                    },
-                  },
-                },
-                allProgressStages: {
-                  ...allProgressStages,
-                  [category]: {
-                    ...allProgressStages[category],
-                    [`${nextLevelPayload?.lessonId}-${nextLevelPayload?.nextLevelId}-Stage1`]:
-                      {
-                        status: true,
-                      },
-                  },
-                },
-                completedLevels: completedLevels + 1,
-                completedStages: useGetUserInfo.getState().completedStages,
-              });
-            }
-            if (nextLevelPayload && nextLessonPayload) {
-              console.log("continue", nextLessonPayload);
-              useGetUserInfo.getState().setUserProgress({
-                allProgressLevels: {
-                  ...allProgressLevels,
-                  [category]: {
-                    ...allProgressLevels[category],
-                    [`${nextLessonPayload}-Level1`]: {
-                      status: true,
-                      rewardClaimed: true,
-                    },
-                  },
-                },
-                allProgressStages: {
-                  ...allProgressStages,
-                  [category]: {
-                    ...allProgressStages[category],
-                    [`${nextLessonPayload}-Level1-Stage1`]: {
-                      status: true,
-                    },
-                  },
-                },
-                completedLevels: completedLevels + 1,
-                completedStages: useGetUserInfo.getState().completedStages,
-              });
-            }
+            // const { allProgressLevels, completedLevels, allProgressStages } =
+            //   useGetUserInfo.getState();
+            // if (!nextLevelPayload) {
+            //   router.push({
+            //     pathname: "/home/category/[categoryId]",
+            //     params: {
+            //       categoryId: category,
+            //     },
+            //   });
+            //   return;
+            // }
+
+            // if (nextLevelPayload && !nextLessonPayload) {
+            //   useGetUserInfo.getState().setUserProgress({
+            //     allProgressLevels: {
+            //       ...allProgressLevels,
+            //       [category]: {
+            //         ...allProgressLevels[category],
+            //         [`${nextLevelPayload!.lessonId}-${
+            //           nextLevelPayload!.nextLevelId
+            //         }`]: {
+            //           isActive: true,
+            //           isRewardClaimed: true,
+            //           dateUnlocked: new Date(),
+            //           isCompleted: true,
+            //           completedAt: new Date(),
+            //         },
+            //       },
+            //     },
+            //     allProgressStages: {
+            //       ...allProgressStages,
+            //       [category]: {
+            //         ...allProgressStages[category],
+            //         [`${nextLevelPayload?.lessonId}-${nextLevelPayload?.nextLevelId}-Stage1`]:
+            //           {
+            //             isActive: true,
+            //             isCompleted: true,
+            //             dateUnlocked: new Date(),
+
+            //             completedAt: new Date(),
+            //           },
+            //       },
+            //     },
+            //     completedLevels: completedLevels + 1,
+            //     completedStages: useGetUserInfo.getState().completedStages,
+            //   });
+            // }
+            // if (nextLevelPayload && nextLessonPayload) {
+            //   console.log("continue", nextLessonPayload);
+            //   useGetUserInfo.getState().setUserProgress({
+            //     allProgressLevels: {
+            //       ...allProgressLevels,
+            //       [category]: {
+            //         ...allProgressLevels[category],
+            //         [`${nextLessonPayload}-Level1`]: {
+            //           isActive: true,
+            //           isRewardClaimed: true,
+            //           dateUnlocked: new Date(),
+            //           isCompleted: true,
+            //           completedAt: new Date(),
+            //         },
+            //       },
+            //     },
+            //     allProgressStages: {
+            //       ...allProgressStages,
+            //       [category]: {
+            //         ...allProgressStages[category],
+            //         [`${nextLessonPayload}-Level1-Stage1`]: {
+            //           isActive: true,
+            //           isCompleted: true,
+            //           dateUnlocked: new Date(),
+
+            //           completedAt: new Date(),
+            //         },
+            //       },
+            //     },
+            //     completedLevels: completedLevels + 1,
+            //     completedStages: useGetUserInfo.getState().completedStages,
+            //   });
+            // }
             router.push({
               pathname: "/home/category/[categoryId]",
               params: {

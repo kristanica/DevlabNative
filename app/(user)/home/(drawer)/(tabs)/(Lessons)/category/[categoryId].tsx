@@ -28,6 +28,7 @@ const CategoryScreen = () => {
   const allLevels = useGetUserInfo((state) => state.allProgressLevels);
 
   let globalCounter = 0;
+
   return (
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>
@@ -104,11 +105,13 @@ const CategoryScreen = () => {
             renderItem={({ item }) => {
               globalCounter++;
               const key = `${item.lessonId}-${item.levelId}`;
-              const isLockedLesson = !allLevels[id]?.[key];
+
+              const isLevelLocked = allLevels[id]?.[key]?.isActive ?? false;
+
               return (
                 <Pressable
                   onPress={() => {
-                    if (isLockedLesson) {
+                    if (!isLevelLocked) {
                       setVisibility(true);
                     } else {
                       setTracker({
@@ -126,7 +129,7 @@ const CategoryScreen = () => {
                   }}
                 >
                   <LessonContainer
-                    isLocked={isLockedLesson}
+                    isLocked={!isLevelLocked}
                     levelInformation={item}
                     index={globalCounter}
                     icon={

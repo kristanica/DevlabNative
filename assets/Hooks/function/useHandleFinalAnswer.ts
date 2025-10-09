@@ -97,6 +97,9 @@ export const useHandleFinalAnswer = ({
         resolve(["wrongAnswer", "Your code field is empty!"]);
         return;
       } else {
+        
+
+
         evaluationMutation.mutate(
           {
             receivedCode: receivedCode,

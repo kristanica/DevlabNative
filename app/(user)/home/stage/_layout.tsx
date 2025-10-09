@@ -11,6 +11,7 @@ const StageLayout = () => {
   useEffect(() => {
     loadUserHp();
   }, [loadUserHp]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>

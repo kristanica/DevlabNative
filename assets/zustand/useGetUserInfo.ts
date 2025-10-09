@@ -5,7 +5,7 @@ type userData = {
   username: string;
   bio: string;
   coins: number;
-  exp: number;
+  exp?: number;
   userLevel: number;
   isSuspended: boolean;
   id: string;
@@ -17,13 +17,33 @@ type userData = {
     subject: string;
   };
 };
-
 type allProgressType = Record<
   string,
-  Record<string, { rewardClaimed: boolean; status: boolean }>
+  Record<
+    string,
+    {
+      isActive: boolean;
+      isRewardClaimed: boolean;
+      dateUnlocked?: Date;
+      isCompleted: boolean;
+      completedAt?: Date;
+    }
+  >
 >;
+// Return type for stage progress
+type allStagesType = Record<
+  string,
+  Record<
+    string,
+    {
+      isActive: boolean;
+      isCompleted: boolean;
+      dateUnlocked?: Date;
 
-type allStagesType = Record<string, Record<string, { status: boolean }>>;
+      completedAt?: Date;
+    }
+  >
+>;
 
 type InformationProviderProps = {
   loading: boolean;

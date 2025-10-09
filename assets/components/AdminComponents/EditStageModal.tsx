@@ -61,19 +61,9 @@ const EditStageModal = ({
   const [videoPresentation, setvideoPresentation] = useState<string>();
   const [replicationFile, setReplicateFile] = useState<string>();
 
-  const {
-    visibility: editConfimationVisibility,
-    setVisibility: setEditConfirmationVisibility,
-    scaleStyle: editConfirmationScaleStyle,
-    closeModal: editConfirmationCloseModal,
-  } = useModal();
+  const editConfirmationModal = useModal();
 
-  const {
-    visibility: deleteConfirmationVisibility,
-    setVisibility: setDeleteConfirmationVisibility,
-    scaleStyle: deleteConfirmationScaleStyle,
-    closeModal: deleteConfirmationCloseModal,
-  } = useModal();
+  const deleteConfirmationModal = useModal();
 
   // Use to make useReducer, state.type, sync.
   useEffect(() => {
@@ -94,7 +84,7 @@ const EditStageModal = ({
       return;
     }
     const hasEmpty = CheckEmptyFields(state, type);
-    editConfirmationCloseModal();
+    editConfirmationModal.closeModal();
     if (hasEmpty) {
       closeModal();
       setToastVisibility("error", "Some fields are empty");
@@ -152,7 +142,7 @@ const EditStageModal = ({
             showsVerticalScrollIndicator={false}
           >
             <Animated.View
-              className="     h-full  rounded-xl "
+              className="     h-full  rounded-xl  "
               style={[scaleStyle]}
             >
               <View className=" bg-modal pb-5 rounded-2xl border-white border-[2px] mb-5 px-2">
@@ -212,10 +202,14 @@ const EditStageModal = ({
                       className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
                       onPress={() => {
                         if (stageData?.order === 1) {
-                          console.log("youcannot delete this!");
+                          setToastVisibility(
+                            "error",
+                            "You cannot delete this stage!"
+                          );
+                          closeModal();
                           return;
                         }
-                        setDeleteConfirmationVisibility(true);
+                        deleteConfirmationModal.setVisibility(true);
                       }}
                     >
                       <Text className="text-white font-exoBold">Delete</Text>
@@ -223,7 +217,7 @@ const EditStageModal = ({
                     <TouchableOpacity
                       className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
                       onPress={() => {
-                        setEditConfirmationVisibility(true);
+                        editConfirmationModal.setVisibility(true);
                       }}
                     >
                       <Text className="text-white">Save</Text>
@@ -231,24 +225,20 @@ const EditStageModal = ({
                   </View>
                 </View>
               </View>
-              {editConfimationVisibility && (
+              {editConfirmationModal.visibility && (
                 <SaveToFirebaseConfirmation
                   onConfirm={handleSaveToFirebase}
-                  visibility={editConfimationVisibility}
-                  scaleStyle={editConfirmationScaleStyle}
-                  closeModal={editConfirmationCloseModal}
+                  {...editConfirmationModal}
                 ></SaveToFirebaseConfirmation>
               )}
-              {deleteConfirmationVisibility && (
+              {deleteConfirmationModal.visibility && (
                 <DeleteFireBaseConfirmationModal
                   onConfirm={() => {
-                    deleteConfirmationCloseModal();
+                    deleteConfirmationModal.closeModal();
                     closeModal();
                     deleteMutation?.mutate();
                   }}
-                  visibility={deleteConfirmationVisibility}
-                  scaleStyle={deleteConfirmationScaleStyle}
-                  closeModal={deleteConfirmationCloseModal}
+                  {...deleteConfirmationModal}
                 ></DeleteFireBaseConfirmationModal>
               )}
             </Animated.View>

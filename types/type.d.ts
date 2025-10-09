@@ -33,7 +33,7 @@ type generalTrackerPayload = {
   category: string;
   lessonId: string;
   levelId: string;
-  stageId: string;
+  stageId?: string;
 };
 
 type ScaleModalProps = {
@@ -48,6 +48,23 @@ type SearchUserFireStorePayload = {
   email: string;
   userLevel: number;
   isSuspended: boolean;
+  id: string;
+  isAdmin: boolean;
+};
+
+type suspendUserPayload = {
+  id: string;
+  isSuspended: boolean;
+};
+
+type UserInformationPayload = {
+  id?: string;
+  username: string;
+  email: string;
+  userLevel: number;
+  isSuspended: boolean;
   uid?: string;
   isAdmin: boolean;
+  profileImage?: string;
+  backgroundImage?: string;
 };

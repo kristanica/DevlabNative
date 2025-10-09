@@ -31,9 +31,6 @@ export const loadSounds = async () => {
 
     if (result) {
       sounds[key] = result.sound;
-      console.log(
-        `Status of ${key} has been loaded: ${result.status.isLoaded}`
-      );
     }
 
     if (error) {

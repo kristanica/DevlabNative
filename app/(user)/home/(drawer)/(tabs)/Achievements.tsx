@@ -70,11 +70,15 @@ const Achievements = () => {
                   horizontal={true}
                   keyExtractor={(item) => String(item.id)}
                   renderItem={({ item }: ListRenderItemInfo<any>) => {
+                    if (item.subject === "JavaScript") {
+                      item.subject = "Js";
+                    }
+
                     const totalAchievementsCompleted = userAchievements.filter(
                       (achievement: any) =>
                         achievement.id.startsWith(item.subject)
                     ).length;
-
+                    console.log(totalAchievementsCompleted);
                     return (
                       <AchievementsProgressBar
                         progress={totalAchievementsCompleted}

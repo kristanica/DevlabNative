@@ -7,7 +7,7 @@ import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -51,10 +51,15 @@ const Register = () => {
             keyboardShouldPersistTaps="handled"
           >
             <View className="flex-1 justify-center items-center ">
-              <Text className="color-white  mb-5 text-3xl font-[500] font-exoExtraBold">
-                DEVLAB
-              </Text>
-
+              <View className="flex-col justify-center items-center ">
+                <Image
+                  source={require("@/assets/images/devlabIcon/devlab-icon-transparent.png")}
+                  className="w-[100px] h-[50px]  "
+                ></Image>
+                <Text className="color-white  flex justify-center items-center mb-5 text-3xl font-[500] font-exoExtraBold ">
+                  DEVLAB
+                </Text>
+              </View>
               <Animated.View className="w-3/4 aspect-[1/2] rounded-3xl bg-accent flex-col items-center justify-center p-2">
                 <View className="justify-center items-center">
                   <Ionicons

@@ -29,12 +29,15 @@ type AdminLessonContainerPayload = {
 
 type AdminUserContainerPayload = {
   allUsersInformation: {
-    username: string;
-    email: string;
-    userLevel: number;
-    isSuspended: boolean;
-    uid?: string;
-    isAdmin: boolean;
+    id?: string;
+    username?: string;
+    email?: string;
+    userLevel?: number;
+    isSuspended?: boolean;
+
+    isAdmin?: boolean;
+    profileImage?: string;
+    backgroundImage?: string;
   };
   mutation: () => void;
   index: number;

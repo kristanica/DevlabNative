@@ -1,40 +1,53 @@
+import { fetchUsers } from "@/assets/API/fireBase/admin/userManagement/fetchUsers";
+import { searchUser } from "@/assets/API/fireBase/admin/userManagement/searchUser";
+import { suspendUser } from "@/assets/API/fireBase/admin/userManagement/suspendUser";
 import AdminUserContainer from "@/assets/components/AdminComponents/AdminUserContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import LoadingAnim from "@/assets/components/LoadingAnim";
-import setSuspended from "@/assets/Hooks/query/mutation/setSuspended";
-import useFetchUsers from "@/assets/Hooks/query/useFetchUsers";
-import searchUserFireStore from "@/assets/Hooks/searchUserFireStore";
-import useDebounce from "@/assets/Hooks/useDebounce";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { FlatList, Text, TextInput, View } from "react-native";
+import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 
 const UserManagement = () => {
-  const [searchUser, setSearchUser] = useState<string>("");
+  const [searchUserName, setSearchUser] = useState<string>("");
 
   const queryClient = useQueryClient();
   const { data: users } = useQuery({
     queryKey: ["allUser"],
-    queryFn: useFetchUsers,
+    queryFn: fetchUsers,
+    staleTime: 5 * (60 * 1000),
   });
 
-  const debounce = useDebounce(1000, searchUser);
-  const { data: searchedUser, isFetching: searchUserLoading } = useQuery({
-    queryKey: ["searchedUser", debounce],
-    queryFn: () => searchUserFireStore(debounce),
-    staleTime: 0,
-
-    enabled: !!debounce,
+  const {
+    mutate: search,
+    data: searchedUser,
+    isIdle: searchUserLoading,
+  } = useMutation({
+    mutationFn: searchUser,
   });
+
   const mutation = useMutation({
-    mutationFn: ({ uid, isSuspended }: { uid: any; isSuspended: boolean }) =>
-      setSuspended(uid, isSuspended),
-    // refetches allUser when setSuspended is success hence updating the UI from suspended > active and vice versa
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["allUser"] }),
-  });
+    mutationFn: suspendUser,
+    onMutate: ({ id, isSuspended }: suspendUserPayload) => {
+      queryClient.cancelQueries({ queryKey: ["allUser"] });
 
+      const previousData = queryClient.getQueryData(["allUser"]);
+
+      queryClient.setQueryData(["allUser"], (old: any) => {
+        return old?.map((user: any) => {
+          return user.id === id ? { ...user, isSuspended: !isSuspended } : user; // ✅ Added return
+        });
+      });
+      return { previousData };
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["allUser"] });
+    },
+  });
+  const isSearching = Boolean(searchUserName.trim());
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -45,15 +58,27 @@ const UserManagement = () => {
                 User Management
               </Text>
             </View>
-            <TextInput
-              className=" px-7 py-2 my-2 mx-7 rounded-3xl border-[2px] border-black text-white font-exoLight"
-              placeholder="Search a user"
-              onChangeText={(text) => {
-                setSearchUser(text);
-              }}
-            />
+            <View className="flex-row">
+              <TextInput
+                className=" px-7 py-2 my-2 ml-7 rounded-3xl border-[2px] border-black text-white font-exoLight w-[80%]"
+                placeholder="Search a user"
+                onChangeText={(text) => {
+                  setSearchUser(text);
+                }}
+              />
 
-            {!searchUser ? (
+              <Pressable
+                className="flex justify-center items-center  mx-auto"
+                onPress={() => {
+                  const term = searchUserName.trim();
+                  if (!term) return;
+                  search(term);
+                }}
+              >
+                <Ionicons name="search" size={20}></Ionicons>
+              </Pressable>
+            </View>
+            {!isSearching ? (
               <FlatList
                 showsVerticalScrollIndicator={false}
                 bounces={false}
@@ -63,7 +88,7 @@ const UserManagement = () => {
                     allUsersInformation={item}
                     mutation={() =>
                       mutation.mutate({
-                        uid: item.uid,
+                        id: item.id,
                         isSuspended: item.isSuspended,
                       })
                     }
@@ -71,9 +96,6 @@ const UserManagement = () => {
                   ></AdminUserContainer>
                 )}
               />
-            ) : // When the user searches something, hides all list and renders the search result
-            searchUserLoading ? (
-              <LoadingAnim></LoadingAnim>
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -85,7 +107,7 @@ const UserManagement = () => {
                     allUsersInformation={item}
                     mutation={() =>
                       mutation.mutate({
-                        uid: item.uid,
+                        id: String(item!.id),
                         isSuspended: item.isSuspended,
                       })
                     }

@@ -20,14 +20,12 @@ const DrawerLayout = () => {
     (state) => state.getUserAchievementProgress
   );
 
-  //Prefetch
   useEffect(() => {
     const loadProgress = async () => {
       const result = await Promise.allSettled([
         queryClient.ensureQueryData({
           queryKey: ["userProgress"],
           queryFn: userProgress,
-          staleTime: 5 * 60 * 1000,
         }),
         queryClient.ensureQueryData({
           queryKey: ["shopItems"],
@@ -48,11 +46,10 @@ const DrawerLayout = () => {
 
       if (isAllFulfiled) {
         setIsReady(true);
-        console.log("Data loaded");
       }
     };
     loadProgress();
-  }, [getUserAchivementProgress, getValidUser, queryClient]);
+  }, []);
 
   if (!isReady) {
     return (

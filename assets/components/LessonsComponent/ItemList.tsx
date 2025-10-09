@@ -41,7 +41,7 @@ const ItemList = () => {
     });
   };
   const { inventory } = useGetUserInfo();
-  console.log(inventory);
+
   const moveToRight = useSharedValue(100);
   const opacity = useSharedValue(1);
 

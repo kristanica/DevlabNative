@@ -28,6 +28,7 @@ const unlockNextStage = async ({
       console.log(res.data.message);
       return res.data; // still return res.data so caller can handle it
     }
+    console.log(res.data);
     return res.data;
   } catch (error: any) {
     console.error(

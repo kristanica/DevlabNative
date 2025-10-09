@@ -1,9 +1,9 @@
+import { gameOver } from "@/assets/API/fireBase/user/Stages/gameOver";
 import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
-import { unlockAchievement } from "./unlockAchievement";
 
 const useSubmitAnswer = () => {
   const { hasShield, consumeErrorShield } = errorShield();
@@ -43,49 +43,61 @@ const useSubmitAnswer = () => {
         });
 
         const data = res;
-        console.log(data);
+
         if (data.isNextStageUnlocked) {
           setCurrentStageIndex((prev: any) => prev + 1);
           return ["stageUnlocked", "You got that one right!"];
-        } else if (data.isNextLevelUnlocked) {
+        }
+        //If there is still next level, unlocks it
+        else if (data.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
-          console.log("This is current LevelId" + levelId);
-          if (levelId === "Level1" && lessonId === "Lesson1") {
-            unlockAchievement(category, "firstLevelComplete", {
-              LevelId: levelId,
-              lessonId: lessonId,
-            });
-            return ["levelUnlocked", "You've unlocked a new Level!"];
-          }
+
+          // if (levelId === "Level1" && lessonId === "Lesson1") {
+          //   unlockAchievement(category, "firstLevelComplete", {
+          //     LevelId: levelId,
+          //     lessonId: lessonId,
+          //   });
+          //   setTimeout(() => {
+          //     levelFinishedModal.setVisibility(true);
+          //   }, 200);
+          //   return ["levelUnlocked", "You've unlocked an achievement!"];
+          // }
+
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
+          console.log(res);
           setUnlockNextLevel({
             lessonId: lessonId,
             nextLevelId: res.nextLevelId,
           });
           return;
-        } else if (data.isNextLessonUnlocked) {
-          finalAnswerModall.closeModal();
-          setTimeout(() => {
-            levelFinishedModal.setVisibility(true);
-          }, 200);
-          setUnlockNextLesson(res.nextLessonId);
-
-          return ["lessonUnlocked", "You've unlocked a new lesson!"];
-        } else {
-          setTimeout(() => {
-            levelFinishedModal.setVisibility(true);
-          }, 200);
-          setUnlockNextSubject(res.isWholeTopicFinished);
-          return ["wholeTopicFinished", "You've finished a whole topic!"];
         }
+        //if there is still next Lesson, unclocks it
+        // else if (data.isNextLessonUnlocked) {
+        //   finalAnswerModall.closeModal();
+        //   setTimeout(() => {
+        //     levelFinishedModal.setVisibility(true);
+        //   }, 200);
+        //   setUnlockNextLesson(res.nextLessonId);
+
+        //   return ["lessonUnlocked", "You've unlocked a new lesson!"];
+        // }
+        // //if there are no more lesson and levels, completes the whole topic
+        // else {
+        //   setTimeout(() => {
+        //     levelFinishedModal.setVisibility(true);
+        //   }, 200);
+        //   setUnlockNextSubject(res.isWholeTopicFinished);
+        //   return ["wholeTopicFinished", "You've finished a whole topic!"];
+        // }
       }
 
       if (healthPointsTracker <= 1) {
+        await gameOver({ category, lessonId, levelId, stageId });
         setCurrentStageIndex(0);
         resetUserHp();
-        console.log("hpReset");
+
         return ["reset", "You've ran out of hp!"];
       }
 

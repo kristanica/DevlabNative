@@ -112,7 +112,8 @@ const useRegister = () => {
               "Lesson1"
             ),
             {
-              status: true,
+              isActive: true,
+              isCompleted: false,
             }
           );
           await setDoc(
@@ -128,8 +129,10 @@ const useRegister = () => {
               "Level1"
             ),
             {
-              status: true,
-              rewardClaimed: false,
+              isActive: true,
+              isRewardClaimed: false,
+              dateUnlocked: new Date(),
+              isCompleted: false,
             }
           );
 
@@ -149,7 +152,9 @@ const useRegister = () => {
               "Stage1"
             ),
             {
-              status: true,
+              isActive: true,
+              isCompleted: false,
+              dateUnlocked: new Date(),
             }
           );
         }

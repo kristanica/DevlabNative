@@ -4,12 +4,14 @@ import StageContainer from "@/assets/components/AdminComponents/StageContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SmallLoading from "@/assets/components/global/SmallLoading";
 import useListStage from "@/assets/Hooks/useListStage";
 import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useIsMutating } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
@@ -25,8 +27,24 @@ const Stage = () => {
     useListStage();
   const tutorial = useModal();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
+  const firstStage = stagesData?.[0];
+  const draggableStages = stagesData?.slice(1) ?? [];
+  const onDragEnd = (data: any) => {
+    const newOrderedData = [
+      firstStage,
+      ...data.map((item: any, index: number) => ({
+        ...item,
+        order: index + 2,
+      })),
+    ];
+    updateOrderMutation.mutate({ newOrder: newOrderedData });
+  };
+  const isMutating = useIsMutating();
   return (
     <AdminProtectedRoutes>
+      {isMutating > 0 && (
+        <FillScreenLoading text="reordering..."></FillScreenLoading>
+      )}
       <View className="flex-[1] bg-accent">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
@@ -56,29 +74,36 @@ const Stage = () => {
                   <SmallLoading></SmallLoading>
                 ) : (
                   <DraggableFlatList
-                    onDragEnd={({ data }) => {
-                      const newOrderedData = data.map((item, index) => {
-                        return {
-                          ...item,
-                          order: index + 1,
-                        };
-                      });
-                      updateOrderMutation.mutate({ newOrder: newOrderedData });
-                    }}
-                    data={stagesData ?? []}
+                    onDragEnd={({ data }) => onDragEnd(data)}
+                    data={draggableStages ?? []}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item: any) => item.id}
+                    ListHeaderComponent={
+                      firstStage ? (
+                        <Pressable
+                          onPress={() => {
+                            stageTracker(firstStage.id);
+                            setVisibility(true);
+                            setCancelCompression(true);
+                          }}
+                        >
+                          <StageContainer
+                            stageInformation={firstStage}
+                            index={0}
+                          ></StageContainer>
+                        </Pressable>
+                      ) : null
+                    }
                     renderItem={({ item, getIndex, drag, isActive }) => {
                       const index = getIndex();
                       if (index === undefined) {
                         return;
                       }
 
-                      const isFirstItem = index === 0;
                       return (
                         <>
                           <TouchableOpacity
-                            onLongPress={isFirstItem ? undefined : drag}
+                            onLongPress={drag}
                             onPress={() => {
                               stageTracker(item.id);
                               setVisibility(true);

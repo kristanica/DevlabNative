@@ -16,7 +16,7 @@ const SignOutModal = ({
           style={[scaleStyle]}
           className="   aspect-square w-3/4 m-auto  rounded-[10px]"
         >
-          <View className="justify-center items-center flex-[1] bg-background rounded-3xl">
+          <View className="justify-center items-center flex-[1] bg-modal rounded-3xl border-[#2a3141] border-[1px]">
             <LottieView
               source={require("@/assets/Lottie/Sad Signout.json")}
               loop

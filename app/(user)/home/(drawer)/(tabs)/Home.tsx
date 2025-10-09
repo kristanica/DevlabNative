@@ -1,4 +1,3 @@
-import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ExperienceBar from "@/assets/components/HomeComponents/ExperienceBar";
@@ -8,9 +7,7 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { lessons } from "@/assets/constants/constants";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { useEffect } from "react";
 import {
   Image,
   ImageBackground,
@@ -22,19 +19,20 @@ import {
 import * as Progress from "react-native-progress";
 export default function Home() {
   const setUserProgress = useGetUserInfo((state) => state.setUserProgress);
-  const { data: userProgressData } = useQuery({
-    queryKey: ["userProgress"],
-    queryFn: userProgress,
-  });
+  const userProgressData = useGetUserInfo((state) => state.allProgressStages);
+  // const { data: userProgressData } = useQuery({
+  //   queryKey: ["userProgress"],
+  //   queryFn: userProgress,
+  // });
 
-  useEffect(() => {
-    setUserProgress({
-      allProgressLevels: userProgressData.allProgress,
-      allProgressStages: userProgressData.allStages,
-      completedLevels: userProgressData.completedLevels,
-      completedStages: userProgressData.completedStages,
-    });
-  }, [userProgressData, setUserProgress]);
+  // useEffect(() => {
+  //   setUserProgress({
+  //     allProgressLevels: userProgressData.allProgress,
+  //     allProgressStages: userProgressData.allStages,
+  //     completedLevels: userProgressData.completedLevels,
+  //     completedStages: userProgressData.completedStages,
+  //   });
+  // }, [userProgressData, setUserProgress]);
 
   const { userData, inventory } = useGetUserInfo();
 
@@ -82,7 +80,7 @@ export default function Home() {
                   </Text>
 
                   <ExperienceBar
-                    userExp={userData!.exp}
+                    userExp={userData!.exp!}
                     userLevel={userData!.userLevel}
                     treshold={100}
                   ></ExperienceBar>
@@ -147,9 +145,7 @@ export default function Home() {
                     <Progress.Circle
                       style={{ margin: "auto" }}
                       size={80}
-                      progress={
-                        userProgressData ? userProgressData?.completedLevels : 0
-                      }
+                      progress={1}
                       showsText={true}
                       thickness={6}
                       color="green"
