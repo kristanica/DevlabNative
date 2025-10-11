@@ -4,9 +4,12 @@ import ExperienceBar from "@/assets/components/HomeComponents/ExperienceBar";
 import InventoryItemContainer from "@/assets/components/HomeComponents/InventoryItemContainer";
 import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
-import { lessons } from "@/assets/constants/constants";
+import { auth, lessons, URL } from "@/assets/constants/constants";
+import tryCatch from "@/assets/Hooks/function/tryCatch";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { router } from "expo-router";
 import {
   Image,
@@ -14,6 +17,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import * as Progress from "react-native-progress";
@@ -35,6 +39,25 @@ export default function Home() {
   // }, [userProgressData, setUserProgress]);
 
   const { userData, inventory } = useGetUserInfo();
+
+  const getUserProg = useMutation({
+    mutationFn: async () => {
+      const token = await auth.currentUser?.getIdToken(true);
+      const [data, error] = await tryCatch(
+        axios.get(`${URL}/fireBase/userProgres/Html`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      );
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      console.log(data.data.allStages);
+    },
+  });
 
   return (
     <ProtectedRoutes>
@@ -154,10 +177,16 @@ export default function Home() {
                   </HomeLesson>
                 ))}
               </View>
+              <TouchableOpacity
+                onPress={async () => {
+                  getUserProg.mutate();
+                }}
+              >
+                <Text className="text-white ml-2 xs:text-lg  font-exoBold">
+                  YOUR INVENTORY
+                </Text>
+              </TouchableOpacity>
 
-              <Text className="text-white ml-2 xs:text-lg  font-exoBold">
-                YOUR INVENTORY
-              </Text>
               <View className="flex-row flex-wrap justify-center">
                 {inventory.map((item) => (
                   <InventoryItemContainer

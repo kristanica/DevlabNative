@@ -32,9 +32,9 @@ const DrawerLayout = () => {
           queryFn: fetchShopItems,
           staleTime: 10 * 60 * 1000,
         }),
-        loadSounds(),
-        getValidUser(),
-        getUserAchivementProgress(),
+        await loadSounds(),
+        await getValidUser(),
+        await getUserAchivementProgress(),
       ]);
       result.forEach(async (error, index) => {
         if (error.status === "rejected")
@@ -48,6 +48,7 @@ const DrawerLayout = () => {
         setIsReady(true);
       }
     };
+    console.log("ASDasdasd");
     loadProgress();
   }, []);
 

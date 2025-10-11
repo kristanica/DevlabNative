@@ -14,6 +14,7 @@ import { pickImage } from "@/assets/Hooks/query/mutation/pickImage";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useSignOut from "@/assets/Hooks/useSignOut";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useMutation } from "@tanstack/react-query";
 import {
   Image,
@@ -30,7 +31,9 @@ const Settings = () => {
     mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
       await editUserInfo(userName, bio),
   });
+  const headerHeight = useHeaderHeight();
 
+  console.log("Header height:", headerHeight);
   const { mutate: updateImage, isPending } = pickImage();
 
   const logOutModal = useModal();
@@ -48,7 +51,10 @@ const Settings = () => {
       <View className="bg-accent flex-1">
         <AnimatedViewContainer>
           <CustomGeneralContainer>
-            <Animated.View className="flex-1" style={[keyBoardHandlingStyle]}>
+            <Animated.View
+              className="flex-1"
+              style={[keyBoardHandlingStyle, { marginTop: headerHeight - 20 }]}
+            >
               {isPending && <LoadingScreen></LoadingScreen>}
               <View className="flex-[1] justify-center items-center">
                 <Pressable
@@ -69,7 +75,6 @@ const Settings = () => {
                   )}
                 </Pressable>
               </View>
-
               <View className=" bg-shopAccent flex-[4] m-3 rounded-2xl">
                 <Pressable
                   className=""

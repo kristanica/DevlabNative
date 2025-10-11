@@ -2,25 +2,25 @@ import { auth, path } from "@/assets/constants/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
-import { onAuthStateChanged } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 const index = () => {
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.replace({ pathname: "/home/Home" });
-        console.log("User logged in:", user.uid);
-      } else {
-        // No persisted session
-        console.log("User logged out");
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       router.replace({ pathname: "/home/Home" });
+  //       console.log("User logged in:", user.uid);
+  //     } else {
+  //       // No persisted session
+  //       console.log("User logged out");
+  //     }
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
   return (
     <View className="bg-background flex-[1] justify-center items-center ">
       <View className="flex-[1] ">
@@ -28,7 +28,6 @@ const index = () => {
           <LottieView
             source={require("@/assets/Lottie/Loading.json")}
             autoPlay
-            loop
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>
@@ -53,6 +52,7 @@ const index = () => {
               onPress={async () => {
                 try {
                   await AsyncStorage.clear();
+                  await signOut(auth);
                   console.log("AsyncStorage cleared!");
                 } catch (e) {
                   console.error("Failed to clear AsyncStorage.", e);

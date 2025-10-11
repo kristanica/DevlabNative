@@ -1,5 +1,5 @@
 import LottieView from "lottie-react-native";
-import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 type EvaluateMoalProps = ScaleModalPayload & {
@@ -23,10 +23,6 @@ const EvaluateModal = (props: EvaluateMoalProps) => {
             className="w-fit  rounded-[10px] mx-2"
           >
             <View className=" border-[#2a3141] border-[1px]  justify-center items-center  bg-modal rounded-3xl  px-2 pt-3 ">
-              <Image
-                source={require("@/assets/images/catGif.gif")}
-                className="aspect-[2] h-[100px] rounded-xl"
-              ></Image>
               <ScrollView>
                 <View>
                   <Text className="text-white m-auto text-justify px-2 font-exoRegular xs:text-[9px] pt-1">

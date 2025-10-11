@@ -13,7 +13,7 @@ import SmallLoading from "../global/SmallLoading";
 import LockLessonModal from "./LockLessonModal";
 import StagesContainer from "./StagesContainer";
 
-const ListStages = () => {
+const ListStages = ({ userStagesProgress }: any) => {
   const levelPayload = tracker((state) => state.levelPayload);
   const setStageData = stageStore((state) => state.setstageData);
   console.log(levelPayload);
@@ -87,6 +87,7 @@ const ListStages = () => {
   useEffect(() => {
     lastOpenedLevel.mutate();
   }, []);
+
   return (
     <View className="h-[40%]">
       {isLoading ? (
@@ -103,10 +104,8 @@ const ListStages = () => {
             }
             const stageKey = `${levelPayload?.lessonId}-${levelPayload?.levelId}-${item.id}`;
             const isStageLocked =
-              (allStages?.[levelPayload?.category]?.[stageKey]?.isActive &&
-                allStages?.[levelPayload.category]?.[stageKey]?.isCompleted) ??
-              false;
-            console.log(isStageLocked);
+              userStagesProgress[stageKey]?.isActive ?? false;
+
             globalCounter++;
             if (item.type !== "Lesson") {
               return null;

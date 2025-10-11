@@ -1,4 +1,3 @@
-import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { playSound } from "@/assets/Hooks/function/soundHandler";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { router } from "expo-router";
@@ -34,7 +33,7 @@ const ModalHandler = ({
   evaluationLessonMutation,
   handleFinalAnswer,
   receivedCode,
-  stageData,
+
   handleGameOver,
   finalAnswerModall,
   health,
@@ -57,7 +56,7 @@ const ModalHandler = ({
       {levelFinishedModal.visibility && (
         <LevelFinishedModal
           onConfirm={async () => {
-            await userProgress();
+            // await userProgress();
             // const nextLevelPayload =
             //   unlockNextLevel.getState().nextLevelPayload;
             // const nextLessonPayload =

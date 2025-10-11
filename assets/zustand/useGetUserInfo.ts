@@ -126,6 +126,7 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   },
   setUserData: (val: userData) => set({ userData: val }),
   getUser: async () => {
+    console.log("ASDSA");
     const uid = auth.currentUser?.uid;
     if (!uid) {
       console.log("No user UID found");

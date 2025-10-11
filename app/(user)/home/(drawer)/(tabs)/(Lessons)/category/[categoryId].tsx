@@ -3,14 +3,15 @@ import SmallLoading from "@/assets/components/global/SmallLoading";
 import LessonContainer from "@/assets/components/LessonsComponent/LessonContainer";
 import ListStages from "@/assets/components/LessonsComponent/ListStages";
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
-import { lessonMetaData } from "@/assets/constants/constants";
+import { auth, lessonMetaData, URL } from "@/assets/constants/constants";
 import fetchLesson from "@/assets/Hooks/query/fetchLesson";
 
 import useModal from "@/assets/Hooks/useModal";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import tracker from "@/assets/zustand/tracker";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React, { useState } from "react";
@@ -25,9 +26,22 @@ const CategoryScreen = () => {
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
   const { fetchedLesson, isLoading } = fetchLesson(id);
-  const allLevels = useGetUserInfo((state) => state.allProgressLevels);
-
   let globalCounter = 0;
+
+  const { data: useUserProgressData, isLoading: progressLoading } = useQuery({
+    queryKey: ["specificUserProgress", id],
+    queryFn: async () => {
+      const token = await auth.currentUser?.getIdToken(true);
+      const response = await axios.get(`${URL}/fireBase/userProgres/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+
+    enabled: !!id,
+  });
 
   return (
     <View className="bg-accent flex-[1]">
@@ -70,7 +84,7 @@ const CategoryScreen = () => {
           scaleStyle={scaleStyle}
           closeModal={closeModal}
         ></LockLessonModal>
-        {isLoading ? (
+        {isLoading || progressLoading ? (
           <SmallLoading />
         ) : stagesVisibility ? (
           <>
@@ -84,7 +98,7 @@ const CategoryScreen = () => {
                 color={"white "}
               ></Ionicons>
             </Pressable>
-            <ListStages />
+            <ListStages userStagesProgress={useUserProgressData?.allStages} />
           </>
         ) : (
           <SectionList
@@ -104,9 +118,10 @@ const CategoryScreen = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               globalCounter++;
-              const key = `${item.lessonId}-${item.levelId}`;
+              const key = `${item.lessonId}-${item.levelId}`; // Access data directly from query
 
-              const isLevelLocked = allLevels[id]?.[key]?.isActive ?? false;
+              const isLevelLocked =
+                useUserProgressData?.allProgress?.[key]?.isActive ?? false;
 
               return (
                 <Pressable

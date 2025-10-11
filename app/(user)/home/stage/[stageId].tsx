@@ -1,4 +1,3 @@
-import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import StageCodingEditor from "@/assets/components/CodeEditor/StageCodingEditor";
 import StageCodingEditorDatabase from "@/assets/components/CodeEditor/StageCodingEditorDatabase";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
@@ -23,7 +22,7 @@ import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsMutating, useMutation } from "@tanstack/react-query";
+import { useIsMutating } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -42,36 +41,43 @@ const StageScreen = () => {
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
 
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
-  useEffect(() => {
-    if (!stageData || stageData.length === 0 || !stageId) {
-      console.warn("No stage data, redirecting to home");
-      router.replace("/home");
-    }
-  }, [stageData, stageId]);
+
+  // FIX: Add optional chaining and safe access
+  const levelKey = `${lessonId}-${levelId}`;
   const isRewardClaimed =
-    levelProgress[`${category}`][`${lessonId}-${levelId}`].isRewardClaimed;
+    levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false;
+
   useEffect(() => {
+    // FIX: Add guard clause to check if data exists
+    if (!levelProgress || !category || !levelProgress[String(category)]) {
+      return;
+    }
+
     if (isRewardClaimed) {
       setToastVisibility(
         "success",
         "You've already claimed the rewards for this level"
       );
-      return;
     }
-  }, [isRewardClaimed, lessonId, levelId, levelProgress]);
+  }, [isRewardClaimed, category, levelProgress]);
 
   const allStages = useGetUserInfo.getState().allProgressStages;
+
   useEffect(() => {
-    const stageKey = `${lessonId}-${levelId}-${currentStageData?.id}`;
-    const isStageLocked =
-      allStages?.[String(category)]?.[stageKey]?.isCompleted ?? false;
-    if (isStageLocked) {
-      setToastVisibility("success", "Youve already completed this stage!");
+    // FIX: Add guard to check if currentStageData exists
+    if (!currentStageData?.id || !allStages || !category) {
       return;
     }
-  }, [currentStageData.id]);
 
-  //gets the current index of the stageData
+    const stageKey = `${lessonId}-${levelId}-${currentStageData.id}`;
+    const isStageLocked =
+      allStages?.[String(category)]?.[stageKey]?.isCompleted ?? false;
+
+    if (isStageLocked) {
+      setToastVisibility("success", "You've already completed this stage!");
+    }
+  }, [currentStageData?.id, allStages, category]);
+
   const setLocation = WhereIsUser((state) => state.setLocation);
   useEffect(() => {
     if (!stageData) return;
@@ -87,7 +93,9 @@ const StageScreen = () => {
       console.log(gameIdentifier.current);
     }
   }, [stageId, stageData, setLocation]);
-  const currentStageType = currentStageData?.type ?? "Lesson"; // default fallback
+
+  const currentStageType = currentStageData?.type ?? "Lesson";
+
   const {
     handleFinalAnswer,
     handleEvaluation,
@@ -136,10 +144,45 @@ const StageScreen = () => {
     gameOver.closeModal();
   }, [gameOver]);
 
-  const userProgressMutation = useMutation({
-    mutationFn: userProgress,
-  });
+  // const userProgressMutation = useMutation({
+  //   mutationFn: userProgress,
+  // });
 
+  // const { allProgressLevels, allProgressStages, setUserProgress } =
+  //   useGetUserInfo();
+
+  // const getUserProg = useMutation({
+  //   mutationFn: async (category: string) => {
+  //     const token = await auth.currentUser?.getIdToken(true);
+  //     const [data, error] = await tryCatch(
+  //       axios.get(`${URL}/fireBase/userProgres/${category}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       })
+  //     );
+  //     if (error) {
+  //       console.log(error, "ASDSAD");
+  //       throw error; // FIX: Throw error instead of return
+  //     }
+  //     return data.data;
+  //   },
+  //   onSuccess: (data, category) => {
+  //     console.log("setting new progress");
+  //     setUserProgress({
+  //       allProgressLevels: {
+  //         ...allProgressLevels,
+  //         [category]: data.allStages,
+  //       },
+  //       allProgressStages: {
+  //         ...allProgressStages,
+  //         [category]: data.allProgressLevels,
+  //       },
+  //       completedLevels: data.completedLevels,
+  //       completedStages: data.completedStages,
+  //     });
+  //   },
+  // });
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -148,7 +191,13 @@ const StageScreen = () => {
           <View className="flex-row justify-between items-center mb-5">
             <Pressable
               onPress={async () => {
-                userProgressMutation.mutate();
+                // try {
+                //   await getUserProg.mutateAsync(String(category));
+                // } catch (error) {
+                //   console.error("Failed to update progress", error);
+                // } finally {
+                //   router.replace({ pathname: "/home/Home" });
+                // }
                 router.replace({ pathname: "/home/Home" });
               }}
             >
@@ -272,3 +321,13 @@ const StageScreen = () => {
 };
 
 export default StageScreen;
+function useYourStore(
+  arg0: (state: any) => {
+    allProgressLevels: any;
+    allProgressStages: any;
+    completedLevels: any;
+    completedStages: any;
+  }
+) {
+  throw new Error("Function not implemented.");
+}

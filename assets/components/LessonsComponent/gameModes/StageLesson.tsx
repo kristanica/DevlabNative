@@ -12,13 +12,6 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
 
   return (
     <>
-      <Text className="text-white font-exoBold xs:text-xl text-justify">
-        {currentStageData?.title}
-      </Text>
-      <Text className="text-white font-exoRegular xs:text-xs my-3 text-justify">
-        {currentStageData?.description}
-      </Text>
-
       {currentStageData.blocks &&
         currentStageData.blocks.map((item: any) => {
           switch (item.type) {
@@ -36,7 +29,7 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
               return (
                 <Text
                   key={item.id}
-                  className=" text-justify text-white font-exoLight my-5"
+                  className=" text-justify text-white font-exoLight my-5 text-xs xs:text-[10xs]"
                 >
                   {item.value}
                 </Text>
@@ -46,7 +39,7 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
               return (
                 <View
                   key={item.id}
-                  className=" border-[#464242a4] border-[1px] border-dashed my-3 mx-5"
+                  className=" border-[#464242a4] border-[1px]  my-3 mx-1"
                 ></View>
               );
             }
