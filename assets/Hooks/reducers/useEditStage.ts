@@ -85,6 +85,11 @@ type Action =
       value: string;
     }
   | {
+      type: "UPDATE_CODING_INTERFACE";
+      field: keyof State["codingInterface"];
+      value: string;
+    }
+  | {
       type: "RESET_ALL_FIELD";
     }
   | { type: "UPDATE_ALL_FIELDS"; payload: any }
@@ -114,6 +119,15 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         choices: {
           ...state.choices,
+          [action.field]: action.value,
+        },
+      };
+    }
+    case "UPDATE_CODING_INTERFACE": {
+      return {
+        ...state,
+        codingInterface: {
+          ...state.codingInterface!,
           [action.field]: action.value,
         },
       };

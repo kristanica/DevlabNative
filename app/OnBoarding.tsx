@@ -1,11 +1,17 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import OnboardingItem from "@/assets/components/OnBoardingComponents/OnboardingItem";
 import Pagination from "@/assets/components/OnBoardingComponents/Pagination";
-import { onboardingData, path, width } from "@/assets/constants/constants";
+import {
+  auth,
+  onboardingData,
+  path,
+  width,
+} from "@/assets/constants/constants";
 import ButtonComponent from "@/assets/deprecated/ButtonComponent";
 import usePresstoScroll from "@/assets/Hooks/usePresstoScroll";
 
 import { router } from "expo-router";
+import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
@@ -98,7 +104,14 @@ const Onboarding = () => {
                 </Text>
               </Pressable>
               <Pressable
-                onPress={() => router.replace({ pathname: path.REGISTER })}
+                onPress={async () => {
+                  const currentUser = auth?.currentUser;
+                  if (currentUser) {
+                    console.log("There is a current user! ");
+                    await signOut(auth);
+                  }
+                  router.replace({ pathname: path.REGISTER });
+                }}
               >
                 <Text className="text-white text-center rounded-2xl bg-accent px-7 xs:text-xs py-2 mt-2 font-exoBold">
                   Sign up

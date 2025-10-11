@@ -2,14 +2,23 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
 import * as Clipboard from "expo-clipboard";
 import React, { useRef } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
+
 type StageLessonprops = {
   currentStageData: stageDataPayload;
 };
 
-const StageLesson = ({ currentStageData }: StageLessonprops) => {
+const StageLesson = ({ currentStageData }: any) => {
   const videoRef = useRef<Video>(null);
-
+  const { width: screenWidth } = useWindowDimensions();
   return (
     <>
       {currentStageData.blocks &&
@@ -78,28 +87,81 @@ const StageLesson = ({ currentStageData }: StageLessonprops) => {
           isLooping
         />
       )}
-      <View className="bg-accentContainer p-3 rounded-3xl my-3">
+      <View className="bg-accentContainer p-3  my-3">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        <View className="bg-background p-3 rounded-3xl my-3 flex-row justify-between">
-          <Text className="text-white font-exoRegular xs:text-xs text-justify">
-            {currentStageData?.codingInterface}
-          </Text>
-          <TouchableOpacity
-            onPress={async () => {
-              await Clipboard.setStringAsync(
-                currentStageData?.codingInterface!
-              );
-            }}
+        <View className="bg-background  my-3 flex-row justify-between">
+          <ScrollView
+            className=" flex-[1] m-3 "
+            horizontal={true}
+            pagingEnabled
+            decelerationRate="fast"
+            showsHorizontalScrollIndicator={false}
+            alwaysBounceVertical={false}
           >
-            <Ionicons
-              name="clipboard-outline"
-              size={20}
-              color={"white"}
-            ></Ionicons>
-          </TouchableOpacity>
+            <View className=" h-[200px] w-[290px]">
+              <TouchableOpacity
+                className="absolute right-0 bottom-0"
+                onPress={async () => {
+                  await Clipboard.setStringAsync(
+                    currentStageData?.codingInterface.html! ||
+                      "HTML code  is not provided"
+                  );
+                }}
+              >
+                <Ionicons
+                  name="clipboard-outline"
+                  size={20}
+                  color={"white"}
+                ></Ionicons>
+              </TouchableOpacity>
+              <Text className="text-white font-exoRegular xs:text-xs text-justify">
+                {currentStageData?.codingInterface?.html}
+              </Text>
+            </View>
+            <View className="bg-background h-[200px] w-[320px]">
+              <TouchableOpacity
+                className="absolute right-0 bottom-0"
+                onPress={async () => {
+                  await Clipboard.setStringAsync(
+                    currentStageData?.codingInterface.css!
+                  );
+                }}
+              >
+                <Ionicons
+                  name="clipboard-outline"
+                  size={20}
+                  color={"white"}
+                ></Ionicons>
+              </TouchableOpacity>
+              <Text className="text-white font-exoRegular xs:text-xs text-justify">
+                {currentStageData?.codingInterface?.css ||
+                  "Css code is not provided"}
+              </Text>
+            </View>
+            <View className="bg-background h-[200px] w-[290px] relative">
+              <TouchableOpacity
+                className="absolute right-0 bottom-0"
+                onPress={async () => {
+                  await Clipboard.setStringAsync(
+                    currentStageData?.codingInterface.js! ||
+                      "JavaScript code  is not provided"
+                  );
+                }}
+              >
+                <Ionicons
+                  name="clipboard-outline"
+                  size={20}
+                  color={"white"}
+                ></Ionicons>
+              </TouchableOpacity>
+              <Text className="text-white font-exoRegular xs:text-xs text-justify">
+                {currentStageData?.codingInterface?.js}
+              </Text>
+            </View>
+          </ScrollView>
         </View>
       </View>
     </>

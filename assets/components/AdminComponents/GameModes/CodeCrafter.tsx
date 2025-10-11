@@ -48,10 +48,33 @@ const CodeCrafter = ({
         }}
         numeric={false}
       />
-
       <InputContainer
-        title={"Coding Interface"}
-        value={state.codingInterface}
+        title={"Coding Interface CSS"}
+        value={state.codingInterface.css}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "codingInterface",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
+        title={"Coding Interface JS"}
+        value={state.codingInterface.js}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_FIELD",
+            field: "codingInterface",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
+        title={"Coding Interface HTML"}
+        value={state.codingInterface.html}
         setValue={(text) => {
           dispatch({
             type: "UPDATE_FIELD",

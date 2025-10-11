@@ -26,6 +26,9 @@ const useLevelEditor = () => {
         levelId: String(payload?.levelId),
       });
     },
+    enabled: Boolean(
+      payload?.category && payload?.lessonId && payload?.levelId
+    ),
   });
 
   const updateLevelMutation = useMutation({

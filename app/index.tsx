@@ -65,7 +65,15 @@ const index = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.replace({ pathname: "/Login" })}
+              onPress={async () => {
+                const currentuser = auth.currentUser;
+                if (currentuser) {
+                  console.log("There is a current user!");
+                  await signOut(auth);
+                }
+
+                router.replace({ pathname: "/Login" });
+              }}
             >
               <Text className="text-pink-400 ml-3 font-exoRegular xs:text-xs sm:text-sm md:text-xl lg:text-2xl xl:text-2xl">
                 Login

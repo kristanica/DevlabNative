@@ -6,7 +6,7 @@ import { loadSounds } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { DrawerActions } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigation } from "expo-router";
+import { useNavigation, usePathname } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
@@ -68,6 +68,12 @@ const DrawerLayout = () => {
         headerLeft: () => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
           const navigation = useNavigation();
+
+          const routename = usePathname();
+          console.log(routename);
+          if (routename === "/home/Shop") {
+            return;
+          }
           return (
             <TouchableOpacity
               style={{ marginLeft: 15 }}

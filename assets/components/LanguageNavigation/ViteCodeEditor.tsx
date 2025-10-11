@@ -1,4 +1,7 @@
+import { codingPlayground } from "@/assets/API/openAi/codingPlayground";
+import useModal from "@/assets/Hooks/useModal";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useIsMutating, useMutation } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import React, { RefObject, useMemo } from "react";
 import {
@@ -9,6 +12,8 @@ import {
   View,
 } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
+import { PlaygroundEvaluateModal } from "../CodeEditor/PlaygroundEvaluateModal";
+import FillScreenLoading from "../global/FillScreenLoading";
 
 type CodeEditorPayload = {
   html?: string;
@@ -35,9 +40,33 @@ const ViteCodeEditor = ({
   terminalRef,
 }: CodingPlaygroundEditorProps) => {
   const snapPoints = useMemo(() => ["5%", "50%"], []);
+  const evaluationModal = useModal();
+  const evaluateMutation = useMutation({
+    mutationFn: async ({ receivedCode }: any) => {
+      console.log(
+        receivedCode?.html +
+          "ASDJHSAGDHJASGHJDGASHJDGJHASGDHJASGDHJSAGJHDGASJHDGSAHJGDHJSAGDHJYAYYS"
+      );
+      return codingPlayground({ receivedCode });
+    },
+    onSuccess: () => {
+      evaluationModal.setVisibility(true);
+    },
+  });
+
+  const isMutating = useIsMutating();
   return (
     <View className="bg-accent flex-[1] rounded-[10px] z-0">
+      {isMutating > 0 && (
+        <FillScreenLoading text={"Evalutaing..."}></FillScreenLoading>
+      )}
       <View className="flex-1 bg-[#D9D9D9] m-2 rounded-xl mt-[20px]">
+        {evaluationModal.visibility && (
+          <PlaygroundEvaluateModal
+            {...evaluationModal}
+            evaluationRes={evaluateMutation.data}
+          ></PlaygroundEvaluateModal>
+        )}
         {receivedCode ? (
           <WebView
             style={{
@@ -104,7 +133,10 @@ const ViteCodeEditor = ({
         )}
       </View>
 
-      <TouchableOpacity className="absolute  z-50  bottom-16 left-5 ">
+      <TouchableOpacity
+        className="absolute  z-50  bottom-16 left-5 "
+        onPress={() => evaluateMutation.mutate({ receivedCode })}
+      >
         <Text className="text-white px-7 py-2 bg-button text-xs rounded-xl font-exoBold">
           Evaluate
         </Text>

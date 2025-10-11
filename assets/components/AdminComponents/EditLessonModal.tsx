@@ -1,11 +1,15 @@
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 
+import tryCatch from "@/assets/Hooks/function/tryCatch";
 import useLevelEditor from "@/assets/Hooks/query/mutation/useLevelEditor";
 import useEditLesson from "@/assets/Hooks/reducers/useEditLesson";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
+import { auth } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import React, { useEffect } from "react";
 import {
   Modal,
   Pressable,
@@ -23,14 +27,54 @@ const EditLessonModal = ({
   scaleStyle,
   closeModal,
 }: ScaleModalPayload) => {
+  console.log("useQuery test:", useQuery);
   const { state, dispatch } = useEditLesson();
+  const payload = tracker((state) => state.levelPayload);
   const { levelData, updateLevelMutation, deleteLevelMutation } =
     useLevelEditor();
+  console.log(payload);
+  const { data } = useQuery({
+    queryKey: ["testQuery", payload],
+    queryFn: async () => {
+      const token = await auth?.currentUser?.getIdToken(true);
+      console.log(token);
+      const [data, error] = await tryCatch(
+        axios.get(
+          `https://b49bb8ad43a2.ngrok-free.app/fireBaseAdmin/specificLevelData/${payload?.category}/${payload?.lessonId}/${payload?.levelId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+      );
+      if (error) {
+        console.log(error);
+        return;
+      }
 
+      return data.data;
+    },
+    enabled: true,
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    console.log("Fetched Level:", data);
+
+    dispatch({
+      type: "UPDATE_ALL_FIELDS",
+      payload: {
+        title: data?.title ?? "",
+        description: data?.description ?? "",
+        expReward: String(data?.expReward ?? ""),
+        coinsReward: String(data?.coinsReward ?? ""),
+      },
+    });
+  }, [data]);
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const confirmationModal = useModal();
-  const payload = tracker((state) => state.levelPayload);
 
   return (
     <Modal visible={visibility} transparent={true}>
@@ -39,13 +83,13 @@ const EditLessonModal = ({
         onPress={closeModal}
       >
         <Pressable
-          className="w-[80%] h-[55%]"
+          className="w-[80%] "
           onPress={(e) => {
             e.stopPropagation();
           }}
         >
           <Animated.View
-            className="  bg-accent  border-[2px] h-full border-[#ffffff43] rounded-xl p-4"
+            className="  bg-modal  border-white border-[2px] rounded-xl p-4"
             style={[scaleStyle, keyBoardHandlingStyle]}
           >
             <InputContainer
@@ -124,6 +168,7 @@ const EditLessonModal = ({
             {confirmationModal.visibility && (
               <SaveToFirebaseConfirmation
                 onConfirm={() => {
+                  closeModal();
                   const hasEmpty = CheckEmptyFields(state, "Level");
 
                   if (hasEmpty) {

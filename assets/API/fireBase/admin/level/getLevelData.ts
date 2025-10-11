@@ -1,4 +1,4 @@
-import { auth, URL } from "@/assets/constants/constants";
+import { auth } from "@/assets/constants/constants";
 import { payloadProps } from "@/assets/constants/type";
 import axios from "axios";
 type levelDataType = {
@@ -20,7 +20,7 @@ const getLevelData = async ({
 
   try {
     const res = await axios.get(
-      `${URL}/fireBaseAdmin/specificLevelData/${category}/${lessonId}/${levelId}`,
+      `https://b49bb8ad43a2.ngrok-free.app/fireBaseAdmin/specificLevelData/${category}/${lessonId}/${levelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -33,8 +33,9 @@ const getLevelData = async ({
       return;
     }
     console.log(res.data);
-    return res.data as levelDataType;
-  } catch {
+    return res.data;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };
