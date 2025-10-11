@@ -21,7 +21,12 @@ const CategoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
+
   const setTracker = tracker((state) => state.setTracker);
+  const lastStageVisibility = tracker((state) => state.lastStageVisibility);
+  const setLastStageVisibility = tracker(
+    (state) => state.setLastStageVisibility
+  );
   const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
@@ -86,10 +91,13 @@ const CategoryScreen = () => {
         ></LockLessonModal>
         {isLoading || progressLoading ? (
           <SmallLoading />
-        ) : stagesVisibility ? (
+        ) : (lastStageVisibility ? lastStageVisibility : stagesVisibility) ? (
           <>
             <Pressable
-              onPress={() => setStagesVisibility(false)}
+              onPress={() => {
+                setStagesVisibility(false);
+                setLastStageVisibility(false);
+              }}
               className="ml-3"
             >
               <Ionicons

@@ -1,14 +1,16 @@
-import { ScaleModalProps } from "@/assets/constants/type";
 import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-
+type HintModalPayload = ScaleModalPayload & {
+  hint: string | undefined;
+};
 const HintModal = ({
   visibility,
   scaleStyle,
   onConfirm,
   closeModal,
-}: ScaleModalProps) => {
+  hint,
+}: HintModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1">
@@ -19,11 +21,11 @@ const HintModal = ({
           <View className="justify-center items-center flex-[1] bg-red-400 rounded-3xl">
             <View className="flex-[1] justify-center items-center">
               <Text className="text-white text-center font-exoBold xs:text-xs">
-                Here is your hint
+                Here is your int
               </Text>
             </View>
             <View className="bg-background w-[80%] rounded-2xl justify-center items-center">
-              <Text className="text-white">TEST</Text>
+              <Text className="text-white"> {hint}</Text>
             </View>
 
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">

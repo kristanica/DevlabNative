@@ -2,24 +2,24 @@ import { auth, URL } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
 import axios from "axios";
 
-type codeCrafterPayload = {
+type bugBustPayload = {
   submittedCode: any;
   instruction: string;
   providedCode: any;
   description: string;
   subject: string;
 };
-export const codeCrafter = async ({
+export const bugBust = async ({
   submittedCode,
   instruction,
   providedCode,
   description,
   subject,
-}: codeCrafterPayload) => {
+}: bugBustPayload) => {
   const token = await auth.currentUser?.getIdToken(true);
   const [data, error] = await tryCatch(
     axios.post(
-      `${URL}/openAI/codeCrafter`,
+      `${URL}/openAI/bugBust`,
       {
         submittedCode: submittedCode,
         instruction: instruction,
@@ -36,20 +36,8 @@ export const codeCrafter = async ({
   );
 
   if (error) {
-    console.log(error + "CODECRAFTER");
+    console.log(error + "BUGBUSTaa");
     return;
   }
-  let raw = data.data.response;
-  if (typeof raw === "string") {
-    raw = raw.replace(/```json|```/g, "").trim();
-  }
-
-  let parsed: any = null;
-  try {
-    parsed = JSON.parse(raw);
-  } catch (e) {
-    console.log("Failed to parse JSON:", e, raw);
-  }
-
-  return parsed;
+  return data.data;
 };

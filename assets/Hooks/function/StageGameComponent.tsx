@@ -14,14 +14,26 @@ type StageGameComponentProps = {
 const StageGameComponent = ({
   currentStageData,
   type,
-}: StageGameComponentProps) => {
+  lessonId,
+  category,
+  stageId,
+  levelId,
+  setCurrentStageIndex,
+}: any) => {
   const stageGameIdentier: Record<string, JSX.Element> = {
     Lesson: <StageLesson currentStageData={currentStageData}></StageLesson>,
     CodeCrafter: (
       <StageCodeCrafter currentStageData={currentStageData}></StageCodeCrafter>
     ),
     BrainBytes: (
-      <StageBrainBytes currentStageData={currentStageData}></StageBrainBytes>
+      <StageBrainBytes
+        currentStageData={currentStageData}
+        stageId={stageId}
+        levelId={levelId}
+        category={category}
+        lessonId={lessonId}
+        setCurrentStageIndex={setCurrentStageIndex}
+      ></StageBrainBytes>
     ),
     CodeRush: (
       <StageCodeRush currentStageData={currentStageData}></StageCodeRush>

@@ -3,7 +3,6 @@ import tryCatch from "@/assets/Hooks/function/tryCatch";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
-import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { doc, setDoc } from "firebase/firestore";
@@ -18,7 +17,9 @@ const ListStages = ({ userStagesProgress }: any) => {
   const setStageData = stageStore((state) => state.setstageData);
   console.log(levelPayload);
   const stageId = useRef<string>("");
-
+  const setLastStageVisibility = tracker(
+    (state) => state.setLastStageVisibility
+  );
   const { data: levelsData, isLoading } = useQuery({
     queryKey: [
       "Stages",
@@ -55,24 +56,26 @@ const ListStages = ({ userStagesProgress }: any) => {
     return null;
   }
 
-  const allStages = useGetUserInfo((state) => state.allProgressStages);
   const lockedModal = useModal();
 
   const lastOpenedLevel = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (data: any) => {
+      console.log(data);
       const uid = auth.currentUser?.uid;
       const userRef = doc(db, "Users", String(uid));
+      console.log(uid);
 
       const [_, error] = await tryCatch(
         setDoc(
           userRef,
           {
             lastOpenedLevel: {
-              lessonId: levelPayload.lessonId,
-              levelId: levelPayload.levelId,
-              subject: levelPayload.category,
+              lessonId: data.lessonId,
+              levelId: data.levelId,
+              subject: data.category,
             },
           },
+
           { merge: true }
         )
       );
@@ -85,8 +88,19 @@ const ListStages = ({ userStagesProgress }: any) => {
   });
 
   useEffect(() => {
-    lastOpenedLevel.mutate();
-  }, []);
+    if (!levelsData) return;
+    lastOpenedLevel.mutate({
+      lessonId: levelPayload.lessonId,
+      levelId: levelPayload.levelId,
+      category: levelPayload.category,
+      description: levelsData?.description,
+      title: levelsData?.title,
+    });
+    const specificStage = levelsData.find(
+      (stage: any) => stage.id === levelPayload.levelId
+    );
+    console.log(specificStage);
+  }, [levelsData]);
 
   return (
     <View className="h-[40%]">
@@ -104,16 +118,19 @@ const ListStages = ({ userStagesProgress }: any) => {
             }
             const stageKey = `${levelPayload?.lessonId}-${levelPayload?.levelId}-${item.id}`;
             const isStageLocked =
-              userStagesProgress[stageKey]?.isActive ?? false;
+              (userStagesProgress[stageKey]?.isActive &&
+                userStagesProgress[stageKey]?.isCompleted) ??
+              false;
 
             globalCounter++;
-            if (item.type !== "Lesson") {
-              return null;
-            }
+            // if (item.type !== "Lesson") {
+            //   return null;
+            // }
 
             return (
               <Pressable
                 onPress={() => {
+                  setLastStageVisibility(false);
                   stageId.current = item.id;
                   if (!isStageLocked) {
                     lockedModal.setVisibility(true);

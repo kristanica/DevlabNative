@@ -80,22 +80,40 @@ const StageScreen = () => {
 
   const setLocation = WhereIsUser((state) => state.setLocation);
   useEffect(() => {
+    console.log("useEffect on stageid");
     if (!stageData) return;
+
     const index: number = stageData.findIndex(
       (stage: any) => stage.id === stageId
     );
     setCurrentStageIndex(index);
     const stage = index !== -1 ? stageData[index] : null;
 
-    setLocation(stage?.type! as string);
+    if (stage?.type) {
+      setLocation(stage.type as string);
+    }
     if (stage?.type !== "Lesson") {
       gameIdentifier.current = stage?.type;
       console.log(gameIdentifier.current);
     }
-  }, [stageId, stageData, setLocation]);
+  }, [stageId, stageData]);
 
   const currentStageType = currentStageData?.type ?? "Lesson";
+  useEffect(() => {
+    console.log("useEffect on currentStageIndex change");
+    if (!stageData || !stageData[currentStageIndex]) return;
 
+    const currentStage = stageData[currentStageIndex];
+
+    if (currentStage?.type) {
+      console.log("Updating location to:", currentStage.type);
+      setLocation(currentStage.type as string);
+    }
+
+    if (currentStage?.type !== "Lesson") {
+      gameIdentifier.current = currentStage?.type;
+    }
+  }, [currentStageIndex, stageData, setLocation]);
   const {
     handleFinalAnswer,
     handleEvaluation,
@@ -144,45 +162,6 @@ const StageScreen = () => {
     gameOver.closeModal();
   }, [gameOver]);
 
-  // const userProgressMutation = useMutation({
-  //   mutationFn: userProgress,
-  // });
-
-  // const { allProgressLevels, allProgressStages, setUserProgress } =
-  //   useGetUserInfo();
-
-  // const getUserProg = useMutation({
-  //   mutationFn: async (category: string) => {
-  //     const token = await auth.currentUser?.getIdToken(true);
-  //     const [data, error] = await tryCatch(
-  //       axios.get(`${URL}/fireBase/userProgres/${category}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       })
-  //     );
-  //     if (error) {
-  //       console.log(error, "ASDSAD");
-  //       throw error; // FIX: Throw error instead of return
-  //     }
-  //     return data.data;
-  //   },
-  //   onSuccess: (data, category) => {
-  //     console.log("setting new progress");
-  //     setUserProgress({
-  //       allProgressLevels: {
-  //         ...allProgressLevels,
-  //         [category]: data.allStages,
-  //       },
-  //       allProgressStages: {
-  //         ...allProgressStages,
-  //         [category]: data.allProgressLevels,
-  //       },
-  //       completedLevels: data.completedLevels,
-  //       completedStages: data.completedStages,
-  //     });
-  //   },
-  // });
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -191,13 +170,6 @@ const StageScreen = () => {
           <View className="flex-row justify-between items-center mb-5">
             <Pressable
               onPress={async () => {
-                // try {
-                //   await getUserProg.mutateAsync(String(category));
-                // } catch (error) {
-                //   console.error("Failed to update progress", error);
-                // } finally {
-                //   router.replace({ pathname: "/home/Home" });
-                // }
                 router.replace({ pathname: "/home/Home" });
               }}
             >
@@ -268,6 +240,11 @@ const StageScreen = () => {
             <StageGameComponent
               currentStageData={currentStageData}
               type={currentStageData?.type}
+              category={category}
+              lessonId={lessonId}
+              levelId={levelId}
+              stageId={currentStageData?.id}
+              setCurrentStageIndex={setCurrentStageIndex}
             ></StageGameComponent>
 
             {/* Determines the gamemode */}
@@ -321,13 +298,3 @@ const StageScreen = () => {
 };
 
 export default StageScreen;
-function useYourStore(
-  arg0: (state: any) => {
-    allProgressLevels: any;
-    allProgressStages: any;
-    completedLevels: any;
-    completedStages: any;
-  }
-) {
-  throw new Error("Function not implemented.");
-}

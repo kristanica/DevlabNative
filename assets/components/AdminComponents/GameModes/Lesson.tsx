@@ -107,7 +107,7 @@ const Lesson = ({
       />
 
       <InputContainer
-        title={"Coding Interface"}
+        title={"Coding Interface "}
         value={state.codingInterface}
         setValue={(text) => {
           dispatch({
@@ -118,6 +118,7 @@ const Lesson = ({
         }}
         numeric={false}
       />
+
       <InputContainer
         title={"Instruction"}
         value={state.instruction}

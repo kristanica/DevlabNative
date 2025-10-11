@@ -6,6 +6,7 @@ import HomeLesson from "@/assets/components/HomeLesson";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { auth, lessons, URL } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
+import tracker from "@/assets/zustand/tracker";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation } from "@tanstack/react-query";
@@ -58,7 +59,10 @@ export default function Home() {
       console.log(data.data.allStages);
     },
   });
-
+  const setLevelPayload = tracker((state) => state.setTracker);
+  const setLastStageVisibility = tracker(
+    (state) => state.setLastStageVisibility
+  );
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -123,6 +127,12 @@ export default function Home() {
               {/* Routes to last  lesson viewed */}
               <Pressable
                 onPress={() => {
+                  setLevelPayload({
+                    category: userData?.lastOpenedLevel.subject!,
+                    lessonId: userData?.lastOpenedLevel.lessonId!,
+                    levelId: userData?.lastOpenedLevel.levelId!,
+                  });
+                  setLastStageVisibility(true);
                   router.push({
                     pathname: `/home/category/[categoryId]`,
                     params: {

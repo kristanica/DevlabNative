@@ -56,92 +56,6 @@ const ModalHandler = ({
       {levelFinishedModal.visibility && (
         <LevelFinishedModal
           onConfirm={async () => {
-            // await userProgress();
-            // const nextLevelPayload =
-            //   unlockNextLevel.getState().nextLevelPayload;
-            // const nextLessonPayload =
-            //   unlockNextLevel.getState().nextLessonPayload;
-
-            // const { allProgressLevels, completedLevels, allProgressStages } =
-            //   useGetUserInfo.getState();
-            // if (!nextLevelPayload) {
-            //   router.push({
-            //     pathname: "/home/category/[categoryId]",
-            //     params: {
-            //       categoryId: category,
-            //     },
-            //   });
-            //   return;
-            // }
-
-            // if (nextLevelPayload && !nextLessonPayload) {
-            //   useGetUserInfo.getState().setUserProgress({
-            //     allProgressLevels: {
-            //       ...allProgressLevels,
-            //       [category]: {
-            //         ...allProgressLevels[category],
-            //         [`${nextLevelPayload!.lessonId}-${
-            //           nextLevelPayload!.nextLevelId
-            //         }`]: {
-            //           isActive: true,
-            //           isRewardClaimed: true,
-            //           dateUnlocked: new Date(),
-            //           isCompleted: true,
-            //           completedAt: new Date(),
-            //         },
-            //       },
-            //     },
-            //     allProgressStages: {
-            //       ...allProgressStages,
-            //       [category]: {
-            //         ...allProgressStages[category],
-            //         [`${nextLevelPayload?.lessonId}-${nextLevelPayload?.nextLevelId}-Stage1`]:
-            //           {
-            //             isActive: true,
-            //             isCompleted: true,
-            //             dateUnlocked: new Date(),
-
-            //             completedAt: new Date(),
-            //           },
-            //       },
-            //     },
-            //     completedLevels: completedLevels + 1,
-            //     completedStages: useGetUserInfo.getState().completedStages,
-            //   });
-            // }
-            // if (nextLevelPayload && nextLessonPayload) {
-            //   console.log("continue", nextLessonPayload);
-            //   useGetUserInfo.getState().setUserProgress({
-            //     allProgressLevels: {
-            //       ...allProgressLevels,
-            //       [category]: {
-            //         ...allProgressLevels[category],
-            //         [`${nextLessonPayload}-Level1`]: {
-            //           isActive: true,
-            //           isRewardClaimed: true,
-            //           dateUnlocked: new Date(),
-            //           isCompleted: true,
-            //           completedAt: new Date(),
-            //         },
-            //       },
-            //     },
-            //     allProgressStages: {
-            //       ...allProgressStages,
-            //       [category]: {
-            //         ...allProgressStages[category],
-            //         [`${nextLessonPayload}-Level1-Stage1`]: {
-            //           isActive: true,
-            //           isCompleted: true,
-            //           dateUnlocked: new Date(),
-
-            //           completedAt: new Date(),
-            //         },
-            //       },
-            //     },
-            //     completedLevels: completedLevels + 1,
-            //     completedStages: useGetUserInfo.getState().completedStages,
-            //   });
-            // }
             router.push({
               pathname: "/home/category/[categoryId]",
               params: {
@@ -166,6 +80,8 @@ const ModalHandler = ({
         <FinalAnswerModal
           onConfirm={async () => {
             finalAnswerModall.closeModal();
+
+            console.log("FUCK");
             const toastResult = await handleFinalAnswer(receivedCode);
 
             await playSound(toastResult[0]);

@@ -8,10 +8,11 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import { achievementPlaceHolder } from "@/assets/constants/constants";
 
 import { fetchAchievements } from "@/assets/API/fireBase/user/achievement/fetchAchievements";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import SmallLoading from "@/assets/components/global/SmallLoading";
 import claimAchievementMutation from "@/assets/Hooks/query/mutation/claimAchievementMutation";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useQuery } from "@tanstack/react-query";
+import { useIsMutating, useQuery } from "@tanstack/react-query";
 import {
   FlatList,
   Image,
@@ -33,10 +34,13 @@ const Achievements = () => {
   });
   const userAchievements = useGetUserInfo((state) => state.userAchievements);
   const claimAchievement = claimAchievementMutation();
-
+  const isMutating = useIsMutating();
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-accent">
+        {isMutating > 0 && (
+          <FillScreenLoading text="Claiming..."></FillScreenLoading>
+        )}
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <ImageBackground

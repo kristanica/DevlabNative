@@ -20,7 +20,11 @@ type State = {
   isHidden: boolean;
   type: string;
   instruction: string;
-  codingInterface?: string;
+  codingInterface?: {
+    css: string;
+    js: string;
+    html: string;
+  };
 
   //Bug Bust
   hint?: string;
@@ -42,7 +46,11 @@ const initialState = {
   isHidden: false,
   type: "",
   instruction: "",
-  codingInterface: "",
+  codingInterface: {
+    css: "",
+    js: "",
+    html: "",
+  },
 
   //Bug Bust
   hint: "",

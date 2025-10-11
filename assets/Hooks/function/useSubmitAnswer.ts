@@ -3,6 +3,7 @@ import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
 
 const useSubmitAnswer = () => {
@@ -25,10 +26,13 @@ const useSubmitAnswer = () => {
       stageType,
     }: submitAnswerPayload) => {
       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
-      const setUnlockNextLesson = unlockNextLevel.getState().unlockNextLesson;
-      const setUnlockNextSubject = unlockNextLevel.getState().unlockNextSubject;
+
       if (hasShield && !answer) {
         const isShieldUsed = await consumeErrorShield();
+        Toast.show({
+          type: "success",
+          text1: "Error shiled Consumed!",
+        });
         if (isShieldUsed) {
           return;
         }
@@ -73,24 +77,7 @@ const useSubmitAnswer = () => {
           });
           return;
         }
-        //if there is still next Lesson, unclocks it
-        // else if (data.isNextLessonUnlocked) {
-        //   finalAnswerModall.closeModal();
-        //   setTimeout(() => {
-        //     levelFinishedModal.setVisibility(true);
-        //   }, 200);
-        //   setUnlockNextLesson(res.nextLessonId);
-
-        //   return ["lessonUnlocked", "You've unlocked a new lesson!"];
-        // }
-        // //if there are no more lesson and levels, completes the whole topic
-        // else {
-        //   setTimeout(() => {
-        //     levelFinishedModal.setVisibility(true);
-        //   }, 200);
-        //   setUnlockNextSubject(res.isWholeTopicFinished);
-        //   return ["wholeTopicFinished", "You've finished a whole topic!"];
-        // }
+        // if there is still next Lesson, unclocks it
       }
 
       if (healthPointsTracker <= 1) {

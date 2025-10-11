@@ -7,6 +7,8 @@ type identifier = {
 };
 
 type trackerPayload = {
+  lastStageVisibility: boolean;
+  setLastStageVisibility: (val: boolean) => void;
   levelPayload: identifier | null;
   stageId: string | null;
   setTracker: (val: identifier) => void;
@@ -14,6 +16,8 @@ type trackerPayload = {
 };
 
 const tracker = create<trackerPayload>((set) => ({
+  lastStageVisibility: false,
+  setLastStageVisibility: (val: boolean) => set({ lastStageVisibility: val }),
   levelPayload: null,
   stageId: null,
   setTracker: (val: identifier) => set({ levelPayload: val }),

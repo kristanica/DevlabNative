@@ -1,5 +1,5 @@
 import { RefObject } from "react";
-import useEvaluationGame from "../query/mutation/useEvaluationGame";
+import { apiCall } from "../query/mutation/apiCall";
 import useEvaluationLesson from "../query/mutation/useEvaluationLesson";
 import useModal from "../useModal";
 import { playSound } from "./soundHandler";
@@ -28,7 +28,7 @@ export const useHandleFinalAnswer = ({
   currentStageIndex,
   currentStageData,
 }: useHandleFinalAnswerProps) => {
-  const { evaluationMutation } = useEvaluationGame();
+  const evaluateGame = apiCall();
 
   const { nextStage } = useSubmitAnswer();
   const finalAnswerModall = useModal();
@@ -97,17 +97,21 @@ export const useHandleFinalAnswer = ({
         resolve(["wrongAnswer", "Your code field is empty!"]);
         return;
       } else {
-        
-
-
-        evaluationMutation.mutate(
+        const stringReceivedCode = JSON.stringify(receivedCode);
+        evaluateGame.mutate(
           {
-            receivedCode: receivedCode,
+            submittedCode: stringReceivedCode,
             instruction: currentStageData.instruction,
-            description: currentStageData.description,
+            providedCode: currentStageData?.replicationFile,
+            description: currentStageData?.description,
+            subject: category,
+            gameType: currentStageData?.type,
           },
           {
             onSuccess: async (data) => {
+              console.log(data);
+              console.log(currentStageData?.instruction);
+              console.log(currentStageData?.description);
               setTimeout(() => finalAnswerModall.closeModal(), 100);
               const evaluationResult = await nextStage.mutateAsync({
                 stageId: currentStageData.id,
@@ -122,10 +126,40 @@ export const useHandleFinalAnswer = ({
               });
               console.log(evaluationResult);
               resolve(evaluationResult);
-              return;
+            },
+
+            onError: (data) => {
+              console.log(data);
             },
           }
         );
+
+        // evaluationMutation.mutate(
+        //   {
+        //     receivedCode: receivedCode,
+        //     instruction: currentStageData.instruction,
+        //     description: currentStageData.description,
+        //   },
+        //   {
+        //     onSuccess: async (data) => {
+        //       setTimeout(() => finalAnswerModall.closeModal(), 100);
+        //       const evaluationResult = await nextStage.mutateAsync({
+        //         stageId: currentStageData.id,
+        //         lessonId: String(lessonId),
+        //         levelId: levelId,
+        //         category: category,
+        //         answer: data.correct,
+        //         setCurrentStageIndex,
+        //         levelFinishedModal,
+        //         finalAnswerModall,
+        //         stageType: currentStageData.type,
+        //       });
+        //       console.log(evaluationResult);
+        //       resolve(evaluationResult);
+        //       return;
+        //     },
+        //   }
+        // );
       }
     });
   };

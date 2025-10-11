@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type SelectLanguageNavigationProps = {
   subject: string;
@@ -30,11 +30,14 @@ const SelectLanguageNavigation = ({
   return (
     <View className="flex-row">
       {visibleButton.map((val: string, index: number) => (
-        <Pressable key={index} onPress={() => sendToWebView(val.toLowerCase())}>
+        <TouchableOpacity
+          key={index}
+          onPress={() => sendToWebView(val.toLowerCase())}
+        >
           <Text className="py-2 px-4 mx-2 rounded-2xl bg-shopAccent text-white font-exoBold">
             {val.toUpperCase()}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       ))}
     </View>
   );

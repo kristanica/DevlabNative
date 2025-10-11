@@ -30,6 +30,7 @@ const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
   return (
     <>
       <HintModal
+        hint={currentStageData?.hint}
         onConfirm={() => hintModal.closeModal()}
         {...hintModal}
       ></HintModal>

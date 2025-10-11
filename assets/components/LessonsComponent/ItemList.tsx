@@ -1,7 +1,6 @@
 import { auth, db, height } from "@/assets/constants/constants";
 
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
-import { playSound } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -102,6 +101,7 @@ const ItemList = () => {
     const updatedData = snapshot.data();
 
     if (itemName) {
+      console.log(itemName);
       addActiveBuff(itemName);
     }
 
@@ -113,66 +113,70 @@ const ItemList = () => {
 
   const useItemActions: Record<string, (userItem: string) => void> = {
     CoinSurge: async (itemId) => {
-      await playSound("success");
+      console.log("ASdWOAOS123");
+      // await playSound("success");
+
       showToast("itemUsed", `You've used Coin Surge!`);
-      useItem(itemId, "doubleCoins");
+      console.log("ABSS");
+      await useItem(itemId, "doubleCoins");
+      console.log("AYES");
     },
     CodeWhisper: async (itemId) => {
       if (location !== "BugBust") {
-        await playSound("wrongAnswer");
+        // await playSound("wrongAnswer");
 
         showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("You're not in bug bust lol");
         return;
       }
-      await playSound("success");
+      // await playSound("success");
       showToast("itemUsed", `You've used Code Whisper!`);
       await useItem(itemId, "revealHint");
     },
     CodePatch: async (itemId) => {
       if (location !== "CodeRush") {
-        await playSound("wrongAnswer");
+        // await playSound("wrongAnswer");
         showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in code rush");
         return;
       }
-      await playSound("success");
+      // await playSound("success");
       showToast("itemUsed", `You've used Code Patch!`);
       useItem(itemId, "extraTime");
     },
     TimeFreeze: async (itemId) => {
       if (location !== "CodeRush") {
-        await playSound("wrongAnswer");
+        // await playSound("wrongAnswer");
 
         showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in code rush");
         return;
       }
-      await playSound("success");
+      // await playSound("success");
       showToast("itemUsed", `You've used Time Freeze!`);
       useItem(itemId, "timeFreeze");
     },
     ErrorShield: async (itemId) => {
       if (location === "Lesson") {
-        await playSound("wrongAnswer");
+        // await playSound("wrongAnswer");
 
         showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("You cannot use items in here");
         return;
       }
-      await playSound("success");
+      // await playSound("success");
       showToast("itemUsed", `You've used Error Shield!`);
       await useItem(itemId, "errorShield");
     },
     BrainFilter: async (itemId) => {
       if (location !== "BrainBytes") {
-        await playSound("wrongAnswer");
+        // await playSound("wrongAnswer");
 
         showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in Brain Bytes");
         return;
       }
-      await playSound("success");
+      // await playSound("success");
       showToast("itemUsed", `You've used Brain Filter!`);
       useItem(itemId, "brainFilter");
     },
@@ -246,7 +250,11 @@ const ItemList = () => {
                 <TouchableOpacity
                   key={userInvItems.id}
                   onPress={() => {
-                    useItemActions[userInvItems.title]?.(userInvItems.id);
+                    console.log("Location:", location);
+                    console.log("Item title:", userInvItems.title);
+                    const action = useItemActions[userInvItems.title];
+                    console.log("Action found:", !!action);
+                    action?.(userInvItems.id);
                   }}
                 >
                   <UserInventoryItems {...userInvItems} />
