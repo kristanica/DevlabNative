@@ -1,34 +1,60 @@
-import { useCallback } from "react";
-import { FlatList } from "react-native";
+import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
+import React, { useCallback, useMemo } from "react";
 import AchievementContainer from "../../AchievementsComponents/AchievementContainer";
-type AchievementListPayload = {
-  achievementsData: any;
-  userAchievements: any;
-  claimAchievement: any;
+
+type Achievement = {
+  id: string;
+  title: string;
+  description?: string;
+  expReward: number;
+  coinsReward: number;
+};
+
+type UserAchievement = { id: string; isClaimed?: boolean };
+
+type Props = {
+  achievementsData: Achievement[] | null | undefined;
+  userAchievements: UserAchievement[] | null | undefined;
+  claimAchievement: {
+    mutate: (p: {
+      achievementId: string;
+      expReward: number;
+      coinsReward: number;
+    }) => void;
+  };
   selectedCategory: string;
 };
+
 const AchievementList = ({
   achievementsData,
   userAchievements,
   claimAchievement,
   selectedCategory,
-}: AchievementListPayload) => {
+}: Props) => {
+  const data = achievementsData ?? [];
+
+  const achievedMap = useMemo(() => {
+    const m = new Map<string, { isClaimed?: boolean }>();
+    for (const a of userAchievements ?? [])
+      m.set(a.id, { isClaimed: a.isClaimed });
+    return m;
+  }, [userAchievements]); // O(1) lookups [web:8][web:24]
+
+  const keyExtractor = useCallback((item: Achievement) => item.id, []); // stable keys [web:8]
+
   const renderItem = useCallback(
-    ({ item, index }: { item: any; index: number }) => {
-      const unlockedAchievement = userAchievements.find(
-        (achievement: any) => achievement.id === item.id
-      );
+    ({ item, index }: ListRenderItemInfo<Achievement>) => {
+      const rec = achievedMap.get(item.id);
+      const isUnlocked = !!rec;
+      const isClaimed = !!rec?.isClaimed;
 
-      const isUnlocked = !!unlockedAchievement;
-      const isClaimed = unlockedAchievement?.isClaimed ?? false;
-
-      const onClaim = () => {
+      const onClaim = () =>
         claimAchievement.mutate({
           achievementId: item.id,
           expReward: item.expReward,
           coinsReward: item.coinsReward,
         });
-      };
+
       return (
         <AchievementContainer
           isUnlocked={isUnlocked}
@@ -40,23 +66,23 @@ const AchievementList = ({
         />
       );
     },
-    [claimAchievement, achievementsData, userAchievements, selectedCategory]
+    [achievedMap, claimAchievement, selectedCategory]
   );
+
   return (
     <>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-        }}
+      <FlashList
+        data={data}
+        bounces={false}
+        horizontal={false}
         numColumns={2}
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-        }}
-        keyExtractor={(item) => item.id}
-        data={achievementsData}
+        keyExtractor={keyExtractor}
         renderItem={renderItem}
+        contentContainerStyle={{
+          paddingVertical: 10,
+          paddingHorizontal: 10,
+        }}
+        estimatedItemSize={286}
       />
     </>
   );

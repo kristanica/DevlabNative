@@ -1,5 +1,6 @@
+import { FlashList } from "@shopify/flash-list";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import InventoryItemContainer from "../../HomeComponents/InventoryItemContainer";
 
 const HomeInventory = ({ inventory }: any) => {
@@ -9,14 +10,23 @@ const HomeInventory = ({ inventory }: any) => {
         YOUR INVENTORY
       </Text>
 
-      <View className="flex-row flex-wrap justify-center">
-        {inventory.map((item: any) => (
-          <InventoryItemContainer
-            key={item.id}
-            {...item}
-          ></InventoryItemContainer>
-        ))}
-      </View>
+      <FlashList
+        data={inventory}
+        numColumns={2}
+        estimatedItemSize={139}
+        renderItem={(item: any) => {
+          console.log("ASDAS");
+          console.log(item.item);
+          return (
+            <InventoryItemContainer
+              Icon={item.item.Icon}
+              key={item.item.id}
+              quantity={item.item.quantity}
+              title={item.item.title}
+            ></InventoryItemContainer>
+          );
+        }}
+      ></FlashList>
     </>
   );
 };

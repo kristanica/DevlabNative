@@ -172,6 +172,6 @@ const StageCodingEditor = ({
   );
 };
 
-export default StageCodingEditor;
+export default React.memo(StageCodingEditor);
 
 const styles = StyleSheet.create({});

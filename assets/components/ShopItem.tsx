@@ -57,10 +57,10 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
   return (
     <Animated.View
       style={[onScale]}
-      className="w-[80%] sm:w-3/4 md:w-2/3 lg:w-1/2 min-h-[200px] my-2 items-center justify-center mx-auto"
+      className="w-[90%]  mx-auto sm:w-3/4 md:w-2/3 lg:w-1/2  my-2 items-center justify-center "
     >
       <View className="bg-shopAccent rounded-xl flex-row flex-[1]  ">
-        <View className="flex-col justify-evenly items-center flex-1 p-3">
+        <View className="flex-col justify-evenly items-center flex-1 py-6 px-5">
           <Image
             source={itemIcon[iconNameTrimmed]}
             style={{ width: "100%", height: 100, resizeMode: "contain" }}

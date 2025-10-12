@@ -31,7 +31,7 @@ const AchievementSelector = ({
     [setSelectedCategory, selectedCategory]
   );
   return (
-    <View className=" items-center flex-row border-b-2  py-2  border-accentContainer px-3">
+    <View className=" items-center flex-row border-b-2  py-5  border-accentContainer px-6">
       <FlatList
         alwaysBounceVertical={false}
         showsHorizontalScrollIndicator={false}

@@ -1,5 +1,6 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import HomeInventory from "@/assets/components/screen/HOME/HomeInventory";
 import JumpBackIn from "@/assets/components/screen/HOME/JumpBackIn";

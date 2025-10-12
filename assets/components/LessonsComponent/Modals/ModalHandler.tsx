@@ -6,13 +6,11 @@ import { StyleSheet } from "react-native";
 import EvaluateModal from "../../CodeEditor/EvaluateModal";
 import FillScreenLoading from "../../global/FillScreenLoading";
 import FinalAnswerModal from "../FinalAnswerModal";
-import GameOverModal from "../GameOverModal";
 import LevelFinishedModal from "../LevelFinishedModal";
 
 type ModalHandlerProps = {
   lessonId: string;
 
-  gameOver: any;
   levelFinishedModal: any;
   evaluateModal: any;
   evaluationLessonMutation: any;
@@ -20,36 +18,25 @@ type ModalHandlerProps = {
   receivedCode: any;
   stageData: any;
 
-  handleGameOver: any;
   finalAnswerModall: any;
-  health: any;
+
   category: string;
 };
 
 const ModalHandler = ({
-  gameOver,
   levelFinishedModal,
   evaluateModal,
   evaluationLessonMutation,
   handleFinalAnswer,
   receivedCode,
 
-  handleGameOver,
   finalAnswerModall,
-  health,
+
   category,
 }: ModalHandlerProps) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   return (
     <>
-      {health === 0 && gameOver.visibility && (
-        <GameOverModal
-          onConfirm={() => {
-            handleGameOver();
-          }}
-          {...gameOver}
-        ></GameOverModal>
-      )}
       {evaluationLessonMutation.isPending && (
         <FillScreenLoading></FillScreenLoading>
       )}

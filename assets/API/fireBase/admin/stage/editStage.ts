@@ -40,34 +40,34 @@ const editStage = async (state: any, stageType: string) => {
   try {
     const token = await auth.currentUser?.getIdToken(true);
 
-    if (!hasLocalImages) {
-      console.log("No local images, sending as JSON");
+    // if (!hasLocalImages) {
+    //   console.log("No local images, sending as JSON");
 
-      const res = await axios.post(
-        `${URL}/fireBaseAdmin/editStage`,
-        {
-          category: levelPayload?.category,
-          lessonId: levelPayload?.lessonId,
-          levelId: levelPayload?.levelId,
-          stageId: stageIdentifier,
-          state: normalizedState,
-          stageType: stageType,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "x-source": "mobile-app",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    //   const res = await axios.post(
+    //     `${URL}/fireBaseAdmin/editStage`,
+    //     {
+    //       category: levelPayload?.category,
+    //       lessonId: levelPayload?.lessonId,
+    //       levelId: levelPayload?.levelId,
+    //       stageId: stageIdentifier,
+    //       state: normalizedState,
+    //       stageType: stageType,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         "x-source": "mobile-app",
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   );
 
-      if (res.status === 200) {
-        console.log("Success:", res.data.message);
-        return res.data;
-      }
-      return;
-    }
+    //   if (res.status === 200) {
+    //     console.log("Success:", res.data.message);
+    //     return res.data;
+    //   }
+    //   return;
+    // }
 
     console.log("Local images detected, sending as FormData");
     const formData = new FormData();
@@ -93,7 +93,6 @@ const editStage = async (state: any, stageType: string) => {
           type: `image/${fileType}`,
         } as any);
 
-        // Replace with reference key
         return { ...block, value: `image_${block.id}` };
       }
       return block;

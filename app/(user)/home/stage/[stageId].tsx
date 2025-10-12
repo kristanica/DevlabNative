@@ -13,42 +13,70 @@ import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnsw
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
-import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import toastHandler from "@/assets/zustand/toastHandler";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Pressable, Text, View } from "react-native";
 const StageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
-
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-
-  const healthPoints = userHp((state) => state.userHp);
-
-  //gets the stageData from zustand to reduce API calls
-  const stageData = stageStore((state) => state.stageData);
-  const currentStageData = stageData?.[currentStageIndex] ?? null;
   const gameIdentifier = useRef<string | undefined>("Lesson");
 
+  //zustand
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
-
+  const allStages = useGetUserInfo.getState().allProgressStages;
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+  const setLocation = WhereIsUser((state) => state.setLocation);
+  const healthPoints = userHp((state) => state.userHp);
+  const stageData = stageStore((state) => state.stageData);
+  const currentStageData = stageData?.[currentStageIndex] ?? null;
+  const databaseQueryingFunctions = useCodeEditorDatabase();
+  const currentStageType = currentStageData?.type ?? "Lesson";
 
-  // FIX: Add optional chaining and safe access
-  const levelKey = `${lessonId}-${levelId}`;
-  const isRewardClaimed =
-    levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false;
+  const isMutating = useIsMutating();
+
+  const handlePrevious = useCallback(() => {
+    if (
+      stageData[currentStageIndex - 1] === undefined ||
+      stageData[currentStageIndex - 1] === null
+    ) {
+      console.log("cannot go bacckkkk");
+      return;
+    }
+    setCurrentStageIndex((prev) => prev - 1);
+  }, []);
+
+  const handleBackPress = useCallback(() => {
+    router.replace({ pathname: "/home/Home" });
+  }, []);
+
+  //useMemo
+
+  const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
+  const currentStageKey = useMemo(
+    () => `${lessonId}-${levelId}-${currentStageData.id}`,
+    [lessonId, lessonId, currentStageData.id]
+  );
+  const isRewardClaimed = useMemo(
+    () =>
+      levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
+    [levelProgress, levelKey, category]
+  );
 
   useEffect(() => {
-    // FIX: Add guard clause to check if data exists
     if (!levelProgress || !category || !levelProgress[String(category)]) {
       return;
     }
@@ -61,26 +89,20 @@ const StageScreen = () => {
     }
   }, [isRewardClaimed, category, levelProgress]);
 
-  const allStages = useGetUserInfo.getState().allProgressStages;
-
   useEffect(() => {
-    // FIX: Add guard to check if currentStageData exists
     if (!currentStageData?.id || !allStages || !category) {
       return;
     }
 
-    const stageKey = `${lessonId}-${levelId}-${currentStageData.id}`;
     const isStageLocked =
-      allStages?.[String(category)]?.[stageKey]?.isCompleted ?? false;
+      allStages?.[String(category)]?.[currentStageKey]?.isCompleted ?? false;
 
     if (isStageLocked) {
       setToastVisibility("success", "You've already completed this stage!");
     }
   }, [currentStageData?.id, allStages, category]);
 
-  const setLocation = WhereIsUser((state) => state.setLocation);
   useEffect(() => {
-    console.log("useEffect on stageid");
     if (!stageData) return;
 
     const index: number = stageData.findIndex(
@@ -98,15 +120,11 @@ const StageScreen = () => {
     }
   }, [stageId, stageData]);
 
-  const currentStageType = currentStageData?.type ?? "Lesson";
   useEffect(() => {
-    console.log("useEffect on currentStageIndex change");
     if (!stageData || !stageData[currentStageIndex]) return;
-
     const currentStage = stageData[currentStageIndex];
 
     if (currentStage?.type) {
-      console.log("Updating location to:", currentStage.type);
       setLocation(currentStage.type as string);
     }
 
@@ -142,37 +160,14 @@ const StageScreen = () => {
     logs,
     terminalRef,
   } = useCodeEditor();
-
-  const databaseQueryingFunctions = useCodeEditorDatabase();
-
-  const health = userHealthPoints((state) => state.health);
-
-  const gameOver = useModal();
-
-  //Handlers
-  const isMutating = useIsMutating();
-
-  const handlePrevious = useCallback(() => {
-    setCurrentStageIndex((prev) => prev - 1);
-  }, []);
-
-  const handleGameOver = useCallback(() => {
-    setCurrentStageIndex(0);
-
-    gameOver.closeModal();
-  }, [gameOver]);
-
+  console.log("BAAANG");
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
         {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
         <CustomGeneralContainer>
           <View className="flex-row justify-between items-center mb-5">
-            <Pressable
-              onPress={async () => {
-                router.replace({ pathname: "/home/Home" });
-              }}
-            >
+            <Pressable onPress={handleBackPress}>
               <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
                 Back
               </Text>
@@ -192,7 +187,6 @@ const StageScreen = () => {
           </View>
           <ModalHandler
             lessonId={String(lessonId)}
-            gameOver={gameOver}
             levelFinishedModal={levelFinishedModal}
             evaluateModal={evaluateModal}
             finalAnswerModall={finalAnswerModall}
@@ -200,8 +194,6 @@ const StageScreen = () => {
             handleFinalAnswer={handleFinalAnswer}
             receivedCode={receivedCode}
             stageData={stageData}
-            health={health}
-            handleGameOver={handleGameOver}
             category={String(category)}
           ></ModalHandler>
           {/* Shows modal for first time */}
@@ -249,17 +241,7 @@ const StageScreen = () => {
 
             {/* Determines the gamemode */}
             <View className="flex-row justify-evenly">
-              <Pressable
-                onPress={() => {
-                  if (
-                    stageData[currentStageIndex - 1] === undefined ||
-                    stageData[currentStageIndex - 1] === null
-                  ) {
-                    return;
-                  }
-                  handlePrevious();
-                }}
-              >
+              <Pressable onPress={handlePrevious}>
                 {currentStageData?.type === "Lesson" && (
                   <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular">
                     Prev

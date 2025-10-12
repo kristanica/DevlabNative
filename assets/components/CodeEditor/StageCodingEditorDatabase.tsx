@@ -129,6 +129,6 @@ ${tableStyle}
   );
 };
 
-export default StageCodingEditorDatabase;
+export default React.memo(StageCodingEditorDatabase);
 
 const styles = StyleSheet.create({});

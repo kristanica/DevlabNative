@@ -21,12 +21,12 @@ type useHandleFinalAnswerProps = {
 export const useHandleFinalAnswer = ({
   lessonId,
   levelId,
-  stageId,
+
   category,
-  gameIdentifier,
+
   currentStageDataType,
   setCurrentStageIndex,
-  currentStageIndex,
+
   currentStageData,
 }: useHandleFinalAnswerProps) => {
   const evaluateGame = apiCall();
@@ -35,10 +35,9 @@ export const useHandleFinalAnswer = ({
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();
   const levelFinishedModal = useModal();
-  // const allStages = useGetUserInfo.getState().allProgressStages;
+
   const { evaluationLessonMutation } = useEvaluationLesson();
 
-  //Handles evaluation for lessons only
   const handleEvaluation = (receivedCode: any) => {
     if (!receivedCode) {
       return;

@@ -6,11 +6,6 @@ import StageLesson from "@/assets/components/LessonsComponent/gameModes/StageLes
 import React, { JSX } from "react";
 import { StyleSheet } from "react-native";
 
-type StageGameComponentProps = {
-  currentStageData: stageDataPayload;
-  type: string;
-};
-
 const StageGameComponent = ({
   currentStageData,
   type,
@@ -50,6 +45,6 @@ const StageGameComponent = ({
   return stageGameIdentier[type] ?? null;
 };
 
-export default StageGameComponent;
+export default React.memo(StageGameComponent);
 
 const styles = StyleSheet.create({});

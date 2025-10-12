@@ -47,9 +47,6 @@
       }
     },
     "owner": "kristanica",
-    "platforms": [
-      "ios",
-      "android"
-    ]
+    "platforms": ["ios", "android"]
   }
 }
