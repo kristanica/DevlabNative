@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import purchaseItem from "../API/fireBase/user/purchaseItem";
 import { itemIcon } from "../constants/constants";
@@ -20,15 +20,7 @@ type ShopItemProps = {
 };
 
 // Shop item component for (Tabs)/Shop.tsx
-const ShopItem = ({
-  id,
-  Icon,
-  desc,
-  title,
-  cost,
-  index,
-  userCoins,
-}: ShopItemProps) => {
+const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
@@ -97,45 +89,3 @@ const ShopItem = ({
 };
 
 export default React.memo(ShopItem);
-// Gradient border
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 10,
-    padding: 1,
-    height: 200,
-    marginVertical: 10,
-  },
-});
-//  if (!userData) {
-//       return null;
-//     }
-
-//     try {
-//       if (userData?.coins < cost) {
-//         console.log("Not enough coins");
-
-//         return null;
-//       }
-
-//       const userRef = doc(db, "Users", userData.uid);
-//       await updateDoc(userRef, {
-//         coins: userData.coins - cost,
-//       });
-
-//       const inventoryRef = doc(db, "Users", userData.uid, "Inventory", id);
-//       const inventorySnap = await getDoc(inventoryRef);
-
-//       console.log(userData.uid, id);
-//       if (inventorySnap.exists()) {
-//         await updateDoc(inventoryRef, {
-//           quantity: increment(1),
-//         });
-//       } else {
-//         await setDoc(inventoryRef, {
-//           quantity: 1,
-//         });
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       return null;
-//     }

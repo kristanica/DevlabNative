@@ -2,7 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 type JumpBackInPayload = {
-  handleJumpBackIn: any;
+  handleJumpBackIn: () => void;
 };
 const JumpBackIn = ({ handleJumpBackIn }: JumpBackInPayload) => {
   return (
@@ -10,8 +10,6 @@ const JumpBackIn = ({ handleJumpBackIn }: JumpBackInPayload) => {
       <Text className="text-white ml-2  xs:text-lg mt-3 font-exoBold">
         JUMP BACK IN
       </Text>
-
-      {/* Routes to last  lesson viewed */}
       <Pressable onPress={handleJumpBackIn}>
         <View className="bg-accentContainer mx-3 my-2 flex-row rounded-2xl overflow-hidden">
           <View className="flex-[.5] justify-center items-center bg-[#070606] rounded-2xl">

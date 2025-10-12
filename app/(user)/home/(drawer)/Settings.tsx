@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import ConfirmationModal from "@/assets/components/SettingsComponents/ConfirmationModal";
 import SignOutModal from "@/assets/components/SettingsComponents/SignOutModal";
 
-import LoadingScreen from "@/assets/components/LoadingScreen";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import ResetPasswordModal from "@/assets/components/SettingsComponents/ResetPasswordModal";
 import editUserInfo from "@/assets/Hooks/query/editUserInfo";
 import { pickImage } from "@/assets/Hooks/query/mutation/pickImage";
@@ -15,7 +15,7 @@ import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useSignOut from "@/assets/Hooks/useSignOut";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useMutation } from "@tanstack/react-query";
+import { useIsMutating, useMutation } from "@tanstack/react-query";
 import {
   Image,
   ImageBackground,
@@ -33,11 +33,9 @@ const Settings = () => {
   });
   const headerHeight = useHeaderHeight();
 
-  console.log("Header height:", headerHeight);
-  const { mutate: updateImage, isPending } = pickImage();
+  const { mutate: updateImage } = pickImage();
 
   const logOutModal = useModal();
-  // const adminModal = useModal();
   const confirmationModal = useModal();
   const { userData } = useGetUserInfo();
   const { logOut } = useSignOut();
@@ -46,6 +44,8 @@ const Settings = () => {
   const [bio, setBio] = useState<string>(userData?.username!);
   const [userName, setUserName] = useState<string>(userData?.bio!);
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
+
+  const isMutating = useIsMutating();
   return (
     <ProtectedRoutes>
       <View className="bg-accent flex-1">
@@ -55,7 +55,9 @@ const Settings = () => {
               className="flex-1"
               style={[keyBoardHandlingStyle, { marginTop: headerHeight - 20 }]}
             >
-              {isPending && <LoadingScreen></LoadingScreen>}
+              {isMutating > 0 && (
+                <FillScreenLoading text="Updating Profile"></FillScreenLoading>
+              )}
               <View className="flex-[1] justify-center items-center">
                 <Pressable
                   onPress={() => {
@@ -160,28 +162,10 @@ const Settings = () => {
                       Log out
                     </Text>
                   </Pressable>
-
-                  {/* <ButtonAnimated
-                    backgroundColor="transparent"
-                    onPressAction={() => adminModal.setVisibility(true)}
-                  >
-                    <Text className="text-white py-2 font-exoLight xs:text-xs">
-                      Login as Administrator
-                    </Text>
-                  </ButtonAnimated> */}
                 </View>
               </View>
             </Animated.View>
-            {/* {adminModal.visibility && (
-              <AdminModal
-                onConfirm={() => {
-                  router.replace({ pathname: "/(admin)/AdminLogin" });
-                }}
-                visibility={adminModal.visibility}
-                scaleStyle={adminModal.scaleStyle}
-                closeModal={adminModal.closeModal}
-              />
-            )} */}
+
             {logOutModal.visibility && (
               <SignOutModal
                 onConfirm={logOut}
