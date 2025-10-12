@@ -41,11 +41,14 @@ const ForgotPasswordModal = ({
           className="   w-[250px] h-[200px] m-auto rounded-[10px] "
           style={[scaleStyle]}
         >
-          <View className="justify-center items-center flex-[1] bg-modal rounded-3xl px-5">
-            <Text className="text-white text-center font-exoBold text-xs">
-              Forgot password
+          <View className="bg-modal rounded-3xl px-6 py-6">
+            <Text className="text-white text-center font-exoBold text-lg mb-2">
+              Reset Password
             </Text>
-
+            <Text className="text-white/70 text-center font-exoRegular text-xs mb-6">
+              Enter your email address and we'll send you a link to reset your
+              password.
+            </Text>
             <View>
               <InputBox
                 icon={"person"}
@@ -55,9 +58,8 @@ const ForgotPasswordModal = ({
                 isPassword={false}
               ></InputBox>
             </View>
-
             <TouchableOpacity onPress={() => handleForgotPassword(email)}>
-              <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
+              <Text className="text-center text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
                 Send to email
               </Text>
             </TouchableOpacity>
@@ -67,4 +69,4 @@ const ForgotPasswordModal = ({
     </Modal>
   );
 };
-export default ForgotPasswordModal;
+export default React.memo(ForgotPasswordModal);

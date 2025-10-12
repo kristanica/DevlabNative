@@ -1,13 +1,12 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import InputBox from "@/assets/components/InputBox";
+import Logo from "@/assets/components/screen/LOGIN/Logo";
+import RegisterForm from "@/assets/components/screen/REGISTER/RegisterForm";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import useRegister from "@/assets/Hooks/reducers/useRegister";
 
 import toastHandler from "@/assets/zustand/toastHandler";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { router } from "expo-router";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -50,100 +49,12 @@ const Register = () => {
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled"
           >
-            <View className="flex-1 justify-center items-center ">
-              <View className="flex-col justify-center items-center ">
-                <Image
-                  source={require("@/assets/images/devlabIcon/devlab-icon-transparent.png")}
-                  className="w-[100px] h-[50px]  "
-                ></Image>
-                <Text className="color-white  flex justify-center items-center mb-5 text-3xl font-[500] font-exoExtraBold ">
-                  DEVLAB
-                </Text>
-              </View>
-              <Animated.View className="w-3/4 aspect-[1/2] rounded-3xl bg-accent flex-col items-center justify-center p-2">
-                <View className="justify-center items-center">
-                  <Ionicons
-                    name="person-circle"
-                    size={120}
-                    color={"#314A70"}
-                    className="mx-auto my-2"
-                  />
-                </View>
-
-                <View>
-                  <InputBox
-                    placeHolder={"Email"}
-                    value={state.email}
-                    setValue={(text) =>
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "email",
-                        value: text,
-                      })
-                    }
-                    icon={"mail"}
-                  />
-
-                  <InputBox
-                    placeHolder={"Password"}
-                    value={state.password}
-                    setValue={(text) =>
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "password",
-                        value: text,
-                      })
-                    }
-                    icon={"lock-closed"}
-                    isPassword={true}
-                  />
-
-                  <InputBox
-                    placeHolder={"Username"}
-                    value={state.username}
-                    setValue={(text) =>
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "username",
-                        value: text,
-                      })
-                    }
-                    icon={"person"}
-                  />
-                  <InputBox
-                    placeHolder={"Age"}
-                    value={String(state.age)}
-                    setValue={(text) =>
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "age",
-                        value: text,
-                      })
-                    }
-                    icon={"calendar"}
-                  />
-                </View>
-
-                <View className=" justify-center items-center ">
-                  <TouchableOpacity onPress={registerUser}>
-                    <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
-                      REGISTER
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View className="justify-center items-center">
-                  <Text className="color-[#FFFFFE] font-exoRegular xs:text-[8px]">
-                    Already have an Account?
-                  </Text>
-
-                  <TouchableOpacity onPress={() => router.replace("/Login")}>
-                    <Text className="color-[#4F80C5] mt-2 font-exoRegular xs:text-[8px]">
-                      Login here
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </Animated.View>
-            </View>
+            <Logo></Logo>
+            <RegisterForm
+              state={state}
+              dispatch={dispatch}
+              handleRegister={registerUser}
+            ></RegisterForm>
           </KeyboardAwareScrollView>
         </CustomGeneralContainer>
       </Animated.View>
