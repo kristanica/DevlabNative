@@ -9,6 +9,7 @@ import fetchLesson from "@/assets/Hooks/query/fetchLesson";
 import useModal from "@/assets/Hooks/useModal";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import tracker from "@/assets/zustand/tracker";
+import { unlockedStages } from "@/assets/zustand/unlockedStages";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -30,6 +31,7 @@ const CategoryScreen = () => {
   const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
+  const setUnlockedStages = unlockedStages((state) => state.setUnlockedStages);
   const { fetchedLesson, isLoading } = fetchLesson(id);
   let globalCounter = 0;
 
@@ -42,6 +44,9 @@ const CategoryScreen = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      setUnlockedStages(response.data.allStages);
+      console.log(JSON.stringify(response.data.allStages) + `${id}`);
       return response.data;
     },
 

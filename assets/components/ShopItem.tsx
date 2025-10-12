@@ -5,7 +5,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import purchaseItem from "../API/fireBase/user/purchaseItem";
 import { itemIcon } from "../constants/constants";
-import { playSound } from "../Hooks/function/soundHandler";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
 import toastHandler from "../zustand/toastHandler";
 import { useGetUserInfo } from "../zustand/useGetUserInfo";
@@ -17,10 +16,19 @@ type ShopItemProps = {
   desc: string;
   title: string;
   index: number;
+  userCoins: number;
 };
 
 // Shop item component for (Tabs)/Shop.tsx
-const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
+const ShopItem = ({
+  id,
+  Icon,
+  desc,
+  title,
+  cost,
+  index,
+  userCoins,
+}: ShopItemProps) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
@@ -48,8 +56,9 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
         .setUserData({ ...userData!, coins: data?.newCoins });
       queryClient.invalidateQueries({ queryKey: ["userData"] });
       setToastVisibility("success", "You've brought an item!");
-
-      await playSound("purchase");
+    },
+    onError: () => {
+      setToastVisibility("error", "Not enough coins!");
     },
   });
 

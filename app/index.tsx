@@ -26,8 +26,9 @@ const index = () => {
       <View className="flex-[1] ">
         <View className="flex-[2] justify-center items-center">
           <LottieView
-            source={require("@/assets/Lottie/Loading.json")}
+            source={require("@/assets/Lottie/devlab-lottie-final.json")}
             autoPlay
+            loop={false}
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>

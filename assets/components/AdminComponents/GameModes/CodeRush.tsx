@@ -36,20 +36,20 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
         value={state.codingInterface.css}
         setValue={(text) => {
           dispatch({
-            type: "UPDATE_FIELD",
-            field: "codingInterface",
+            type: "UPDATE_CODING_INTERFACE",
+            field: "css",
             value: text,
           });
         }}
         numeric={false}
       />
       <InputContainer
-        title={"Coding Interface JS"}
+        title={"Coding Interface 312"}
         value={state.codingInterface.js}
         setValue={(text) => {
           dispatch({
-            type: "UPDATE_FIELD",
-            field: "codingInterface",
+            type: "UPDATE_CODING_INTERFACE",
+            field: "js",
             value: text,
           });
         }}
@@ -60,8 +60,8 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
         value={state.codingInterface.html}
         setValue={(text) => {
           dispatch({
-            type: "UPDATE_FIELD",
-            field: "codingInterface",
+            type: "UPDATE_CODING_INTERFACE",
+            field: "html",
             value: text,
           });
         }}

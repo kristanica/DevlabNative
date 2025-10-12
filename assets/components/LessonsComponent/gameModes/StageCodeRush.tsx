@@ -1,13 +1,26 @@
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import codePatchTimeFreeze from "@/assets/Hooks/mainGameModeFunctions/codePatchTimeFreeze";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Clipboard from "expo-clipboard";
 import React, { useCallback, useEffect } from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-const StageCodeRush = ({ currentStageData }: CurrentStageDataPayload) => {
+const StageCodeRush = ({
+  currentStageData,
+  setCurrentStageIndex,
+  lessonId,
+  category,
+  stageId,
+  levelId,
+}: any) => {
   const { timer, codePatch, timeFreeze } = codePatchTimeFreeze(
-    currentStageData?.timer!
+    currentStageData?.timer!,
+    setCurrentStageIndex,
+    lessonId,
+    category,
+    stageId,
+    levelId
   );
 
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
@@ -65,9 +78,77 @@ const StageCodeRush = ({ currentStageData }: CurrentStageDataPayload) => {
           {currentStageData?.instruction}
         </Text>
         <View className="bg-background p-3 rounded-3xl my-3">
-          <Text className="text-white font-exoRegular xs:text-xs text-justify">
-            {currentStageData?.codingInterface}
-          </Text>
+          {currentStageData?.codingInterface && (
+            <ScrollView
+              className=" flex-[1] m-3 "
+              horizontal={true}
+              pagingEnabled
+              decelerationRate="fast"
+              showsHorizontalScrollIndicator={false}
+              alwaysBounceVertical={false}
+            >
+              <View className=" h-[200px] w-[290px]">
+                <TouchableOpacity
+                  className="absolute right-0 bottom-0"
+                  onPress={async () => {
+                    await Clipboard.setStringAsync(
+                      currentStageData?.codingInterface.html! ||
+                        "HTML code  is not provided"
+                    );
+                  }}
+                >
+                  <Ionicons
+                    name="clipboard-outline"
+                    size={20}
+                    color={"white"}
+                  ></Ionicons>
+                </TouchableOpacity>
+                <Text className="text-white font-exoRegular xs:text-xs text-justify">
+                  {currentStageData?.codingInterface?.html}
+                </Text>
+              </View>
+              <View className="bg-background h-[200px] w-[320px]">
+                <TouchableOpacity
+                  className="absolute right-0 bottom-0"
+                  onPress={async () => {
+                    await Clipboard.setStringAsync(
+                      currentStageData?.codingInterface.css!
+                    );
+                  }}
+                >
+                  <Ionicons
+                    name="clipboard-outline"
+                    size={20}
+                    color={"white"}
+                  ></Ionicons>
+                </TouchableOpacity>
+                <Text className="text-white font-exoRegular xs:text-xs text-justify">
+                  {currentStageData?.codingInterface?.css ||
+                    "Css code is not provided"}
+                </Text>
+              </View>
+              <View className="bg-background h-[200px] w-[290px] relative">
+                <TouchableOpacity
+                  className="absolute right-0 bottom-0"
+                  onPress={async () => {
+                    await Clipboard.setStringAsync(
+                      currentStageData?.codingInterface.js! ||
+                        "JavaScript code  is not provided"
+                    );
+                  }}
+                >
+                  <Ionicons
+                    name="clipboard-outline"
+                    size={20}
+                    color={"white"}
+                  ></Ionicons>
+                </TouchableOpacity>
+                <Text className="text-white font-exoRegular xs:text-xs text-justify">
+                  {currentStageData?.codingInterface?.js}
+                </Text>
+              </View>
+            </ScrollView>
+          )}
         </View>
       </View>
     </>

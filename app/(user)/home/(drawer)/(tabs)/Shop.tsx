@@ -62,7 +62,12 @@ const Shop = () => {
               >
                 {Array.isArray(shopItems) &&
                   shopItems!.map((item, index) => (
-                    <ShopItem {...item} index={index} key={item.id} />
+                    <ShopItem
+                      {...item}
+                      index={index}
+                      key={item.id}
+                      userCoins={userData?.coins!}
+                    />
                   ))}
               </ScrollView>
             </View>

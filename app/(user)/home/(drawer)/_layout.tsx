@@ -70,7 +70,7 @@ const DrawerLayout = () => {
           const navigation = useNavigation();
 
           const routename = usePathname();
-          console.log(routename);
+
           if (routename === "/home/Shop") {
             return;
           }

@@ -5,7 +5,7 @@ import useLevelEditor from "@/assets/Hooks/query/mutation/useLevelEditor";
 import useEditLesson from "@/assets/Hooks/reducers/useEditLesson";
 import useKeyBoardHandler from "@/assets/Hooks/useKeyBoardHandler";
 import useModal from "@/assets/Hooks/useModal";
-import { auth } from "@/assets/constants/constants";
+import { auth, URL } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -40,7 +40,7 @@ const EditLessonModal = ({
       console.log(token);
       const [data, error] = await tryCatch(
         axios.get(
-          `https://b49bb8ad43a2.ngrok-free.app/fireBaseAdmin/specificLevelData/${payload?.category}/${payload?.lessonId}/${payload?.levelId}`,
+          `${URL}/fireBaseAdmin/specificLevelData/${payload?.category}/${payload?.lessonId}/${payload?.levelId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -1,6 +1,6 @@
 import { itemIcon } from "@/assets/constants/constants";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 const UserInventoryItems = ({
   title,
@@ -30,6 +30,4 @@ const UserInventoryItems = ({
   );
 };
 
-export default UserInventoryItems;
-
-const styles = StyleSheet.create({});
+export default React.memo(UserInventoryItems);

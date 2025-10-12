@@ -279,16 +279,17 @@ const StageScreen = () => {
                   </Text>
                 </Pressable>
               )}
-
-              <Pressable
-                onPress={() => {
-                  finalAnswerModall.setVisibility(true);
-                }}
-              >
-                <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
-                  Next
-                </Text>
-              </Pressable>
+              {currentStageData?.type !== "BrainBytes" && (
+                <Pressable
+                  onPress={() => {
+                    finalAnswerModall.setVisibility(true);
+                  }}
+                >
+                  <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
+                    Next
+                  </Text>
+                </Pressable>
+              )}
             </View>
           </SwipeLessonContainer>
         </CustomGeneralContainer>

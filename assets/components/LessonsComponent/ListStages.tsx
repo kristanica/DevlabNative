@@ -15,7 +15,7 @@ import StagesContainer from "./StagesContainer";
 const ListStages = ({ userStagesProgress }: any) => {
   const levelPayload = tracker((state) => state.levelPayload);
   const setStageData = stageStore((state) => state.setstageData);
-  console.log(levelPayload);
+
   const stageId = useRef<string>("");
   const setLastStageVisibility = tracker(
     (state) => state.setLastStageVisibility
@@ -93,13 +93,7 @@ const ListStages = ({ userStagesProgress }: any) => {
       lessonId: levelPayload.lessonId,
       levelId: levelPayload.levelId,
       category: levelPayload.category,
-      description: levelsData?.description,
-      title: levelsData?.title,
     });
-    const specificStage = levelsData.find(
-      (stage: any) => stage.id === levelPayload.levelId
-    );
-    console.log(specificStage);
   }, [levelsData]);
 
   return (

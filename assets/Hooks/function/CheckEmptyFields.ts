@@ -17,15 +17,7 @@ const exemptions: Record<string, string[]> = {
     "choices",
     "blocks",
   ],
-  CodeRush: [
-    "codingInterface",
-    "hint",
-    "isHidden",
-    "choices",
-
-    "type",
-    "blocks",
-  ],
+  CodeRush: ["blocks", "copyCode", "choices", "isHidden", "hint", "type"],
   BrainBytes: [
     "codingInterface",
     "hint",
@@ -60,18 +52,28 @@ const CheckEmptyFields = (
   state: Record<string, any>,
   type: ExemptionType
 ): boolean => {
-  return Object.entries(state).some(([key, value]) => {
-    if (exemptions[type]?.includes(key)) return false;
+  console.log("Checking state:", state);
 
+  return Object.entries(state).some(([key, value]) => {
+    if (exemptions[type]?.includes(key)) {
+      console.log(`${key} is EXEMPT - skipping`);
+      return false;
+    }
+
+    // Check nested objects like blocks, choices, AND codingInterface
     if (
-      (key === "blocks" || key === "choices") &&
+      (key === "blocks" || key === "choices" || key === "codingInterface") &&
       value &&
       typeof value === "object"
     ) {
-      return hasEmptyInObject(value);
+      const isEmpty = hasEmptyInObject(value);
+      console.log(`${key} (object) is ${isEmpty ? "EMPTY" : "VALID"}`);
+      return isEmpty;
     }
 
-    return isEmptyValue(value);
+    const isEmpty = isEmptyValue(value);
+    console.log(`${key} = "${value}" is ${isEmpty ? "EMPTY" : "VALID"}`);
+    return isEmpty;
   });
 };
 

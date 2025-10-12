@@ -1,3 +1,4 @@
+import { unlockedStages } from "@/assets/zustand/unlockedStages";
 import { RefObject } from "react";
 import { apiCall } from "../query/mutation/apiCall";
 import useEvaluationLesson from "../query/mutation/useEvaluationLesson";
@@ -58,18 +59,26 @@ export const useHandleFinalAnswer = ({
   };
 
   const handleFinalAnswer = async (receivedCode: any) => {
-    // const stageKey = `${lessonId}-${levelId}-${stageId}`;
+    const finishedStages = unlockedStages.getState().unlockedStages;
+
+    const isStagedUnlocked =
+      finishedStages[`${lessonId}-${levelId}-${currentStageData.id}`]
+        .isCompleted ?? false;
+
+    if (isStagedUnlocked) {
+      console.log(
+        `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
+      );
+      setCurrentStageIndex((prev) => prev + 1);
+      return;
+    }
     // const isStageLocked =
     //   allStages?.[String(category)]?.[stageKey]?.status ?? false;
     // gameIdentifier.current = currentStageDataType;
     // Checks if the next stage is already unlocked
 
     // if (isStageLocked) {
-    //   if (stageDataLength - 1 === currentStageIndex) {
-    //     finalAnswerModall.closeModal();
-    //     setTimeout(() => levelFinishedModal.setVisibility(true), 200);
-    //     return;
-    //   }
+
     //   finalAnswerModall.closeModal();
     //   setCurrentStageIndex((prev: any) => prev + 1);
     //   return;
@@ -109,9 +118,6 @@ export const useHandleFinalAnswer = ({
           },
           {
             onSuccess: async (data) => {
-              console.log(data);
-              console.log(currentStageData?.instruction);
-              console.log(currentStageData?.description);
               setTimeout(() => finalAnswerModall.closeModal(), 100);
               const evaluationResult = await nextStage.mutateAsync({
                 stageId: currentStageData.id,

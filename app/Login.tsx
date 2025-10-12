@@ -6,8 +6,9 @@ import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
+import LottieView from "lottie-react-native";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -34,10 +35,12 @@ const Login = () => {
             keyboardShouldPersistTaps="handled"
           >
             <View className="flex-col justify-center items-center ">
-              <Image
-                source={require("@/assets/images/devlabIcon/devlab-icon-transparent.png")}
-                className="w-[100px] h-[50px]  "
-              ></Image>
+              <LottieView
+                source={require("@/assets/Lottie/devlab-lottie-final.json")}
+                autoPlay
+                loop={false}
+                style={{ height: 50, width: 50, marginRight: 4 }}
+              ></LottieView>
               <Text className="color-white  flex justify-center items-center mb-5 text-3xl font-[500] font-exoExtraBold ">
                 DEVLAB
               </Text>

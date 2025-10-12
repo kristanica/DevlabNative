@@ -14,14 +14,15 @@ const StageBrainBytes = ({
   setCurrentStageIndex,
 }: any) => {
   console.log(lessonId, stageId, lessonId, category, levelId);
-  const { compareUserAnswer, arrayChoices, brainFilterItem } = brainFilter(
-    currentStageData?.choices!,
-    setCurrentStageIndex,
-    lessonId,
-    category,
-    stageId,
-    levelId
-  );
+  const { compareUserAnswer, arrayChoices, brainFilterItem, optionsArray } =
+    brainFilter(
+      currentStageData?.choices!,
+      setCurrentStageIndex,
+      lessonId,
+      category,
+      stageId,
+      levelId
+    );
   const [answer, setAnswer] = useState<string>("");
   const [displayChoices, setDisplayChoices] = useState<any>(arrayChoices || []);
   const activeBuff = activeBuffsLocal((state) => state.activeBuff);
@@ -55,30 +56,40 @@ const StageBrainBytes = ({
           {currentStageData?.instruction}
         </Text>
         <View className="bg-background p-3 rounded-3xl my-3">
-          {displayChoices &&
-            displayChoices.map((choice: string, index: number) => (
-              <View className="">
-                {answer === choice && (
+          {optionsArray &&
+            Array.from(optionsArray).map(([key, choice], index) => (
+              <View key={index} className="flex flex-row relative">
+                <TouchableOpacity onPress={() => setAnswer(key)}>
+                  <Text className="py-2  text-white font-exoRegular text-xs xs:text-[9px] text-justify">
+                    {key.toLocaleUpperCase()}. {choice}
+                  </Text>
+                </TouchableOpacity>
+                {answer === key && (
                   <View
-                    key={index + 4}
                     style={{
                       marginVertical: "auto",
                       marginRight: 100,
                       height: 8,
                       width: 8,
+                      position: "absolute",
+                      right: 0,
+                      bottom: 9,
                       borderRadius: 5,
-                      backgroundColor: "#555",
+                      backgroundColor: "green",
                     }}
                   />
                 )}
-                <TouchableOpacity key={index} onPress={() => setAnswer(choice)}>
-                  <Text className="py-2 text-white font-exoRegular text-xs xs:text-[9px] text-justify ">
-                    {choice}
-                  </Text>
-                </TouchableOpacity>
               </View>
             ))}
         </View>
+        <TouchableOpacity
+          className="mx-auto bg-button  rounded-xl "
+          onPress={() => compareUserAnswer(answer)}
+        >
+          <Text className=" text-xs xs:text-[10px] py-2 px-6 font-exoBold text-white">
+            Final Answer
+          </Text>
+        </TouchableOpacity>
       </View>
     </>
   );

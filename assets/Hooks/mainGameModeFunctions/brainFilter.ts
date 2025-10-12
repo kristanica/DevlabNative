@@ -1,10 +1,9 @@
-import { gameOver } from "@/assets/API/fireBase/user/Stages/gameOver";
 import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
 import { isAnswerCorrect } from "@/assets/zustand/isAnswerCorrect";
 import userHp from "@/assets/zustand/userHp";
-import Toast from "react-native-toast-message";
 import { activeBuffsLocal } from "../function/activeBuffsLocal";
-import errorShield from "./globalItems/errorShield";
+import { useHandleDecrementHp } from "../function/useHandleDecrementHp";
+import { useHandleGameOver } from "../function/useHandleGameOver";
 
 const brainFilter = (
   choices: {
@@ -26,16 +25,14 @@ const brainFilter = (
   const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   const setIsCorrect = isAnswerCorrect((state) => state.setIsCorrect);
   const resetUserHp = userHp.getState().resetUserHp;
-
-  const { hasShield, consumeErrorShield } = errorShield();
-  const decrementUserHp = userHp.getState().decrementUserHp;
+  const { handleDecrementHp } = useHandleDecrementHp();
+  const { handleGameOver } = useHandleGameOver();
   const healthPointsTracker = userHp.getState().userHp;
+  let optionsArray = Object.entries(choices)
+    .filter(([key]) => key !== "correctAnswer")
+    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
 
   const compareUserAnswer = async (answer: string) => {
-    let optionsArray = Object.entries(choices)
-      .filter(([key]) => key !== "correctAnswer")
-      .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
-    console.log(optionsArray);
     if (answer === choices.correctAnswer.trim()) {
       console.log("You are correct");
       await unlockNextStage({
@@ -48,25 +45,18 @@ const brainFilter = (
       setIsCorrect(true);
       return;
     } else {
-      if (hasShield) {
-        const isShieldUsed = await consumeErrorShield();
-        Toast.show({
-          type: "success",
-          text1: "Error shiled Consumed!",
-        });
-        if (isShieldUsed) {
-          return;
-        }
-      }
+      handleDecrementHp();
       if (healthPointsTracker <= 1) {
-        console.log(category, lessonId, levelId, stageId);
-        await gameOver({ category, lessonId, levelId, stageId });
-        setCurrentStageIndex(0);
-        resetUserHp();
+        handleGameOver({
+          category,
+          lessonId,
+          levelId,
+          stageId,
+          setCurrentStageIndex,
+        });
       }
 
       console.log("You are wrong");
-      decrementUserHp();
       setIsCorrect(false);
     }
   };
@@ -88,7 +78,7 @@ const brainFilter = (
     return removedOneWrongAnswer;
   };
 
-  return { arrayChoices, compareUserAnswer, brainFilterItem };
+  return { arrayChoices, compareUserAnswer, brainFilterItem, optionsArray };
 };
 
 export default brainFilter;

@@ -36,7 +36,14 @@ const StageGameComponent = ({
       ></StageBrainBytes>
     ),
     CodeRush: (
-      <StageCodeRush currentStageData={currentStageData}></StageCodeRush>
+      <StageCodeRush
+        currentStageData={currentStageData}
+        stageId={stageId}
+        levelId={levelId}
+        category={category}
+        lessonId={lessonId}
+        setCurrentStageIndex={setCurrentStageIndex}
+      ></StageCodeRush>
     ),
     BugBust: <StageBugBust currentStageData={currentStageData}></StageBugBust>,
   };

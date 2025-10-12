@@ -22,8 +22,7 @@ const purchaseItem = async ({ id, cost, itemName }: purchaseItemPayload) => {
   );
 
   if (error) {
-    console.log("Purchase failed:", error);
-    return;
+    throw new Error(String(error));
   }
 
   if (res?.status !== 200) {
