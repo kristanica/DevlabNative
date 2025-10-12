@@ -27,11 +27,11 @@ const LessonsContainer = ({ name, closeModal }: HomeLessonProps) => {
     >
       <View className="flex-row">
         <View className="m-auto">
-          <Ionicons name="logo-html5" size={50} color={"white"} />
+          <Ionicons name={meta.ionIcon} size={50} color={"white"} />
         </View>
 
         <View className="flex-[2]  flex-col ml-4">
-          <Text className="text-white xs:text-lg font-exoBold my-3">
+          <Text className="text-white text-lg xs:text-[12px] font-exoBold ">
             {meta.title}
           </Text>
 

@@ -71,34 +71,3 @@ const codePatchTimeFreeze = (
 };
 
 export default codePatchTimeFreeze;
-
-// useEffect(() => {
-//     if (!isFreezed && isFocused) {
-//       intervalRef.current = setInterval(() => {
-//         setTimer((prev) => {
-//           if (prev <= 0) {
-//             clearInterval(intervalRef.current);
-//             decrementUserHp();
-//             const currentHp = userHp.getState().userHp;
-//             if (currentHp <= 1) {
-//               setTimeout(() => {
-//                 handleGameOver({
-//                   lessonId,
-//                   category,
-//                   stageId,
-//                   levelId,
-//                   setCurrentStageIndex,
-//                 });
-//               }, 0);
-//             }
-//             setTimeout(() => {
-//               setTimer(initialTime);
-//             }, 100);
-//             return 0;
-//           }
-//           return prev - 1;
-//         });
-//       }, 1000);
-//     }
-//     return () => clearInterval(intervalRef.current);
-//   }, [isFreezed, isFocused, resetTimer, decrementUserHp]);

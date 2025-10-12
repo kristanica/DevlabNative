@@ -1,16 +1,7 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
-import * as Clipboard from "expo-clipboard";
 import React, { useRef } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { Accordion } from "../../global/Accordion";
 
 type StageLessonprops = {
   currentStageData: stageDataPayload;
@@ -18,7 +9,7 @@ type StageLessonprops = {
 
 const StageLesson = ({ currentStageData }: any) => {
   const videoRef = useRef<Video>(null);
-  const { width: screenWidth } = useWindowDimensions();
+
   return (
     <>
       {currentStageData.blocks &&
@@ -92,9 +83,31 @@ const StageLesson = ({ currentStageData }: any) => {
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        <View className="bg-background  my-3 flex-row justify-between">
-          {currentStageData?.codingInterface && (
-            <ScrollView
+        <View className="bg-background my-3 flex-col">
+          {currentStageData?.codingInterface &&
+            Object.entries(currentStageData.codingInterface).map(
+              ([key, value]: any) => (
+                <Accordion header={key} contents={value!} key={key} />
+              )
+            )}
+        </View>
+      </View>
+    </>
+  );
+};
+
+export default React.memo(StageLesson);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  video: { width: "100%", height: 200 },
+});
+{
+  /* <ScrollView
               className=" flex-[1] m-3 "
               horizontal={true}
               pagingEnabled
@@ -162,21 +175,5 @@ const StageLesson = ({ currentStageData }: any) => {
                   {currentStageData?.codingInterface?.js}
                 </Text>
               </View>
-            </ScrollView>
-          )}
-        </View>
-      </View>
-    </>
-  );
-};
-
-export default React.memo(StageLesson);
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-  },
-  video: { width: "100%", height: 200 },
-});
+            </ScrollView> */
+}

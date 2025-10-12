@@ -17,8 +17,6 @@ export const PlaygroundEvaluateModal = ({
   onConfirm,
   evaluationRes,
 }: PlaygroundEvaluateModalProps) => {
-  const height = useSharedValue(0);
-
   const cssOpen = useSharedValue(true);
   const jsOpen = useSharedValue(true);
   const htmlOpen = useSharedValue(true);

@@ -139,33 +139,6 @@ export const useHandleFinalAnswer = ({
             },
           }
         );
-
-        // evaluationMutation.mutate(
-        //   {
-        //     receivedCode: receivedCode,
-        //     instruction: currentStageData.instruction,
-        //     description: currentStageData.description,
-        //   },
-        //   {
-        //     onSuccess: async (data) => {
-        //       setTimeout(() => finalAnswerModall.closeModal(), 100);
-        //       const evaluationResult = await nextStage.mutateAsync({
-        //         stageId: currentStageData.id,
-        //         lessonId: String(lessonId),
-        //         levelId: levelId,
-        //         category: category,
-        //         answer: data.correct,
-        //         setCurrentStageIndex,
-        //         levelFinishedModal,
-        //         finalAnswerModall,
-        //         stageType: currentStageData.type,
-        //       });
-        //       console.log(evaluationResult);
-        //       resolve(evaluationResult);
-        //       return;
-        //     },
-        //   }
-        // );
       }
     });
   };

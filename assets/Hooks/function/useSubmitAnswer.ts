@@ -1,18 +1,13 @@
-import { gameOver } from "@/assets/API/fireBase/user/Stages/gameOver";
 import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
-import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
+import { useHandleDecrementHp } from "./useHandleDecrementHp";
+import { useHandleGameOver } from "./useHandleGameOver";
 
 const useSubmitAnswer = () => {
-  const { hasShield, consumeErrorShield } = errorShield();
-  const decrementUserHp = userHp.getState().decrementUserHp;
   const healthPointsTracker = userHp.getState().userHp;
-
-  const resetUserHp = userHp.getState().resetUserHp;
-
+  const { handleGameOver } = useHandleGameOver();
   const nextStage = useMutation({
     mutationFn: async ({
       stageId,
@@ -25,19 +20,8 @@ const useSubmitAnswer = () => {
       finalAnswerModall,
       stageType,
     }: submitAnswerPayload) => {
+      const { handleDecrementHp } = useHandleDecrementHp();
       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
-
-      if (hasShield && !answer) {
-        const isShieldUsed = await consumeErrorShield();
-        Toast.show({
-          type: "success",
-          text1: "Error shiled Consumed!",
-        });
-        if (isShieldUsed) {
-          return;
-        }
-      }
-
       if (answer || stageType === "Lesson") {
         const res = await unlockNextStage({
           category: category,
@@ -77,19 +61,20 @@ const useSubmitAnswer = () => {
           });
           return;
         }
-        // if there is still next Lesson, unclocks it
       }
 
       if (healthPointsTracker <= 1) {
-        await gameOver({ category, lessonId, levelId, stageId });
-        setCurrentStageIndex(0);
-        resetUserHp();
-
+        handleGameOver({
+          stageId,
+          lessonId,
+          levelId,
+          category,
+          setCurrentStageIndex,
+        });
         return ["reset", "You've ran out of hp!"];
       }
+      handleDecrementHp();
 
-      decrementUserHp();
-      console.log("loseOneHp");
       return ["loseOneHp", "You got that one wrong!"];
     },
   });
@@ -97,6 +82,3 @@ const useSubmitAnswer = () => {
 };
 
 export default useSubmitAnswer;
-// else {
-
-//         }

@@ -23,22 +23,6 @@ import {
 } from "react-native";
 import * as Progress from "react-native-progress";
 export default function Home() {
-  const setUserProgress = useGetUserInfo((state) => state.setUserProgress);
-  const userProgressData = useGetUserInfo((state) => state.allProgressStages);
-  // const { data: userProgressData } = useQuery({
-  //   queryKey: ["userProgress"],
-  //   queryFn: userProgress,
-  // });
-
-  // useEffect(() => {
-  //   setUserProgress({
-  //     allProgressLevels: userProgressData.allProgress,
-  //     allProgressStages: userProgressData.allStages,
-  //     completedLevels: userProgressData.completedLevels,
-  //     completedStages: userProgressData.completedStages,
-  //   });
-  // }, [userProgressData, setUserProgress]);
-
   const { userData, inventory } = useGetUserInfo();
 
   const getUserProg = useMutation({

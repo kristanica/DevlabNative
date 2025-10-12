@@ -25,7 +25,7 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                   <Text className="text-white font-exoBold xs:text-sm">
                     Coding Playground
                   </Text>
-                  <Text className="text-[#CFEFFF]  font-exoRegular xs:text-xs">
+                  <Text className="text-white  font-exoRegular xs:text-xs">
                     Try HTML/CSS/JS
                   </Text>
                 </View>
@@ -40,10 +40,10 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
               >
                 <Ionicons name={"cube"} size={50} color={"white"} />
                 <View className="flex-col justify-center ml-4">
-                  <Text className="text-white font-exoBold xs:text-sm">
+                  <Text className="text-white font-exoBold  text-lg xs:text-[12px]">
                     Database Playground
                   </Text>
-                  <Text className="text-[#CFFFE0] font-exoRegular text-sm">
+                  <Text className="text-white  font-exoRegular xs:text-[8px]">
                     Try HTML/CSS/JS
                   </Text>
                 </View>
