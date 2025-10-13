@@ -2,7 +2,7 @@ import { auth, db, path } from "@/assets/constants/constants";
 import { doc, getDoc } from "@firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { AuthError, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useEffect, useReducer } from "react";
 import { Keyboard } from "react-native";
 
@@ -10,6 +10,7 @@ type State = {
   email: string;
   password: string;
   keepSign: boolean;
+  isLoggingIn: boolean;
 };
 
 type Action = {
@@ -31,6 +32,7 @@ const useLogin = () => {
     email: "",
     password: "",
     keepSign: false,
+    isLoggingIn: false,
   });
 
   const signIn = async () => {
@@ -46,13 +48,14 @@ const useLogin = () => {
       if (!userCredential.user.emailVerified) {
         return ["unverifiedEmail", "Your email has not been verified yet!"];
       }
-
+      dispatch({ type: "UPDATE_FIELD", field: "isLoggingIn", value: true });
       if (!userCredential.user) {
         return;
       }
 
       const userRef = doc(db, "Users", userCredential?.user.uid);
       const data = await getDoc(userRef);
+
       //check if account is suspended
       if (data.data()?.isSuspended) {
         console.log("your account is suspended");
@@ -73,7 +76,16 @@ const useLogin = () => {
         pathname: "/(user)/home/(drawer)/(tabs)/Home",
       });
     } catch (error) {
-      console.log(error);
+      const e = error as AuthError;
+      switch (e.code) {
+        case "auth/invalid-credential": {
+          return ["error", "Invalid Credentials"];
+        }
+        default:
+          return ["error", e.message];
+      }
+    } finally {
+      dispatch({ type: "UPDATE_FIELD", field: "isLoggingIn", value: false });
     }
   };
 

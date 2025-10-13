@@ -1,4 +1,5 @@
 import { FlashList } from "@shopify/flash-list";
+import React from "react";
 import ShopItem from "../../ShopItem";
 type ShopListProps = {
   shopItem: any;
@@ -16,10 +17,10 @@ const ShopList = ({ shopItem }: ShopListProps) => {
         keyExtractor={(item) => item.id}
         className="flex-[5] border-[#36334B] border-2 rounded-[10px]"
         contentContainerStyle={{ paddingBottom: 8 }}
-        estimatedItemSize={269}
+        estimatedItemSize={255}
       />
     </>
   );
 };
 
-export default ShopList;
+export default React.memo(ShopList);

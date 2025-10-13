@@ -10,6 +10,7 @@ type LoginFormPayload = {
     email: string;
     password: string;
     keepSign: boolean;
+    isLoggingIn: boolean;
   };
   handleLogin: () => Promise<void>;
   setForgotPasswordVisibility: () => void;
@@ -80,7 +81,7 @@ const LoginForm = ({
           </Text>
         </View>
 
-        <TouchableOpacity onPress={handleLogin}>
+        <TouchableOpacity onPress={handleLogin} disabled={state.isLoggingIn}>
           <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
             LOGIN
           </Text>

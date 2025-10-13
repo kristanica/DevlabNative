@@ -78,6 +78,7 @@ type StagesContainerPayload = {
   stageInformation: StageInformation;
   index: number;
   isLocked?: boolean;
+  id?: string;
 };
 
 type CodeEditorPayload = {

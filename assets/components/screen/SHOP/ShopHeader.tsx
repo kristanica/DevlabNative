@@ -34,6 +34,6 @@ const ShopHeader = ({ coins }: ShopHeader) => {
   );
 };
 
-export default ShopHeader;
+export default React.memo(ShopHeader);
 
 const styles = StyleSheet.create({});

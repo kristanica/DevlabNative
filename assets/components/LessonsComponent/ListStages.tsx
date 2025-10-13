@@ -1,21 +1,19 @@
-import { auth, db, URL } from "@/assets/constants/constants";
-import tryCatch from "@/assets/Hooks/function/tryCatch";
+import { auth, URL } from "@/assets/constants/constants";
+import { setLastOpenedLevel } from "@/assets/Hooks/query/mutation/setLastOpenedLevel";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { router } from "expo-router";
-import { doc, setDoc } from "firebase/firestore";
+import { FlashList } from "@shopify/flash-list";
+import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useRef } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { View } from "react-native";
 import SmallLoading from "../global/SmallLoading";
+import ListStagesItem from "../RenderItems/ListStagesItem";
 import LockLessonModal from "./LockLessonModal";
-import StagesContainer from "./StagesContainer";
 
 const ListStages = ({ userStagesProgress }: any) => {
   const levelPayload = tracker((state) => state.levelPayload);
   const setStageData = stageStore((state) => state.setstageData);
-
   const stageId = useRef<string>("");
   const setLastStageVisibility = tracker(
     (state) => state.setLastStageVisibility
@@ -58,34 +56,7 @@ const ListStages = ({ userStagesProgress }: any) => {
 
   const lockedModal = useModal();
 
-  const lastOpenedLevel = useMutation({
-    mutationFn: async (data: any) => {
-      console.log(data);
-      const uid = auth.currentUser?.uid;
-      const userRef = doc(db, "Users", String(uid));
-      console.log(uid);
-
-      const [_, error] = await tryCatch(
-        setDoc(
-          userRef,
-          {
-            lastOpenedLevel: {
-              lessonId: data.lessonId,
-              levelId: data.levelId,
-              subject: data.category,
-            },
-          },
-
-          { merge: true }
-        )
-      );
-
-      if (error) {
-        console.log(error);
-        return;
-      }
-    },
-  });
+  const lastOpenedLevel = setLastOpenedLevel();
 
   useEffect(() => {
     if (!levelsData) return;
@@ -96,67 +67,27 @@ const ListStages = ({ userStagesProgress }: any) => {
     });
   }, [levelsData]);
 
+  const { renderItem } = ListStagesItem(
+    levelPayload,
+    levelsData,
+    userStagesProgress,
+    globalCounter,
+    setLastStageVisibility,
+    lockedModal,
+    stageId
+  );
   return (
     <View className="h-[40%]">
       {isLoading ? (
         <SmallLoading />
       ) : (
-        <FlatList
+        <FlashList
           data={levelsData ?? []}
+          estimatedItemSize={98}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => item.id}
-          renderItem={({ item }) => {
-            if (!item || !item.id) {
-              console.warn("Null or invalid item in levelsData");
-              return null;
-            }
-            const stageKey = `${levelPayload?.lessonId}-${levelPayload?.levelId}-${item.id}`;
-            const isStageLocked =
-              (userStagesProgress[stageKey]?.isActive &&
-                userStagesProgress[stageKey]?.isCompleted) ??
-              false;
-
-            globalCounter++;
-            // if (item.type !== "Lesson") {
-            //   return null;
-            // }
-
-            return (
-              <Pressable
-                onPress={() => {
-                  setLastStageVisibility(false);
-                  stageId.current = item.id;
-                  if (!isStageLocked) {
-                    lockedModal.setVisibility(true);
-                    return null;
-                  }
-                  if (
-                    levelPayload?.category &&
-                    levelPayload?.lessonId &&
-                    levelPayload?.levelId &&
-                    stageId
-                  ) {
-                    router.push({
-                      pathname: "/(user)/home/stage/[stageId]",
-                      params: {
-                        stageId: stageId.current,
-                        category: levelPayload.category,
-                        lessonId: levelPayload.lessonId,
-                        levelId: levelPayload.levelId,
-                      },
-                    });
-                  }
-                }}
-              >
-                <StagesContainer
-                  isLocked={isStageLocked}
-                  stageInformation={item}
-                  index={globalCounter}
-                ></StagesContainer>
-              </Pressable>
-            );
-          }}
-        ></FlatList>
+          keyExtractor={(item: any) => item.id}
+          renderItem={renderItem}
+        ></FlashList>
       )}
 
       <LockLessonModal

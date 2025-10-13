@@ -19,7 +19,7 @@ const useSequentialAppearAnim = ({
 
   const onScale = useAnimatedStyle(() => ({
     opacity: scaleVal.value,
-    transform: [{ scale: scaleVal.value }],
+    //  transform: [{ scale: scaleVal.value }],
   }));
 
   useEffect(() => {

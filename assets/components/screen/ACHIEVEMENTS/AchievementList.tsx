@@ -38,10 +38,9 @@ const AchievementList = ({
     for (const a of userAchievements ?? [])
       m.set(a.id, { isClaimed: a.isClaimed });
     return m;
-  }, [userAchievements]); // O(1) lookups [web:8][web:24]
+  }, [userAchievements]);
 
-  const keyExtractor = useCallback((item: Achievement) => item.id, []); // stable keys [web:8]
-
+  const keyExtractor = useCallback((item: Achievement) => item.id, []);
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<Achievement>) => {
       const rec = achievedMap.get(item.id);
