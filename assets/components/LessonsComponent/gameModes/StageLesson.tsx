@@ -86,9 +86,10 @@ const StageLesson = ({ currentStageData }: any) => {
         <View className="bg-background my-3 flex-col">
           {currentStageData?.codingInterface &&
             Object.entries(currentStageData.codingInterface).map(
-              ([key, value]: any) => (
-                <Accordion header={key} contents={value!} key={key} />
-              )
+              ([key, value]: any) => {
+                if (!value) return;
+                return <Accordion header={key} contents={value!} key={key} />;
+              }
             )}
         </View>
       </View>

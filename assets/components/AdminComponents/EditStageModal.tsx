@@ -7,6 +7,7 @@ import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import toastHandler from "@/assets/zustand/toastHandler";
 import tracker from "@/assets/zustand/tracker";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
@@ -88,7 +89,7 @@ const EditStageModal = ({
     if (hasEmpty) {
       closeModal();
       setToastVisibility("error", "Some fields are empty");
-      //TODO: add toast if empty fields
+
       return;
     }
 
@@ -125,7 +126,6 @@ const EditStageModal = ({
         className="flex-[1] justify-center items-center bg-black/30 "
         onPress={() => {
           setCancelCompression(false);
-          closeModal();
         }}
       >
         <Pressable
@@ -142,10 +142,19 @@ const EditStageModal = ({
             showsVerticalScrollIndicator={false}
           >
             <Animated.View
-              className="     h-full  rounded-xl  "
+              className="  h-full  rounded-xl  "
               style={[scaleStyle]}
             >
               <View className=" bg-modal pb-5 rounded-2xl border-white border-[2px] mb-5 px-2">
+                <Pressable onPress={() => closeModal()}>
+                  <Ionicons
+                    name={"close"}
+                    size={25}
+                    color={"white"}
+                    className="py-2"
+                  ></Ionicons>
+                </Pressable>
+
                 <View>
                   <Text className="text-white font-exoBold text-lg mx-auto my-3">
                     Currently editing {stageIdentifier}

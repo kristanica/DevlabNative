@@ -19,11 +19,11 @@ const ConfirmationModal = ({
       <Pressable onPress={closeModal} className="flex-1">
         <Animated.View
           style={[scaleStyle]}
-          className="   w-[250px] h-[300px] m-auto bg-[#2C2C2E] rounded-[10px]"
+          className="   w-[250px] h-[300px] m-auto  rounded-[10px]"
         >
-          <View className="justify-center items-center flex-[1] bg-[#2C2C2E] rounded-3xl">
+          <View className="justify-center items-center flex-[1] bg-modal rounded-xl border-[1px] border-[#FFFFFF]">
             <LottieView
-              source={require("@/assets/Lottie/Admin Login.json")}
+              source={require("@/assets/Lottie/Loading.json")}
               loop
               autoPlay
               style={{
@@ -34,18 +34,18 @@ const ConfirmationModal = ({
               }}
             />
             <View className="flex-[1] justify-center items-center">
-              <Text className="text-white text-center font-exoBold">
+              <Text className="text-white text-center font-exoBold text-xs xs:text-[9px]">
                 Do you want to save your changes?
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
               <Pressable onPress={onConfirm}>
-                <Text className="text-white py-2 px-7 font-exoBold bg-[#7F5AF0]">
+                <Text className="text-white py-2 px-7 font-exoBold bg-[#7F5AF0] text-xs xs:text-[9px] rounded-xl">
                   Continue
                 </Text>
               </Pressable>
               <Pressable onPress={closeModal}>
-                <Text className="text-white py-2 px-10 font-exoBold bg-[#FF6166]">
+                <Text className="text-white py-2 px-10 font-exoBold bg-[#FF6166] text-xs xs:text-[9px] rounded-xl">
                   No
                 </Text>
               </Pressable>

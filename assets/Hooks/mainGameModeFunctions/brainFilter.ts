@@ -67,20 +67,29 @@ const brainFilter = (
 
   const brainFilterItem = () => {
     console.log("BRAINFILETER USEDDDDDDDDDDDDDD");
-    const wrongOptions = arrayChoices.filter(
-      (value: string) => value !== choices.correctAnswer.trim()
+    // const wrongOptions = arrayChoices.filter(
+    //   (value: string) => value !== choices.correctAnswer.trim()
+    // );
+    const wrongOptions = optionsArray.filter(
+      ([key]) => key !== choices.correctAnswer.trim()
     );
-
+    if (wrongOptions.length === 0) return optionsArray;
     const randomIndex = Math.floor(Math.random() * wrongOptions.length);
-    const optionToRemove = wrongOptions[randomIndex];
-
-    const removedOneWrongAnswer = arrayChoices.filter(
-      (value: string) => value !== optionToRemove
+    const optionToRemove = wrongOptions[randomIndex][0];
+    const filteredOptions = optionsArray.filter(
+      ([key]) => key !== optionToRemove
     );
 
-    removeActiveBuff("brainFilter");
-    console.log("WRONG ANSWERRRRRRRRRRRRRRRRR" + removedOneWrongAnswer);
-    return removedOneWrongAnswer;
+    // const randomIndex = Math.floor(Math.random() * wrongOptions.length);
+    // const optionToRemove = wrongOptions[randomIndex];
+
+    // const removedOneWrongAnswer = arrayChoices.filter(
+    //   (value: string) => value !== optionToRemove
+    // );
+
+    // removeActiveBuff("brainFilter");
+    console.log("WRONG ANSWERRRRRRRRRRRRRRRRR" + filteredOptions);
+    return filteredOptions;
   };
 
   return { arrayChoices, compareUserAnswer, brainFilterItem, optionsArray };

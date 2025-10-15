@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
+import { css as beautifyCSS, html as beautifyHTML } from "js-beautify";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -14,14 +15,24 @@ type AccordionPayload = {
 
 export const Accordion = ({ header, contents }: AccordionPayload) => {
   const [isOpened, setIsOpened] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  console.log(contentHeight);
   const accordionStyle = useAnimatedStyle(() => ({
-    height: withTiming(isOpened ? 100 : 0, {
+    height: withTiming(isOpened ? contentHeight : 0, {
       duration: 300,
       easing: Easing.out(Easing.ease),
     }),
     opacity: withTiming(isOpened ? 1 : 0, { duration: 200 }),
     overflow: "hidden",
   }));
+  console.log(header);
+  if (header === "html") {
+    console.log("ASDSADASD" + contents);
+    contents = beautifyHTML(contents, { indent_size: 2 });
+  }
+  if (header === "css") {
+    contents = beautifyCSS(contents, { indent_size: 2 });
+  }
 
   return (
     <View className="bg-accent px-6 py-2 rounded-lg mx-2 my-3">
@@ -42,9 +53,18 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
       </View>
 
       <Animated.View style={accordionStyle} className="relative">
-        <Text className="text-white font-exoRegular text-[10px] text-justify mt-1">
-          {contents}
-        </Text>
+        <View
+          onLayout={(event) =>
+            setContentHeight(event.nativeEvent.layout.height)
+          }
+          style={{
+            position: "absolute",
+          }}
+        >
+          <Text className="text-white font-exoRegular text-[10px] text-justify mt-1">
+            {contents}
+          </Text>
+        </View>
 
         <Pressable
           className="absolute right-0 bottom-2"

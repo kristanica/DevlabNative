@@ -41,8 +41,8 @@ const Settings = () => {
   const { logOut } = useSignOut();
 
   const resetPassword = useModal();
-  const [bio, setBio] = useState<string>(userData?.username!);
-  const [userName, setUserName] = useState<string>(userData?.bio!);
+  const [bio, setBio] = useState<string>(userData?.bio!);
+  const [userName, setUserName] = useState<string>(userData?.username!);
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const isMutating = useIsMutating();

@@ -56,8 +56,8 @@ const StageBrainBytes = ({
           {currentStageData?.instruction}
         </Text>
         <View className="bg-background p-3 rounded-3xl my-3">
-          {optionsArray &&
-            Array.from(optionsArray).map(([key, choice], index) => (
+          {displayChoices &&
+            displayChoices.map(([key, choice]: any, index: any) => (
               <View key={index} className="flex flex-row relative">
                 <TouchableOpacity onPress={() => setAnswer(key)}>
                   <Text className="py-2  text-white font-exoRegular text-xs xs:text-[9px] text-justify">

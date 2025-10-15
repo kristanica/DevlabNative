@@ -15,7 +15,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React, { useCallback, useMemo, useState } from "react";
-import { Pressable, SectionList, Text, View } from "react-native";
+import {
+  Pressable,
+  SectionList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useShallow } from "zustand/react/shallow";
 
 const CategoryScreen = () => {
@@ -23,11 +29,6 @@ const CategoryScreen = () => {
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
 
-  // const setTracker = tracker((state) => state.setTracker);
-  // const lastStageVisibility = tracker((state) => state.lastStageVisibility);
-  // const setLastStageVisibility = tracker(
-  //   (state) => state.setLastStageVisibility
-  // );
   const { setTracker, lastStageVisibility, setLastStageVisibility } = tracker(
     useShallow((state) => ({
       setTracker: state.setTracker,
@@ -42,7 +43,11 @@ const CategoryScreen = () => {
 
   const { fetchedLesson, isLoading } = fetchLesson(id);
 
-  const { data: useUserProgressData, isLoading: progressLoading } = useQuery({
+  const {
+    data: useUserProgressData,
+    isLoading: progressLoading,
+    refetch: refetchProgress,
+  } = useQuery({
     queryKey: ["specificUserProgress", id],
     queryFn: async () => {
       const token = await auth.currentUser?.getIdToken(true);
@@ -78,7 +83,7 @@ const CategoryScreen = () => {
   const sections = useMemo(() => {
     return fetchedLesson
       ? fetchedLesson.map((lesson: any) => ({
-          title: lesson.Lesson, // numeric lesson index
+          title: lesson.Lesson,
           data: lesson.levelsData.map((level: any) => ({
             ...level,
             levelId: level.id,
@@ -92,6 +97,9 @@ const CategoryScreen = () => {
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>
         <CategoryHeader meta={meta} id={id}></CategoryHeader>
+        <TouchableOpacity onPress={() => refetchProgress()}>
+          <Ionicons name={"reload-circle"} size={20} color="white"></Ionicons>
+        </TouchableOpacity>
         <LockLessonModal
           onConfirm={() => closeModal()}
           visibility={visibility}
