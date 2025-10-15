@@ -6,7 +6,7 @@ import {
   FIREBASE_STORAGE,
   FIREBASE_STORE,
 } from "../../firebaseConfig";
-export const URL = `https://7286a9bf5888.ngrok-free.app` as const;
+export const URL = `https://d70d6718a06c.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -226,6 +226,28 @@ export const devlabBootLines = [
   "Buffing syntax with +5 chaos energy...",
   "Enabling God Mode for your console.logs...",
   "All systems unstable. Proceed anyway 🚀",
+] as const;
+export const evaluatingCodeLines = [
+  "Parsing the sacred markup scrolls...",
+  "Whispering sweet nothings to your CSS...",
+  "Gently poking the DOM tree with a virtual stick...",
+  "Evaluating your JavaScript sorcery...",
+  "Untangling the web of tangled styles...",
+  "Summoning phantom bugs for inspection...",
+  "Translating hieroglyphic comments...",
+  "Validating inline styles with a magnifying glass...",
+  "Conversion of caffeine into code analysis...",
+  "Summoning the ghost of coding past...",
+  "Gulping bulk coffee during static analysis...",
+  "Bowing to the altar of semantic tags...",
+  "Hunting rogue selectors in the style jungle...",
+  "Feeding your JavaScript to the syntax monster...",
+  "Balancing pixel perfection and browser quirks...",
+  "Polishing the pixels before pixel perfect...",
+  "Applying magic patches to your CSS grid...",
+  "Decoding cryptic variable names...",
+  "Blessing your tags with accessibility...",
+  "Debugging while humming the internet’s anthem...",
 ] as const;
 
 //Onboarding Constants

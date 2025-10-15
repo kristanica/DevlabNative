@@ -43,10 +43,6 @@ const ViteCodeEditor = ({
   const evaluationModal = useModal();
   const evaluateMutation = useMutation({
     mutationFn: async ({ receivedCode }: any) => {
-      console.log(
-        receivedCode?.html +
-          "ASDJHSAGDHJASGHJDGASHJDGJHASGDHJASGDHJSAGJHDGASJHDGSAHJGDHJSAGDHJYAYYS"
-      );
       return codingPlayground({ receivedCode });
     },
     onSuccess: () => {

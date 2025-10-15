@@ -1,59 +1,34 @@
 import { useIsFocused } from "@react-navigation/native";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
-import purchaseItem from "../API/fireBase/user/purchaseItem";
 import { itemIcon } from "../constants/constants";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
-import toastHandler from "../zustand/toastHandler";
-import { useGetUserInfo } from "../zustand/useGetUserInfo";
 
 type ShopItemProps = {
-  id: string;
   Icon: string;
   cost: number;
   desc: string;
   title: string;
   index: number;
   userCoins: number;
+  handlePurchase: any;
 };
 
-// Shop item component for (Tabs)/Shop.tsx
-const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
+const ShopItem = ({
+  Icon,
+  desc,
+  title,
+  cost,
+  index,
+  handlePurchase,
+}: ShopItemProps) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
     id: index,
   });
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
-  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
-  const userData = useGetUserInfo((state) => state.userData);
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: async ({
-      id,
-      cost,
-      itemName,
-    }: {
-      id: string;
-      cost: number;
-      itemName: string;
-    }) => {
-      return purchaseItem({ id: id, cost: cost, itemName: itemName });
-    },
-    onSuccess: async (data) => {
-      useGetUserInfo
-        .getState()
-        .setUserData({ ...userData!, coins: data?.newCoins });
-      queryClient.invalidateQueries({ queryKey: ["userData"] });
-      setToastVisibility("success", "You've brought an item!");
-    },
-    onError: () => {
-      setToastVisibility("error", "Not enough coins!");
-    },
-  });
-
   return (
     <Animated.View
       style={[onScale]}
@@ -73,11 +48,7 @@ const ShopItem = ({ id, Icon, desc, title, cost, index }: ShopItemProps) => {
             {desc}
           </Text>
 
-          <TouchableOpacity
-            onPress={() =>
-              mutation.mutate({ id: id, cost: cost, itemName: iconNameTrimmed })
-            }
-          >
+          <TouchableOpacity onPress={handlePurchase}>
             <Text className="text-white xs:text-[8px] bg-[#1ABC9C]  px-7 font-exoRegular py-2 rounded-2xl">
               ${cost}
             </Text>

@@ -7,7 +7,7 @@ import ShopHeader from "@/assets/components/screen/SHOP/ShopHeader";
 import ShopList from "@/assets/components/screen/SHOP/ShopList";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useIsMutating, useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { View } from "react-native";
 
@@ -20,7 +20,10 @@ const Shop = () => {
   const userData = useGetUserInfo((state) => state.userData);
 
   const isMutating = useIsMutating();
-  const arrayShopItem = Array.isArray(shopItems) ? shopItems : [];
+  const arrayShopItem = useMemo(
+    () => (Array.isArray(shopItems) ? shopItems : []),
+    [shopItems]
+  );
   return (
     <ProtectedRoutes>
       <View className="bg-accent flex-1 ">

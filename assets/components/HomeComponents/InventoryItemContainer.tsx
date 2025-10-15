@@ -7,7 +7,6 @@ const InventoryItemContainer = ({
   quantity,
   title,
 }: UserInventoryItemsPayload) => {
-  console.log(Icon);
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
 
   return (

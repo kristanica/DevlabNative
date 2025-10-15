@@ -6,7 +6,6 @@ import { CategoryItem } from "@/assets/components/RenderItems/CategoryItem";
 import CategoryHeader from "@/assets/components/screen/CATEGORY/CategoryHeader";
 import { auth, lessonMetaData, URL } from "@/assets/constants/constants";
 import fetchLesson from "@/assets/Hooks/query/fetchLesson";
-
 import useModal from "@/assets/Hooks/useModal";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import tracker from "@/assets/zustand/tracker";
@@ -15,23 +14,32 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Pressable, SectionList, Text, View } from "react-native";
+import { useShallow } from "zustand/react/shallow";
 
 const CategoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
 
-  const setTracker = tracker((state) => state.setTracker);
-  const lastStageVisibility = tracker((state) => state.lastStageVisibility);
-  const setLastStageVisibility = tracker(
-    (state) => state.setLastStageVisibility
+  // const setTracker = tracker((state) => state.setTracker);
+  // const lastStageVisibility = tracker((state) => state.lastStageVisibility);
+  // const setLastStageVisibility = tracker(
+  //   (state) => state.setLastStageVisibility
+  // );
+  const { setTracker, lastStageVisibility, setLastStageVisibility } = tracker(
+    useShallow((state) => ({
+      setTracker: state.setTracker,
+      lastStageVisibility: state.lastStageVisibility,
+      setLastStageVisibility: state.setLastStageVisibility,
+    }))
   );
   const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
   const setUnlockedStages = unlockedStages((state) => state.setUnlockedStages);
+
   const { fetchedLesson, isLoading } = fetchLesson(id);
 
   const { data: useUserProgressData, isLoading: progressLoading } = useQuery({
@@ -66,6 +74,20 @@ const CategoryScreen = () => {
     setStagesVisibility,
     id
   );
+
+  const sections = useMemo(() => {
+    return fetchedLesson
+      ? fetchedLesson.map((lesson: any) => ({
+          title: lesson.Lesson, // numeric lesson index
+          data: lesson.levelsData.map((level: any) => ({
+            ...level,
+            levelId: level.id,
+            lessonId: lesson.id,
+          })),
+        }))
+      : [];
+  }, [fetchedLesson]);
+
   return (
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>
@@ -91,18 +113,7 @@ const CategoryScreen = () => {
           </>
         ) : (
           <SectionList
-            sections={
-              fetchedLesson
-                ? fetchedLesson.map((lesson: any) => ({
-                    title: lesson.Lesson, // numeric lesson index
-                    data: lesson.levelsData.map((level: any) => ({
-                      ...level,
-                      levelId: level.id,
-                      lessonId: lesson.id,
-                    })),
-                  }))
-                : []
-            }
+            sections={sections}
             stickySectionHeadersEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
