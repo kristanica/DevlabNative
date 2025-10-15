@@ -17,19 +17,20 @@ type ModalHandlerProps = {
   handleFinalAnswer: any;
   receivedCode: any;
   stageData: any;
-
+  queryRecievedCode: any;
   finalAnswerModall: any;
-
+  isRewardClaimed: any;
   category: string;
 };
 
 const ModalHandler = ({
+  isRewardClaimed,
   levelFinishedModal,
   evaluateModal,
   evaluationLessonMutation,
   handleFinalAnswer,
   receivedCode,
-
+  queryRecievedCode,
   finalAnswerModall,
 
   category,
@@ -51,6 +52,7 @@ const ModalHandler = ({
             });
           }}
           {...levelFinishedModal}
+          isRewardClaimed={isRewardClaimed}
         ></LevelFinishedModal>
       )}
 
@@ -68,11 +70,20 @@ const ModalHandler = ({
           onConfirm={async () => {
             finalAnswerModall.closeModal();
 
-            console.log("FUCK");
+            if (category === "Database") {
+              console.log(queryRecievedCode.query + "modalHandler");
+              const toastResult = await handleFinalAnswer(
+                queryRecievedCode.result
+              );
+
+              setToastVisibility(toastResult[0], toastResult[1]);
+
+              return;
+            }
             const toastResult = await handleFinalAnswer(receivedCode);
 
             await playSound(toastResult[0]);
-            console.log(toastResult[0]);
+
             setToastVisibility(toastResult[0], toastResult[1]);
           }}
           {...finalAnswerModall}

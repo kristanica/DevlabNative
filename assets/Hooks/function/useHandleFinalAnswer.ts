@@ -58,19 +58,20 @@ export const useHandleFinalAnswer = ({
   };
 
   const handleFinalAnswer = async (receivedCode: any) => {
+    console.log(receivedCode + "handleFinalAnswer");
     const finishedStages = unlockedStages.getState().unlockedStages;
 
     const isStagedUnlocked =
       finishedStages[`${lessonId}-${levelId}-${currentStageData.id}`]
         .isCompleted ?? false;
 
-    if (isStagedUnlocked) {
-      console.log(
-        `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
-      );
-      setCurrentStageIndex((prev) => prev + 1);
-      return;
-    }
+    // if (isStagedUnlocked) {
+    //   console.log(
+    //     `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
+    //   );
+    //   setCurrentStageIndex((prev) => prev + 1);
+    //   return;
+    // }
     // const isStageLocked =
     //   allStages?.[String(category)]?.[stageKey]?.status ?? false;
     // gameIdentifier.current = currentStageDataType;

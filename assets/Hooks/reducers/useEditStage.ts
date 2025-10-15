@@ -24,6 +24,7 @@ type State = {
     css: string;
     js: string;
     html: string;
+    database: string;
   };
 
   //Bug Bust
@@ -50,6 +51,7 @@ const initialState = {
     css: "",
     js: "",
     html: "",
+    database: "",
   },
 
   //Bug Bust

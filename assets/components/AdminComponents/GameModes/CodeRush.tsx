@@ -44,7 +44,7 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
         numeric={false}
       />
       <InputContainer
-        title={"Coding Interface 312"}
+        title={"Coding Interface JS"}
         value={state.codingInterface.js}
         setValue={(text) => {
           dispatch({
@@ -56,8 +56,20 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
         numeric={false}
       />
       <InputContainer
-        title={"Coding Interface HTML"}
-        value={state.codingInterface.html}
+        title={"Coding Interface QUEREYING"}
+        value={state.codingInterface.database}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_CODING_INTERFACE",
+            field: "database",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
+        title={"Coding Interface QUEREYING"}
+        value={state.codingInterface.database}
         setValue={(text) => {
           dispatch({
             type: "UPDATE_CODING_INTERFACE",

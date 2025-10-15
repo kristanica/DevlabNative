@@ -143,6 +143,18 @@ const Lesson = ({
         numeric={false}
       />
       <InputContainer
+        title={"Coding Interface QUEREYING"}
+        value={state.codingInterface.database}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_CODING_INTERFACE",
+            field: "database",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
         title={"Instruction"}
         value={state.instruction}
         setValue={(text) => {

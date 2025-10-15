@@ -73,6 +73,18 @@ const CodeCrafter = ({
         numeric={false}
       />
       <InputContainer
+        title={"Coding Interface QUEREYING"}
+        value={state.codingInterface.database}
+        setValue={(text) => {
+          dispatch({
+            type: "UPDATE_CODING_INTERFACE",
+            field: "database",
+            value: text,
+          });
+        }}
+        numeric={false}
+      />
+      <InputContainer
         title={"Coding Interface HTML"}
         value={state.codingInterface.html}
         setValue={(text) => {

@@ -1,18 +1,22 @@
+import { auth, db } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-
+type levelFinishedModalPayload = ScaleModalPayload & {
+  isRewardClaimed: boolean;
+};
 const LevelFinishedModal = ({
-  closeModal,
   visibility,
   scaleStyle,
   onConfirm,
-}: ScaleModalPayload) => {
+  isRewardClaimed,
+}: levelFinishedModalPayload) => {
   const expAndCoins = setCoinsandExp((state) => state.coinsAndExp);
   const userHealth = userHealthPoints((state) => state.health);
   const { coinSurgeItem } = coinSurge();
@@ -26,26 +30,28 @@ const LevelFinishedModal = ({
     removeActiveBuffs("doubleCoins");
   }, [activeBuffs]);
 
-  // useEffect(() => {
-  //   const giveReward = async () => {
-  //     const uid = auth?.currentUser?.uid;
-  //     const userRef = doc(db, "Users", String(uid));
-  //     const userSnapShot = (await getDoc(userRef)).data();
+  useEffect(() => {
+    console.log("isReward claimed?" + isRewardClaimed);
+    if (isRewardClaimed) return;
+    const giveReward = async () => {
+      const uid = auth?.currentUser?.uid;
+      const userRef = doc(db, "Users", String(uid));
+      const userSnapShot = (await getDoc(userRef)).data();
 
-  //     await setDoc(
-  //       userRef,
-  //       {
-  //         exp: userSnapShot?.exp + expAndCoins?.exp,
-  //         coins: userSnapShot?.coins + expAndCoins?.coins,
-  //       },
-  //       {
-  //         merge: true,
-  //       }
-  //     );
-  //     console.log(expAndCoins);
-  //   };
-  //   giveReward();
-  // }, [expAndCoins]);
+      await setDoc(
+        userRef,
+        {
+          exp: userSnapShot?.exp + expAndCoins?.exp,
+          coins: userSnapShot?.coins + expAndCoins?.coins,
+        },
+        {
+          merge: true,
+        }
+      );
+      console.log(expAndCoins);
+    };
+    giveReward();
+  }, [expAndCoins]);
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
@@ -78,18 +84,28 @@ const LevelFinishedModal = ({
                 PERFORMANCE SUMMARY
               </Text>
               <View className="mt-3">
-                <Text className="text-white text-center font-exoBold xs:text-xs">
-                  Lives Remaining:
-                  <Text className="text-[#ad3532]"> {userHealth}x</Text>
-                </Text>
-                <Text className="text-white text-center font-exoBold xs:text-xs">
-                  DevCoins: +
-                  <Text className="text-[#e3be00]">{expAndCoins?.coins}</Text>
-                </Text>
-                <Text className="text-white text-center font-exoBold xs:text-xs">
-                  Experience gained: +
-                  <Text className="text-[#21b3cf]">{expAndCoins?.exp}</Text>
-                </Text>
+                {isRewardClaimed ? (
+                  <Text className="text-white text-center font-exoBold xs:text-xs">
+                    You've already claimed the reward for this level!
+                  </Text>
+                ) : (
+                  <>
+                    <Text className="text-white text-center font-exoBold xs:text-xs">
+                      Lives Remaining:
+                      <Text className="text-[#ad3532]"> {userHealth}x</Text>
+                    </Text>
+                    <Text className="text-white text-center font-exoBold xs:text-xs">
+                      DevCoins: +
+                      <Text className="text-[#e3be00]">
+                        {expAndCoins?.coins}
+                      </Text>
+                    </Text>
+                    <Text className="text-white text-center font-exoBold xs:text-xs">
+                      Experience gained: +
+                      <Text className="text-[#21b3cf]">{expAndCoins?.exp}</Text>
+                    </Text>
+                  </>
+                )}
               </View>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">

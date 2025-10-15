@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useCallback } from "react";
+import React from "react";
 import { Pressable, StyleSheet } from "react-native";
 import StagesContainer from "../LessonsComponent/StagesContainer";
 
@@ -16,37 +16,34 @@ const ListStagesItem = (
   lockedModal: any,
   stageId: any
 ) => {
-  const pressStage = useCallback(
-    (item: any, isStageLocked: boolean, levelPayload: any) => {
-      {
-        setLastStageVisibility(false);
-        stageId.current = item.id;
-        if (!isStageLocked) {
-          lockedModal.setVisibility(true);
-          return null;
-        }
-        if (
-          levelPayload?.category &&
-          levelPayload?.lessonId &&
-          levelPayload?.levelId &&
-          stageId
-        ) {
-          router.push({
-            pathname: "/(user)/home/stage/[stageId]",
-            params: {
-              stageId: stageId.current,
-              category: levelPayload.category,
-              lessonId: levelPayload.lessonId,
-              levelId: levelPayload.levelId,
-            },
-          });
-        }
+  const pressStage = (item: any, isStageLocked: boolean, levelPayload: any) => {
+    {
+      setLastStageVisibility(false);
+      stageId.current = item.id;
+      if (!isStageLocked) {
+        lockedModal.setVisibility(true);
+        return null;
       }
-    },
-    [levelsData]
-  );
+      if (
+        levelPayload?.category &&
+        levelPayload?.lessonId &&
+        levelPayload?.levelId &&
+        stageId
+      ) {
+        router.push({
+          pathname: "/(user)/home/stage/[stageId]",
+          params: {
+            stageId: stageId.current,
+            category: levelPayload.category,
+            lessonId: levelPayload.lessonId,
+            levelId: levelPayload.levelId,
+          },
+        });
+      }
+    }
+  };
 
-  const renderItem = useCallback(({ item, index }: any) => {
+  const renderItem = ({ item, index }: any) => {
     {
       if (!item || !item.id || !item.title || !item.description) {
         console.warn("Null or invalid item in levelsData", item);
@@ -76,7 +73,7 @@ const ListStagesItem = (
         </Pressable>
       );
     }
-  }, []);
+  };
 
   return { renderItem };
 };

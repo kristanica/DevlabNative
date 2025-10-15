@@ -160,7 +160,7 @@ const StageScreen = () => {
     logs,
     terminalRef,
   } = useCodeEditor();
-  console.log("BAAANG");
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -173,19 +173,25 @@ const StageScreen = () => {
               </Text>
             </Pressable>
 
-            <Pressable
-              onPress={() => {
-                terminalRef.current?.expand();
-              }}
-            >
-              <Ionicons name="terminal" size={20} color="white" />
-            </Pressable>
-            <SelectLanguageNavigation
-              subject={String(category)}
-              sendToWebView={sendToWebView}
-            />
+            {category !== "Database" && (
+              <>
+                <Pressable
+                  onPress={() => {
+                    terminalRef.current?.expand();
+                  }}
+                >
+                  <Ionicons name="terminal" size={20} color="white" />
+                </Pressable>
+                <SelectLanguageNavigation
+                  subject={String(category)}
+                  sendToWebView={sendToWebView}
+                />
+              </>
+            )}
           </View>
           <ModalHandler
+            isRewardClaimed={isRewardClaimed}
+            queryRecievedCode={databaseQueryingFunctions.queryRecievedCode}
             lessonId={String(lessonId)}
             levelFinishedModal={levelFinishedModal}
             evaluateModal={evaluateModal}
@@ -252,6 +258,14 @@ const StageScreen = () => {
               {currentStageData?.type === "Lesson" && (
                 <Pressable
                   onPress={() => {
+                    if (category === "Database") {
+                      console.log("this should run huhu");
+                      handleEvaluation(
+                        databaseQueryingFunctions.queryRecievedCode.query
+                      );
+                      return;
+                    }
+
                     handleEvaluation(receivedCode);
                   }}
                   className="mx-auto"

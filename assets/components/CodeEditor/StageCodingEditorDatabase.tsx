@@ -1,17 +1,26 @@
 import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
 import { sqlRegex } from "@/assets/Hooks/regexChecker/sqlRegex";
 import LottieView from "lottie-react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import WebView from "react-native-webview";
 
+type ViteDatabaseCodeEditorProps = {
+  queryRecievedCode: any;
+  setQueryRecievedCode: any;
+  query: string | undefined;
+  setQuery: React.Dispatch<React.SetStateAction<string | undefined>>;
+  tableStyle: string;
+};
 const StageCodingEditorDatabase = ({
   queryRecievedCode,
   setQueryRecievedCode,
   query,
   setQuery,
   tableStyle,
-}: CodeMirrorDatabasePayload) => {
+}: ViteDatabaseCodeEditorProps) => {
+  const [displayHTML, setDisplayHTML] = useState<any>("");
+  const webRef = useRef<WebView>(null);
   useEffect(() => {
     if (!queryRecievedCode) return;
     const unlockSqlAchievement = sqlRegex(queryRecievedCode);
@@ -46,17 +55,13 @@ const StageCodingEditorDatabase = ({
               html: `<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
-  <meta charset="UTF-8" />
+
   <style>
 ${tableStyle}
   </style>
   </head>
   <body>
-   ${query}
+  ${displayHTML}
   </body>
 </html>`,
             }}
@@ -69,17 +74,13 @@ ${tableStyle}
                 html: `<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
-  <meta charset="UTF-8" />
+ 
  <style>
 ${tableStyle}
   </style>
   </head>
   <body>
-   ${queryRecievedCode}
+    ${queryRecievedCode.result}
   </body>
 </html>`,
               }}
@@ -102,6 +103,7 @@ ${tableStyle}
         </ScrollView>
         <View className="bg-shopAccent flex-[2] m-3 rounded-[10px] ">
           <WebView
+            ref={webRef}
             scrollEnabled={false}
             style={{
               flex: 1,
@@ -112,12 +114,28 @@ ${tableStyle}
             source={require("@/fontFamily/editor/database/index.html")}
             onMessage={(e) => {
               try {
-                const result = e.nativeEvent.data;
+                const data = JSON.parse(e.nativeEvent.data);
+
                 if (!query) {
-                  setQuery(result);
+                  setQuery(data.defaultQuery);
                   return;
                 }
-                setQueryRecievedCode(result);
+
+                setQueryRecievedCode({
+                  query: data.query,
+                  result: data.result,
+                });
+
+                if (data.allTables) {
+                  const combinedHtml = data.allTables
+                    .map(
+                      (table: any) =>
+                        `<h2 style="color: black; font-family: Arial, sans-serif">${table.name}</h2>${table.html}`
+                    )
+                    .join("<br/><br/>");
+
+                  setDisplayHTML(combinedHtml);
+                }
               } catch (error) {
                 console.log(error);
               }

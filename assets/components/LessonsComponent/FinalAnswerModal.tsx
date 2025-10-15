@@ -1,4 +1,4 @@
-import { Modal, Pressable, Text, View } from "react-native";
+import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 const FinalAnswerModal = ({
@@ -21,11 +21,11 @@ const FinalAnswerModal = ({
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <Pressable onPress={onConfirm}>
+              <TouchableOpacity onPress={onConfirm}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
                   Continue
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
               <Pressable onPress={closeModal}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px]  bg-[#FF6166] rounded-2xl">
                   No

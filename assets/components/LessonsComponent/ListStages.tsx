@@ -1,18 +1,21 @@
 import { auth, URL } from "@/assets/constants/constants";
+import tryCatch from "@/assets/Hooks/function/tryCatch";
 import { setLastOpenedLevel } from "@/assets/Hooks/query/mutation/setLastOpenedLevel";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useEffect, useRef } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import SmallLoading from "../global/SmallLoading";
 import ListStagesItem from "../RenderItems/ListStagesItem";
 import LockLessonModal from "./LockLessonModal";
 
 const ListStages = ({ userStagesProgress }: any) => {
   const levelPayload = tracker((state) => state.levelPayload);
+  console.log(levelPayload);
   const setStageData = stageStore((state) => state.setstageData);
   const stageId = useRef<string>("");
   const setLastStageVisibility = tracker(
@@ -28,21 +31,23 @@ const ListStages = ({ userStagesProgress }: any) => {
     queryFn: async () => {
       const currentUser = auth.currentUser;
       const token = await currentUser?.getIdToken(true);
-      const res = await fetch(
-        `${URL}/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
-        {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
+      const [res, error] = await tryCatch(
+        axios.get(
+          `${URL}/fireBase/getSpecificStage/${levelPayload?.category}/${levelPayload?.lessonId}/${levelPayload?.levelId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
       );
 
-      if (!res.ok) {
-        console.log("Failed to fetch stages... " + res.status);
-        return null;
+      if (error) {
+        console.log(error);
+        return;
       }
-      const data = await res.json();
+      const data = res?.data;
+      console.log(data);
 
       setStageData(data);
       return data;
@@ -81,13 +86,16 @@ const ListStages = ({ userStagesProgress }: any) => {
       {isLoading ? (
         <SmallLoading />
       ) : (
-        <FlashList
-          data={levelsData ?? []}
-          estimatedItemSize={98}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item: any) => item.id}
-          renderItem={renderItem}
-        ></FlashList>
+        <>
+          <Text>ASDSAD</Text>
+          <FlashList
+            data={levelsData}
+            estimatedItemSize={98}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item: any) => item.id}
+            renderItem={renderItem}
+          ></FlashList>
+        </>
       )}
 
       <LockLessonModal

@@ -35,30 +35,24 @@ const useSubmitAnswer = () => {
         if (data.isNextStageUnlocked) {
           setCurrentStageIndex((prev: any) => prev + 1);
           return ["stageUnlocked", "You got that one right!"];
-        }
-        //If there is still next level, unlocks it
-        else if (data.isNextLevelUnlocked) {
+        } else if (data.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
-
-          // if (levelId === "Level1" && lessonId === "Lesson1") {
-          //   unlockAchievement(category, "firstLevelComplete", {
-          //     LevelId: levelId,
-          //     lessonId: lessonId,
-          //   });
-          //   setTimeout(() => {
-          //     levelFinishedModal.setVisibility(true);
-          //   }, 200);
-          //   return ["levelUnlocked", "You've unlocked an achievement!"];
-          // }
-
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
           console.log(res);
+          console.log("Hello");
           setUnlockNextLevel({
             lessonId: lessonId,
             nextLevelId: res.nextLevelId,
           });
+          return;
+        } else if (data.isWholeTopicFinished) {
+          finalAnswerModall.closeModal();
+          setTimeout(() => {
+            levelFinishedModal.setVisibility(true);
+          }, 200);
+
           return;
         }
       }

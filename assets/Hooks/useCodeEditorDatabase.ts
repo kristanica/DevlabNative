@@ -2,15 +2,14 @@ import { useState } from "react";
 
 export const useCodeEditorDatabase = () => {
   const [query, setQuery] = useState<string | undefined>();
-  const [queryRecievedCode, setQueryRecievedCode] = useState<
-    string | undefined
-  >();
+  const [queryRecievedCode, setQueryRecievedCode] = useState<any>();
 
   const tableStyle = `
   body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction:column;
     min-height: 100vh;
 
     margin: 0;
