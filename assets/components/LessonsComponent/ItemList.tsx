@@ -1,6 +1,7 @@
 import { auth, db, height } from "@/assets/constants/constants";
 
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -30,6 +31,8 @@ import Toast, { BaseToastProps } from "react-native-toast-message";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
 const ItemList = () => {
+  const setActiveItem = ActiveItemIcon((state) => state.setActiveIcon);
+  const activeItem = ActiveItemIcon((state) => state.activeIcon);
   const showToast = (type: string, message: string) => {
     Toast.show({
       type: type,
@@ -113,11 +116,18 @@ const ItemList = () => {
 
   const useItemActions: Record<string, (userItem: string) => void> = {
     CoinSurge: async (itemId) => {
-      console.log("ASdWOAOS123");
-      // await playSound("success");
+      if (activeItem.CoinSurge) {
+        console.log("Youve already used this!");
+        showToast("itemError", "You've already used this!");
+        return;
+      }
+
+      setActiveItem({
+        CoinSurge: true,
+      });
 
       showToast("itemUsed", `You've used Coin Surge!`);
-      console.log("ABSS");
+
       await useItem(itemId, "doubleCoins");
       console.log("AYES");
     },
@@ -164,7 +174,16 @@ const ItemList = () => {
         console.log("You cannot use items in here");
         return;
       }
+      if (activeItem.ErrorShield) {
+        console.log("Errros shiled is alreayd used");
+        showToast("itemError", "You've already used this!");
+        return;
+      }
+
       // await playSound("success");
+      setActiveItem({
+        ErrorShield: true,
+      });
       showToast("itemUsed", `You've used Error Shield!`);
       await useItem(itemId, "errorShield");
     },
@@ -176,7 +195,14 @@ const ItemList = () => {
         console.log("youre not in Brain Bytes");
         return;
       }
-      // await playSound("success");
+      if (activeItem.BrainFilter) {
+        showToast("itemError", "Youve already used BrainFiler!");
+        return;
+      }
+
+      setActiveItem({
+        BrainFilter: true,
+      });
       showToast("itemUsed", `You've used Brain Filter!`);
       useItem(itemId, "brainFilter");
     },
@@ -230,6 +256,31 @@ const ItemList = () => {
         className="h-80 w-[50%] top-14 absolute right-0 bg-modal border-[#2a3141] border-[1px] border-r-0 shadow-2xl z-50 p-4"
         pointerEvents="auto"
       >
+        <View>
+          <Text className="text-white text-xs xs:text-[9px] text-center font-exoBold">
+            Active Items
+          </Text>
+          {activeItem.ErrorShield && (
+            <>
+              <Ionicons
+                name="shield"
+                size={24}
+                color="green"
+                className="my-5"
+              />
+            </>
+          )}
+          {activeItem.CoinSurge && (
+            <>
+              <Ionicons name="cash" size={24} color="yellow" className="my-2" />
+            </>
+          )}
+          {activeItem.BrainFilter && (
+            <>
+              <Ionicons name="book" size={24} color="yellow" className="my-2" />
+            </>
+          )}
+        </View>
         <View className="justify-center items-center flex-row mb-2">
           <TouchableOpacity
             onPress={() => {
@@ -239,6 +290,7 @@ const ItemList = () => {
           >
             <Ionicons name={"close"} size={15} color={"white"}></Ionicons>
           </TouchableOpacity>
+
           <Text className="text-white font-exoBold text-lg">
             Your Inventory
           </Text>

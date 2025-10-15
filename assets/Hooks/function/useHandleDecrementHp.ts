@@ -1,9 +1,12 @@
+import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import userHp from "@/assets/zustand/userHp";
 import Toast from "react-native-toast-message";
 import errorShield from "../mainGameModeFunctions/globalItems/errorShield";
 
 export const useHandleDecrementHp = () => {
   const decrementUserHp = userHp?.getState().decrementUserHp;
+  const setActiveItem = ActiveItemIcon.getState().setActiveIcon;
+
   const { hasShield, consumeErrorShield } = errorShield();
   const handleDecrementHp = async () => {
     if (hasShield) {
@@ -14,6 +17,7 @@ export const useHandleDecrementHp = () => {
           text1: "Error shield Consumed!",
         });
       }, 0);
+      setActiveItem({ ErrorShield: false });
       if (isShiledUsed) {
         return;
       }

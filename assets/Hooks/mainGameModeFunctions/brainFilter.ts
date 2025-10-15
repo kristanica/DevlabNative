@@ -1,4 +1,5 @@
 import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
+import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import { isAnswerCorrect } from "@/assets/zustand/isAnswerCorrect";
 import userHp from "@/assets/zustand/userHp";
 import { activeBuffsLocal } from "../function/activeBuffsLocal";
@@ -24,7 +25,7 @@ const brainFilter = (
     .map(([_, values]: any) => values);
   const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   const setIsCorrect = isAnswerCorrect((state) => state.setIsCorrect);
-  const resetUserHp = userHp.getState().resetUserHp;
+  const setActiveItem = ActiveItemIcon.getState().setActiveIcon;
   const { handleDecrementHp } = useHandleDecrementHp();
   const { handleGameOver } = useHandleGameOver();
   const healthPointsTracker = userHp.getState().userHp;
@@ -41,11 +42,14 @@ const brainFilter = (
         levelId: levelId,
         stageId: stageId,
       });
+
       setCurrentStageIndex((prev: any) => prev + 1);
+      setActiveItem({ BrainFilter: false });
       setIsCorrect(true);
       return;
     } else {
       handleDecrementHp();
+      setActiveItem({ BrainFilter: false });
       if (healthPointsTracker <= 1) {
         handleGameOver({
           category,
@@ -55,13 +59,14 @@ const brainFilter = (
           setCurrentStageIndex,
         });
       }
-
+      setActiveItem({ BrainFilter: false });
       console.log("You are wrong");
       setIsCorrect(false);
     }
   };
 
   const brainFilterItem = () => {
+    console.log("BRAINFILETER USEDDDDDDDDDDDDDD");
     const wrongOptions = arrayChoices.filter(
       (value: string) => value !== choices.correctAnswer.trim()
     );
@@ -74,7 +79,7 @@ const brainFilter = (
     );
 
     removeActiveBuff("brainFilter");
-
+    console.log("WRONG ANSWERRRRRRRRRRRRRRRRR" + removedOneWrongAnswer);
     return removedOneWrongAnswer;
   };
 

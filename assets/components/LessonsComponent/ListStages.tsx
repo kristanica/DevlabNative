@@ -47,7 +47,6 @@ const ListStages = ({ userStagesProgress }: any) => {
         return;
       }
       const data = res?.data;
-      console.log(data);
 
       setStageData(data);
       return data;

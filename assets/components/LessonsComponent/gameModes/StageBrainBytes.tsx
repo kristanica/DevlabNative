@@ -14,24 +14,24 @@ const StageBrainBytes = ({
   setCurrentStageIndex,
 }: any) => {
   console.log(lessonId, stageId, lessonId, category, levelId);
-  const { compareUserAnswer, arrayChoices, brainFilterItem, optionsArray } =
-    brainFilter(
-      currentStageData?.choices!,
-      setCurrentStageIndex,
-      lessonId,
-      category,
-      stageId,
-      levelId
-    );
+  const { compareUserAnswer, brainFilterItem, optionsArray } = brainFilter(
+    currentStageData?.choices!,
+    setCurrentStageIndex,
+    lessonId,
+    category,
+    stageId,
+    levelId
+  );
   const [answer, setAnswer] = useState<string>("");
-  const [displayChoices, setDisplayChoices] = useState<any>(arrayChoices || []);
-  const activeBuff = activeBuffsLocal((state) => state.activeBuff);
 
+  const [displayChoices, setDisplayChoices] = useState<any>(optionsArray || []);
+  const activeBuff = activeBuffsLocal((state) => state.activeBuff);
   useEffect(() => {
     const itemUse = async () => {
       if (!activeBuff.includes("brainFilter")) return;
       const filtered = await brainFilterItem();
       setDisplayChoices(filtered);
+      console.log(filtered);
     };
     itemUse();
   }, [activeBuff]);
