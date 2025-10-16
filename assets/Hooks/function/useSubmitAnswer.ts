@@ -22,6 +22,7 @@ const useSubmitAnswer = () => {
     }: any) => {
       const { handleDecrementHp } = useHandleDecrementHp();
       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
+      console.log(answer + "useSubmitAnswer");
       if (answer || stageType === "Lesson") {
         const res = await unlockNextStage({
           category: category,

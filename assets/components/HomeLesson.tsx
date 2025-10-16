@@ -1,11 +1,17 @@
 import React from "react";
 
 import { useIsFocused } from "@react-navigation/native";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
 
-const HomeLesson = ({ name, color, children, index }: HomeLessonPayload) => {
+const HomeLesson = ({
+  name,
+  color,
+  children,
+  index,
+  icon,
+}: HomeLessonPayload) => {
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
@@ -18,14 +24,16 @@ const HomeLesson = ({ name, color, children, index }: HomeLessonPayload) => {
     >
       <View
         style={{ backgroundColor: color }}
-        className="h-3/4 justify-center items-center rounded-br-none rounded-bl-none"
+        className="h-[70%] justify-center items-center rounded-br-none rounded-bl-none"
       >
-        {children}
+        <Image source={icon} className="w-[50px] h-[50px]"></Image>
       </View>
       {/* Render's Name */}
-      <View className=" justify-center items-center">
+      <View className=" items-center my-2 flex-row justify-between  mr-3 ml-2">
         <Text className="text-white font-exoBold  xs:text-xs">{name}</Text>
+        {children}
       </View>
+      <View></View>
     </Animated.View>
   );
 };

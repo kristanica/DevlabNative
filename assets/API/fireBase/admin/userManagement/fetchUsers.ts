@@ -22,6 +22,6 @@ export const fetchUsers = async () => {
       "This errror comes from fetchUsers function. The client reached the backend but failed to get a response"
     );
   }
-
+  console.log(allUserData.data);
   return allUserData.data;
 };

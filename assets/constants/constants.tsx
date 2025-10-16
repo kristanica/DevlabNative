@@ -291,10 +291,30 @@ export const onboardingData = [
 
 // Home Constatns
 export const lessons = [
-  { id: 1, name: "Html", color: "#FFC300", icon: "logo-html5" },
-  { id: 2, name: "Css", color: "#00BFFF", icon: "logo-css3" },
-  { id: 3, name: "JavaScript", color: "#FF8C00", icon: "logo-javascript" },
-  { id: 4, name: "Database", color: "#388E3C", icon: "cube" },
+  {
+    id: 1,
+    name: "Html",
+    color: "#FFC300",
+    icon: require("@/assets/images/lessonIcons/HTMLicon.png"),
+  },
+  {
+    id: 2,
+    name: "Css",
+    color: "#00BFFF",
+    icon: require("@/assets/images/lessonIcons/CSSicon.png"),
+  },
+  {
+    id: 3,
+    name: "JavaScript",
+    color: "#FF8C00",
+    icon: require("@/assets/images/lessonIcons/JSicon.png"),
+  },
+  {
+    id: 4,
+    name: "Database",
+    color: "#388E3C",
+    icon: require("@/assets/images/lessonIcons/DATABASEicon.png"),
+  },
 ];
 
 // Achievements Constants

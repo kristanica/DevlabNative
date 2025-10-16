@@ -19,7 +19,7 @@ export const bugBust = async ({
   const token = await auth.currentUser?.getIdToken(true);
   const [data, error] = await tryCatch(
     axios.post(
-      `${URL}/openAI/bugBust`,
+      `${URL}/openAI/bugBustPrompt`,
       {
         submittedCode: submittedCode,
         instruction: instruction,
@@ -39,5 +39,17 @@ export const bugBust = async ({
     console.log(error + "BUGBUSTaa");
     return;
   }
-  return data.data;
+  let raw = data.data.response;
+  if (typeof raw === "string") {
+    raw = raw.replace(/```json|```/g, "").trim();
+  }
+
+  let parsed: any = null;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    console.log("Failed to parse JSON:", e, raw);
+  }
+
+  return parsed;
 };

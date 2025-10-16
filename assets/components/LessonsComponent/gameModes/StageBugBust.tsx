@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
 import React, { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { Accordion } from "../../global/Accordion";
 import HintModal from "../Modals/HintModal";
 
 const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
@@ -55,10 +56,14 @@ const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
         >
           <Ionicons name="clipboard" color="white" size={20} />
         </TouchableOpacity>
-        <View className="bg-background p-3  my-3 relative">
-          <Text className="text-white font-exoRegular xs:text-xs text-justify">
-            {currentStageData.codingInterface}
-          </Text>
+        <View className="bg-background my-3 flex-col">
+          {currentStageData?.codingInterface &&
+            Object.entries(currentStageData.codingInterface).map(
+              ([key, value]: any) => {
+                if (!value) return;
+                return <Accordion header={key} contents={value!} key={key} />;
+              }
+            )}
         </View>
       </View>
     </>

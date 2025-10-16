@@ -2,12 +2,14 @@ import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import { useIsFocused } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import AnimatedProgressWheel from "react-native-progress-wheel";
 import Animated from "react-native-reanimated";
 
 const AdminUserContainer = ({
   allUsersInformation,
   mutation,
   index,
+  activeLevel,
 }: AdminUserContainerPayload) => {
   const [visible, setVisible] = useState<boolean>(false);
   const isFocused = useIsFocused();
@@ -29,8 +31,8 @@ const AdminUserContainer = ({
         <View className="flex-[1] justify-center items-center ">
           <Image
             style={{
-              height: 100,
-              width: 100,
+              height: 80,
+              width: 80,
               borderRadius: 40,
             }}
             source={toUse}
@@ -49,10 +51,74 @@ const AdminUserContainer = ({
           >
             {/* Suppose to be progress across lessons */}
             <View className="flex-row justify-evenly  items-center">
-              <View className="w-[50px] h-[50px] bg-slate-300 rounded-lg"></View>
-              <View className="w-[50px] h-[50px] bg-slate-300 rounded-lg"></View>
-              <View className="w-[50px] h-[50px] bg-slate-300 rounded-lg"></View>
-              <View className="w-[50px] h-[50px] bg-slate-300 rounded-lg"></View>
+              <View className="w-[50px] h-[100px] bg-modal  rounded-lg justify-center items-center">
+                <AnimatedProgressWheel
+                  progress={allUsersInformation.levelCount["Html"]}
+                  showProgressLabel={true}
+                  rotation={"-90deg"}
+                  subtitle={` / ${activeLevel["Html"]["levelCounter"]}`}
+                  subtitleStyle={{ fontSize: 5, color: "white" }}
+                  labelStyle={{ fontSize: 5, color: "white" }}
+                  color={"#2CB67D"}
+                  backgroundColor={"#242629"}
+                  size={40}
+                  width={5}
+                  rounded
+                />
+                <Text className="text-white text-xs xs:text-[9px]">Html</Text>
+              </View>
+              <View className="w-[50px] h-[100px] bg-modal  rounded-lg justify-center items-center">
+                <AnimatedProgressWheel
+                  progress={allUsersInformation.levelCount["Css"]}
+                  showProgressLabel={true}
+                  rotation={"-90deg"}
+                  subtitle={` / ${activeLevel["Css"]["levelCounter"]}`}
+                  subtitleStyle={{ fontSize: 5, color: "white" }}
+                  labelStyle={{ fontSize: 5, color: "white" }}
+                  color={"#2CB67D"}
+                  backgroundColor={"#242629"}
+                  size={40}
+                  width={5}
+                  rounded
+                />
+                <Text className="text-white text-xs xs:text-[9px]">Css</Text>
+              </View>
+              <View className="w-[50px] h-[100px] bg-modal  rounded-lg justify-center items-center">
+                <AnimatedProgressWheel
+                  progress={allUsersInformation.levelCount["JavaScript"]}
+                  showProgressLabel={true}
+                  rotation={"-90deg"}
+                  subtitle={` / ${activeLevel["JavaScript"]["levelCounter"]}`}
+                  subtitleStyle={{ fontSize: 5, color: "white" }}
+                  labelStyle={{ fontSize: 5, color: "white" }}
+                  color={"#2CB67D"}
+                  backgroundColor={"#242629"}
+                  size={40}
+                  width={5}
+                  rounded
+                />
+                <Text className="text-white text-xs xs:text-[9px]">
+                  JavaScript
+                </Text>
+              </View>
+              <View className="w-[50px] h-[100px] bg-modal  rounded-lg justify-center items-center">
+                <AnimatedProgressWheel
+                  progress={allUsersInformation.levelCount["Database"]}
+                  showProgressLabel={true}
+                  rotation={"-90deg"}
+                  subtitle={` / ${activeLevel["Database"]["levelCounter"]}`}
+                  subtitleStyle={{ fontSize: 5, color: "white" }}
+                  labelStyle={{ fontSize: 5, color: "white" }}
+                  color={"#2CB67D"}
+                  backgroundColor={"#242629"}
+                  size={40}
+                  width={5}
+                  rounded
+                />
+                <Text className="text-white text-xs xs:text-[9px]">
+                  Database
+                </Text>
+              </View>
             </View>
 
             <TouchableOpacity
@@ -61,7 +127,7 @@ const AdminUserContainer = ({
                 setVisible(false);
               }}
             >
-              <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl justify-center items-center">
+              <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl justify-center items-center  text-xs xs:text-[10px]">
                 Progress
               </Text>
             </TouchableOpacity>
@@ -77,25 +143,21 @@ const AdminUserContainer = ({
               },
             ]}
           >
-            <Text className="text-white font-exoBold">
+            <Text className="text-white font-exoBold text-xs xs:text-[10px]">
               USERNAME:
               <Text className="text-white font-exoLight">
-                {" "}
                 {allUsersInformation.username}
               </Text>
             </Text>
-            <Text className="my-3 text-white font-exoBold">
+            <Text className="my-3 text-white font-exoBold text-xs xs:text-[10px]">
               EMAIL:
-              <Text className="font-exoLight">
-                {" "}
-                {allUsersInformation.email}
-              </Text>
+              <Text className="font-exoLight">{allUsersInformation.email}</Text>
             </Text>
 
-            <Text className="text-white font-exoBold">
+            <Text className="text-white font-exoBold text-xs xs:text-[10px]">
               STATUS:
               <Text
-                className="font-exoLight "
+                className="font-exoLight text-xs xs:text-[10px]"
                 style={{
                   color: allUsersInformation.isSuspended ? "red" : "green",
                 }}
@@ -103,12 +165,12 @@ const AdminUserContainer = ({
                 {allUsersInformation.isSuspended ? "Suspended" : "Active"}
               </Text>
             </Text>
-            <View className="flex-row justify-evenly items-center flex-[1]">
+            <View className="flex-row justify-evenly items-center flex-[1] mt-3">
               <TouchableOpacity
                 disabled={allUsersInformation.isSuspended}
                 onPress={mutation}
               >
-                <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
+                <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                   Suspend
                 </Text>
               </TouchableOpacity>
@@ -117,7 +179,7 @@ const AdminUserContainer = ({
                 disabled={!allUsersInformation.isSuspended}
                 onPress={mutation}
               >
-                <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl">
+                <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                   Activate
                 </Text>
               </TouchableOpacity>
@@ -127,7 +189,7 @@ const AdminUserContainer = ({
                   setVisible(true);
                 }}
               >
-                <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl">
+                <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                   Progress
                 </Text>
               </TouchableOpacity>

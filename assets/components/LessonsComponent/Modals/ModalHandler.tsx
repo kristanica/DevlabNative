@@ -64,6 +64,7 @@ const ModalHandler = ({
                 categoryId: category,
               },
             });
+            levelFinishedModal.closeModal();
           }}
           {...levelFinishedModal}
           isRewardClaimed={isRewardClaimed}
@@ -84,16 +85,13 @@ const ModalHandler = ({
           onConfirm={async () => {
             finalAnswerModall.closeModal();
             console.log(currentStageType + "modalHandler");
-
             if (category === "Database") {
               console.log(queryRecievedCode.query + "modalHandler");
               const toastResult = await handleFinalAnswer(
                 queryRecievedCode,
                 currentStageType
               );
-
               setToastVisibility(toastResult[0], toastResult[1]);
-
               return;
             }
             const toastResult = await handleFinalAnswer(
@@ -101,7 +99,6 @@ const ModalHandler = ({
               currentStageType,
               setEvaluationData
             );
-
             setToastVisibility(toastResult[0], toastResult[1]);
           }}
           {...finalAnswerModall}

@@ -21,12 +21,12 @@ const FeedBackModal = ({
 }: FeedBackModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable className="flex-1 bg-black/50">
+      <Pressable className="flex-1 bg-black/50 z-50">
         <Animated.View
           style={[scaleStyle]}
           className="  h-[30%] w-3/4 m-auto  rounded-[10px]"
         >
-          <View className=" flex-[1] bg-modal rounded-xl border-[##6c37a5] border-[1px] ">
+          <View className=" flex-[1] bg-modal rounded-xl border-[##6c37a5] border-[1px] z-50">
             <View className="justify-center items-center h-[20%] relative">
               <Text className="text-white text-center font-exoBold xs:text-xs ">
                 Previous evaluation

@@ -17,19 +17,20 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
             key={item.id}
             name={item.name}
             color={item.color}
+            icon={item.icon}
             index={index}
           >
             <AnimatedProgressWheel
               progress={userProgress[item.name]}
               showProgressLabel={true}
               rotation={"-90deg"}
-              subtitle={` out of ${activeLevel[item.name]["levelCounter"]}`}
-              subtitleStyle={{ fontSize: 10 }}
-              labelStyle={{ fontSize: 10 }}
-              color={"green"}
-              backgroundColor={"gray"}
-              size={100}
-              width={10}
+              subtitle={` / ${activeLevel[item.name]["levelCounter"]}`}
+              subtitleStyle={{ fontSize: 5, color: "white" }}
+              labelStyle={{ fontSize: 5, color: "white" }}
+              color={"#2CB67D"}
+              backgroundColor={"#242629"}
+              size={40}
+              width={5}
               rounded
             />
           </HomeLesson>

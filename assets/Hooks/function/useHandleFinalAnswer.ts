@@ -59,8 +59,7 @@ export const useHandleFinalAnswer = ({
   const handleFinalAnswer = async (
     receivedCode: any,
     type: string,
-    setEvaluationData: any,
-    setEvaluationModal: any
+    setEvaluationData: any
   ) => {
     // const   = unlockedStages.getState().unlockedStages;
 
@@ -104,7 +103,10 @@ export const useHandleFinalAnswer = ({
           {
             submittedCode: stringReceivedCode,
             instruction: currentStageData.instruction,
-            providedCode: currentStageData?.codingInterface,
+            providedCode:
+              type === "CodeCrafter"
+                ? currentStageData?.replicationFile
+                : currentStageData?.codingInterface,
             description: currentStageData?.description,
             subject: category,
             gameType: currentStageData?.type,
@@ -118,13 +120,12 @@ export const useHandleFinalAnswer = ({
                 levelId: levelId,
                 category: category,
                 answer: data.correct,
-
                 setCurrentStageIndex,
                 levelFinishedModal,
                 finalAnswerModall,
                 stageType: currentStageData.type,
               });
-
+              console.log("did it even reach here?");
               if (data.correct) {
                 setEvaluationData(data);
                 feedBackModal.setVisibility(true);

@@ -1,10 +1,12 @@
 import { fetchUsers } from "@/assets/API/fireBase/admin/userManagement/fetchUsers";
 import { searchUser } from "@/assets/API/fireBase/admin/userManagement/searchUser";
 import { suspendUser } from "@/assets/API/fireBase/admin/userManagement/suspendUser";
+import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import AdminUserContainer from "@/assets/components/AdminComponents/AdminUserContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -20,14 +22,13 @@ const UserManagement = () => {
     staleTime: 5 * (60 * 1000),
   });
 
-  const {
-    mutate: search,
-    data: searchedUser,
-    isIdle: searchUserLoading,
-  } = useMutation({
+  const { mutate: search, data: searchedUser } = useMutation({
     mutationFn: searchUser,
   });
-
+  const { data: activeLevel, isLoading } = useQuery({
+    queryKey: ["ActiveLeveld"],
+    queryFn: activeLevelCounter,
+  });
   const mutation = useMutation({
     mutationFn: suspendUser,
     onMutate: ({ id, isSuspended }: suspendUserPayload) => {
@@ -48,6 +49,10 @@ const UserManagement = () => {
     },
   });
   const isSearching = Boolean(searchUserName.trim());
+
+  if (isLoading) {
+    return <FillScreenLoading></FillScreenLoading>;
+  }
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -83,18 +88,21 @@ const UserManagement = () => {
                 showsVerticalScrollIndicator={false}
                 bounces={false}
                 data={users}
-                renderItem={({ item, index }) => (
-                  <AdminUserContainer
-                    allUsersInformation={item}
-                    mutation={() =>
-                      mutation.mutate({
-                        id: item.id,
-                        isSuspended: item.isSuspended,
-                      })
-                    }
-                    index={index}
-                  ></AdminUserContainer>
-                )}
+                renderItem={({ item, index }) => {
+                  return (
+                    <AdminUserContainer
+                      allUsersInformation={item}
+                      activeLevel={activeLevel.active}
+                      mutation={() =>
+                        mutation.mutate({
+                          id: item.id,
+                          isSuspended: item.isSuspended,
+                        })
+                      }
+                      index={index}
+                    ></AdminUserContainer>
+                  );
+                }}
               />
             ) : (
               <FlatList
@@ -103,6 +111,7 @@ const UserManagement = () => {
                 data={searchedUser}
                 renderItem={({ item, index }) => (
                   <AdminUserContainer
+                    activeLevel={activeLevel.active}
                     index={index}
                     allUsersInformation={item}
                     mutation={() =>

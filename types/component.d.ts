@@ -38,9 +38,11 @@ type AdminUserContainerPayload = {
     isAdmin?: boolean;
     profileImage?: string;
     backgroundImage?: string;
+    levelCount: any;
   };
   mutation: () => void;
   index: number;
+  activeLevel: any;
 };
 
 type DropDownMenuPayload = {
@@ -206,6 +208,7 @@ type HomeLessonPayload = {
   name: string;
   color: string;
   index: number;
+  icon: any;
   children: ReactNode;
 };
 
