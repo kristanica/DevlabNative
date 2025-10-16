@@ -1,3 +1,4 @@
+import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
 import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScreen";
@@ -23,6 +24,10 @@ const DrawerLayout = () => {
   useEffect(() => {
     const loadProgress = async () => {
       const result = await Promise.allSettled([
+        queryClient.ensureQueryData({
+          queryKey: ["ActiveLeveld"],
+          queryFn: activeLevelCounter,
+        }),
         queryClient.ensureQueryData({
           queryKey: ["userProgress"],
           queryFn: userProgress,

@@ -1,4 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import RenderCounter from "@/assets/components/global/RenderCounter";
 import ForgotPasswordModal from "@/assets/components/RegisterComponents/ForgotPasswordModal";
 import LoginForm from "@/assets/components/screen/LOGIN/LoginForm";
 import Logo from "@/assets/components/screen/LOGIN/Logo";
@@ -11,6 +12,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Animated, { FadeIn } from "react-native-reanimated";
 
 const Login = () => {
+  RenderCounter("login");
   const { state, dispatch, signIn } = useLogin();
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const handleLogin = async () => {

@@ -9,13 +9,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useRef } from "react";
 import { Text, View } from "react-native";
+import RenderCounter from "../global/RenderCounter";
 import SmallLoading from "../global/SmallLoading";
 import ListStagesItem from "../RenderItems/ListStagesItem";
 import LockLessonModal from "./LockLessonModal";
 
 const ListStages = ({ userStagesProgress }: any) => {
+  RenderCounter("List Stages");
   const levelPayload = tracker((state) => state.levelPayload);
-  console.log(levelPayload);
+
   const setStageData = stageStore((state) => state.setstageData);
   const stageId = useRef<string>("");
   const setLastStageVisibility = tracker(

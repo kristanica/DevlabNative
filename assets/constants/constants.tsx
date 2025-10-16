@@ -6,7 +6,7 @@ import {
   FIREBASE_STORAGE,
   FIREBASE_STORE,
 } from "../../firebaseConfig";
-export const URL = `https://3918f59ddfb4.ngrok-free.app` as const;
+export const URL = `https://527a12dc47a1.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -291,8 +291,8 @@ export const onboardingData = [
 
 // Home Constatns
 export const lessons = [
-  { id: 1, name: "HTML", color: "#FFC300", icon: "logo-html5" },
-  { id: 2, name: "CSS", color: "#00BFFF", icon: "logo-css3" },
+  { id: 1, name: "Html", color: "#FFC300", icon: "logo-html5" },
+  { id: 2, name: "Css", color: "#00BFFF", icon: "logo-css3" },
   { id: 3, name: "JavaScript", color: "#FF8C00", icon: "logo-javascript" },
   { id: 4, name: "Database", color: "#388E3C", icon: "cube" },
 ];

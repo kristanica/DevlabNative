@@ -57,21 +57,20 @@ export const useHandleFinalAnswer = ({
     );
   };
 
-  const handleFinalAnswer = async (receivedCode: any) => {
-    console.log(receivedCode + "handleFinalAnswer");
+  const handleFinalAnswer = async (receivedCode: any, type: string) => {
     const finishedStages = unlockedStages.getState().unlockedStages;
 
     const isStagedUnlocked =
       finishedStages[`${lessonId}-${levelId}-${currentStageData.id}`]
         .isCompleted ?? false;
 
-    // if (isStagedUnlocked) {
-    //   console.log(
-    //     `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
-    //   );
-    //   setCurrentStageIndex((prev) => prev + 1);
-    //   return;
-    // }
+    if (isStagedUnlocked) {
+      console.log(
+        `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
+      );
+      setCurrentStageIndex((prev) => prev + 1);
+      return;
+    }
     // const isStageLocked =
     //   allStages?.[String(category)]?.[stageKey]?.status ?? false;
     // gameIdentifier.current = currentStageDataType;
@@ -84,9 +83,10 @@ export const useHandleFinalAnswer = ({
     //   return;
     // }
     // Chekcs if the current stage is Lesson, this will ignore answer
-
+    console.log(type + " hAndleFinalAnswer");
     return new Promise(async (resolve, reject) => {
-      if (currentStageDataType === "Lesson") {
+      if (type === "Lesson") {
+        console.log("OKEASE?");
         const evaluationResult = nextStage.mutateAsync({
           stageId: currentStageData.id,
           lessonId: String(lessonId),
@@ -101,7 +101,7 @@ export const useHandleFinalAnswer = ({
         return;
       }
 
-      if (!receivedCode && currentStageDataType !== "Lesson") {
+      if (!receivedCode && type !== "Lesson") {
         setTimeout(() => finalAnswerModall.closeModal(), 100);
         resolve(["wrongAnswer", "Your code field is empty!"]);
         return;

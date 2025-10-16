@@ -1,4 +1,3 @@
-import { playSound } from "@/assets/Hooks/function/soundHandler";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { router } from "expo-router";
 import React from "react";
@@ -21,6 +20,7 @@ type ModalHandlerProps = {
   finalAnswerModall: any;
   isRewardClaimed: any;
   category: string;
+  currentStageType: string;
 };
 
 const ModalHandler = ({
@@ -32,6 +32,7 @@ const ModalHandler = ({
   receivedCode,
   queryRecievedCode,
   finalAnswerModall,
+  currentStageType,
 
   category,
 }: ModalHandlerProps) => {
@@ -69,6 +70,7 @@ const ModalHandler = ({
         <FinalAnswerModal
           onConfirm={async () => {
             finalAnswerModall.closeModal();
+            console.log(currentStageType + "modalHandler");
 
             if (category === "Database") {
               console.log(queryRecievedCode.query + "modalHandler");
@@ -80,9 +82,12 @@ const ModalHandler = ({
 
               return;
             }
-            const toastResult = await handleFinalAnswer(receivedCode);
+            const toastResult = await handleFinalAnswer(
+              receivedCode,
+              currentStageType
+            );
 
-            await playSound(toastResult[0]);
+            // await playSound(toastResult[0]);
 
             setToastVisibility(toastResult[0], toastResult[1]);
           }}

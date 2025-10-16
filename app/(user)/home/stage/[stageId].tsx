@@ -2,13 +2,13 @@ import StageCodingEditor from "@/assets/components/CodeEditor/StageCodingEditor"
 import StageCodingEditorDatabase from "@/assets/components/CodeEditor/StageCodingEditorDatabase";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import RenderCounter from "@/assets/components/global/RenderCounter";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
-import StageModalComponent from "@/assets/Hooks/function/StageModalComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
@@ -31,6 +31,7 @@ import React, {
 } from "react";
 import { Pressable, Text, View } from "react-native";
 const StageScreen = () => {
+  RenderCounter("stage screen");
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
   const gameIdentifier = useRef<string | undefined>("Lesson");
@@ -49,19 +50,19 @@ const StageScreen = () => {
   const isMutating = useIsMutating();
 
   const handlePrevious = useCallback(() => {
-    if (
-      stageData[currentStageIndex - 1] === undefined ||
-      stageData[currentStageIndex - 1] === null
-    ) {
-      console.log("cannot go bacckkkk");
-      return;
-    }
-    setCurrentStageIndex((prev) => prev - 1);
+    setCurrentStageIndex((prev) => {
+      if (prev <= 0) {
+        console.log("last stage");
+        return prev;
+      }
+      const newIndex = prev - 1;
+      console.log("UPDATED INDEX:", newIndex);
+      return newIndex;
+    });
   }, []);
-
   const handleBackPress = useCallback(() => {
     router.replace({ pathname: "/home/Home" });
-  }, []);
+  }, [currentStageIndex]);
 
   //useMemo
 
@@ -77,37 +78,12 @@ const StageScreen = () => {
   );
 
   useEffect(() => {
-    if (!levelProgress || !category || !levelProgress[String(category)]) {
-      return;
-    }
-
-    if (isRewardClaimed) {
-      setToastVisibility(
-        "success",
-        "You've already claimed the rewards for this level"
-      );
-    }
-  }, [isRewardClaimed, category, levelProgress]);
-
-  useEffect(() => {
-    if (!currentStageData?.id || !allStages || !category) {
-      return;
-    }
-
-    const isStageLocked =
-      allStages?.[String(category)]?.[currentStageKey]?.isCompleted ?? false;
-
-    if (isStageLocked) {
-      setToastVisibility("success", "You've already completed this stage!");
-    }
-  }, [currentStageData?.id, allStages, category]);
-
-  useEffect(() => {
     if (!stageData) return;
 
     const index: number = stageData.findIndex(
       (stage: any) => stage.id === stageId
     );
+
     setCurrentStageIndex(index);
     const stage = index !== -1 ? stageData[index] : null;
 
@@ -190,6 +166,7 @@ const StageScreen = () => {
             )}
           </View>
           <ModalHandler
+            currentStageType={currentStageType}
             isRewardClaimed={isRewardClaimed}
             queryRecievedCode={databaseQueryingFunctions.queryRecievedCode}
             lessonId={String(lessonId)}
@@ -203,9 +180,7 @@ const StageScreen = () => {
             category={String(category)}
           ></ModalHandler>
           {/* Shows modal for first time */}
-          <StageModalComponent
-            type={gameIdentifier.current}
-          ></StageModalComponent>
+
           {category === "Database" ? (
             <StageCodingEditorDatabase
               {...databaseQueryingFunctions}

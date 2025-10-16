@@ -1,5 +1,8 @@
+import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
+import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import RenderCounter from "@/assets/components/global/RenderCounter";
 
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import HomeInventory from "@/assets/components/screen/HOME/HomeInventory";
@@ -9,11 +12,13 @@ import UserProgress from "@/assets/components/screen/HOME/UserProgress";
 import { lessons } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCallback } from "react";
 
 import { ScrollView, View } from "react-native";
 export default function Home() {
+  RenderCounter("Home");
   const { userData, inventory } = useGetUserInfo();
 
   const setLevelPayload = tracker((state) => state.setTracker);
@@ -36,6 +41,16 @@ export default function Home() {
     });
   }, []);
 
+  const { data: activeLevel } = useQuery({
+    queryKey: ["ActiveLeveld"],
+    queryFn: activeLevelCounter,
+  });
+
+  const { data: progressData } = useQuery({
+    queryKey: ["userProgress"],
+    queryFn: userProgress,
+  });
+
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -46,10 +61,14 @@ export default function Home() {
             <ScrollView
               bounces={true}
               showsVerticalScrollIndicator={false}
-              className="flex-[3]  "
+              className="flex-[3] "
             >
               <JumpBackIn handleJumpBackIn={handleJumpBackIn}></JumpBackIn>
-              <UserProgress lessons={lessons}></UserProgress>
+              <UserProgress
+                lessons={lessons}
+                activeLevel={activeLevel.active}
+                userProgress={progressData.specificCompletedLevels}
+              ></UserProgress>
 
               <HomeInventory inventory={inventory}></HomeInventory>
             </ScrollView>

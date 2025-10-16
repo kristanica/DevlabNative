@@ -6,6 +6,7 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 
 import { fetchAchievements } from "@/assets/API/fireBase/user/achievement/fetchAchievements";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import RenderCounter from "@/assets/components/global/RenderCounter";
 import SmallLoading from "@/assets/components/global/SmallLoading";
 import AchievementList from "@/assets/components/screen/ACHIEVEMENTS/AchievementList";
 import AchievementSelector from "@/assets/components/screen/ACHIEVEMENTS/AchievementSelector";
@@ -16,6 +17,7 @@ import { useIsMutating, useQuery } from "@tanstack/react-query";
 import { View } from "react-native";
 
 const Achievements = () => {
+  RenderCounter("AChievments");
   const [selectedCategory, setSelectedCategory] = useState<string>("Html");
   const { userData } = useGetUserInfo();
   const { data: achievementsData, isLoading } = useQuery({

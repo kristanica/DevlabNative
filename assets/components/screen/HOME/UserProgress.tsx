@@ -1,8 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import * as Progress from "react-native-progress";
+import AnimatedProgressWheel from "react-native-progress-wheel";
 import HomeLesson from "../../HomeLesson";
-const UserProgress = ({ lessons }: any) => {
+
+const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
+  console.log(
+    Math.min(
+      1,
+      userProgress["Database"] / activeLevel["Database"]["levelCounter"]
+    )
+  );
   return (
     <>
       <Text className="text-white ml-2 xs:text-lg  font-exoBold">
@@ -17,14 +24,19 @@ const UserProgress = ({ lessons }: any) => {
             color={item.color}
             index={index}
           >
-            <Progress.Circle
-              style={{ margin: "auto" }}
-              size={80}
-              progress={1}
-              showsText={true}
-              thickness={6}
-              color="green"
-              textStyle={{ color: "white", fontWeight: 900 }}
+            <AnimatedProgressWheel
+              progress={userProgress[item.name]}
+              max={activeLevel[item.name]["levelCounter"]}
+              showProgressLabel={true}
+              rotation={"-90deg"}
+              subtitle={` out of ${activeLevel[item.name]["levelCounter"]}`}
+              subtitleStyle={{ fontSize: 10 }}
+              labelStyle={{ fontSize: 10 }}
+              color={"green"}
+              backgroundColor={"gray"}
+              size={100}
+              width={10}
+              rounded
             />
           </HomeLesson>
         ))}

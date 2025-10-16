@@ -27,7 +27,6 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
   }));
   console.log(header);
   if (header === "html") {
-    console.log("ASDSADASD" + contents);
     contents = beautifyHTML(contents, { indent_size: 2 });
   }
   if (header === "css") {

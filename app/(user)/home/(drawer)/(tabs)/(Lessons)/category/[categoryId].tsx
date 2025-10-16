@@ -1,4 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import RenderCounter from "@/assets/components/global/RenderCounter";
 import SmallLoading from "@/assets/components/global/SmallLoading";
 import ListStages from "@/assets/components/LessonsComponent/ListStages";
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
@@ -14,7 +15,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Pressable,
   SectionList,
@@ -25,6 +26,7 @@ import {
 import { useShallow } from "zustand/react/shallow";
 
 const CategoryScreen = () => {
+  RenderCounter("categoryid");
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
   const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
@@ -47,6 +49,7 @@ const CategoryScreen = () => {
     data: useUserProgressData,
     isLoading: progressLoading,
     refetch: refetchProgress,
+    isRefetching: isRefetching,
   } = useQuery({
     queryKey: ["specificUserProgress", id],
     queryFn: async () => {
@@ -93,6 +96,9 @@ const CategoryScreen = () => {
       : [];
   }, [fetchedLesson]);
 
+  useEffect(() => {
+    refetchProgress();
+  }, []);
   return (
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>
@@ -106,7 +112,7 @@ const CategoryScreen = () => {
           scaleStyle={scaleStyle}
           closeModal={closeModal}
         ></LockLessonModal>
-        {isLoading || progressLoading ? (
+        {isLoading || progressLoading || isRefetching ? (
           <SmallLoading />
         ) : (lastStageVisibility ? lastStageVisibility : stagesVisibility) ? (
           <>

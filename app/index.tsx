@@ -1,3 +1,4 @@
+import RenderCounter from "@/assets/components/global/RenderCounter";
 import Footer from "@/assets/components/screen/INDEX/Footer";
 import { auth } from "@/assets/constants/constants";
 
@@ -8,6 +9,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 const index = () => {
+  RenderCounter("index");
   const handleLogin = async () => {
     const currentuser = auth.currentUser;
     if (currentuser) {
