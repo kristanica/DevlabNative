@@ -1,4 +1,3 @@
-import { unlockedStages } from "@/assets/zustand/unlockedStages";
 import { RefObject } from "react";
 import { apiCall } from "../query/mutation/apiCall";
 import useEvaluationLesson from "../query/mutation/useEvaluationLesson";
@@ -24,7 +23,6 @@ export const useHandleFinalAnswer = ({
 
   category,
 
-  currentStageDataType,
   setCurrentStageIndex,
 
   currentStageData,
@@ -35,6 +33,7 @@ export const useHandleFinalAnswer = ({
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();
   const levelFinishedModal = useModal();
+  const feedBackModal = useModal();
 
   const { evaluationLessonMutation } = useEvaluationLesson();
 
@@ -57,32 +56,26 @@ export const useHandleFinalAnswer = ({
     );
   };
 
-  const handleFinalAnswer = async (receivedCode: any, type: string) => {
-    const finishedStages = unlockedStages.getState().unlockedStages;
+  const handleFinalAnswer = async (
+    receivedCode: any,
+    type: string,
+    setEvaluationData: any,
+    setEvaluationModal: any
+  ) => {
+    // const   = unlockedStages.getState().unlockedStages;
 
-    const isStagedUnlocked =
-      finishedStages[`${lessonId}-${levelId}-${currentStageData.id}`]
-        .isCompleted ?? false;
+    // const isStagedUnlocked =
+    //   finishedStages[`${lessonId}-${levelId}-${currentStageData.id}`]
+    //     .isCompleted ?? false;
 
-    if (isStagedUnlocked) {
-      console.log(
-        `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
-      );
-      setCurrentStageIndex((prev) => prev + 1);
-      return;
-    }
-    // const isStageLocked =
-    //   allStages?.[String(category)]?.[stageKey]?.status ?? false;
-    // gameIdentifier.current = currentStageDataType;
-    // Checks if the next stage is already unlocked
-
-    // if (isStageLocked) {
-
-    //   finalAnswerModall.closeModal();
-    //   setCurrentStageIndex((prev: any) => prev + 1);
+    // if (isStagedUnlocked) {
+    //   console.log(
+    //     `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
+    //   );
+    //   setCurrentStageIndex((prev) => prev + 1);
     //   return;
     // }
-    // Chekcs if the current stage is Lesson, this will ignore answer
+
     console.log(type + " hAndleFinalAnswer");
     return new Promise(async (resolve, reject) => {
       if (type === "Lesson") {
@@ -111,7 +104,7 @@ export const useHandleFinalAnswer = ({
           {
             submittedCode: stringReceivedCode,
             instruction: currentStageData.instruction,
-            providedCode: currentStageData?.replicationFile,
+            providedCode: currentStageData?.codingInterface,
             description: currentStageData?.description,
             subject: category,
             gameType: currentStageData?.type,
@@ -125,12 +118,17 @@ export const useHandleFinalAnswer = ({
                 levelId: levelId,
                 category: category,
                 answer: data.correct,
+
                 setCurrentStageIndex,
                 levelFinishedModal,
                 finalAnswerModall,
                 stageType: currentStageData.type,
               });
-              console.log(evaluationResult);
+
+              if (data.correct) {
+                setEvaluationData(data);
+                feedBackModal.setVisibility(true);
+              }
               resolve(evaluationResult);
             },
 
@@ -150,5 +148,6 @@ export const useHandleFinalAnswer = ({
     finalAnswerModall,
     evaluateModal,
     levelFinishedModal,
+    feedBackModal,
   };
 };

@@ -6,10 +6,12 @@ import EvaluateModal from "../../CodeEditor/EvaluateModal";
 import FillScreenLoading from "../../global/FillScreenLoading";
 import FinalAnswerModal from "../FinalAnswerModal";
 import LevelFinishedModal from "../LevelFinishedModal";
+import FeedBackModal from "./FeedBackModal";
 
 type ModalHandlerProps = {
   lessonId: string;
 
+  setEvaluationData: any;
   levelFinishedModal: any;
   evaluateModal: any;
   evaluationLessonMutation: any;
@@ -21,9 +23,13 @@ type ModalHandlerProps = {
   isRewardClaimed: any;
   category: string;
   currentStageType: string;
+
+  evaluationData: any;
+  feedBackModal: any;
 };
 
 const ModalHandler = ({
+  feedBackModal,
   isRewardClaimed,
   levelFinishedModal,
   evaluateModal,
@@ -33,12 +39,19 @@ const ModalHandler = ({
   queryRecievedCode,
   finalAnswerModall,
   currentStageType,
-
+  setEvaluationData,
+  evaluationData,
   category,
 }: ModalHandlerProps) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   return (
     <>
+      {feedBackModal.visibility && (
+        <FeedBackModal
+          {...feedBackModal}
+          evaluationData={evaluationData}
+        ></FeedBackModal>
+      )}
       {evaluationLessonMutation.isPending && (
         <FillScreenLoading></FillScreenLoading>
       )}
@@ -56,7 +69,7 @@ const ModalHandler = ({
           isRewardClaimed={isRewardClaimed}
         ></LevelFinishedModal>
       )}
-
+      {}
       {evaluateModal.visibility && (
         <EvaluateModal
           onConfirm={() => evaluateModal.closeModal()}
@@ -75,7 +88,8 @@ const ModalHandler = ({
             if (category === "Database") {
               console.log(queryRecievedCode.query + "modalHandler");
               const toastResult = await handleFinalAnswer(
-                queryRecievedCode.result
+                queryRecievedCode,
+                currentStageType
               );
 
               setToastVisibility(toastResult[0], toastResult[1]);
@@ -84,10 +98,9 @@ const ModalHandler = ({
             }
             const toastResult = await handleFinalAnswer(
               receivedCode,
-              currentStageType
+              currentStageType,
+              setEvaluationData
             );
-
-            // await playSound(toastResult[0]);
 
             setToastVisibility(toastResult[0], toastResult[1]);
           }}

@@ -14,7 +14,6 @@ import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnsw
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import stageStore from "@/assets/zustand/stageStore";
-import toastHandler from "@/assets/zustand/toastHandler";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import userHp from "@/assets/zustand/userHp";
@@ -35,11 +34,11 @@ const StageScreen = () => {
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
   const gameIdentifier = useRef<string | undefined>("Lesson");
+  const [evaluationData, setEvaluationData] = useState<any>();
 
   //zustand
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
-  const allStages = useGetUserInfo.getState().allProgressStages;
-  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+
   const setLocation = WhereIsUser((state) => state.setLocation);
   const healthPoints = userHp((state) => state.userHp);
   const stageData = stageStore((state) => state.stageData);
@@ -114,6 +113,7 @@ const StageScreen = () => {
     evaluateModal,
     levelFinishedModal,
     finalAnswerModall,
+    feedBackModal,
     evaluationLessonMutation,
   } = useHandleFinalAnswer({
     lessonId: String(lessonId),
@@ -166,6 +166,9 @@ const StageScreen = () => {
             )}
           </View>
           <ModalHandler
+            feedBackModal={feedBackModal}
+            setEvaluationData={setEvaluationData}
+            evaluationData={evaluationData}
             currentStageType={currentStageType}
             isRewardClaimed={isRewardClaimed}
             queryRecievedCode={databaseQueryingFunctions.queryRecievedCode}

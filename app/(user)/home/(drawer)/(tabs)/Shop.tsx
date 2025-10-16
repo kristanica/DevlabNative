@@ -2,6 +2,7 @@ import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import RenderCounter from "@/assets/components/global/RenderCounter";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import ShopHeader from "@/assets/components/screen/SHOP/ShopHeader";
 import ShopList from "@/assets/components/screen/SHOP/ShopList";
@@ -12,6 +13,7 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 
 const Shop = () => {
+  RenderCounter("Shop");
   const { data: shopItems } = useQuery({
     queryKey: ["shopItems"],
     queryFn: fetchShopItems,

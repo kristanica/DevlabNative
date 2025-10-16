@@ -50,6 +50,7 @@ const brainFilter = (
     } else {
       handleDecrementHp();
       setActiveItem({ BrainFilter: false });
+      console.log(healthPointsTracker + "BrainBbvytes health");
       if (healthPointsTracker <= 1) {
         handleGameOver({
           category,
@@ -80,14 +81,6 @@ const brainFilter = (
       ([key]) => key !== optionToRemove
     );
 
-    // const randomIndex = Math.floor(Math.random() * wrongOptions.length);
-    // const optionToRemove = wrongOptions[randomIndex];
-
-    // const removedOneWrongAnswer = arrayChoices.filter(
-    //   (value: string) => value !== optionToRemove
-    // );
-
-    // removeActiveBuff("brainFilter");
     console.log("WRONG ANSWERRRRRRRRRRRRRRRRR" + filteredOptions);
     return filteredOptions;
   };

@@ -19,7 +19,7 @@ const useSubmitAnswer = () => {
       levelFinishedModal,
       finalAnswerModall,
       stageType,
-    }: submitAnswerPayload) => {
+    }: any) => {
       const { handleDecrementHp } = useHandleDecrementHp();
       const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
       if (answer || stageType === "Lesson") {

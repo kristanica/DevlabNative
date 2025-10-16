@@ -4,12 +4,7 @@ import AnimatedProgressWheel from "react-native-progress-wheel";
 import HomeLesson from "../../HomeLesson";
 
 const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
-  console.log(
-    Math.min(
-      1,
-      userProgress["Database"] / activeLevel["Database"]["levelCounter"]
-    )
-  );
+  console.log(userProgress["Html"] + "Progress on Html");
   return (
     <>
       <Text className="text-white ml-2 xs:text-lg  font-exoBold">
@@ -26,7 +21,6 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
           >
             <AnimatedProgressWheel
               progress={userProgress[item.name]}
-              max={activeLevel[item.name]["levelCounter"]}
               showProgressLabel={true}
               rotation={"-90deg"}
               subtitle={` out of ${activeLevel[item.name]["levelCounter"]}`}

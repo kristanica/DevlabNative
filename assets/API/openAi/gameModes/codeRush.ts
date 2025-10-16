@@ -21,13 +21,13 @@ export const codeRush = async ({
 
   const [data, error] = await tryCatch(
     axios.post(
-      `${URL}/openAI/codeRush`,
+      `${URL}/openAI/codeRushPrompts`,
       {
-        SUBMITTEDCODE: submittedCode,
-        INSTRUCTION: instruction,
-        PROVIDEDCODE: providedCode,
-        DESCRIPTION: description,
-        SUBJECT: subject,
+        submittedCode: submittedCode,
+        instruction: instruction,
+        providedCode: providedCode,
+        description: description,
+        subject: subject,
       },
       {
         headers: {
@@ -40,5 +40,17 @@ export const codeRush = async ({
     console.log(error + "CODECRAFTER");
     return;
   }
-  return data.data;
+  let raw = data.data.response;
+  if (typeof raw === "string") {
+    raw = raw.replace(/```json|```/g, "").trim();
+  }
+
+  let parsed: any = null;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    console.log("Failed to parse JSON:", e, raw);
+  }
+
+  return parsed;
 };
