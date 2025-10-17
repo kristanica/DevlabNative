@@ -1,4 +1,3 @@
-import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import React, { memo, useEffect } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -17,10 +16,10 @@ const AchievementContainer = ({
 }: AchievementContainerPayload) => {
   const interpolateVal = useSharedValue(0);
 
-  const { onScale } = useSequentialAppearAnim({
-    indicator: selectedCategory,
-    id: index,
-  });
+  // const { onScale } = useSequentialAppearAnim({
+  //   indicator: selectedCategory,
+  //   id: index,
+  // });
 
   useEffect(() => {
     interpolateVal.value = withRepeat(
@@ -31,7 +30,7 @@ const AchievementContainer = ({
   }, []);
   return (
     <Animated.View
-      style={[onScale]}
+      // style={[onScale]}
       className="w-[90%] aspect-[3/5] mx-auto  rounded-[10px] my-2"
     >
       <View

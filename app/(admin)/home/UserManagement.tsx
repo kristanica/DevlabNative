@@ -1,22 +1,21 @@
 import { fetchUsers } from "@/assets/API/fireBase/admin/userManagement/fetchUsers";
 import { searchUser } from "@/assets/API/fireBase/admin/userManagement/searchUser";
-import { suspendUser } from "@/assets/API/fireBase/admin/userManagement/suspendUser";
 import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import AdminUserContainer from "@/assets/components/AdminComponents/AdminUserContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import { useSuspendAccount } from "@/assets/Hooks/query/mutation/suspendAccount";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 
 const UserManagement = () => {
   const [searchUserName, setSearchUser] = useState<string>("");
 
-  const queryClient = useQueryClient();
-  const { data: users } = useQuery({
+  const { data: users, isLoading: userFetchLoading } = useQuery({
     queryKey: ["allUser"],
     queryFn: fetchUsers,
     staleTime: 5 * (60 * 1000),
@@ -28,29 +27,18 @@ const UserManagement = () => {
   const { data: activeLevel, isLoading } = useQuery({
     queryKey: ["ActiveLeveld"],
     queryFn: activeLevelCounter,
+    staleTime: 5 * 60 * 1000,
   });
-  const mutation = useMutation({
-    mutationFn: suspendUser,
-    onMutate: ({ id, isSuspended }: suspendUserPayload) => {
-      queryClient.cancelQueries({ queryKey: ["allUser"] });
 
-      const previousData = queryClient.getQueryData(["allUser"]);
-
-      queryClient.setQueryData(["allUser"], (old: any) => {
-        return old?.map((user: any) => {
-          return user.id === id ? { ...user, isSuspended: !isSuspended } : user; // ✅ Added return
-        });
-      });
-      return { previousData };
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["allUser"] });
-    },
-  });
   const isSearching = Boolean(searchUserName.trim());
 
-  if (isLoading) {
+  const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
+  const suspendAccount = useSuspendAccount({
+    onMutate: ({ id }: any) => setLoadingUserId(id),
+    onSettled: () => setLoadingUserId(null),
+  });
+
+  if (isLoading || userFetchLoading) {
     return <FillScreenLoading></FillScreenLoading>;
   }
   return (
@@ -94,11 +82,12 @@ const UserManagement = () => {
                       allUsersInformation={item}
                       activeLevel={activeLevel.active}
                       mutation={() =>
-                        mutation.mutate({
+                        suspendAccount.mutate({
                           id: item.id,
-                          isSuspended: item.isSuspended,
+                          toggleDisable: item.isAccountSuspended,
                         })
                       }
+                      loading={loadingUserId === item.id} 
                       index={index}
                     ></AdminUserContainer>
                   );
@@ -115,11 +104,12 @@ const UserManagement = () => {
                     index={index}
                     allUsersInformation={item}
                     mutation={() =>
-                      mutation.mutate({
-                        id: String(item!.id),
-                        isSuspended: item.isSuspended,
+                      suspendAccount.mutate({
+                        id: item.id,
+                        toggleDisable: item.isAccountSuspended,
                       })
                     }
+                    loading={loadingUserId === item.id}
                   ></AdminUserContainer>
                 )}
               />

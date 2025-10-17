@@ -6,7 +6,7 @@ import {
   FIREBASE_STORAGE,
   FIREBASE_STORE,
 } from "../../firebaseConfig";
-export const URL = `https://800143c70e12.ngrok-free.app` as const;
+export const URL = `https://918361550012.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;

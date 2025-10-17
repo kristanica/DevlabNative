@@ -1,7 +1,7 @@
 import LottieView from "lottie-react-native";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Modal, Pressable, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
+import { Accordion } from "../global/Accordion";
 type EvaluateMoalProps = ScaleModalPayload & {
   gptResponse: any;
 };
@@ -17,31 +17,20 @@ const EvaluateModal = (props: EvaluateMoalProps) => {
           style={[StyleSheet.absoluteFillObject]}
         />
 
-        <Pressable onPress={(e) => e.stopPropagation()} className="m-auto">
+        <Pressable onPress={(e) => e.stopPropagation()} className="my-auto">
           <Animated.View
             style={[props.scaleStyle]}
-            className="w-fit  rounded-[10px] mx-2"
+            className="w-fit  rounded-[10px] mx-2 bg-modal"
           >
-            <View className=" border-[#2a3141] border-[1px]  justify-center items-center  bg-modal rounded-3xl  px-2 pt-3 ">
-              <ScrollView>
-                <View>
-                  <Text className="text-white m-auto text-justify px-2 font-exoRegular xs:text-[9px] pt-1">
-                    <Text className="text-yellow-400 font-exoBold">
-                      💡 Feedback:
-                    </Text>{" "}
-                    {props.gptResponse.feedback}
-                  </Text>
-                </View>
-                <View className=" border-t-[1px] border-[#ffffff62] border-none mt-2 pt-1">
-                  <Text className="text-white m-auto text-justify px-2  xs:text-[9px] font-exoLight">
-                    <Text className="text-yellow-400 font-exoBold">
-                      💡 Sugestion:
-                    </Text>{" "}
-                    {props.gptResponse.suggestion}
-                  </Text>
-                </View>
-              </ScrollView>
-            </View>
+            <Accordion
+              header={"Feedback"}
+              contents={props.gptResponse.feedback}
+            ></Accordion>
+
+            <Accordion
+              header={"Suggestion"}
+              contents={props.gptResponse.suggestion}
+            ></Accordion>
           </Animated.View>
         </Pressable>
       </Pressable>

@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import AnimatedProgressWheel from "react-native-progress-wheel";
 import Animated from "react-native-reanimated";
+import SmallLoading from "../global/SmallLoading";
 
 const AdminUserContainer = ({
   allUsersInformation,
   mutation,
   index,
   activeLevel,
+  loading,
 }: AdminUserContainerPayload) => {
+  console.log(loading + "loading");
   const [visible, setVisible] = useState<boolean>(false);
   const isFocused = useIsFocused();
   const { onScale } = useSequentialAppearAnim({
@@ -159,40 +162,60 @@ const AdminUserContainer = ({
               <Text
                 className="font-exoLight text-xs xs:text-[10px]"
                 style={{
-                  color: allUsersInformation.isSuspended ? "red" : "green",
+                  color: allUsersInformation.isAccountSuspended
+                    ? "red"
+                    : "green",
                 }}
               >
-                {allUsersInformation.isSuspended ? "Suspended" : "Active"}
+                {allUsersInformation.isAccountSuspended
+                  ? "Suspended"
+                  : "Active"}
               </Text>
             </Text>
             <View className="flex-row justify-evenly items-center flex-[1] mt-3">
-              <TouchableOpacity
-                disabled={allUsersInformation.isSuspended}
-                onPress={mutation}
-              >
-                <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
-                  Suspend
-                </Text>
-              </TouchableOpacity>
+              {loading ? (
+                <SmallLoading></SmallLoading>
+              ) : (
+                <>
+                  <TouchableOpacity
+                    disabled={allUsersInformation.isAccountSuspended}
+                    onPress={mutation}
+                    className={`${
+                      allUsersInformation.isAccountSuspended
+                        ? `opacity-50`
+                        : `opacity-100`
+                    }`}
+                  >
+                    <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                      Suspend
+                    </Text>
+                  </TouchableOpacity>
 
-              <TouchableOpacity
-                disabled={!allUsersInformation.isSuspended}
-                onPress={mutation}
-              >
-                <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
-                  Activate
-                </Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={!allUsersInformation.isAccountSuspended}
+                    onPress={mutation}
+                    className={`${
+                      allUsersInformation.isAccountSuspended
+                        ? `opacity-100`
+                        : `opacity-50`
+                    }`}
+                  >
+                    <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                      Activate
+                    </Text>
+                  </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  setVisible(true);
-                }}
-              >
-                <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
-                  Progress
-                </Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setVisible(true);
+                    }}
+                  >
+                    <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                      Progress
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
           </View>
         )}

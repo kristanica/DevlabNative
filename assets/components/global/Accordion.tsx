@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
 import { css as beautifyCSS, html as beautifyHTML } from "js-beautify";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
   Easing,
@@ -25,13 +25,11 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
     opacity: withTiming(isOpened ? 1 : 0, { duration: 200 }),
     overflow: "hidden",
   }));
-  console.log(header);
-  if (header === "html") {
-    contents = beautifyHTML(contents, { indent_size: 2 });
-  }
-  if (header === "css") {
-    contents = beautifyCSS(contents, { indent_size: 2 });
-  }
+  const formattedContents = useMemo(() => {
+    if (header === "html") return beautifyHTML(contents, { indent_size: 2 });
+    if (header === "css") return beautifyCSS(contents, { indent_size: 2 });
+    return contents;
+  }, [header, contents]);
 
   return (
     <View className="bg-accent px-6 py-2 rounded-lg mx-2 my-3">
@@ -61,7 +59,7 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
           }}
         >
           <Text className="text-white font-exoRegular text-[10px] text-justify mt-1">
-            {contents}
+            {formattedContents}
           </Text>
         </View>
 

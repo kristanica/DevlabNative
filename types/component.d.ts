@@ -39,10 +39,12 @@ type AdminUserContainerPayload = {
     profileImage?: string;
     backgroundImage?: string;
     levelCount: any;
+    isAccountSuspended: boolean;
   };
   mutation: () => void;
   index: number;
   activeLevel: any;
+  loading: any;
 };
 
 type DropDownMenuPayload = {

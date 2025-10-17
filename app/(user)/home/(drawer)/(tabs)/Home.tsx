@@ -44,6 +44,7 @@ export default function Home() {
   const { data: activeLevel } = useQuery({
     queryKey: ["ActiveLeveld"],
     queryFn: activeLevelCounter,
+    staleTime: 5 * (60 * 1000),
   });
 
   const { data: progressData } = useQuery({
