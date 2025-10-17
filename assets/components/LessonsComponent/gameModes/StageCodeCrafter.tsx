@@ -1,12 +1,28 @@
+import useModal from "@/assets/Hooks/useModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import WebView from "react-native-webview";
+import CodeCrafterModal from "../Modals/CodeCrafterModal";
 
 const StageCodeCrafter = ({ currentStageData }: CurrentStageDataPayload) => {
   const [webViewHeight, setWebViewHeight] = useState(0);
-
+  const codeCrafter = useModal();
   return (
     <>
+      <Pressable
+        className="absolute right-5 z-50"
+        onPress={() => codeCrafter.setVisibility((prev) => !prev)}
+      >
+        <Ionicons
+          name={"information-circle"}
+          size={20}
+          color={"white"}
+        ></Ionicons>
+      </Pressable>
+      {codeCrafter.visibility && (
+        <CodeCrafterModal {...codeCrafter}></CodeCrafterModal>
+      )}
       <Text className="font-exoBold xs:text-xl text-justify text-red-500">
         {currentStageData?.title}
       </Text>

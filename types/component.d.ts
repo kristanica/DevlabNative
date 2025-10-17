@@ -42,6 +42,7 @@ type AdminUserContainerPayload = {
     isAccountSuspended: boolean;
   };
   mutation: () => void;
+  deleteAccount: () => void;
   index: number;
   activeLevel: any;
   loading: any;

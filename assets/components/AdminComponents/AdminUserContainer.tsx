@@ -12,6 +12,7 @@ const AdminUserContainer = ({
   index,
   activeLevel,
   loading,
+  deleteAccount,
 }: AdminUserContainerPayload) => {
   console.log(loading + "loading");
   const [visible, setVisible] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const AdminUserContainer = ({
     <>
       <Animated.View
         style={onScale}
-        className="bg-background flex-row h-[200px] my-2 mx-3 rounded-2xl border-[#56EBFF] border-[1px] relative "
+        className="bg-background flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#56EBFF] border-[1px] relative "
       >
         <View className="flex-[1] justify-center items-center ">
           <Image
@@ -40,6 +41,11 @@ const AdminUserContainer = ({
             }}
             source={toUse}
           ></Image>
+          <TouchableOpacity onPress={deleteAccount}>
+            <Text className="text-white font-exoBold text-xs xs:text-[10px] bg-red-500 px-7 py-2 rounded-xl mt-1 ">
+              Delete
+            </Text>
+          </TouchableOpacity>
         </View>
         {visible ? (
           <View
@@ -130,8 +136,8 @@ const AdminUserContainer = ({
                 setVisible(false);
               }}
             >
-              <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl justify-center items-center  text-xs xs:text-[10px]">
-                Progress
+              <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl justify-center items-center font-exoRegular  text-xs xs:text-[10px]">
+                Back
               </Text>
             </TouchableOpacity>
           </View>
@@ -146,14 +152,14 @@ const AdminUserContainer = ({
               },
             ]}
           >
-            <Text className="text-white font-exoBold text-xs xs:text-[10px]">
-              USERNAME:
+            <Text className="text-white font-exoBold text-xs xs:text-[10px] ">
+              USERNAME:{" "}
               <Text className="text-white font-exoLight">
                 {allUsersInformation.username}
               </Text>
             </Text>
             <Text className="my-3 text-white font-exoBold text-xs xs:text-[10px]">
-              EMAIL:
+              EMAIL:{" "}
               <Text className="font-exoLight">{allUsersInformation.email}</Text>
             </Text>
 
@@ -167,6 +173,7 @@ const AdminUserContainer = ({
                     : "green",
                 }}
               >
+                {" "}
                 {allUsersInformation.isAccountSuspended
                   ? "Suspended"
                   : "Active"}
@@ -186,7 +193,7 @@ const AdminUserContainer = ({
                         : `opacity-100`
                     }`}
                   >
-                    <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                    <Text className="font-exoRegular text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                       Suspend
                     </Text>
                   </TouchableOpacity>
@@ -200,7 +207,7 @@ const AdminUserContainer = ({
                         : `opacity-50`
                     }`}
                   >
-                    <Text className="text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                    <Text className="font-exoRegular text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                       Activate
                     </Text>
                   </TouchableOpacity>
@@ -210,7 +217,7 @@ const AdminUserContainer = ({
                       setVisible(true);
                     }}
                   >
-                    <Text className="text-white bg-green-500 py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                    <Text className="font-exoRegular text-white bg-green-500 py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                       Progress
                     </Text>
                   </TouchableOpacity>

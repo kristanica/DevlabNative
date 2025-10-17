@@ -28,12 +28,14 @@ const EditStageModal = ({
   );
 
   const stageIdentifier = tracker((state) => state.stageId);
+
   const {
     editMutation,
     stageData,
     deleteMutation,
     uploadVideoMutation,
     uploadFileReplication,
+    isLoading,
   } = useStageEditor();
 
   const { state, dispatch } = useEditStage();
@@ -121,7 +123,7 @@ const EditStageModal = ({
   const isMutating = useIsMutating();
   return (
     <Modal visible={visibility} transparent={true}>
-      {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
+      {(isMutating > 0 || isLoading) && <FillScreenLoading></FillScreenLoading>}
       <Pressable
         className="flex-[1] justify-center items-center bg-black/30 "
         onPress={() => {

@@ -1,8 +1,12 @@
+import tracker from "@/assets/zustand/tracker";
 import React from "react";
 import { StyleSheet } from "react-native";
+import CodingInterfaces from "../CodingInterfaces";
 import InputContainer from "../InputContainer";
 
 const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
+  const category = tracker((state) => state.levelPayload?.category);
+
   return (
     <>
       <InputContainer
@@ -29,54 +33,12 @@ const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
         }}
         numeric={false}
       />
-      <InputContainer
-        title={"Coding Interface CSS"}
-        value={state.codingInterface.css}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "css",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface JS"}
-        value={state.codingInterface.js}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "js",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface HTML"}
-        value={state.codingInterface.html}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "html",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface QUEREYING"}
-        value={state.codingInterface.database}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "database",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
+      {/* Renders input containers for coding interfaces */}
+      <CodingInterfaces
+        state={state}
+        dispatch={dispatch}
+        category={category!}
+      ></CodingInterfaces>
       <InputContainer
         title={"Instruction"}
         value={state.instruction}

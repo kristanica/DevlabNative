@@ -1,7 +1,9 @@
+import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DocumentPicker from "expo-document-picker";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import CodingInterfaces from "../CodingInterfaces";
 import InputContainer from "../InputContainer";
 
 const CodeCrafter = ({
@@ -20,7 +22,7 @@ const CodeCrafter = ({
     console.log(imageUri);
     setReplicateFile(imageUri);
   };
-
+  const category = tracker((state) => state.levelPayload?.category);
   return (
     <>
       <InputContainer
@@ -48,54 +50,12 @@ const CodeCrafter = ({
         }}
         numeric={false}
       />
-      <InputContainer
-        title={"Coding Interface CSS"}
-        value={state.codingInterface.css}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_FIELD",
-            field: "codingInterface",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface JS"}
-        value={state.codingInterface.js}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_FIELD",
-            field: "codingInterface",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface QUEREYING"}
-        value={state.codingInterface.database}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "database",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface HTML"}
-        value={state.codingInterface.html}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_FIELD",
-            field: "codingInterface",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
+      {/* Renders input containers for coding interfaces */}
+      <CodingInterfaces
+        state={state}
+        dispatch={dispatch}
+        category={category!}
+      ></CodingInterfaces>
       <InputContainer
         title={"Instruction"}
         value={state.instruction}

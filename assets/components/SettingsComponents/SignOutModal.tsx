@@ -11,7 +11,7 @@ const SignOutModal = ({
 }: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1">
+      <Pressable onPress={closeModal} className="flex-1 bg-black/40">
         <Animated.View
           style={[scaleStyle]}
           className="   aspect-square w-3/4 m-auto  rounded-[10px]"

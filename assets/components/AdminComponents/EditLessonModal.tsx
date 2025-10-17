@@ -19,6 +19,7 @@ import {
   View,
 } from "react-native";
 import Animated from "react-native-reanimated";
+import FillScreenLoading from "../global/FillScreenLoading";
 import InputContainer from "./InputContainer";
 import SaveToFirebaseConfirmation from "./SaveToFirebaseConfirmation";
 
@@ -33,7 +34,7 @@ const EditLessonModal = ({
   const { levelData, updateLevelMutation, deleteLevelMutation } =
     useLevelEditor();
   console.log(payload);
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["testQuery", payload],
     queryFn: async () => {
       const token = await auth?.currentUser?.getIdToken(true);
@@ -56,6 +57,7 @@ const EditLessonModal = ({
       return data.data;
     },
     enabled: true,
+    staleTime: 2 * (60 * 1000),
   });
 
   useEffect(() => {
@@ -78,6 +80,7 @@ const EditLessonModal = ({
 
   return (
     <Modal visible={visibility} transparent={true}>
+      {isFetching && <FillScreenLoading></FillScreenLoading>}
       <Pressable
         className="flex-[1] justify-center items-center bg-black/30 "
         onPress={closeModal}

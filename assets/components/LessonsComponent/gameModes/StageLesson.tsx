@@ -1,7 +1,10 @@
+import useModal from "@/assets/Hooks/useModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
 import React, { useRef } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Accordion } from "../../global/Accordion";
+import LessonModal from "../Modals/LessonModal";
 
 type StageLessonprops = {
   currentStageData: stageDataPayload;
@@ -9,9 +12,22 @@ type StageLessonprops = {
 
 const StageLesson = ({ currentStageData }: any) => {
   const videoRef = useRef<Video>(null);
+  const lesson = useModal();
 
   return (
     <>
+      <Pressable
+        className="absolute right-5 z-50"
+        onPress={() => lesson.setVisibility((prev) => !prev)}
+      >
+        <Ionicons
+          name={"information-circle"}
+          size={20}
+          color={"white"}
+        ></Ionicons>
+      </Pressable>
+
+      {lesson.visibility && <LessonModal {...lesson}></LessonModal>}
       {currentStageData.blocks &&
         currentStageData.blocks.map((item: any) => {
           switch (item.type) {

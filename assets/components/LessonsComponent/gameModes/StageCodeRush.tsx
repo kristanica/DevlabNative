@@ -1,10 +1,18 @@
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import codePatchTimeFreeze from "@/assets/Hooks/mainGameModeFunctions/codePatchTimeFreeze";
+import useModal from "@/assets/Hooks/useModal";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
 import React, { useCallback, useEffect } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import CodeRushModal from "../Modals/CodeRushModal";
 
 const StageCodeRush = ({
   currentStageData,
@@ -55,9 +63,20 @@ const StageCodeRush = ({
     run();
     console.log("ASDSAHGDASDGJH");
   }, [activeBuffs]);
-
+  const codeRush = useModal();
   return (
     <>
+      <Pressable
+        className="absolute right-5 z-50"
+        onPress={() => codeRush.setVisibility((prev) => !prev)}
+      >
+        <Ionicons
+          name={"information-circle"}
+          size={20}
+          color={"white"}
+        ></Ionicons>
+      </Pressable>
+      {codeRush.visibility && <CodeRushModal {...codeRush}></CodeRushModal>}
       <View className="flex-row items-center justify-between pr-10">
         <Text className="font-exoBold xs:text-xl text-justify text-red-500">
           {currentStageData?.title}

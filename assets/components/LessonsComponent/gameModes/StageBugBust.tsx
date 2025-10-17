@@ -4,8 +4,9 @@ import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
 import React, { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Accordion } from "../../global/Accordion";
+import BugBustModal from "../Modals/BugBustModal";
 import HintModal from "../Modals/HintModal";
 
 const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
@@ -27,9 +28,22 @@ const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
     };
     run();
   }, [activeBuffs]);
-
+  const bugBust = useModal();
   return (
     <>
+      <Pressable
+        className="absolute right-5 z-50"
+        onPress={() => bugBust.setVisibility((prev) => !prev)}
+      >
+        <Ionicons
+          name={"information-circle"}
+          size={20}
+          color={"white"}
+          className="absolute right-5"
+        ></Ionicons>
+      </Pressable>
+      {bugBust.visibility && <BugBustModal {...bugBust}></BugBustModal>}
+
       <HintModal
         hint={currentStageData?.hint}
         onConfirm={() => hintModal.closeModal()}

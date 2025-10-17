@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Video } from "react-native-compressor";
 
+import tracker from "@/assets/zustand/tracker";
 import LoadingCompression from "../../LoadingCompression";
+import CodingInterfaces from "../CodingInterfaces";
 import InputContainer from "../InputContainer";
 import InputSelector from "../InputSelector";
 import TestDropDownMenu from "../TestDropDownMenu";
@@ -78,6 +80,9 @@ const Lesson = ({
   useEffect(() => {
     console.log(state);
   }, [state]);
+
+  const category = tracker((state) => state.levelPayload?.category);
+
   return (
     <>
       <InputContainer
@@ -105,55 +110,12 @@ const Lesson = ({
         }}
         numeric={false}
       />
-
-      <InputContainer
-        title={"Coding Interface CSS"}
-        value={state.codingInterface.css}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "css",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface JS"}
-        value={state.codingInterface.js}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "js",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface HTML"}
-        value={state.codingInterface.html}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "html",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
-      <InputContainer
-        title={"Coding Interface QUEREYING"}
-        value={state.codingInterface.database}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_CODING_INTERFACE",
-            field: "database",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
+      {/* Renders input containers for coding interfaces */}
+      <CodingInterfaces
+        state={state}
+        dispatch={dispatch}
+        category={category!}
+      ></CodingInterfaces>
       <InputContainer
         title={"Instruction"}
         value={state.instruction}

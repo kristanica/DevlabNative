@@ -5,7 +5,7 @@ import AdminUserContainer from "@/assets/components/AdminComponents/AdminUserCon
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import { useDeleteAccount } from "@/assets/Hooks/query/mutation/deleteAccount";
 import { useSuspendAccount } from "@/assets/Hooks/query/mutation/suspendAccount";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 const UserManagement = () => {
   const [searchUserName, setSearchUser] = useState<string>("");
 
-  const { data: users, isLoading: userFetchLoading } = useQuery({
+  const { data: users } = useQuery({
     queryKey: ["allUser"],
     queryFn: fetchUsers,
     staleTime: 5 * (60 * 1000),
@@ -24,8 +24,8 @@ const UserManagement = () => {
   const { mutate: search, data: searchedUser } = useMutation({
     mutationFn: searchUser,
   });
-  const { data: activeLevel, isLoading } = useQuery({
-    queryKey: ["ActiveLeveld"],
+  const { data: activeLevel } = useQuery({
+    queryKey: ["Active level admin"],
     queryFn: activeLevelCounter,
     staleTime: 5 * 60 * 1000,
   });
@@ -37,10 +37,8 @@ const UserManagement = () => {
     onMutate: ({ id }: any) => setLoadingUserId(id),
     onSettled: () => setLoadingUserId(null),
   });
+  const deleteAccount = useDeleteAccount();
 
-  if (isLoading || userFetchLoading) {
-    return <FillScreenLoading></FillScreenLoading>;
-  }
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
@@ -87,7 +85,8 @@ const UserManagement = () => {
                           toggleDisable: item.isAccountSuspended,
                         })
                       }
-                      loading={loadingUserId === item.id} 
+                      deleteAccount={() => deleteAccount.mutate(item.id)}
+                      loading={loadingUserId === item.id}
                       index={index}
                     ></AdminUserContainer>
                   );
@@ -100,6 +99,7 @@ const UserManagement = () => {
                 data={searchedUser}
                 renderItem={({ item, index }) => (
                   <AdminUserContainer
+                    deleteAccount={() => deleteAccount.mutate(item.id)}
                     activeLevel={activeLevel.active}
                     index={index}
                     allUsersInformation={item}

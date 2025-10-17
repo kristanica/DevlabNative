@@ -1,9 +1,12 @@
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import brainFilter from "@/assets/Hooks/mainGameModeFunctions/brainFilter";
+import useModal from "@/assets/Hooks/useModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import FillScreenLoading from "../../global/FillScreenLoading";
+import BrainBytesModal from "../Modals/BrainBytesModal";
 
 const StageBrainBytes = ({
   currentStageData,
@@ -36,10 +39,25 @@ const StageBrainBytes = ({
     itemUse();
   }, [activeBuff]);
   const isMutating = useIsMutating();
+  const braibBytes = useModal();
   return (
     <>
+      <Pressable
+        className="absolute right-5 z-50"
+        onPress={() => braibBytes.setVisibility((prev) => !prev)}
+      >
+        <Ionicons
+          name={"information-circle"}
+          size={20}
+          color={"white"}
+        ></Ionicons>
+      </Pressable>
       {isMutating > 0 && (
         <FillScreenLoading text="Checking your answer..."></FillScreenLoading>
+      )}
+
+      {braibBytes.visibility && (
+        <BrainBytesModal {...braibBytes}></BrainBytesModal>
       )}
       <TouchableOpacity>
         <Text className="font-exoBold xs:text-xl text-justify text-red-500">
