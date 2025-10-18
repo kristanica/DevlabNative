@@ -1,5 +1,6 @@
 import { RefObject } from "react";
 import { apiCall } from "../query/mutation/apiCall";
+import { makeLevelFeedback } from "../query/mutation/makeLevelFeedback";
 import useEvaluationLesson from "../query/mutation/useEvaluationLesson";
 import useModal from "../useModal";
 import { playSound } from "./soundHandler";
@@ -30,10 +31,12 @@ export const useHandleFinalAnswer = ({
   const evaluateGame = apiCall();
 
   const { nextStage } = useSubmitAnswer();
+
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();
   const levelFinishedModal = useModal();
   const feedBackModal = useModal();
+  const makeFeedback = makeLevelFeedback();
 
   const { evaluationLessonMutation } = useEvaluationLesson();
 
@@ -59,7 +62,8 @@ export const useHandleFinalAnswer = ({
   const handleFinalAnswer = async (
     receivedCode: any,
     type: string,
-    setEvaluationData: any
+    setEvaluationData: any,
+    feedbackArray: any
   ) => {
     // const   = unlockedStages.getState().unlockedStages;
 
@@ -124,11 +128,26 @@ export const useHandleFinalAnswer = ({
                 levelFinishedModal,
                 finalAnswerModall,
                 stageType: currentStageData.type,
+                evaluationResult: data,
               });
-              console.log("did it even reach here?");
-              if (data.correct) {
-                setEvaluationData(data);
-                feedBackModal.setVisibility(true);
+
+              if (
+                data.correct &&
+                currentStageData.type !== "Lesson" &&
+                currentStageData.type !== "BrainBytes"
+              ) {
+                feedbackArray.current.push({
+                  stageId: currentStageData.id,
+                  evaluation: data.feedback,
+                  feedback: data.evaluation,
+                });
+                console.log(feedbackArray);
+              }
+
+              if (evaluationResult![0] === "levelUnlocked") {
+                setEvaluationData(
+                  await makeFeedback.mutateAsync(feedbackArray.current)
+                );
               }
               resolve(evaluationResult);
             },

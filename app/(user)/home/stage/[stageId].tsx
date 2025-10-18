@@ -126,6 +126,9 @@ const StageScreen = () => {
     currentStageIndex: currentStageIndex,
     currentStageData: currentStageData,
   });
+  const feedbackArray = useRef<
+    { stageId: string; evaluation: string; feedback: string }[]
+  >([]);
 
   const {
     webRef,
@@ -166,6 +169,7 @@ const StageScreen = () => {
             )}
           </View>
           <ModalHandler
+            feedbackArray={feedbackArray}
             feedBackModal={feedBackModal}
             setEvaluationData={setEvaluationData}
             evaluationData={evaluationData}

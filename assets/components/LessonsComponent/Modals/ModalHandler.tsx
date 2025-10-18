@@ -10,7 +10,7 @@ import FeedBackModal from "./FeedBackModal";
 
 type ModalHandlerProps = {
   lessonId: string;
-
+  feedbackArray: any;
   setEvaluationData: any;
   levelFinishedModal: any;
   evaluateModal: any;
@@ -42,6 +42,7 @@ const ModalHandler = ({
   setEvaluationData,
   evaluationData,
   category,
+  feedbackArray,
 }: ModalHandlerProps) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   return (
@@ -68,6 +69,7 @@ const ModalHandler = ({
           }}
           {...levelFinishedModal}
           isRewardClaimed={isRewardClaimed}
+          evaluationData={evaluationData}
         ></LevelFinishedModal>
       )}
       {}
@@ -97,7 +99,8 @@ const ModalHandler = ({
             const toastResult = await handleFinalAnswer(
               receivedCode,
               currentStageType,
-              setEvaluationData
+              setEvaluationData,
+              feedbackArray
             );
             setToastVisibility(toastResult[0], toastResult[1]);
           }}

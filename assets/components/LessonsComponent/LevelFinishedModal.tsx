@@ -8,14 +8,18 @@ import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
+import { Accordion } from "../global/Accordion";
+import SmallLoading from "../global/SmallLoading";
 type levelFinishedModalPayload = ScaleModalPayload & {
   isRewardClaimed: boolean;
+  evaluationData: any;
 };
 const LevelFinishedModal = ({
   visibility,
   scaleStyle,
   onConfirm,
   isRewardClaimed,
+  evaluationData,
 }: levelFinishedModalPayload) => {
   const expAndCoins = setCoinsandExp((state) => state.coinsAndExp);
   const userHealth = userHealthPoints((state) => state.health);
@@ -64,23 +68,17 @@ const LevelFinishedModal = ({
         />
         <Animated.View
           style={[scaleStyle]}
-          className="  h-[50%] w-3/4 m-auto  rounded-[10px]"
+          className={`  ${
+            isRewardClaimed ? `h-[30%]` : `h-[70%]`
+          } ] w-3/4 m-auto  rounded-[10px]`}
         >
-          <View className="justify-center items-center flex-[1] bg-modal rounded-xl border-[##6c37a5] border-[1px]">
-            <Text className="text-[#f5ff42] font-exoExtraBold text-3xl my-5">
+          <View className=" flex-[1] bg-modal rounded-xl border-[##6c37a5] border-[1px]">
+            <Text className=" text-center text-[#f5ff42] font-exoExtraBold text-3xl mt-2">
               LEVEL COMPLETED
             </Text>
-            <View className="flex-[1] justify-center items-center bg-[#080c15] py-5 border-[#2a3141] border-[1px] rounded-2xl mx-5 px-5">
-              <Text className="text-white text-center font-exoBold xs:text-xs">
-                🌑 The Terminal Falls Silent You’ve emerged from the
-                code—scarred, but wiser. The system yields, for now, recognizing
-                your resolve. Yet beneath the surface, deeper logic churns…
-                ancient, unrefined,
-              </Text>
-            </View>
 
-            <View className="flex-[1] justify-center  items-center mt-2 border-[#2a3141] border-0 border-t-[1px]">
-              <Text className="text-white text-center font-exoBold xs:text-xl">
+            <View className="flex-[1]  mt-2 border-[#2a3141] border-0 border-t-[1px]">
+              <Text className="text-white text-center font-exoBold xs:text-xl mt-2">
                 PERFORMANCE SUMMARY
               </Text>
               <View className="mt-3">
@@ -88,27 +86,55 @@ const LevelFinishedModal = ({
                   <Text className="text-white text-center font-exoBold xs:text-xs">
                     You've already claimed the reward for this level!
                   </Text>
+                ) : !evaluationData ? (
+                  <SmallLoading text="getting your performance summary"></SmallLoading>
                 ) : (
-                  <>
-                    <Text className="text-white text-center font-exoBold xs:text-xs">
-                      Lives Remaining:
-                      <Text className="text-[#ad3532]"> {userHealth}x</Text>
-                    </Text>
-                    <Text className="text-white text-center font-exoBold xs:text-xs">
-                      DevCoins: +
-                      <Text className="text-[#e3be00]">
-                        {expAndCoins?.coins}
+                  <View>
+                    <View className="bg-[#080c15]  m-3 py-3 rounded-lg">
+                      <Text className="text-white text-center font-exoBold xs:text-xs">
+                        Lives Remaining:
+                        <Text className="text-[#ad3532]"> {userHealth}x</Text>
                       </Text>
-                    </Text>
-                    <Text className="text-white text-center font-exoBold xs:text-xs">
-                      Experience gained: +
-                      <Text className="text-[#21b3cf]">{expAndCoins?.exp}</Text>
-                    </Text>
-                  </>
+                      <Text className="text-white text-center font-exoBold xs:text-xs">
+                        DevCoins: +
+                        <Text className="text-[#e3be00]">
+                          {expAndCoins?.coins}
+                        </Text>
+                      </Text>
+                      <Text className="text-white text-center font-exoBold xs:text-xs">
+                        Experience gained: +
+                        <Text className="text-[#21b3cf]">
+                          {expAndCoins?.exp}
+                        </Text>
+                      </Text>
+                    </View>
+                    <View className="bg-[#080c15]  mx-3 py-3 rounded-lg">
+                      <Text className="text-white text-center font-exoBold xs:text-xs px-2">
+                        {evaluationData.encouragement}
+                      </Text>
+                    </View>
+                    {Object.entries(evaluationData).map(
+                      ([key, value]: [string, any]) => {
+                        if (!value) return;
+                        if (key === "encouragement") return null;
+                        return (
+                          <Accordion
+                            header={key}
+                            contents={value}
+                            key={key}
+                          ></Accordion>
+                        );
+                      }
+                    )}
+                  </View>
                 )}
               </View>
             </View>
-            <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
+            <View
+              className={`${
+                isRewardClaimed ? `flex-[1]` : ``
+              } justify-center items-center`}
+            >
               <Pressable onPress={onConfirm}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
                   Back to Main

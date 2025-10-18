@@ -1,4 +1,5 @@
 import purchaseItem from "@/assets/API/fireBase/user/purchaseItem";
+import { playSound } from "@/assets/Hooks/function/soundHandler";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { FlashList } from "@shopify/flash-list";
@@ -29,6 +30,7 @@ const ShopList = ({ shopItem }: ShopListProps) => {
         .getState()
         .setUserData({ ...userData!, coins: data?.newCoins });
       queryClient.invalidateQueries({ queryKey: ["userData"] });
+      playSound("purchase");
       setToastVisibility("success", "You've brought an item!");
     },
     onError: () => {

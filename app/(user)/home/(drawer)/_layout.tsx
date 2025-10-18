@@ -3,12 +3,14 @@ import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
 import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScreen";
 import CustomDrawer from "@/assets/components/TabBarComponents/CustomDrawer";
+import { auth } from "@/assets/constants/constants";
 import { loadSounds } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { DrawerActions } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation, usePathname } from "expo-router";
 import { Drawer } from "expo-router/drawer";
+import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
 
@@ -22,39 +24,49 @@ const DrawerLayout = () => {
   );
 
   useEffect(() => {
-    const loadProgress = async () => {
-      const result = await Promise.allSettled([
-        queryClient.ensureQueryData({
-          queryKey: ["ActiveLeveld"],
-          queryFn: activeLevelCounter,
-        }),
-        queryClient.ensureQueryData({
-          queryKey: ["userProgress"],
-          queryFn: userProgress,
-        }),
-        queryClient.ensureQueryData({
-          queryKey: ["shopItems"],
-          queryFn: fetchShopItems,
-          staleTime: 10 * 60 * 1000,
-        }),
-        await loadSounds(),
-        await getValidUser(),
-        await getUserAchivementProgress(),
-      ]);
-      result.forEach(async (error, index) => {
-        if (error.status === "rejected")
-          console.log(`Query ${index} failed because of ${error.reason}`);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      console.log("AuthState changed!");
+      if (!user) {
+        console.log("What?");
         return;
-      });
-
-      const isAllFulfiled = result.every((item) => item.status === "fulfilled");
-
-      if (isAllFulfiled) {
-        setIsReady(true);
       }
-    };
-    console.log("ASDasdasd");
-    loadProgress();
+      const loadProgress = async () => {
+        const result = await Promise.allSettled([
+          queryClient.ensureQueryData({
+            queryKey: ["ActiveLeveld"],
+            queryFn: activeLevelCounter,
+          }),
+          queryClient.ensureQueryData({
+            queryKey: ["userProgress"],
+            queryFn: userProgress,
+          }),
+          queryClient.ensureQueryData({
+            queryKey: ["shopItems"],
+            queryFn: fetchShopItems,
+            staleTime: 10 * 60 * 1000,
+          }),
+          await loadSounds(),
+          await getValidUser(),
+          await getUserAchivementProgress(),
+        ]);
+        result.forEach(async (error, index) => {
+          if (error.status === "rejected")
+            console.log(`Query ${index} failed because of ${error.reason}`);
+          return;
+        });
+
+        const isAllFulfiled = result.every(
+          (item) => item.status === "fulfilled"
+        );
+
+        if (isAllFulfiled) {
+          setIsReady(true);
+        }
+      };
+      console.log("ASDasdasd");
+      loadProgress();
+    });
+    return unsub;
   }, []);
 
   if (!isReady) {

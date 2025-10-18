@@ -15,7 +15,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Pressable, SectionList, Text, View } from "react-native";
 import { useShallow } from "zustand/react/shallow";
 
@@ -90,9 +90,6 @@ const CategoryScreen = () => {
       : [];
   }, [fetchedLesson]);
 
-  useEffect(() => {
-    refetchProgress();
-  }, []);
   return (
     <View className="bg-accent flex-[1]">
       <CustomGeneralContainer>

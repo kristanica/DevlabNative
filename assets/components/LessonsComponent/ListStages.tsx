@@ -53,7 +53,6 @@ const ListStages = ({ userStagesProgress }: any) => {
       setStageData(data);
       return data;
     },
-    staleTime: 5 * (60 * 1000), // remove if necessary
   });
   let globalCounter = 0;
 

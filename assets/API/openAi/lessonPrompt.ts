@@ -71,7 +71,6 @@ const lessonPrompt = async ({
 
     let raw = res.data.response;
 
-    // 🧹 Clean response if wrapped in ```json ... ```
     if (typeof raw === "string") {
       raw = raw.replace(/```json|```/g, "").trim();
     }

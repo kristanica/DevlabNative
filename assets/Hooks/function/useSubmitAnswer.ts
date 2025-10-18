@@ -7,7 +7,9 @@ import { useHandleGameOver } from "./useHandleGameOver";
 
 const useSubmitAnswer = () => {
   const healthPointsTracker = userHp.getState().userHp;
+
   const { handleGameOver } = useHandleGameOver();
+
   const nextStage = useMutation({
     mutationFn: async ({
       stageId,
@@ -35,19 +37,20 @@ const useSubmitAnswer = () => {
 
         if (data.isNextStageUnlocked) {
           setCurrentStageIndex((prev: any) => prev + 1);
+
           return ["stageUnlocked", "You got that one right!"];
         } else if (data.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
-          console.log(res);
-          console.log("Hello");
+
           setUnlockNextLevel({
             lessonId: lessonId,
             nextLevelId: res.nextLevelId,
           });
-          return;
+          console.log("levelunllocked??");
+          return ["levelUnlocked", "You've finished a level!"];
         } else if (data.isWholeTopicFinished) {
           finalAnswerModall.closeModal();
           setTimeout(() => {

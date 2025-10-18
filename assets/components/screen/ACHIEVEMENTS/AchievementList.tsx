@@ -1,5 +1,5 @@
 import { FlashList, ListRenderItemInfo } from "@shopify/flash-list";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import AchievementContainer from "../../AchievementsComponents/AchievementContainer";
 
 type Achievement = {
@@ -33,19 +33,15 @@ const AchievementList = ({
 }: Props) => {
   const data = achievementsData ?? [];
 
-  const achievedMap = useMemo(() => {
-    const m = new Map<string, { isClaimed?: boolean }>();
-    for (const a of userAchievements ?? [])
-      m.set(a.id, { isClaimed: a.isClaimed });
-    return m;
-  }, [userAchievements]);
-
   const keyExtractor = useCallback((item: Achievement) => item.id, []);
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<Achievement>) => {
-      const rec = achievedMap.get(item.id);
-      const isUnlocked = !!rec;
-      const isClaimed = !!rec?.isClaimed;
+      const unlockedAchievement = userAchievements!.find(
+        (achievement: any) => achievement.id === item.id
+      );
+
+      const isUnlocked = !!unlockedAchievement;
+      const isClaimed = unlockedAchievement?.isClaimed ?? false;
 
       const onClaim = () =>
         claimAchievement.mutate({
@@ -65,7 +61,7 @@ const AchievementList = ({
         />
       );
     },
-    [achievedMap, claimAchievement, selectedCategory]
+    []
   );
 
   return (

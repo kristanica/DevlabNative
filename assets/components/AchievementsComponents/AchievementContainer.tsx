@@ -31,7 +31,7 @@ const AchievementContainer = ({
   return (
     <Animated.View
       // style={[onScale]}
-      className="w-[90%] aspect-[3/5] mx-auto  rounded-[10px] my-2"
+      className="w-[50%] aspect-[3/5] mx-auto  rounded-[10px] my-2"
     >
       <View
         className=" h-full w-full absolute "

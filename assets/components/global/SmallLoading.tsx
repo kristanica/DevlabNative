@@ -18,7 +18,7 @@ const SmallLoading = ({ text }: SmallLoadingProps) => {
         autoPlay
       />
 
-      <Text className="text-white  text-lg xs:text-sm font-exoBold">
+      <Text className="text-white  text-lg xs:text-[10px] font-exoBold">
         {text || "Please wait"}
       </Text>
     </Animated.View>
