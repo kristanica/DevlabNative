@@ -30,7 +30,7 @@ export const useHandleFinalAnswer = ({
 }: useHandleFinalAnswerProps) => {
   const evaluateGame = apiCall();
 
-  const { nextStage } = useSubmitAnswer();
+  const { nextStage } = useSubmitAnswer(setCurrentStageIndex);
 
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();

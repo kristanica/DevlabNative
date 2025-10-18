@@ -62,6 +62,6 @@ const SwipeLessonContainer = ({ children }: SwipeLessonContainerProps) => {
   );
 };
 
-export default SwipeLessonContainer;
+export default React.memo(SwipeLessonContainer);
 
 const styles = StyleSheet.create({});

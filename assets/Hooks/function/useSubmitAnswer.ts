@@ -1,15 +1,19 @@
-import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
+import { Dispatch, SetStateAction } from "react";
+import { unlock } from "../query/mutation/unlock";
 import { useHandleDecrementHp } from "./useHandleDecrementHp";
 import { useHandleGameOver } from "./useHandleGameOver";
 
-const useSubmitAnswer = () => {
+const useSubmitAnswer = (
+  setCurrentStageIndex: Dispatch<SetStateAction<number>>
+) => {
   const healthPointsTracker = userHp.getState().userHp;
-
+  const unlockNext = unlock(setCurrentStageIndex);
   const { handleGameOver } = useHandleGameOver();
-
+  const { handleDecrementHp } = useHandleDecrementHp();
+  const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
   const nextStage = useMutation({
     mutationFn: async ({
       stageId,
@@ -17,29 +21,20 @@ const useSubmitAnswer = () => {
       levelId,
       category,
       answer,
-      setCurrentStageIndex,
+
       levelFinishedModal,
       finalAnswerModall,
       stageType,
     }: any) => {
-      const { handleDecrementHp } = useHandleDecrementHp();
-      const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
-      console.log(answer + "useSubmitAnswer");
       if (answer || stageType === "Lesson") {
-        const res = await unlockNextStage({
-          category: category,
-          lessonId: lessonId,
-          levelId: levelId,
-          stageId: stageId,
+        console.log("iseSubmitanswer new");
+        const unlockData = await unlockNext.mutateAsync({
+          category,
+          lessonId,
+          levelId,
+          stageId,
         });
-
-        const data = res;
-
-        if (data.isNextStageUnlocked) {
-          setCurrentStageIndex((prev: any) => prev + 1);
-
-          return ["stageUnlocked", "You got that one right!"];
-        } else if (data.isNextLevelUnlocked) {
+        if (unlockData.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
@@ -47,18 +42,20 @@ const useSubmitAnswer = () => {
 
           setUnlockNextLevel({
             lessonId: lessonId,
-            nextLevelId: res.nextLevelId,
+            nextLevelId: unlockData.nextLevelId,
           });
-          console.log("levelunllocked??");
+
+          console.log("level unlocked??");
           return ["levelUnlocked", "You've finished a level!"];
-        } else if (data.isWholeTopicFinished) {
+        } else if (unlockData.isWholeTopicFinished) {
           finalAnswerModall.closeModal();
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
 
-          return;
+          return ["topicFinished", "You've completed the entire topic!"];
         }
+        return;
       }
 
       if (healthPointsTracker <= 1) {

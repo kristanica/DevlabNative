@@ -1,10 +1,9 @@
-import unlockNextStage from "@/assets/API/fireBase/user/unlockNextStage";
 import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import { isAnswerCorrect } from "@/assets/zustand/isAnswerCorrect";
 import userHp from "@/assets/zustand/userHp";
-import { activeBuffsLocal } from "../function/activeBuffsLocal";
 import { useHandleDecrementHp } from "../function/useHandleDecrementHp";
 import { useHandleGameOver } from "../function/useHandleGameOver";
+import { unlock } from "../query/mutation/unlock";
 
 const brainFilter = (
   choices: {
@@ -23,8 +22,9 @@ const brainFilter = (
   const arrayChoices: any = Object.entries(choices)
     .filter(([key]) => key !== "correctAnswer")
     .map(([_, values]: any) => values);
-  const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
+  // const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   const setIsCorrect = isAnswerCorrect((state) => state.setIsCorrect);
+  const unlockNext = unlock(setCurrentStageIndex);
   const setActiveItem = ActiveItemIcon.getState().setActiveIcon;
   const { handleDecrementHp } = useHandleDecrementHp();
   const { handleGameOver } = useHandleGameOver();
@@ -36,14 +36,13 @@ const brainFilter = (
   const compareUserAnswer = async (answer: string) => {
     if (answer === choices.correctAnswer.trim()) {
       console.log("You are correct");
-      await unlockNextStage({
+      unlockNext.mutate({
         category: category,
         lessonId: lessonId,
         levelId: levelId,
         stageId: stageId,
       });
 
-      setCurrentStageIndex((prev: any) => prev + 1);
       setActiveItem({ BrainFilter: false });
       setIsCorrect(true);
       return;

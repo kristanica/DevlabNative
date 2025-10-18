@@ -2,10 +2,8 @@ import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import brainFilter from "@/assets/Hooks/mainGameModeFunctions/brainFilter";
 import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsMutating } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import FillScreenLoading from "../../global/FillScreenLoading";
 import BrainBytesModal from "../Modals/BrainBytesModal";
 
 const StageBrainBytes = ({
@@ -38,7 +36,7 @@ const StageBrainBytes = ({
     };
     itemUse();
   }, [activeBuff]);
-  const isMutating = useIsMutating();
+
   const braibBytes = useModal();
   return (
     <>
@@ -52,9 +50,6 @@ const StageBrainBytes = ({
           color={"white"}
         ></Ionicons>
       </Pressable>
-      {isMutating > 0 && (
-        <FillScreenLoading text="Checking your answer..."></FillScreenLoading>
-      )}
 
       {braibBytes.visibility && (
         <BrainBytesModal {...braibBytes}></BrainBytesModal>

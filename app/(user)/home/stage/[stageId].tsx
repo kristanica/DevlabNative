@@ -38,7 +38,6 @@ const StageScreen = () => {
 
   //zustand
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
-
   const setLocation = WhereIsUser((state) => state.setLocation);
   const healthPoints = userHp((state) => state.userHp);
   const stageData = stageStore((state) => state.stageData);
@@ -66,10 +65,7 @@ const StageScreen = () => {
   //useMemo
 
   const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
-  const currentStageKey = useMemo(
-    () => `${lessonId}-${levelId}-${currentStageData.id}`,
-    [lessonId, lessonId, currentStageData.id]
-  );
+
   const isRewardClaimed = useMemo(
     () =>
       levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
