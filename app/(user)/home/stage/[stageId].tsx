@@ -1,108 +1,44 @@
-import StageCodingEditor from "@/assets/components/CodeEditor/StageCodingEditor";
-import StageCodingEditorDatabase from "@/assets/components/CodeEditor/StageCodingEditorDatabase";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import RenderCounter from "@/assets/components/global/RenderCounter";
-import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
+import Hearts from "@/assets/components/RenderItems/Hearts";
+import { StageHeader } from "@/assets/components/screen/STAGE/StageHeader";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
+import { RenderStageEditor } from "@/assets/Hooks/stageScreenHandles/RenderStageEditor";
+import { useCurrentStageData } from "@/assets/Hooks/stageScreenHandles/useCurrentStageData";
+import { useStageNavigation } from "@/assets/Hooks/stageScreenHandles/useStageNavigation";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
-import stageStore from "@/assets/zustand/stageStore";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import userHp from "@/assets/zustand/userHp";
-import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useIsMutating } from "@tanstack/react-query";
-import { router, useLocalSearchParams } from "expo-router";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useLocalSearchParams } from "expo-router";
+import React, { useCallback, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 const StageScreen = () => {
   RenderCounter("stage screen");
+
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
-  const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const gameIdentifier = useRef<string | undefined>("Lesson");
   const [evaluationData, setEvaluationData] = useState<any>();
-
-  //zustand
-  const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
-  const setLocation = WhereIsUser((state) => state.setLocation);
-  const healthPoints = userHp((state) => state.userHp);
-  const stageData = stageStore((state) => state.stageData);
-  const currentStageData = stageData?.[currentStageIndex] ?? null;
-  const databaseQueryingFunctions = useCodeEditorDatabase();
-  const currentStageType = currentStageData?.type ?? "Lesson";
-
-  const isMutating = useIsMutating();
-
-  const handlePrevious = useCallback(() => {
-    setCurrentStageIndex((prev) => {
-      if (prev <= 0) {
-        console.log("last stage");
-        return prev;
-      }
-      const newIndex = prev - 1;
-      console.log("UPDATED INDEX:", newIndex);
-      return newIndex;
-    });
-  }, []);
-  const handleBackPress = useCallback(() => {
-    router.replace({ pathname: "/home/Home" });
-  }, [currentStageIndex]);
-
-  //useMemo
-
-  const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
-
-  const isRewardClaimed = useMemo(
-    () =>
-      levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
-    [levelProgress, levelKey, category]
+  const {
+    currentStageIndex,
+    setCurrentStageIndex,
+    currentStageData,
+    stageData,
+    currentStageType,
+    gameIdentifier,
+    feedbackArray,
+  } = useCurrentStageData(String(stageId));
+  const { handlePrevious, handleBackPress } = useStageNavigation(
+    setCurrentStageIndex,
+    currentStageIndex
   );
-
-  useEffect(() => {
-    if (!stageData) return;
-
-    const index: number = stageData.findIndex(
-      (stage: any) => stage.id === stageId
-    );
-
-    setCurrentStageIndex(index);
-    const stage = index !== -1 ? stageData[index] : null;
-
-    if (stage?.type) {
-      setLocation(stage.type as string);
-    }
-    if (stage?.type !== "Lesson") {
-      gameIdentifier.current = stage?.type;
-      console.log(gameIdentifier.current);
-    }
-  }, [stageId, stageData]);
-
-  useEffect(() => {
-    if (!stageData || !stageData[currentStageIndex]) return;
-    const currentStage = stageData[currentStageIndex];
-
-    if (currentStage?.type) {
-      setLocation(currentStage.type as string);
-    }
-
-    if (currentStage?.type !== "Lesson") {
-      gameIdentifier.current = currentStage?.type;
-    }
-  }, [currentStageIndex, stageData, setLocation]);
   const {
     handleFinalAnswer,
     handleEvaluation,
@@ -122,9 +58,26 @@ const StageScreen = () => {
     currentStageIndex: currentStageIndex,
     currentStageData: currentStageData,
   });
-  const feedbackArray = useRef<
-    { stageId: string; evaluation: string; feedback: string }[]
-  >([]);
+  //zustand
+  const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
+
+  const databaseQueryingFunctions = useCodeEditorDatabase();
+
+  const isMutating = useIsMutating();
+
+  //useMemo
+
+  const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
+
+  const isRewardClaimed = useMemo(
+    () =>
+      levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
+    [levelProgress, levelKey, category]
+  );
+
+  const handleExpandTerminal = useCallback(() => {
+    terminalRef.current?.expand();
+  }, []);
 
   const {
     webRef,
@@ -141,29 +94,12 @@ const StageScreen = () => {
       <View className="flex-1 bg-background p-3">
         {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
         <CustomGeneralContainer>
-          <View className="flex-row justify-between items-center mb-5">
-            <Pressable onPress={handleBackPress}>
-              <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
-                Back
-              </Text>
-            </Pressable>
-
-            {category !== "Database" && (
-              <>
-                <Pressable
-                  onPress={() => {
-                    terminalRef.current?.expand();
-                  }}
-                >
-                  <Ionicons name="terminal" size={20} color="white" />
-                </Pressable>
-                <SelectLanguageNavigation
-                  subject={String(category)}
-                  sendToWebView={sendToWebView}
-                />
-              </>
-            )}
-          </View>
+          <StageHeader
+            handleBackPress={handleBackPress}
+            handleExpandTerminal={handleExpandTerminal}
+            category={String(category)}
+            sendToWebView={sendToWebView}
+          ></StageHeader>
           <ModalHandler
             feedbackArray={feedbackArray}
             feedBackModal={feedBackModal}
@@ -184,34 +120,21 @@ const StageScreen = () => {
           ></ModalHandler>
           {/* Shows modal for first time */}
 
-          {category === "Database" ? (
-            <StageCodingEditorDatabase
-              {...databaseQueryingFunctions}
-            ></StageCodingEditorDatabase>
-          ) : (
-            <StageCodingEditor
-              terminalRef={terminalRef}
-              webRef={webRef}
-              receivedCode={receivedCode}
-              setReceivedCode={setReceivedCode}
-              setLogs={setLogs}
-              logs={logs}
-            ></StageCodingEditor>
-          )}
+          <RenderStageEditor
+            category={String(category)}
+            databaseQueryingFunctions={databaseQueryingFunctions}
+            terminalRef={terminalRef}
+            webRef={webRef}
+            receivedCode={receivedCode!}
+            setReceivedCode={setReceivedCode}
+            setLogs={setLogs}
+            logs={logs}
+          ></RenderStageEditor>
           <View className="h-[10px] w-[20px] bg-slate-400"></View>
           <ItemList></ItemList>
           <SwipeLessonContainer>
-            <View className="flex-row">
-              {currentStageData?.type !== "Lesson" &&
-                Array.from({ length: healthPoints }).map((_, index) => (
-                  <Ionicons
-                    name="heart"
-                    size={20}
-                    color={"red"}
-                    key={index}
-                  ></Ionicons>
-                ))}
-            </View>
+            {/* Renders the heart system on gamemodes */}
+            {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
 
             <StageGameComponent
               currentStageData={currentStageData}
