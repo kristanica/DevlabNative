@@ -1,13 +1,9 @@
 import * as ImagePicker from "expo-image-picker";
 import { auth, db, storage } from "../constants/constants";
-import { useBackground } from "../zustand/BackgroundProvider";
-import { useProfile } from "../zustand/ProfileProvider";
 
 import { doc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 const usePickImage = () => {
-  const { setBackground } = useBackground();
-  const { setProfile } = useProfile();
   const uid = auth.currentUser?.uid;
   if (!uid) throw new Error("No user logged in.");
   const pickImageBackground = async () => {

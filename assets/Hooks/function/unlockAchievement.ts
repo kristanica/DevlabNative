@@ -1,4 +1,5 @@
 import { auth, db } from "@/assets/constants/constants";
+import { useAchievementStore } from "@/assets/zustand/useAchievementStore";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Toast from "react-native-toast-message";
 
@@ -8,17 +9,9 @@ export const unlockAchievement = async (
   payload: any
 ) => {
   const userId = auth.currentUser?.uid;
-
+  const achievementStore = useAchievementStore.getState().achievementStore;
   try {
-    const achievementsRef = doc(db, "Achievements", subject);
-    const achivementsSnapShot = await getDoc(achievementsRef);
-    if (!achivementsSnapShot.exists()) {
-      return null;
-    }
-    const achievementsData = achivementsSnapShot.data();
-    for (const [achievementId, achievement] of Object.entries(
-      achievementsData
-    )) {
+    for (const achievement of achievementStore[subject]) {
       const condition = achievement?.unlockCondition;
 
       let match = false;
@@ -60,7 +53,7 @@ export const unlockAchievement = async (
           "Users",
           String(userId),
           "Achievements",
-          achievementId
+          achievement.id
         );
         const userAchievementSnap = await getDoc(userAchievementRef);
         if (userAchievementSnap.exists()) {

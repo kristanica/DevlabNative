@@ -1,7 +1,11 @@
 import { auth, URL } from "@/assets/constants/constants";
+import { useAchievementStore } from "@/assets/zustand/useAchievementStore";
 import axios from "axios";
 
 export const fetchAchievements = async (category: string) => {
+  const setAchievementStore =
+    useAchievementStore.getState().setAchievementStore;
+
   const token = await auth.currentUser?.getIdToken(true);
   console.log(URL);
   try {
@@ -19,6 +23,7 @@ export const fetchAchievements = async (category: string) => {
       .map(([id, data]: any) => ({ id, ...data }))
       .sort((a, b) => a.order - b.order);
 
+    setAchievementStore(category, sortedAchievements);
     return sortedAchievements;
   } catch (error) {
     console.log(error);

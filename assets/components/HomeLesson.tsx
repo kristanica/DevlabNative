@@ -20,20 +20,19 @@ const HomeLesson = ({
   return (
     <Animated.View
       style={[{}, onScale]}
-      className="w-2/5 h-48  bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden "
+      className=" bg-accentContainer mx-3 my-2 rounded-2xl overflow-hidden flex-row items-center justify-between px-5 py-5"
     >
-      <View
-        style={{ backgroundColor: color }}
-        className="h-[70%] justify-center items-center rounded-br-none rounded-bl-none"
-      >
-        <Image source={icon} className="w-[50px] h-[50px]"></Image>
+      <View className=" flex flex-row  items-center">
+        <Image source={icon} className="w-[50px] h-[50px] mr-2"></Image>
+        <Text className="text-white font-exoBold   xs:text-xs">
+          {name.toLocaleUpperCase()}
+        </Text>
       </View>
+
       {/* Render's Name */}
       <View className=" items-center my-2 flex-row justify-between  mr-3 ml-2">
-        <Text className="text-white font-exoBold  xs:text-xs">{name}</Text>
         {children}
       </View>
-      <View></View>
     </Animated.View>
   );
 };

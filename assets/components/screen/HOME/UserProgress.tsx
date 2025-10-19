@@ -11,7 +11,7 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
         VIEW YOUR PROGRESS
       </Text>
       {/* Renders HomeLesson component */}
-      <View className="flex-row flex-wrap justify-center">
+      <View className="flex-col justify-center">
         {lessons.map((item: any, index: number) => (
           <HomeLesson
             key={item.id}
@@ -29,7 +29,7 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
               labelStyle={{ fontSize: 5, color: "white" }}
               color={"#2CB67D"}
               backgroundColor={"#242629"}
-              size={40}
+              size={50}
               width={5}
               rounded
             />

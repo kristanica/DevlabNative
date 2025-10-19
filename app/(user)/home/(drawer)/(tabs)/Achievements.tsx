@@ -21,7 +21,7 @@ const Achievements = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Html");
   const { userData } = useGetUserInfo();
   const { data: achievementsData, isLoading } = useQuery({
-    queryKey: ["Achievement1", selectedCategory],
+    queryKey: ["Achievement", selectedCategory],
     queryFn: () => fetchAchievements(selectedCategory),
     staleTime: 5 * 60 * 1000,
   });

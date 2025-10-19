@@ -29,7 +29,7 @@ const StageCodingEditorDatabase = ({
   const webRef = useRef<WebView>(null);
   useEffect(() => {
     if (!queryRecievedCode) return;
-    console.log("This triggered");
+
     const unlockSqlAchievement = sqlRegex(queryRecievedCode.query);
 
     if (unlockSqlAchievement.length > 0) {

@@ -1,3 +1,4 @@
+import { fetchAchievements } from "@/assets/API/fireBase/user/achievement/fetchAchievements";
 import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
@@ -11,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation, usePathname } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
 
 const DrawerLayout = () => {
@@ -22,6 +23,19 @@ const DrawerLayout = () => {
   const getUserAchivementProgress = useGetUserInfo(
     (state) => state.getUserAchievementProgress
   );
+
+  const preFetchAchievements = useCallback(() => {
+    const category = ["Html", "Css", "JavaScript", "Database"];
+
+    return Promise.allSettled(
+      category.map((val: string) =>
+        queryClient.ensureQueryData({
+          queryKey: ["Achievement", val],
+          queryFn: () => fetchAchievements(val),
+        })
+      )
+    );
+  }, []);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -45,9 +59,10 @@ const DrawerLayout = () => {
             queryFn: fetchShopItems,
             staleTime: 10 * 60 * 1000,
           }),
-          await loadSounds(),
-          await getValidUser(),
-          await getUserAchivementProgress(),
+          preFetchAchievements(),
+          loadSounds(),
+          getValidUser(),
+          getUserAchivementProgress(),
         ]);
         result.forEach(async (error, index) => {
           if (error.status === "rejected")

@@ -10,7 +10,7 @@ const InventoryItemContainer = ({
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
 
   return (
-    <View className="bg-background my-2    w-[80%] mx-auto  rounded-2xl p-3 flex-row  border-[1px] ">
+    <View className="bg-accentContainer  my-2    w-[90%] mx-auto  rounded-2xl p-3 flex-row ">
       <Image
         source={itemIcon[iconNameTrimmed]}
         style={{
