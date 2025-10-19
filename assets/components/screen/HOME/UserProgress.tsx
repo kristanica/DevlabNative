@@ -7,11 +7,11 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
   console.log(userProgress["Html"] + "Progress on Html");
   return (
     <>
-      <Text className="text-white ml-2 xs:text-lg  font-exoBold">
+      <Text className="text-white ml-3  xs:text-lg font-exoBold tracking-wide">
         VIEW YOUR PROGRESS
       </Text>
-      {/* Renders HomeLesson component */}
-      <View className="flex-col justify-center">
+
+      <View className="flex-col mt-2 space-y-3">
         {lessons.map((item: any, index: number) => (
           <HomeLesson
             key={item.id}
@@ -20,19 +20,21 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
             icon={item.icon}
             index={index}
           >
-            <AnimatedProgressWheel
-              progress={userProgress[item.name]}
-              showProgressLabel={true}
-              rotation={"-90deg"}
-              subtitle={` / ${activeLevel[item.name]["levelCounter"]}`}
-              subtitleStyle={{ fontSize: 5, color: "white" }}
-              labelStyle={{ fontSize: 5, color: "white" }}
-              color={"#2CB67D"}
-              backgroundColor={"#242629"}
-              size={50}
-              width={5}
-              rounded
-            />
+            <View className="flex-row items-center justify-between  bg-accentContainer rounded-2xl shadow-md">
+              <AnimatedProgressWheel
+                progress={userProgress[item.name] || 0}
+                showProgressLabel={true}
+                rotation="-90deg"
+                subtitle={` / ${activeLevel[item.name]?.levelCounter || 0}`}
+                subtitleStyle={{ fontSize: 6, color: "white" }}
+                labelStyle={{ fontSize: 6, color: "white" }}
+                color={item.color || "#2CB67D"}
+                backgroundColor="#2A2A35"
+                size={50}
+                width={5}
+                rounded
+              />
+            </View>
           </HomeLesson>
         ))}
       </View>

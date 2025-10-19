@@ -1,16 +1,16 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
-import { lessonMetaData } from "../constants/constants";
+import { Image, Pressable, Text, View } from "react-native";
+import { categoryIcon, lessonMetaData } from "../constants/constants";
 
 type HomeLessonProps = {
   name: string;
   closeModal: any;
+  index: number;
 };
 
 // Lesson container component for (tabs)/Lesson.tsx
-const LessonsContainer = ({ name, closeModal }: HomeLessonProps) => {
+const LessonsContainer = ({ name, closeModal, index }: HomeLessonProps) => {
   const id = name as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
 
@@ -27,7 +27,10 @@ const LessonsContainer = ({ name, closeModal }: HomeLessonProps) => {
     >
       <View className="flex-row">
         <View className="m-auto">
-          <Ionicons name={meta.ionIcon} size={50} color={"white"} />
+          <Image
+            source={categoryIcon[id]}
+            className="h-[50px] w-[50px]"
+          ></Image>
         </View>
 
         <View className="flex-[2]  flex-col ml-4">

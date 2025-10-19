@@ -1,3 +1,4 @@
+import { hint } from "@/assets/API/openAi/hint";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import RenderCounter from "@/assets/components/global/RenderCounter";
@@ -17,10 +18,10 @@ import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useIsMutating } from "@tanstack/react-query";
+import { useIsMutating, useMutation } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 const StageScreen = () => {
   RenderCounter("stage screen");
 
@@ -99,7 +100,14 @@ const StageScreen = () => {
     logs,
     terminalRef,
   } = useCodeEditor();
-
+  const mutation = useMutation({
+    mutationFn: async ({ description, instruction, receivedCode }: any) =>
+      hint({
+        description: currentStageData.description,
+        instruction: currentStageData.instruction,
+        receivedCode,
+      }),
+  });
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -146,6 +154,18 @@ const StageScreen = () => {
           {/* TODO: Hides inventory on completed levels */}
           {!islevelCompleted && <ItemList></ItemList>}
           <SwipeLessonContainer>
+            <TouchableOpacity
+              onPress={() => {
+                console.log(receivedCode);
+                mutation.mutate({
+                  description: currentStageData.description,
+                  instruction: currentStageData.instruction,
+                  receivedCode,
+                });
+              }}
+            >
+              <Text className="text-white">Helloasd</Text>
+            </TouchableOpacity>
             {/* Renders the heart system on gamemodes */}
             {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
 

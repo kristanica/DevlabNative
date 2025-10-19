@@ -4,49 +4,46 @@ import ExperienceBar from "../../HomeComponents/ExperienceBar";
 
 const ProfileHeader = ({ userData }: any) => {
   return (
-    <View className="flex-[2] py-3 ">
+    <View className="flex-[2] py-3">
       <ImageBackground
         source={
           userData?.backgroundImage
-            ? { uri: userData?.backgroundImage }
+            ? { uri: userData.backgroundImage }
             : require("@/assets/images/profile.png")
         }
-        className="flex-row flex-[1]  overflow-hidden border-[#adb2be]  border-b-[2px]"
+        className="flex-row flex-1 border-b-[2px] border-gray-500 rounded-b-3xl overflow-hidden p-3"
       >
-        {/* Renders left side user information */}
-        <View className="flex-[2]  justify-center items-center">
-          {userData?.profileImage && (
-            <Image
-              // profileVal context usage
-              source={
-                userData?.profileImage
-                  ? { uri: userData?.profileImage }
-                  : // Default val if profileVal is false
-                    require("@/assets/images/profile.png")
-              }
-              className=" rounded-full xs:w-28 xs:h-28 "
-            />
-          )}
-
-          <Text className="xs:text-xs text-white font-exoLight">
+        {/* Left side */}
+        <View className="flex-[2] justify-center items-center">
+          <Image
+            source={
+              userData?.profileImage
+                ? { uri: userData.profileImage }
+                : require("@/assets/images/profile.png")
+            }
+            className="w-28 h-28 rounded-full border-2 border-white"
+          />
+          <Text className="text-white xs:text-xs font-exoLight mt-2 text-center">
             {userData?.bio}
           </Text>
         </View>
 
-        {/* Renders right side user information */}
-        <View className="flex-[3] justify-center items-star ">
+        {/* Right side */}
+        <View className="flex-[3] justify-center pl-4">
           <Text className="text-white font-exoBold xs:text-xl">
             Good to see you!
           </Text>
-          <Text className="text-white xs:text-lg font-exoExtraBold">
+          <Text className="text-white xs:text-lg font-exoExtraBold mt-1">
             {userData?.username}
           </Text>
 
-          <ExperienceBar
-            userExp={userData!.exp!}
-            userLevel={userData!.userLevel}
-            treshold={100}
-          ></ExperienceBar>
+          <View className="mt-3">
+            <ExperienceBar
+              userExp={userData?.exp || 0}
+              userLevel={userData?.userLevel || 1}
+              treshold={100}
+            />
+          </View>
         </View>
       </ImageBackground>
     </View>

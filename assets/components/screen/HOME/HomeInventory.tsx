@@ -6,13 +6,14 @@ import InventoryItemContainer from "../../HomeComponents/InventoryItemContainer"
 const HomeInventory = ({ inventory }: any) => {
   return (
     <>
-      <Text className="text-white ml-2 xs:text-lg  font-exoBold">
+      <Text className="text-white ml-3 xs:text-lg font-exoBold tracking-wide">
         YOUR INVENTORY
       </Text>
 
       <FlashList
         data={inventory}
         estimatedItemSize={139}
+        contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={(item: any) => {
           return (
             <InventoryItemContainer

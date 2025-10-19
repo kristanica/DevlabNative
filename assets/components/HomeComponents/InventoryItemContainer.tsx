@@ -10,25 +10,20 @@ const InventoryItemContainer = ({
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
 
   return (
-    <View className="bg-accentContainer  my-2    w-[90%] mx-auto  rounded-2xl p-3 flex-row ">
+    <View className="bg-accentContainer w-[90%] mx-auto my-2 rounded-2xl p-3 flex-row items-center shadow-md">
       <Image
         source={itemIcon[iconNameTrimmed]}
         style={{
           height: 50,
           width: 50,
-          marginRight: 25,
+          marginRight: 20,
           resizeMode: "contain",
         }}
-      ></Image>
+      />
 
-      <View className="items-center justify-center flex-row">
-        <Text className="text-white font-exoBold text-[12px]">
-          {quantity} x
-        </Text>
-        <Text className="text-white font-exoMedium text-xs">
-          {"   "}
-          {title}
-        </Text>
+      <View className="flex-row items-center">
+        <Text className="text-white font-exoBold text-sm">{quantity} x</Text>
+        <Text className="text-white font-exoMedium text-sm ml-2">{title}</Text>
       </View>
     </View>
   );

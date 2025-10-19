@@ -32,6 +32,7 @@ const DrawerLayout = () => {
         queryClient.ensureQueryData({
           queryKey: ["Achievement", val],
           queryFn: () => fetchAchievements(val),
+          staleTime: 10 * 60 * 1000,
         })
       )
     );

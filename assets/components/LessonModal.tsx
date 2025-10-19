@@ -1,7 +1,6 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScaleModalProps } from "../constants/type";
 import LessonsContainer from "./LessonsContainer";
 const mock = ["Html", "Css", "JavaScript", "Database"];
@@ -20,7 +19,10 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                 }
                 className="flex-row"
               >
-                <Ionicons name={"logo-css3"} size={50} color={"white"} />
+                <Image
+                  source={require("@/assets/images/lessonIcons/codePlayground.png")}
+                  className="h-[50px] w-[50px]"
+                ></Image>
                 <View className="flex-col justify-center ml-4">
                   <Text className="text-white font-exoBold xs:text-sm">
                     Coding Playground
@@ -38,7 +40,10 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                 }
                 className="flex-row mt-3"
               >
-                <Ionicons name={"cube"} size={50} color={"white"} />
+                <Image
+                  source={require("@/assets/images/lessonIcons/DbPlayground.png")}
+                  className="h-[50px] w-[50px]"
+                ></Image>
                 <View className="flex-col justify-center ml-4">
                   <Text className="text-white font-exoBold  text-lg xs:text-[12px]">
                     Database Playground
@@ -54,6 +59,7 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                   key={index}
                   closeModal={closeModal}
                   name={item}
+                  index={index}
                 />
               ))}
             </View>

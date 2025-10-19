@@ -64,7 +64,10 @@ export default function Home() {
               showsVerticalScrollIndicator={false}
               className="flex-[3] "
             >
-              <JumpBackIn handleJumpBackIn={handleJumpBackIn}></JumpBackIn>
+              <JumpBackIn
+                handleJumpBackIn={handleJumpBackIn}
+                lastOpenedLevel={userData!.lastOpenedLevel!}
+              ></JumpBackIn>
               <UserProgress
                 lessons={lessons}
                 activeLevel={activeLevel.active}

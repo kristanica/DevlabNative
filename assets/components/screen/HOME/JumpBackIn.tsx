@@ -1,34 +1,40 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { categoryIcon } from "@/assets/constants/constants";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 type JumpBackInPayload = {
   handleJumpBackIn: () => void;
+  lastOpenedLevel: {
+    lessonId: string;
+    levelId: string;
+    subject: string;
+    description: string;
+    title: string;
+  };
 };
-const JumpBackIn = ({ handleJumpBackIn }: JumpBackInPayload) => {
+const JumpBackIn = ({
+  handleJumpBackIn,
+  lastOpenedLevel,
+}: JumpBackInPayload) => {
   return (
     <>
-      <Text className="text-white ml-2  xs:text-lg mt-3 font-exoBold">
+      <Text className="text-white ml-3 mt-4 xs:text-lg font-exoBold tracking-wide">
         JUMP BACK IN
       </Text>
-      <Pressable onPress={handleJumpBackIn}>
-        <View className="bg-accentContainer mx-3 my-2 flex-row rounded-2xl overflow-hidden">
-          <View className="flex-[.5] justify-center items-center bg-[#070606] rounded-2xl">
-            <Ionicons name="logo-html5" size={50} color={"white"} />
-          </View>
-
-          <View className="flex-1 overflow-hidden p-2 ">
+      <Pressable onPress={handleJumpBackIn} className="mx-3 my-2">
+        <View className="flex-row items-center bg-accentContainer rounded-2xl overflow-hidden shadow-md p-3">
+          <Image
+            source={categoryIcon[lastOpenedLevel.subject]}
+            className="w-14 h-14 rounded-lg"
+          />
+          <View className="flex-1 ml-3">
             <Text className="text-white xs:text-sm font-exoBold">
-              HTML Explorer - The Foundation
+              {lastOpenedLevel.title}
             </Text>
-
             <Text
-              className="text-[#94A1B2] text-xs text-justify font-exoLight"
-              numberOfLines={3}
+              className="text-gray-400 xs:text-xs font-exoLight mt-1"
+              numberOfLines={2}
             >
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Dignissimos, voluptates laudantium sint error deleniti aliquid
-              quasi maiores suscipit a maxime voluptatibus nemo laborum dicta
-              harum totam explicabo temporibus ut facilis?
+              {lastOpenedLevel.description}
             </Text>
           </View>
         </View>

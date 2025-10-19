@@ -176,6 +176,8 @@ type LessonContainerPayload = {
     id: string;
     title: string;
     description: string;
+    levelId: string;
+    lessonId: string;
   };
   index: number;
   isLocked: boolean | undefined;

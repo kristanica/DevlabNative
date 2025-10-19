@@ -64,6 +64,7 @@ const StageCodeRush = ({
     console.log("ASDSAHGDASDGJH");
   }, [activeBuffs]);
   const codeRush = useModal();
+
   return (
     <>
       <Pressable

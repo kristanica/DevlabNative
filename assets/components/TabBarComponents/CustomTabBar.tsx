@@ -1,10 +1,9 @@
 import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsButton";
-import { width } from "@/assets/constants/constants";
+import { navIcon, width } from "@/assets/constants/constants";
 import useModal from "@/assets/Hooks/useModal";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import LessonModal from "../LessonModal";
 
@@ -57,21 +56,24 @@ export default function CustomTabBar({
             target: route.key,
           });
         };
-
+        console.log(index + "nav");
         return (
           <CustomTabsButton
             key={route.key}
             onPress={onPress}
             onLongPress={onLongPress}
-            icon={tabIcon[index]}
             isFocused={isFocused}
             name={label.toString()}
+            navIcon={navIcon[index]}
           />
         );
       })}
 
       <TouchableOpacity onPress={() => lessonModal.setVisibility(true)}>
-        <Ionicons name="add" size={20} color={"white"}></Ionicons>
+        <Image
+          source={require("@/assets/images/navBarIcons/Lesson.png")}
+          className="h-[30px] w-[30px]"
+        ></Image>
       </TouchableOpacity>
 
       {lessonModal.visibility && (

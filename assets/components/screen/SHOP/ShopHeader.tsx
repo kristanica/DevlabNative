@@ -1,6 +1,5 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 type ShopHeader = {
   coins: number | undefined;
 };
@@ -12,14 +11,20 @@ const ShopHeader = ({ coins }: ShopHeader) => {
           <Text className="xs:text-2xl text-white font-exoExtraBold px-3">
             DEVLAB
           </Text>
-          <Ionicons name="cart" size={20} color={"#FFFFFF"} />
+          <Image
+            source={require("@/assets/images/navBarIcons/Shop.png")}
+            className="h-[30px] w-[30px]"
+          ></Image>
         </View>
 
         <View className="flex-row items-center mr-7 ">
           <Text className="text-white xs:text-xs text-justify font-exoRegular mr-2 px-3">
             {coins}
           </Text>
-          <Ionicons name="cash" size={20} color={"#FFFFFF"} />
+          <Image
+            source={require("@/assets/images/iconItems/DevCoins.png")}
+            className="h-[20px] w-[20px]"
+          ></Image>
         </View>
       </View>
 

@@ -6,10 +6,8 @@ import tryCatch from "../../function/tryCatch";
 export const setLastOpenedLevel = () => {
   return useMutation({
     mutationFn: async (data: any) => {
-      console.log(data);
       const uid = auth.currentUser?.uid;
       const userRef = doc(db, "Users", String(uid));
-      console.log(uid);
 
       const [_, error] = await tryCatch(
         setDoc(
@@ -18,7 +16,9 @@ export const setLastOpenedLevel = () => {
             lastOpenedLevel: {
               lessonId: data.lessonId,
               levelId: data.levelId,
-              subject: data.category,
+              subject: data.subject,
+              description: data.description,
+              title: data.title,
             },
           },
 
@@ -27,8 +27,7 @@ export const setLastOpenedLevel = () => {
       );
 
       if (error) {
-        console.log(error);
-        return;
+        throw error;
       }
     },
   });

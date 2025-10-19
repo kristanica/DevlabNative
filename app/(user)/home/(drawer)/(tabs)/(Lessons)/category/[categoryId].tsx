@@ -42,7 +42,7 @@ const CategoryScreen = () => {
   const {
     data: useUserProgressData,
     isLoading: progressLoading,
-    refetch: refetchProgress,
+
     isRefetching: isRefetching,
   } = useQuery({
     queryKey: ["specificUserProgress", id],
@@ -74,7 +74,8 @@ const CategoryScreen = () => {
     setTracker,
     setCoinsAndExp,
     setStagesVisibility,
-    id
+    id,
+    String(categoryId)
   );
 
   const sections = useMemo(() => {

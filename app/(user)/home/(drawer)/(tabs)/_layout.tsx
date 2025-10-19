@@ -16,13 +16,13 @@ const _layout = () => {
         <Tabs.Screen name="Home" />
         <Tabs.Screen name="Shop" />
 
+        <Tabs.Screen name="Achievements" options={{ title: "Trophies" }} />
         <Tabs.Screen
           name="(Lessons)"
           options={{
             title: "Lessons",
           }}
         />
-        <Tabs.Screen name="Achievements" options={{ title: "Trophies" }} />
       </Tabs>
     </>
   );

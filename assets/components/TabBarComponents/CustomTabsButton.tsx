@@ -1,67 +1,61 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useEffect } from "react";
-import { Pressable, View } from "react-native";
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withSequence,
-  withTiming,
-} from "react-native-reanimated";
+import React from "react";
+import { Image, TouchableOpacity } from "react-native";
+import Animated from "react-native-reanimated";
 
 type customTabsButton = {
   onPress: () => void;
   onLongPress: () => void;
   name: string;
   isFocused: boolean;
-  icon: any;
+
+  navIcon: any;
 };
 
 const CustomTabsButton = ({
   onPress,
   onLongPress,
-  icon,
   isFocused,
   name,
+  navIcon,
 }: customTabsButton) => {
-  const AnimatedIcons = Animated.createAnimatedComponent(Ionicons);
+  // const AnimatedIcons = Animated.createAnimatedComponent(Image);
 
-  const scaleVal = useSharedValue(1);
+  // const scaleVal = useSharedValue(1);
 
-  const onScale = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: interpolate(scaleVal.value, [0, 1], [0, 1]),
-      },
-    ],
-  }));
+  // const onScale = useAnimatedStyle(() => ({
+  //   transform: [
+  //     {
+  //       scale: interpolate(scaleVal.value, [0, 1], [0, 1]),
+  //     },
+  //   ],
+  // }));
 
-  useEffect(() => {
-    scaleVal.value = withSequence(
-      withTiming(1.2, { duration: 100 }),
-      withTiming(1, { duration: 100 })
-    );
-    // scaleVal.value = withSpring(isFocused ? 1.5 : 1);
-  }, [isFocused]);
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     scaleVal.value = withSequence(
+  //       withTiming(1.2, { duration: 100 }),
+  //       withTiming(1, { duration: 100 })
+  //     );
+  //   }
+  // }, [isFocused]);
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={{}}
       onPress={() => onPress()}
       onLongPress={() => onLongPress()}
       className="flex-col justify-center items-center "
     >
-      <View className="w-[20px] h-[30px] ">
-        <AnimatedIcons
-          name={isFocused ? icon : `${icon}-outline`}
-          color={"white"}
-          size={20}
-          style={onScale}
-        />
-      </View>
+      <Image
+        source={navIcon}
+        className="h-[20px] w-[20px] m-auto mt-2 "
+        // style={onScale}
+      ></Image>
 
-      <Animated.Text className="text-white xs:text-[8px]">{name}</Animated.Text>
-    </Pressable>
+      <Animated.Text className="text-white xs:text-[8px] pt-2">
+        {name}
+      </Animated.Text>
+    </TouchableOpacity>
   );
 };
 

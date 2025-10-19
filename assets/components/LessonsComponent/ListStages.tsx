@@ -1,13 +1,12 @@
 import { auth, URL } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
-import { setLastOpenedLevel } from "@/assets/Hooks/query/mutation/setLastOpenedLevel";
 import useModal from "@/assets/Hooks/useModal";
 import stageStore from "@/assets/zustand/stageStore";
 import tracker from "@/assets/zustand/tracker";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Text, View } from "react-native";
 import RenderCounter from "../global/RenderCounter";
 import SmallLoading from "../global/SmallLoading";
@@ -61,17 +60,6 @@ const ListStages = ({ userStagesProgress }: any) => {
   }
 
   const lockedModal = useModal();
-
-  const lastOpenedLevel = setLastOpenedLevel();
-
-  useEffect(() => {
-    if (!levelsData) return;
-    lastOpenedLevel.mutate({
-      lessonId: levelPayload.lessonId,
-      levelId: levelPayload.levelId,
-      category: levelPayload.category,
-    });
-  }, [levelsData]);
 
   const { renderItem } = ListStagesItem(
     levelPayload,

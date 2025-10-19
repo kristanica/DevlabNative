@@ -1,3 +1,4 @@
+import { setLastOpenedLevel } from "@/assets/Hooks/query/mutation/setLastOpenedLevel";
 import { useCallback } from "react";
 import { Pressable } from "react-native";
 import LessonContainer from "../LessonsComponent/LessonContainer";
@@ -10,8 +11,10 @@ export const CategoryItem = (
   setTracker: any,
   setCoinsAndExp: any,
   setStagesVisibility: any,
-  id: any
+  id: any,
+  categoryId: string
 ) => {
+  const lastOpenedLevel = setLastOpenedLevel();
   const handleStageTracker = useCallback(
     (isLevelLocked: boolean, item: any) => {
       if (!isLevelLocked) {
@@ -32,6 +35,7 @@ export const CategoryItem = (
     },
     []
   );
+
   const renderItem = useCallback(
     ({ item, index }: any) => {
       const key = `${item.lessonId}-${item.levelId}`; // Access data directly from query
@@ -40,7 +44,18 @@ export const CategoryItem = (
         useUserProgressData?.allProgress?.[key]?.isActive ?? false;
 
       return (
-        <Pressable onPress={() => handleStageTracker(isLevelLocked, item)}>
+        <Pressable
+          onPress={() => {
+            handleStageTracker(isLevelLocked, item);
+            lastOpenedLevel.mutate({
+              lessonId: item.lessonId,
+              levelId: item.levelId,
+              subject: categoryId,
+              description: item.description,
+              title: item.title,
+            });
+          }}
+        >
           <LessonContainer
             isLocked={!isLevelLocked}
             levelInformation={item}

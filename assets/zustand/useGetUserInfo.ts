@@ -15,6 +15,8 @@ type userData = {
     lessonId: string;
     levelId: string;
     subject: string;
+    title: string;
+    description: string;
   };
 };
 type allProgressType = Record<
@@ -155,6 +157,8 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
                 lessonId: data?.lastOpenedLevel?.lessonId,
                 levelId: data?.lastOpenedLevel?.levelId,
                 subject: data?.lastOpenedLevel?.subject,
+                title: data?.lastOpenedLevel?.title,
+                description: data?.lastOpenedLevel?.description,
               },
             },
             loading: false,
