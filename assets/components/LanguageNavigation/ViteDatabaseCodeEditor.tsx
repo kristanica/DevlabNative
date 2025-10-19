@@ -48,6 +48,9 @@ const ViteDatabaseCodeEditor = ({
         <FillScreenLoading text={"Evalutaing..."}></FillScreenLoading>
       )}
       <View className="flex-[1] bg-accent rounded-[10px]">
+        <TouchableOpacity onPress={() => console.log(queryRecievedCode)}>
+          <Text>asdsad</Text>
+        </TouchableOpacity>
         {evaluationModal.visibility && (
           <PlaygroundDatabaseEvaluationModal
             {...evaluationModal}
@@ -147,16 +150,23 @@ ${tableStyle}
             onMessage={(e) => {
               try {
                 const data = JSON.parse(e.nativeEvent.data);
-
+                if (!data) {
+                  console.log("no data");
+                }
                 if (!query) {
                   setQuery(data.defaultQuery);
                   return;
                 }
 
-                setQueryRecievedCode({
-                  query: data.query,
-                  result: data.result,
-                });
+                if (data.query && data.result) {
+                  console.log("set!");
+                  setQueryRecievedCode({
+                    query: data.query,
+                    result: data.result,
+                  });
+
+                  return;
+                }
 
                 if (data.allTables) {
                   const combinedHtml = data.allTables

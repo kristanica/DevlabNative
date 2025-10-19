@@ -24,6 +24,9 @@ const AchievementsHeader = ({
       if (item.subject === "JavaScript") {
         item.subject = "Js";
       }
+      if (item.subject === "Database") {
+        item.subject = "Db";
+      }
 
       const totalAchievementsCompleted = userAchievements.filter(
         (achievement: any) => achievement.id.startsWith(item.subject)

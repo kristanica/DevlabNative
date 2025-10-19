@@ -6,6 +6,7 @@ import { InteractionManager } from "react-native";
 export const useCurrentStageData = (stageId: string) => {
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
   const stageData = stageStore((state) => state.stageData);
+  const [stageLength] = useState<number>(stageData.length);
   const feedbackArray = useRef<
     { stageId: string; evaluation: string; feedback: string }[]
   >([]);
@@ -57,5 +58,6 @@ export const useCurrentStageData = (stageId: string) => {
     currentStageType,
     gameIdentifier,
     feedbackArray,
+    stageLength,
   };
 };

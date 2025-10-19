@@ -66,7 +66,7 @@ const DrawerLayout = () => {
       console.log("ASDasdasd");
       loadProgress();
     });
-    return unsub;
+    return () => unsub();
   }, []);
 
   if (!isReady) {

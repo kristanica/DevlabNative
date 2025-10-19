@@ -8,6 +8,7 @@ export const unlockAchievement = async (
   payload: any
 ) => {
   const userId = auth.currentUser?.uid;
+
   try {
     const achievementsRef = doc(db, "Achievements", subject);
     const achivementsSnapShot = await getDoc(achievementsRef);
@@ -19,7 +20,9 @@ export const unlockAchievement = async (
       achievementsData
     )) {
       const condition = achievement?.unlockCondition;
+
       let match = false;
+
       switch (actionType) {
         case "firstLevelComplete":
           match =

@@ -34,7 +34,10 @@ const brainFilter = (
     .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
 
   const compareUserAnswer = async (answer: string) => {
-    if (answer === choices.correctAnswer.trim()) {
+    if (
+      answer.toLocaleUpperCase() ===
+      choices.correctAnswer.trim().toLocaleUpperCase()
+    ) {
       console.log("You are correct");
       unlockNext.mutate({
         category: category,

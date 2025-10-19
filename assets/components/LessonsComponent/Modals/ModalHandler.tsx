@@ -48,10 +48,14 @@ const ModalHandler = ({
     finalAnswerModall.closeModal();
     console.log(currentStageType + "modalHandler");
     if (category === "Database") {
+      console.log(queryRecievedCode);
       console.log(queryRecievedCode.query + "modalHandler");
+      const recievedCode = queryRecievedCode.query;
       const toastResult = await handleFinalAnswer(
-        queryRecievedCode,
-        currentStageType
+        recievedCode,
+        currentStageType,
+        setEvaluationData,
+        feedbackArray
       );
       setToastVisibility(toastResult[0], toastResult[1]);
       return;

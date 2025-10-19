@@ -1,21 +1,21 @@
 import axios from "axios";
 import { auth, URL } from "../../constants/constants";
 
-type receivedCodePayload = {
-  html?: string;
-  css?: string;
-  js?: string;
-};
+// type receivedCodePayload = {
+//   html?: string;
+//   css?: string;
+//   js?: string;
+// };
 
 type useEvaluationPayload = {
-  receivedCode: receivedCodePayload | undefined;
+  receivedCode: any;
   instruction: string;
   description: {
     id: number;
     type: string;
     value: string;
   }[];
-
+  category: string;
   // description: string;
 };
 
@@ -44,6 +44,7 @@ const lessonPrompt = async ({
   receivedCode,
   instruction,
   description,
+  category,
 }: useEvaluationPayload) => {
   if (!receivedCode) return null;
   const instructionText = getInstructionFromBlocks(description);
@@ -51,9 +52,24 @@ const lessonPrompt = async ({
   console.log(instructionText);
 
   const token = await currentUser?.getIdToken(true);
-
-  try {
-    const res = await axios.post(
+  let res;
+  if (category === "Database") {
+    res = await axios.post(
+      `${URL}/openAI/lessonPromptDb`,
+      {
+        sql: receivedCode,
+        subject: category,
+        instructions: instruction,
+        description: instructionText,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } else {
+    res = await axios.post(
       `${URL}/openAI/lessonPrompt`,
       {
         html: receivedCode.html,
@@ -68,9 +84,10 @@ const lessonPrompt = async ({
         },
       }
     );
+  }
 
+  try {
     let raw = res.data.response;
-
     if (typeof raw === "string") {
       raw = raw.replace(/```json|```/g, "").trim();
     }

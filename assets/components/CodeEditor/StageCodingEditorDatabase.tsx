@@ -2,7 +2,13 @@ import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
 import { sqlRegex } from "@/assets/Hooks/regexChecker/sqlRegex";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import WebView from "react-native-webview";
 
 type ViteDatabaseCodeEditorProps = {
@@ -23,18 +29,23 @@ const StageCodingEditorDatabase = ({
   const webRef = useRef<WebView>(null);
   useEffect(() => {
     if (!queryRecievedCode) return;
-    const unlockSqlAchievement = sqlRegex(queryRecievedCode);
+    console.log("This triggered");
+    const unlockSqlAchievement = sqlRegex(queryRecievedCode.query);
 
     if (unlockSqlAchievement.length > 0) {
-      unlockAchievement("Database", "tagsUsed", {
-        unlockSqlAchievement,
+      unlockAchievement("Database", "tagUsed", {
+        usedTags: unlockSqlAchievement,
         isCorrect: true,
       });
     }
   }, [queryRecievedCode]);
+
   return (
     <View className="bg-background flex-[1]">
       <View className="flex-[1] bg-accent rounded-[10px]">
+        <TouchableOpacity onPress={() => console.log(queryRecievedCode)}>
+          <Text>asdsad</Text>
+        </TouchableOpacity>
         <ScrollView
           className=" flex-[1] m-3 rounded-[10px]"
           horizontal={true}
@@ -115,17 +126,22 @@ ${tableStyle}
             onMessage={(e) => {
               try {
                 const data = JSON.parse(e.nativeEvent.data);
-
+                console.log("test");
+                console.log(data);
                 if (!query) {
                   setQuery(data.defaultQuery);
                   return;
                 }
 
-                setQueryRecievedCode({
-                  query: data.query,
-                  result: data.result,
-                });
+                if (data.query && data.result) {
+                  console.log("set!");
+                  setQueryRecievedCode({
+                    query: data.query,
+                    result: data.result,
+                  });
 
+                  return;
+                }
                 if (data.allTables) {
                   const combinedHtml = data.allTables
                     .map(

@@ -25,7 +25,9 @@ const StageScreen = () => {
   RenderCounter("stage screen");
 
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
+  //feedback on level end setter
   const [evaluationData, setEvaluationData] = useState<any>();
+
   const {
     currentStageIndex,
     setCurrentStageIndex,
@@ -34,11 +36,14 @@ const StageScreen = () => {
     currentStageType,
     gameIdentifier,
     feedbackArray,
+    stageLength,
   } = useCurrentStageData(String(stageId));
   const { handlePrevious, handleBackPress } = useStageNavigation(
     setCurrentStageIndex,
     currentStageIndex
   );
+
+  console.log("current stague UNBDEX" + currentStageIndex);
   const {
     handleFinalAnswer,
     handleEvaluation,
@@ -52,6 +57,7 @@ const StageScreen = () => {
     levelId: String(levelId),
     stageId: String(stageId),
     category: String(category),
+    stageLength: stageLength,
     gameIdentifier: gameIdentifier,
     currentStageDataType: currentStageType,
     setCurrentStageIndex: setCurrentStageIndex,
@@ -72,6 +78,11 @@ const StageScreen = () => {
   const isRewardClaimed = useMemo(
     () =>
       levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
+    [levelProgress, levelKey, category]
+  );
+
+  const islevelCompleted = useMemo(
+    () => levelProgress?.[String(category)]?.[levelKey]?.isCompleted ?? false,
     [levelProgress, levelKey, category]
   );
 
@@ -148,19 +159,17 @@ const StageScreen = () => {
 
             {/* Determines the gamemode */}
             <View className="flex-row justify-evenly">
-              <Pressable onPress={handlePrevious}>
-                {currentStageData?.type === "Lesson" && (
+              {(currentStageData?.type === "Lesson" || islevelCompleted) && (
+                <Pressable onPress={handlePrevious}>
                   <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular">
                     Prev
                   </Text>
-                )}
-              </Pressable>
-
+                </Pressable>
+              )}
               {currentStageData?.type === "Lesson" && (
                 <Pressable
                   onPress={() => {
                     if (category === "Database") {
-                      console.log("this should run huhu");
                       handleEvaluation(
                         databaseQueryingFunctions.queryRecievedCode.query
                       );
@@ -176,9 +185,19 @@ const StageScreen = () => {
                   </Text>
                 </Pressable>
               )}
-              {currentStageData?.type !== "BrainBytes" && (
+              {(currentStageData?.type !== "BrainBytes" ||
+                islevelCompleted) && (
                 <Pressable
                   onPress={() => {
+                    if (islevelCompleted) {
+                      if (currentStageIndex < stageLength - 1) {
+                        setCurrentStageIndex((prev) => prev + 1);
+                      } else {
+                        levelFinishedModal.setVisibility(true);
+                      }
+
+                      return;
+                    }
                     finalAnswerModall.setVisibility(true);
                   }}
                 >

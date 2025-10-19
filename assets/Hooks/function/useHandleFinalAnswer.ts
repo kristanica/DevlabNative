@@ -16,6 +16,7 @@ type useHandleFinalAnswerProps = {
   setCurrentStageIndex: React.Dispatch<React.SetStateAction<number>>;
   currentStageIndex: number;
   currentStageData: any;
+  stageLength: number;
 };
 
 export const useHandleFinalAnswer = ({
@@ -25,7 +26,6 @@ export const useHandleFinalAnswer = ({
   category,
 
   setCurrentStageIndex,
-
   currentStageData,
 }: useHandleFinalAnswerProps) => {
   const evaluateGame = apiCall();
@@ -49,6 +49,7 @@ export const useHandleFinalAnswer = ({
         receivedCode: receivedCode,
         instruction: currentStageData.instruction,
         description: currentStageData.description,
+        category: category,
       },
       {
         onSuccess: async () => {
@@ -65,21 +66,6 @@ export const useHandleFinalAnswer = ({
     setEvaluationData: any,
     feedbackArray: any
   ) => {
-    // const   = unlockedStages.getState().unlockedStages;
-
-    // const isStagedUnlocked =
-    //   finishedStages[`${lessonId}-${levelId}-${currentStageData.id}`]
-    //     .isCompleted ?? false;
-
-    // if (isStagedUnlocked) {
-    //   console.log(
-    //     `${lessonId}-${levelId}-${currentStageData.id} is ${isStagedUnlocked}`
-    //   );
-    //   setCurrentStageIndex((prev) => prev + 1);
-    //   return;
-    // }
-
-    console.log(type + " hAndleFinalAnswer");
     return new Promise(async (resolve, reject) => {
       if (type === "Lesson") {
         console.log("OKEASE?");
@@ -98,6 +84,7 @@ export const useHandleFinalAnswer = ({
       }
 
       if (!receivedCode && type !== "Lesson") {
+        console.log(receivedCode);
         setTimeout(() => finalAnswerModall.closeModal(), 100);
         resolve(["wrongAnswer", "Your code field is empty!"]);
         return;
@@ -144,6 +131,7 @@ export const useHandleFinalAnswer = ({
                 console.log(feedbackArray);
               }
 
+              //Sets the data for the feedback on level end
               if (evaluationResult![0] === "levelUnlocked") {
                 setEvaluationData(
                   await makeFeedback.mutateAsync(feedbackArray.current)

@@ -1,14 +1,17 @@
 import lessonPrompt from "@/assets/API/openAi/lessonPrompt";
 import { useMutation } from "@tanstack/react-query";
 
-type receivedCodePayload = {
-  html?: string;
-  css?: string;
-  js?: string;
-};
+// type receivedCodePayload =
+//   | {
+//       html?: string;
+//       css?: string;
+//       js?: string;
+//     }
+//   | string;
 
 type useEvaluationPayload = {
-  receivedCode: receivedCodePayload | undefined;
+  category: string;
+  receivedCode: any;
   instruction: string;
   // description: string;
   description: {
@@ -24,12 +27,15 @@ const useEvaluationLesson = () => {
       receivedCode,
       instruction,
       description,
-    }: useEvaluationPayload) =>
-      lessonPrompt({
+      category,
+    }: useEvaluationPayload) => {
+      return lessonPrompt({
         receivedCode,
         instruction,
         description,
-      }),
+        category,
+      });
+    },
   });
   return { evaluationLessonMutation };
 };
