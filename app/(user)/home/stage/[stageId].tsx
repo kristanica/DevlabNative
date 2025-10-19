@@ -38,12 +38,21 @@ const StageScreen = () => {
     feedbackArray,
     stageLength,
   } = useCurrentStageData(String(stageId));
-  const { handlePrevious, handleBackPress } = useStageNavigation(
-    setCurrentStageIndex,
-    currentStageIndex
+  const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
+
+  //useMemos
+  const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
+
+  const isRewardClaimed = useMemo(
+    () =>
+      levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
+    [levelProgress, levelKey, category]
+  );
+  const islevelCompleted = useMemo(
+    () => levelProgress?.[String(category)]?.[levelKey]?.isCompleted ?? false,
+    [levelProgress, levelKey, category]
   );
 
-  console.log("current stague UNBDEX" + currentStageIndex);
   const {
     handleFinalAnswer,
     handleEvaluation,
@@ -64,27 +73,18 @@ const StageScreen = () => {
     currentStageIndex: currentStageIndex,
     currentStageData: currentStageData,
   });
-  //zustand
-  const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
 
+  const { handlePrevious, handleBackPress, handleNext } = useStageNavigation(
+    setCurrentStageIndex,
+    currentStageIndex,
+    islevelCompleted,
+    stageLength,
+    finalAnswerModall.setVisibility,
+    levelFinishedModal.setVisibility
+  );
   const databaseQueryingFunctions = useCodeEditorDatabase();
 
   const isMutating = useIsMutating();
-
-  //useMemo
-
-  const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
-
-  const isRewardClaimed = useMemo(
-    () =>
-      levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
-    [levelProgress, levelKey, category]
-  );
-
-  const islevelCompleted = useMemo(
-    () => levelProgress?.[String(category)]?.[levelKey]?.isCompleted ?? false,
-    [levelProgress, levelKey, category]
-  );
 
   const handleExpandTerminal = useCallback(() => {
     terminalRef.current?.expand();
@@ -131,6 +131,7 @@ const StageScreen = () => {
           ></ModalHandler>
           {/* Shows modal for first time */}
 
+          {/* Determines Code editor */}
           <RenderStageEditor
             category={String(category)}
             databaseQueryingFunctions={databaseQueryingFunctions}
@@ -142,11 +143,13 @@ const StageScreen = () => {
             logs={logs}
           ></RenderStageEditor>
           <View className="h-[10px] w-[20px] bg-slate-400"></View>
-          <ItemList></ItemList>
+          {/* TODO: Hides inventory on completed levels */}
+          {!islevelCompleted && <ItemList></ItemList>}
           <SwipeLessonContainer>
             {/* Renders the heart system on gamemodes */}
             {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
 
+            {/* Renders the contents of the page */}
             <StageGameComponent
               currentStageData={currentStageData}
               type={currentStageData?.type}
@@ -157,8 +160,8 @@ const StageScreen = () => {
               setCurrentStageIndex={setCurrentStageIndex}
             ></StageGameComponent>
 
-            {/* Determines the gamemode */}
             <View className="flex-row justify-evenly">
+              {/* Renders prev button on lesson only */}
               {(currentStageData?.type === "Lesson" || islevelCompleted) && (
                 <Pressable onPress={handlePrevious}>
                   <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular">
@@ -166,6 +169,8 @@ const StageScreen = () => {
                   </Text>
                 </Pressable>
               )}
+              {/* TODO: Might consider rendering evaluate button upon level completion on all gamemodes */}
+              {/* Evalutaion button on Lesson */}
               {currentStageData?.type === "Lesson" && (
                 <Pressable
                   onPress={() => {
@@ -185,22 +190,10 @@ const StageScreen = () => {
                   </Text>
                 </Pressable>
               )}
+              {/* Renders Next button except on brain bytes as it has its own button. Renders Next button upon level completion */}
               {(currentStageData?.type !== "BrainBytes" ||
                 islevelCompleted) && (
-                <Pressable
-                  onPress={() => {
-                    if (islevelCompleted) {
-                      if (currentStageIndex < stageLength - 1) {
-                        setCurrentStageIndex((prev) => prev + 1);
-                      } else {
-                        levelFinishedModal.setVisibility(true);
-                      }
-
-                      return;
-                    }
-                    finalAnswerModall.setVisibility(true);
-                  }}
-                >
+                <Pressable onPress={handleNext}>
                   <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
                     Next
                   </Text>

@@ -3,11 +3,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import WebView from "react-native-webview";
+import RenderCounter from "../../global/RenderCounter";
 import CodeCrafterModal from "../Modals/CodeCrafterModal";
 
 const StageCodeCrafter = ({ currentStageData }: CurrentStageDataPayload) => {
   const [webViewHeight, setWebViewHeight] = useState(0);
   const codeCrafter = useModal();
+  RenderCounter("CodeCrafter");
+
   return (
     <>
       <Pressable

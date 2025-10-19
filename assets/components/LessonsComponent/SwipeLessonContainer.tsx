@@ -1,10 +1,11 @@
-import React, { ReactNode } from "react";
-import { Dimensions, ScrollView, StyleSheet } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import React, { ReactNode, useCallback, useState } from "react";
 import {
-  Directions,
-  Gesture,
-  GestureDetector,
-} from "react-native-gesture-handler";
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -16,49 +17,56 @@ type SwipeLessonContainerProps = {
 };
 const SwipeLessonContainer = ({ children }: SwipeLessonContainerProps) => {
   const { height } = Dimensions.get("screen");
+  const [isShown, setIsShown] = useState<boolean>(false);
 
   const heightVal = useSharedValue(height - 100);
-  const state = useSharedValue<"up" | "down">("up");
 
-  const swipeDown = Gesture.Fling()
-    .direction(Directions.DOWN)
-    .onStart(() => {
-      if (state.value === "up") {
-        heightVal.value = withSpring(50, { damping: 50, stiffness: 50 });
-        state.value = "down";
-      }
-    });
-
-  const swipeUp = Gesture.Fling()
-    .direction(Directions.UP)
-    .onStart(() => {
-      if (state.value === "down") {
-        heightVal.value = withSpring(height - 100, {
-          damping: 50,
-          stiffness: 50,
-        });
-        state.value = "up";
-      }
-    });
   const swipeStyle = useAnimatedStyle(() => ({
     height: heightVal.value,
   }));
 
+  const toggleContainer = useCallback(() => {
+    if (!isShown) {
+      heightVal.value = withSpring(height - 100, {
+        damping: 50,
+        stiffness: 50,
+      });
+      setIsShown(true);
+      return;
+    } else {
+      heightVal.value = withSpring(50, { damping: 50, stiffness: 50 });
+      setIsShown(false);
+    }
+  }, [isShown, height, heightVal]);
+
   return (
-    <GestureDetector gesture={Gesture.Exclusive(swipeDown, swipeUp)}>
-      <Animated.View
-        style={[swipeStyle]}
-        className="w-full bg-background px-2 absolute bottom-0 border-[2px]  border-[#1c474d] border-b-0 pt-[20px] rounded-tl-[10px] rounded-tr-[10px]"
+    <Animated.View
+      style={[swipeStyle]}
+      className="w-full bg-background px-2 absolute bottom-0 border-[2px]  border-[#1c474d] border-b-0 pt-[20px] rounded-tl-[10px] rounded-tr-[10px]"
+    >
+      <TouchableOpacity
+        onPress={toggleContainer}
+        className="absolute  z-50"
+        style={{
+          top: 18,
+          right: 60,
+        }}
       >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        >
-          {children}
-        </ScrollView>
-      </Animated.View>
-    </GestureDetector>
+        <Ionicons
+          name={`${isShown ? `arrow-down-circle` : `arrow-up-circle`}`}
+          color={"yellow"}
+          size={25}
+        ></Ionicons>
+      </TouchableOpacity>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      >
+        {children}
+      </ScrollView>
+    </Animated.View>
   );
 };
 

@@ -4,7 +4,11 @@ import { InteractionManager } from "react-native";
 
 export const useStageNavigation = (
   setCurrentStageIndex: Dispatch<SetStateAction<number>>,
-  currentStageIndex: number
+  currentStageIndex: number,
+  islevelCompleted: boolean,
+  stageLength: number,
+  setFinalAsnwerVisibility: (val: boolean) => void,
+  setFinishedModalVisibility: (val: boolean) => void
 ) => {
   const handlePrevious = useCallback(() => {
     setCurrentStageIndex((prev) => {
@@ -23,8 +27,24 @@ export const useStageNavigation = (
     });
   }, [currentStageIndex]);
 
+  const handleNext = useCallback(() => {
+    setCurrentStageIndex((prev: number) => {
+      if (islevelCompleted) {
+        if (prev < stageLength - 1) {
+          return prev + 1;
+        } else {
+          setFinishedModalVisibility(true);
+          return prev;
+        }
+      }
+      setFinalAsnwerVisibility(true);
+      return prev;
+    });
+  }, []);
+
   return {
     handlePrevious,
     handleBackPress,
+    handleNext,
   };
 };

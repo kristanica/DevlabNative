@@ -19,7 +19,7 @@ const CustomGeneralContainer = ({ children }: CustomGeneralContainerProps) => {
     <View
       className="flex-1"
       style={{
-        marginBottom: tabHeight ? tabHeight : 0,
+        marginBottom: tabHeight ? tabHeight + 25 : 0,
         marginTop: actionCenterHeight.top,
       }}
     >

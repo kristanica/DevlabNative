@@ -12,7 +12,6 @@ const HomeInventory = ({ inventory }: any) => {
 
       <FlashList
         data={inventory}
-        numColumns={2}
         estimatedItemSize={139}
         renderItem={(item: any) => {
           return (

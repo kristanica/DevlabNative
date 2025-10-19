@@ -2,10 +2,12 @@ import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import brainFilter from "@/assets/Hooks/mainGameModeFunctions/brainFilter";
 import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import BrainBytesModal from "../Modals/BrainBytesModal";
+import RenderCounter from "../../global/RenderCounter";
+import SmallLoading from "../../global/SmallLoading";
 
+const BrainBytesModal = React.lazy(() => import("../Modals/BrainBytesModal"));
 const StageBrainBytes = ({
   currentStageData,
   lessonId,
@@ -24,25 +26,26 @@ const StageBrainBytes = ({
     levelId
   );
   const [answer, setAnswer] = useState<string>("");
+  RenderCounter("StageLesson");
 
   const [displayChoices, setDisplayChoices] = useState<any>(optionsArray || []);
   const activeBuff = activeBuffsLocal((state) => state.activeBuff);
   useEffect(() => {
     const itemUse = async () => {
       if (!activeBuff.includes("brainFilter")) return;
-      const filtered = await brainFilterItem();
+      const filtered = brainFilterItem();
       setDisplayChoices(filtered);
       console.log(filtered);
     };
     itemUse();
   }, [activeBuff]);
 
-  const braibBytes = useModal();
+  const brainBytes = useModal();
   return (
     <>
       <Pressable
         className="absolute right-5 z-50"
-        onPress={() => braibBytes.setVisibility((prev) => !prev)}
+        onPress={() => brainBytes.setVisibility((prev) => !prev)}
       >
         <Ionicons
           name={"information-circle"}
@@ -51,14 +54,15 @@ const StageBrainBytes = ({
         ></Ionicons>
       </Pressable>
 
-      {braibBytes.visibility && (
-        <BrainBytesModal {...braibBytes}></BrainBytesModal>
+      {brainBytes.visibility && (
+        <Suspense fallback={<SmallLoading></SmallLoading>}>
+          <BrainBytesModal {...brainBytes} />
+        </Suspense>
       )}
-      <TouchableOpacity>
-        <Text className="font-exoBold xs:text-xl text-justify text-red-500">
-          {currentStageData?.title}
-        </Text>
-      </TouchableOpacity>
+
+      <Text className="font-exoBold xs:text-xl text-justify text-red-500">
+        {currentStageData?.title}
+      </Text>
 
       <Text className="text-white font-exoRegular xs:text-xs my-3 text-justify">
         {currentStageData?.description}

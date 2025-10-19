@@ -1,10 +1,12 @@
 import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Video } from "expo-av";
-import React, { useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Accordion } from "../../global/Accordion";
-import LessonModal from "../Modals/LessonModal";
+import RenderCounter from "../../global/RenderCounter";
+import SmallLoading from "../../global/SmallLoading";
+const LessonModal = React.lazy(() => import("../Modals/LessonModal"));
 
 type StageLessonprops = {
   currentStageData: stageDataPayload;
@@ -13,7 +15,7 @@ type StageLessonprops = {
 const StageLesson = ({ currentStageData }: any) => {
   const videoRef = useRef<Video>(null);
   const lesson = useModal();
-
+  RenderCounter("StageLesson");
   return (
     <>
       <Pressable
@@ -27,7 +29,11 @@ const StageLesson = ({ currentStageData }: any) => {
         ></Ionicons>
       </Pressable>
 
-      {lesson.visibility && <LessonModal {...lesson}></LessonModal>}
+      {lesson.visibility && (
+        <Suspense fallback={<SmallLoading></SmallLoading>}>
+          <LessonModal {...lesson} />
+        </Suspense>
+      )}
       {currentStageData.blocks &&
         currentStageData.blocks.map((item: any) => {
           switch (item.type) {
@@ -123,74 +129,3 @@ const styles = StyleSheet.create({
   },
   video: { width: "100%", height: 200 },
 });
-{
-  /* <ScrollView
-              className=" flex-[1] m-3 "
-              horizontal={true}
-              pagingEnabled
-              decelerationRate="fast"
-              showsHorizontalScrollIndicator={false}
-              alwaysBounceVertical={false}
-            >
-              <View className=" h-[200px] w-[290px]">
-                <TouchableOpacity
-                  className="absolute right-0 bottom-0"
-                  onPress={async () => {
-                    await Clipboard.setStringAsync(
-                      currentStageData?.codingInterface.html! ||
-                        "HTML code  is not provided"
-                    );
-                  }}
-                >
-                  <Ionicons
-                    name="clipboard-outline"
-                    size={20}
-                    color={"white"}
-                  ></Ionicons>
-                </TouchableOpacity>
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface?.html}
-                </Text>
-              </View>
-              <View className="bg-background h-[200px] w-[320px]">
-                <TouchableOpacity
-                  className="absolute right-0 bottom-0"
-                  onPress={async () => {
-                    await Clipboard.setStringAsync(
-                      currentStageData?.codingInterface.css!
-                    );
-                  }}
-                >
-                  <Ionicons
-                    name="clipboard-outline"
-                    size={20}
-                    color={"white"}
-                  ></Ionicons>
-                </TouchableOpacity>
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface?.css ||
-                    "Css code is not provided"}
-                </Text>
-              </View>
-              <View className="bg-background h-[200px] w-[290px] relative">
-                <TouchableOpacity
-                  className="absolute right-0 bottom-0"
-                  onPress={async () => {
-                    await Clipboard.setStringAsync(
-                      currentStageData?.codingInterface.js! ||
-                        "JavaScript code  is not provided"
-                    );
-                  }}
-                >
-                  <Ionicons
-                    name="clipboard-outline"
-                    size={20}
-                    color={"white"}
-                  ></Ionicons>
-                </TouchableOpacity>
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface?.js}
-                </Text>
-              </View>
-            </ScrollView> */
-}

@@ -16,7 +16,7 @@ const LessonModal = ({
           style={[scaleStyle]}
           className="aspect-square w-5/6 max-w-[350px] m-auto rounded-3xl shadow-2xl shadow-black/80"
         >
-          <View className="flex-1 bg-[#16161A] border border-[#7F5AF0]/40 rounded-3xl p-5 justify-center items-center">
+          <View className="flex-1 bg-[#16161A] border border-[#1c474d] rounded-3xl p-5 justify-center items-center">
             <Text className="text-white font-exoBold text-center text-base mb-3">
               Welcome to <Text className="text-[#7F5AF0]">Lesson Mode</Text> —
               where your coding journey begins!
@@ -37,17 +37,6 @@ const LessonModal = ({
                 Every line you learn here powers up your skills for the
                 challenges ahead.
               </Text>
-            </View>
-
-            <View className="w-full flex-row justify-center mt-6">
-              <Pressable
-                onPress={onConfirm}
-                className="bg-[#7F5AF0] px-7 py-2 rounded-2xl active:scale-95 transition-all"
-              >
-                <Text className="text-white font-exoBold text-sm">
-                  Continue
-                </Text>
-              </Pressable>
             </View>
           </View>
         </Animated.View>
