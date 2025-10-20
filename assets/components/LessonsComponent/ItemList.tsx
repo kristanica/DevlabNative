@@ -1,11 +1,12 @@
 import { auth, db, height } from "@/assets/constants/constants";
-
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
+import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FlashList } from "@shopify/flash-list";
 import {
   deleteDoc,
   doc,
@@ -13,45 +14,29 @@ import {
   increment,
   updateDoc,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import Toast, { BaseToastProps } from "react-native-toast-message";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
 const ItemList = () => {
-  const setActiveItem = ActiveItemIcon((state) => state.setActiveIcon);
-  const activeItem = ActiveItemIcon((state) => state.activeIcon);
-  const showToast = (type: string, message: string) => {
-    Toast.show({
-      type: type,
-      text1: message,
-      visibilityTime: 2000,
-      position: "top",
-      topOffset: 20,
-    });
-  };
-  const { inventory } = useGetUserInfo();
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
 
+  const inventory = useGetUserInfo((state) => state.inventory);
+  const activeItem = ActiveItemIcon((state) => state.activeIcon);
+
+  const setActiveItem = ActiveItemIcon((state) => state.setActiveIcon);
   const moveToRight = useSharedValue(100);
   const opacity = useSharedValue(1);
-
-  const inventoryX = useSharedValue(300);
+  const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
   const location = WhereIsUser((state) => state.location);
 
-  // const temp = itemThatShouldRender(location!, inventory);
-
+  const inventoryX = useSharedValue(300);
   const [disable, setDisable] = useState<boolean>(true);
   const [toggleInventory, setToggleInventory] = useState<boolean>(false);
 
@@ -91,34 +76,42 @@ const ItemList = () => {
     return () => clearTimeout(timeoutClear);
   }, []);
 
-  const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
-  const useItem = async (itemId: string, itemName: string) => {
-    console.log(itemId, itemName);
-    const id = auth.currentUser?.uid;
-    const userInventoryRef = doc(db, "Users", String(id), "Inventory", itemId);
-    await updateDoc(userInventoryRef, {
-      quantity: increment(-1),
-    });
+  const useItem = useCallback(
+    async (itemId: string, itemName: string) => {
+      console.log(itemId, itemName);
+      const id = auth.currentUser?.uid;
+      const userInventoryRef = doc(
+        db,
+        "Users",
+        String(id),
+        "Inventory",
+        itemId
+      );
+      await updateDoc(userInventoryRef, {
+        quantity: increment(-1),
+      });
 
-    const snapshot = await getDoc(userInventoryRef);
-    const updatedData = snapshot.data();
+      const snapshot = await getDoc(userInventoryRef);
+      const updatedData = snapshot.data();
 
-    if (itemName) {
-      console.log(itemName);
-      addActiveBuff(itemName);
-    }
+      if (itemName) {
+        console.log(itemName);
+        addActiveBuff(itemName);
+      }
 
-    if (updatedData?.quantity <= 0) {
-      await deleteDoc(userInventoryRef);
-      return;
-    }
-  };
+      if (updatedData?.quantity <= 0) {
+        await deleteDoc(userInventoryRef);
+        return;
+      }
+    },
+    [addActiveBuff]
+  );
 
   const useItemActions: Record<string, (userItem: string) => void> = {
     CoinSurge: async (itemId) => {
       if (activeItem.CoinSurge) {
         console.log("Youve already used this!");
-        showToast("itemError", "You've already used this!");
+        setToastVisibility("error", "You've already used this!");
         return;
       }
 
@@ -126,91 +119,105 @@ const ItemList = () => {
         CoinSurge: true,
       });
 
-      showToast("itemUsed", `You've used Coin Surge!`);
+      setToastVisibility("success", `You've used Coin Surge!`);
 
-      await useItem(itemId, "doubleCoins");
+      useItem(itemId, "doubleCoins");
       console.log("AYES");
     },
     CodeWhisper: async (itemId) => {
       if (location === "Lesson") {
         // await playSound("wrongAnswer");
 
-        showToast("itemError", `You cannot use that, you're in ${location}!`);
-        console.log("You're not in bug bust lol");
+        setToastVisibility(
+          "error",
+          `You cannot use Code whisper in ${location}`
+        );
         return;
       }
       // await playSound("success");
-      showToast("itemUsed", `You've used Code Whisper!`);
+      setToastVisibility("success", `You've used Code Whisper!`);
       await useItem(itemId, "revealHint");
     },
     CodePatch: async (itemId) => {
       if (location !== "CodeRush") {
         // await playSound("wrongAnswer");
-        showToast("itemError", `You cannot use that, you're in ${location}!`);
+        setToastVisibility(
+          "error",
+          `You cannot use that, you're in ${location}!`
+        );
         console.log("youre not in code rush");
         return;
       }
       // await playSound("success");
-      showToast("itemUsed", `You've used Code Patch!`);
+      setToastVisibility("success", `You've used Code Path!`);
       useItem(itemId, "extraTime");
     },
     TimeFreeze: async (itemId) => {
       if (location !== "CodeRush") {
         // await playSound("wrongAnswer");
+        setToastVisibility(
+          "error",
+          `You cannot use that, you're in ${location}!`
+        );
 
-        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in code rush");
         return;
       }
       // await playSound("success");
-      showToast("itemUsed", `You've used Time Freeze!`);
+      setToastVisibility("success", `You've used Time freeze!`);
       useItem(itemId, "timeFreeze");
     },
     ErrorShield: async (itemId) => {
       if (location === "Lesson") {
         // await playSound("wrongAnswer");
+        setToastVisibility(
+          "error",
+          `You cannot use that, you're in ${location}!`
+        );
 
-        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("You cannot use items in here");
         return;
       }
       if (activeItem.ErrorShield) {
-        console.log("Errros shiled is alreayd used");
-        showToast("itemError", "You've already used this!");
+        console.log("Errros shiled already in effect");
+        setToastVisibility("error", `You've already used this!`);
         return;
       }
-
       // await playSound("success");
       setActiveItem({
         ErrorShield: true,
       });
-      showToast("itemUsed", `You've used Error Shield!`);
+      setToastVisibility("success", `You've used error shield!`);
+
       await useItem(itemId, "errorShield");
     },
     BrainFilter: async (itemId) => {
       if (location !== "BrainBytes") {
         // await playSound("wrongAnswer");
+        setToastVisibility(
+          "error",
+          `You cannot use that, you're in ${location}!`
+        );
 
-        showToast("itemError", `You cannot use that, you're in ${location}!`);
         console.log("youre not in Brain Bytes");
         return;
       }
       if (activeItem.BrainFilter) {
-        showToast("itemError", "Youve already used BrainFiler!");
+        setToastVisibility("error", `You've already used brain filter!`);
         return;
       }
-
       setActiveItem({
         BrainFilter: true,
       });
-      showToast("itemUsed", `You've used Brain Filter!`);
+      setToastVisibility("success", `You've used brain filter!`);
+
       useItem(itemId, "brainFilter");
     },
   };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-  const showInventory = () => {
+  const showInventory = useCallback(() => {
     if (!toggleInventory) {
       inventoryX.value = withTiming(0, { duration: 1000 });
       opacity.value = withTiming(0);
@@ -219,28 +226,9 @@ const ItemList = () => {
       opacity.value = withTiming(1);
     }
     setToggleInventory((prev) => !prev);
-  };
+  }, [toggleInventory, inventoryX, opacity]);
   return (
     <>
-      <Toast
-        config={{
-          itemError: (props: BaseToastProps) => (
-            <View className="h-[50px]  w-52 mx-2 z-50 bg-red-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
-              <Text className="text-white xs: text-xs text-center font-exoExtraBold">
-                {props.text1}
-              </Text>
-            </View>
-          ),
-
-          itemUsed: (props: BaseToastProps) => (
-            <View className="h-[50px]  w-52 mx-2 z-50 bg-green-500 border-[#ffffffaf] border-[2px] rounded-xl justify-center items-center absolute ">
-              <Text className="text-white xs: text-xs text-center font-exoExtraBold">
-                {props.text1}
-              </Text>
-            </View>
-          ),
-        }}
-      />
       <AnimatedPressable
         onPress={showInventory}
         disabled={disable}
@@ -295,26 +283,22 @@ const ItemList = () => {
             Your Inventory
           </Text>
         </View>
-        <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-          <View className="flex-row flex-wrap justify-center">
-            {inventory?.map((userInvItems: any) => {
-              return (
-                <TouchableOpacity
-                  key={userInvItems.id}
-                  onPress={() => {
-                    console.log("Location:", location);
-                    console.log("Item title:", userInvItems.title);
-                    const action = useItemActions[userInvItems.title];
-                    console.log("Action found:", !!action);
-                    action?.(userInvItems.id);
-                  }}
-                >
-                  <UserInventoryItems {...userInvItems} />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
+
+        <FlashList
+          data={inventory}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                const action = useItemActions[item.title];
+                action?.(item.id);
+              }}
+            >
+              <UserInventoryItems {...item} />
+            </TouchableOpacity>
+          )}
+          estimatedItemSize={80}
+          showsVerticalScrollIndicator={false}
+        />
       </Animated.View>
     </>
   );

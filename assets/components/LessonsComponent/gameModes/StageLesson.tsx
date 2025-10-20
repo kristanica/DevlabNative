@@ -1,6 +1,6 @@
 import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Video } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
 import React, { Suspense, useRef } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Accordion } from "../../global/Accordion";
@@ -98,6 +98,7 @@ const StageLesson = ({ currentStageData }: any) => {
           style={styles.video}
           useNativeControls
           isLooping
+          resizeMode={ResizeMode.CONTAIN}
         />
       )}
       <View className="bg-accentContainer p-3  my-3">

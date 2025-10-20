@@ -104,12 +104,14 @@ const StageScreen = () => {
     terminalRef,
   } = useCodeEditor();
   const hintModall = useModal();
+  const [hintLoading, setHintLoading] = useState<boolean>(false);
   const [generatedHint, setGeneratedHint] = useState<string>("");
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
   const codeWhisperItem = codeWhisper(
     hintModall.setVisibility,
-    setGeneratedHint
+    setGeneratedHint,
+    setHintLoading
   );
 
   console.log(category);
@@ -140,7 +142,7 @@ const StageScreen = () => {
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
-        {(isMutating > 0 || codeWhisperItem.isPending) && (
+        {(isMutating > 0 || codeWhisperItem.isPending || hintLoading) && (
           <FillScreenLoading></FillScreenLoading>
         )}
         <CustomGeneralContainer>
@@ -187,7 +189,7 @@ const StageScreen = () => {
           ></RenderStageEditor>
 
           {/* TODO: Hides inventory on completed levels */}
-          {isMutating === 0 && <ItemList></ItemList>}
+          {!hintLoading && <ItemList></ItemList>}
           <SwipeLessonContainer>
             {/* Renders the heart system on gamemodes */}
             {currentStageData.type !== "Lesson" && <Hearts></Hearts>}

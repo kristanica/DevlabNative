@@ -8,87 +8,95 @@ const HowToUseStageEditor = ({
   closeModal,
 }: ScaleModalPayload) => {
   return (
-    <Modal visible={visibility} transparent>
-      <View className="flex-1 justify-center items-center bg-black/30">
+    <Modal visible={visibility} transparent animationType="fade">
+      <View className="flex-1 justify-center items-center bg-black/40">
         <Pressable className="absolute inset-0" onPress={closeModal} />
-        <View className="w-[80%] h-[70%]">
+        <View className="w-[85%] h-[75%]">
           <Animated.View
-            className="bg-accent border-[2px] h-full border-[#ffffff43] rounded-xl"
+            className="bg-accent border-2 border-white/20 rounded-2xl h-full overflow-hidden"
             style={[scaleStyle]}
           >
             <ScrollView
               contentContainerStyle={{
-                paddingHorizontal: 16,
-                paddingVertical: 20,
+                paddingHorizontal: 18,
+                paddingVertical: 22,
               }}
               showsVerticalScrollIndicator={true}
             >
-              <Text className="text-white font-exoExtraBold text-xl text-center ">
-                Welcome to the Stage Editor!
+              {/* Title */}
+              <Text className="text-white font-exoExtraBold text-2xl text-center mb-2">
+                Stage Editor Guide
               </Text>
-              <Text className="text-white font-exoRegular text-center text-xs my-2">
-                Here you can edit and organize stages. Everything you change
-                here is what players will see inside the app, so edit carefully!
-              </Text>
-
-              <Text className="text-white font-exoBold text-base mt-4">
-                Reordering Stages:
-              </Text>
-              <Text className="text-white font-exoRegular text-xs">
-                Press and hold a stage container, and drag it up and down to
-                rearrange the order. NOTE: The first stage CANNOT be reordered
-                and deleted as this will serve as the entry point for the user
+              <Text className="text-white font-exoRegular text-xs text-center mb-4">
+                Everything you customize here is what players will see inside
+                the game— so tweak wisely!
               </Text>
 
-              <Text className="text-white font-exoBold text-base mt-4">
-                Editing contents
+              {/* Reordering */}
+              <Text className="font-exoBold text-md text-blue-500 mt-2">
+                🔁 Reordering Stages
               </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify">
-                Press one of the following containers to edit them. Remember:
-                stage visibility is handled automatically, so you don{"'"}t need
-                to worry about toggling it on/off.
-              </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify">
-                Careful what you are editing as these contents are what will be
-                seen by the users!
+              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
+                Press and hold a stage, then drag it up or down to reorder. ⚠️
+                The first stage cannot be moved or deleted, as it serves as the
+                entry point.
               </Text>
 
-              <Text className="text-white font-exoBold text-base mt-4">
-                Adding Lesson
+              {/* Editing */}
+              <Text className="font-exoBold text-md text-pink-400 mt-3">
+                ✏️ Editing Content
+              </Text>
+              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
+                Tap a stage container to edit its details. Visibility is managed
+                automatically, so no manual toggles are required.
               </Text>
               <Text className="text-white font-exoRegular text-xs text-justify">
-                Simply scroll down to the bottom of the list and tap the +
-                icon...
+                Ensure accuracy—players will directly interact with your final
+                version.
               </Text>
 
-              <Text className="text-white font-exoBold text-base mt-4">
-                Saving
+              {/* Adding */}
+              <Text className="font-exoBold text-md text-green-400 mt-3">
+                ➕ Adding a Stage
               </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify">
-                Make sure to save the changes when you edit a lesson...
+              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
+                Scroll to the bottom of the list and tap the + icon to create a
+                new stage.
               </Text>
 
-              <Text className="text-white font-exoBold tex t-basemt-4">
-                Deleting
+              {/* Saving */}
+              <Text className="font-exoBold text-md text-yellow-400 mt-3">
+                💾 Saving Changes
               </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify">
-                If you need to remove a stage, simply press one of the
-                containers and scroll down to find the delete button.
+              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
+                Always hit "Save" after editing. Unsaved progress will not be
+                applied.
+              </Text>
+
+              {/* Deleting */}
+              <Text className="font-exoBold text-md text-red-400 mt-3">
+                🗑️ Deleting a Stage
+              </Text>
+              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
+                Tap a stage, scroll, and press the delete button to remove it.
               </Text>
               <Text className="text-white font-exoRegular text-sm text-justify">
-                (⚠️ Be careful — this action cannot be undone.)
+                (⚠️ This action is permanent and cannot be undone.)
               </Text>
 
-              <Text className="text-white font-exoBold text-base mt-4">
-                Validation
+              {/* Validation */}
+              <Text className="font-exoBold text-base text-purple-400 mt-4">
+                ✅ Validation
               </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify">
-                Make sure that all fields are satisfied or the stage {"won't"}{" "}
-                be saved.
+              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
+                All required fields must be filled out correctly, or the stage
+                will not be saved.
               </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify mt-2">
-                {"That's it! "}🎮 Go ahead and start customizing your stages.
-                Have fun building an awesome learning experience!
+
+              {/* Outro */}
+              <Text className="text-white font-exoRegular text-xs text-center mt-4">
+                🎮 You’re all set! Start building engaging learning journeys and
+                let your creativity take the stage.
               </Text>
             </ScrollView>
           </Animated.View>

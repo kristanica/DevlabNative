@@ -23,7 +23,7 @@ const uploadVideo = async ({
   videoForm.append("lessonId", lessonId);
   videoForm.append("levelId", levelId);
   videoForm.append("stageId", stageId);
-  await axios.post(`${URL}}/fireBaseAdmin/uploadVideo`, videoForm, {
+  await axios.post(`${URL}/fireBaseAdmin/uploadVideo`, videoForm, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,

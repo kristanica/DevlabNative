@@ -4,15 +4,10 @@ import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScree
 import CustomTabBarAdmin from "@/assets/components/TabBarComponents/CustomTabBarAdmin";
 import { adminIcon } from "@/assets/constants/constants";
 import adminAuthentication from "@/assets/zustand/adminAuthentication";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 
-const query = new QueryClient();
 const AdminLayout = () => {
   const getValidAdmin = adminAuthentication((state) => state.getAdmin);
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -58,18 +53,16 @@ const AdminLayout = () => {
     );
   }
   return (
-    <QueryClientProvider client={query}>
-      <Tabs
-        screenOptions={{ headerShown: false }}
-        tabBar={(props) => <CustomTabBarAdmin {...props} tabIcon={adminIcon} />}
-      >
-        <Tabs.Screen name="UserManagement"></Tabs.Screen>
-        <Tabs.Screen
-          name="(contentManagement)"
-          options={{ title: "Content Management" }}
-        ></Tabs.Screen>
-      </Tabs>
-    </QueryClientProvider>
+    <Tabs
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <CustomTabBarAdmin {...props} tabIcon={adminIcon} />}
+    >
+      <Tabs.Screen name="UserManagement"></Tabs.Screen>
+      <Tabs.Screen
+        name="(contentManagement)"
+        options={{ title: "Content Management" }}
+      ></Tabs.Screen>
+    </Tabs>
   );
 };
 

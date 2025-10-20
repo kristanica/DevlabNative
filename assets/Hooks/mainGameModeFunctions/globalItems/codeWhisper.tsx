@@ -9,7 +9,8 @@ type codeWhisperPayload = {
 };
 const codeWhisper = (
   setHintModalVisibility: (val: boolean) => void,
-  setGeneratedHint: (val: string) => void
+  setGeneratedHint: (val: string) => void,
+  setHintLoading: (val: boolean) => void
 ) => {
   const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   return useMutation({
@@ -20,10 +21,11 @@ const codeWhisper = (
         receivedCode,
       }),
     onMutate: () => {
-      console.log("Ran!!!!!!!!!!!!!!!");
+      setHintLoading(true);
       removeActiveBuff("revealHint");
     },
     onSuccess: (data) => {
+      setHintLoading(false);
       console.log(data.parsedResponse.whisper + "HEre!");
       setGeneratedHint(data.parsedResponse.whisper);
       setTimeout(() => {

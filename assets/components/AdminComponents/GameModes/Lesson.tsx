@@ -70,6 +70,7 @@ const Lesson = ({
         );
 
         setVideoPresentation(compreesedUri);
+
         setIsCompressing(false);
         return;
       }

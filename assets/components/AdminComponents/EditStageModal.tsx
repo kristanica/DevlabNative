@@ -96,6 +96,8 @@ const EditStageModal = ({
     }
 
     if (videoPresentation) {
+      console.log("There is something inhere!!!!!!!!!!!");
+      console.log(videoPresentation);
       Promises.push(
         uploadVideoMutation!.mutateAsync({ video: videoPresentation })
       );
@@ -156,7 +158,9 @@ const EditStageModal = ({
                     className="py-2"
                   ></Ionicons>
                 </Pressable>
-
+                <Pressable onPress={() => console.log(videoPresentation)}>
+                  <Text>HEllo</Text>
+                </Pressable>
                 <View>
                   <Text className="text-white font-exoBold text-lg mx-auto my-3">
                     Currently editing {stageIdentifier}

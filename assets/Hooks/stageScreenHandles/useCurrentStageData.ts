@@ -1,7 +1,6 @@
 import stageStore from "@/assets/zustand/stageStore";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { InteractionManager } from "react-native";
 
 export const useCurrentStageData = (stageId: string) => {
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
@@ -22,13 +21,11 @@ export const useCurrentStageData = (stageId: string) => {
   useEffect(() => {
     if (!currentStageData?.type) return;
 
-    InteractionManager.runAfterInteractions(() => {
-      setLocation(currentStageData.type);
+    setLocation(currentStageData.type);
 
-      if (currentStageData.type !== "Lesson") {
-        gameIdentifier.current = currentStageData.type;
-      }
-    });
+    if (currentStageData.type !== "Lesson") {
+      gameIdentifier.current = currentStageData.type;
+    }
   }, [currentStageData, setLocation]);
 
   useEffect(() => {

@@ -20,7 +20,7 @@ const SaveToFirebaseConfirmation = ({
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
-        className="flex-[1] justify-center items-center "
+        className="flex-[1] justify-center items-center bg-black/50"
         onPress={closeModal}
       >
         <Pressable
@@ -31,27 +31,31 @@ const SaveToFirebaseConfirmation = ({
           }}
         >
           <Animated.View
-            className="  bg-accent  border-[2px] h-full border-[#56EBFF] "
+            className="  bg-modal   h-full border-[#2a3141] border-[1px] rounded-xl"
             style={[scaleStyle]}
           >
-            <Text className="text-white font-exoBold mx-auto mt-3 ">
+            <Text className="text-white font-exoBold  text-[13px] mt-5 mx-auto  ">
               Are you sure you want to save this?
             </Text>
-
             <LottieView
-              source={require("@/assets/Lottie/Loading.json")}
+              source={require("@/assets/Lottie/devlab-lottie-final.json")}
               autoPlay
               loop
-              style={{ flex: 1 }}
+              style={{
+                height: "50%",
+                width: "50%",
+                aspectRatio: 1,
+                margin: "auto",
+              }}
             ></LottieView>
             <View className="flex-row justify-evenly items-center mb-3">
               <TouchableOpacity onPress={onConfirm}>
-                <Text className="px-7 py-2 self-start bg-green-400 text-white  rounded-2xl font-exoBold">
+                <Text className="px-7 py-2 self-start bg-green-400 text-white text-xs xs:text-[10px]  rounded-2xl font-exoBold">
                   Yes
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={closeModal}>
-                <Text className="px-7 py-2 self-start bg-red-400 text-white  rounded-2xl font-exoBold">
+                <Text className="px-7 py-2 self-start bg-red-400 text-white text-xs xs:text-[10px]  rounded-2xl font-exoBold">
                   No
                 </Text>
               </TouchableOpacity>

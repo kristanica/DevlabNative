@@ -50,12 +50,12 @@ const Stage = () => {
         <AnimatedViewContainer>
           <CustomGeneralContainer>
             <View className="flex-[1]">
-              <View className="  h-[20%] flex-row  items-center justify-center px-3">
+              <View className="  h-[10%] flex-row  items-center justify-center px-3">
                 <TouchableOpacity onPress={() => router.back()}>
                   <Ionicons
                     name="arrow-back-circle"
-                    size={50}
-                    color="#4CAF50"
+                    size={30}
+                    color="white"
                   ></Ionicons>
                 </TouchableOpacity>
                 <Text className="text-white font-exoBold font-lg m-auto">
@@ -65,12 +65,12 @@ const Stage = () => {
                 <Pressable onPress={() => tutorial.setVisibility(true)}>
                   <Ionicons
                     name="alert-circle"
-                    size={50}
-                    color="#4CAF50"
+                    size={30}
+                    color="white"
                   ></Ionicons>
                 </Pressable>
               </View>
-              <View className=" h-[80%]">
+              <View className=" h-[90%]">
                 {isLoading ? (
                   <SmallLoading></SmallLoading>
                 ) : (
