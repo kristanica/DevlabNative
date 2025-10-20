@@ -1,5 +1,4 @@
 import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
-import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import RenderCounter from "@/assets/components/global/RenderCounter";
@@ -32,12 +31,11 @@ const Shop = () => {
         {isMutating > 0 && (
           <FillScreenLoading text="Purachasing an item..."></FillScreenLoading>
         )}
-        <AnimatedViewContainer>
-          <CustomGeneralContainer>
-            <ShopHeader coins={userData?.coins}></ShopHeader>
-            <ShopList shopItem={arrayShopItem}></ShopList>
-          </CustomGeneralContainer>
-        </AnimatedViewContainer>
+
+        <CustomGeneralContainer>
+          <ShopHeader coins={userData?.coins}></ShopHeader>
+          <ShopList shopItem={arrayShopItem}></ShopList>
+        </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>
   );

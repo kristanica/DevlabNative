@@ -3,7 +3,6 @@ import { searchUser } from "@/assets/API/fireBase/admin/userManagement/searchUse
 import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import AdminUserContainer from "@/assets/components/AdminComponents/AdminUserContainer";
 import AdminProtectedRoutes from "@/assets/components/AdminProtectedRoutes";
-import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import { useDeleteAccount } from "@/assets/Hooks/query/mutation/deleteAccount";
 import { useSuspendAccount } from "@/assets/Hooks/query/mutation/suspendAccount";
@@ -42,80 +41,78 @@ const UserManagement = () => {
   return (
     <AdminProtectedRoutes>
       <View className="flex-[1] bg-accent">
-        <AnimatedViewContainer>
-          <CustomGeneralContainer>
-            <View className=" items-center flex-row  mx-4">
-              <Text className="text-white font-exoExtraBold text-3xl">
-                User Management
-              </Text>
-            </View>
-            <View className="flex-row">
-              <TextInput
-                className=" px-7 py-2 my-2 ml-7 rounded-3xl border-[2px] border-black text-white font-exoLight w-[80%]"
-                placeholder="Search a user"
-                onChangeText={(text) => {
-                  setSearchUser(text);
-                }}
-              />
+        <CustomGeneralContainer>
+          <View className=" items-center flex-row  mx-4">
+            <Text className="text-white font-exoExtraBold text-3xl">
+              User Management
+            </Text>
+          </View>
+          <View className="flex-row">
+            <TextInput
+              className=" px-7 py-2 my-2 ml-7 rounded-3xl border-[2px] border-black text-white font-exoLight w-[80%]"
+              placeholder="Search a user"
+              onChangeText={(text) => {
+                setSearchUser(text);
+              }}
+            />
 
-              <Pressable
-                className="flex justify-center items-center  mx-auto"
-                onPress={() => {
-                  const term = searchUserName.trim();
-                  if (!term) return;
-                  search(term);
-                }}
-              >
-                <Ionicons name="search" size={20}></Ionicons>
-              </Pressable>
-            </View>
-            {!isSearching ? (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-                data={users}
-                renderItem={({ item, index }) => {
-                  return (
-                    <AdminUserContainer
-                      allUsersInformation={item}
-                      activeLevel={activeLevel.active}
-                      mutation={() =>
-                        suspendAccount.mutate({
-                          id: item.id,
-                          toggleDisable: item.isAccountSuspended,
-                        })
-                      }
-                      deleteAccount={() => deleteAccount.mutate(item.id)}
-                      loading={loadingUserId === item.id}
-                      index={index}
-                    ></AdminUserContainer>
-                  );
-                }}
-              />
-            ) : (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-                data={searchedUser}
-                renderItem={({ item, index }) => (
+            <Pressable
+              className="flex justify-center items-center  mx-auto"
+              onPress={() => {
+                const term = searchUserName.trim();
+                if (!term) return;
+                search(term);
+              }}
+            >
+              <Ionicons name="search" size={20}></Ionicons>
+            </Pressable>
+          </View>
+          {!isSearching ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+              data={users}
+              renderItem={({ item, index }) => {
+                return (
                   <AdminUserContainer
-                    deleteAccount={() => deleteAccount.mutate(item.id)}
-                    activeLevel={activeLevel.active}
-                    index={index}
                     allUsersInformation={item}
+                    activeLevel={activeLevel.active}
                     mutation={() =>
                       suspendAccount.mutate({
                         id: item.id,
                         toggleDisable: item.isAccountSuspended,
                       })
                     }
+                    deleteAccount={() => deleteAccount.mutate(item.id)}
                     loading={loadingUserId === item.id}
+                    index={index}
                   ></AdminUserContainer>
-                )}
-              />
-            )}
-          </CustomGeneralContainer>
-        </AnimatedViewContainer>
+                );
+              }}
+            />
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+              data={searchedUser}
+              renderItem={({ item, index }) => (
+                <AdminUserContainer
+                  deleteAccount={() => deleteAccount.mutate(item.id)}
+                  activeLevel={activeLevel.active}
+                  index={index}
+                  allUsersInformation={item}
+                  mutation={() =>
+                    suspendAccount.mutate({
+                      id: item.id,
+                      toggleDisable: item.isAccountSuspended,
+                    })
+                  }
+                  loading={loadingUserId === item.id}
+                ></AdminUserContainer>
+              )}
+            />
+          )}
+        </CustomGeneralContainer>
       </View>
     </AdminProtectedRoutes>
   );

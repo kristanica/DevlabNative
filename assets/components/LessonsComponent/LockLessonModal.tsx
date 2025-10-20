@@ -1,8 +1,14 @@
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
-import ButtonAnimated from "../../deprecated/ButtonComponent";
 
 const LockLessonModal = ({
   visibility,
@@ -12,9 +18,9 @@ const LockLessonModal = ({
 }: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable className="flex-1" onPress={() => closeModal()}>
+      <Pressable className="flex-1 bg-black/50" onPress={() => closeModal()}>
         <Animated.View
-          className="   w-[250px] h-[300px] m-auto bg-[#2C2C2E] rounded-[10px]"
+          className="   w-[250px] h-[300px] m-auto bg-modal rounded-[10px] border-[#2a3141] border-[1px]"
           style={scaleStyle}
         >
           <LottieView
@@ -22,24 +28,27 @@ const LockLessonModal = ({
             loop
             autoPlay
             style={{
-              height: 180,
+              width: "50%",
+              height: "40%",
+              aspectRatio: 1,
+              margin: "auto",
+              marginTop: 20,
             }}
           />
 
-          <View className="flex-[1] justify-center items-center">
-            <Text className="text-white text-center font-exoBold">
+          <View className="h-[50%] items-center justify-center">
+            <Text className="text-white text-center font-exoBold text-md xs:text-[13px]">
               This content is currently locked.
             </Text>
-          </View>
-          <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-            <ButtonAnimated
-              backgroundColor={"#7F5AF0"}
-              onPressAction={onConfirm}
-            >
-              <Text className="text-white py-2 px-10 font-exoBold">
+            <Text className="text-white text-center font-exoLight text-md xs:text-[8px] opacity-50">
+              Play through to progress
+            </Text>
+
+            <TouchableOpacity onPress={closeModal}>
+              <Text className="text-white py-2 rounded-xl px-10 font-exoBold text-xs xs:text-[10px] bg-button self-start mx-auto mt-5">
                 Continue
               </Text>
-            </ButtonAnimated>
+            </TouchableOpacity>
           </View>
         </Animated.View>
       </Pressable>

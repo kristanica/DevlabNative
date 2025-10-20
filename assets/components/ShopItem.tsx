@@ -1,9 +1,7 @@
-import { useIsFocused } from "@react-navigation/native";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { itemIcon } from "../constants/constants";
-import useSequentialAppearAnim from "../Hooks/useSequentialAppearAnim";
 
 type ShopItemProps = {
   Icon: string;
@@ -23,15 +21,15 @@ const ShopItem = ({
   index,
   handlePurchase,
 }: ShopItemProps) => {
-  const isFocused = useIsFocused();
-  const { onScale } = useSequentialAppearAnim({
-    indicator: isFocused,
-    id: index,
-  });
+  // const isFocused = useIsFocused();
+  // const { onScale } = useSequentialAppearAnim({
+  //   indicator: isFocused,
+  //   id: index,
+  // });
   const iconNameTrimmed = Icon ? Icon.replace(".png", "") : "";
   return (
     <Animated.View
-      style={[onScale]}
+      // style={[onScale]}
       className="w-[90%]  mx-auto sm:w-3/4 md:w-2/3 lg:w-1/2  my-2 items-center justify-center "
     >
       <View className="bg-shopAccent rounded-xl flex-row flex-[1]  ">

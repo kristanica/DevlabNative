@@ -24,10 +24,10 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                   className="h-[50px] w-[50px]"
                 ></Image>
                 <View className="flex-col justify-center ml-4">
-                  <Text className="text-white font-exoBold xs:text-sm">
+                  <Text className="text-white font-exoBold text-lg xs:text-[12px]">
                     Coding Playground
                   </Text>
-                  <Text className="text-white  font-exoRegular xs:text-xs">
+                  <Text className="text-white  font-exoRegular xs:text-[8px] opacity-50">
                     Try HTML/CSS/JS
                   </Text>
                 </View>
@@ -48,8 +48,8 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                   <Text className="text-white font-exoBold  text-lg xs:text-[12px]">
                     Database Playground
                   </Text>
-                  <Text className="text-white  font-exoRegular xs:text-[8px]">
-                    Try HTML/CSS/JS
+                  <Text className="text-white  font-exoRegular xs:text-[8px] opacity-50">
+                    Try Database Querying
                   </Text>
                 </View>
               </Pressable>

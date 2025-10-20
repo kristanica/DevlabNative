@@ -1,6 +1,5 @@
 import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
-import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import RenderCounter from "@/assets/components/global/RenderCounter";
 
@@ -55,29 +54,27 @@ export default function Home() {
   return (
     <ProtectedRoutes>
       <View className="flex-[1] bg-accent">
-        <AnimatedViewContainer>
-          <CustomGeneralContainer>
-            <ProfileHeader userData={userData}></ProfileHeader>
+        <CustomGeneralContainer>
+          <ProfileHeader userData={userData}></ProfileHeader>
 
-            <ScrollView
-              bounces={true}
-              showsVerticalScrollIndicator={false}
-              className="flex-[3] "
-            >
-              <JumpBackIn
-                handleJumpBackIn={handleJumpBackIn}
-                lastOpenedLevel={userData!.lastOpenedLevel!}
-              ></JumpBackIn>
-              <UserProgress
-                lessons={lessons}
-                activeLevel={activeLevel.active}
-                userProgress={progressData.specificCompletedLevels}
-              ></UserProgress>
+          <ScrollView
+            bounces={true}
+            showsVerticalScrollIndicator={false}
+            className="flex-[3] "
+          >
+            <JumpBackIn
+              handleJumpBackIn={handleJumpBackIn}
+              lastOpenedLevel={userData!.lastOpenedLevel!}
+            ></JumpBackIn>
+            <UserProgress
+              lessons={lessons}
+              activeLevel={activeLevel.active}
+              userProgress={progressData.specificCompletedLevels}
+            ></UserProgress>
 
-              <HomeInventory inventory={inventory}></HomeInventory>
-            </ScrollView>
-          </CustomGeneralContainer>
-        </AnimatedViewContainer>
+            <HomeInventory inventory={inventory}></HomeInventory>
+          </ScrollView>
+        </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>
   );

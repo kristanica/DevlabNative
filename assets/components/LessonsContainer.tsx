@@ -39,7 +39,7 @@ const LessonsContainer = ({ name, closeModal, index }: HomeLessonProps) => {
           </Text>
 
           <Text
-            className="text-white  xs:text-[8px] text-justify"
+            className="text-white  xs:text-[8px] opacity-50 text-justify"
             numberOfLines={2}
           >
             {meta.description}

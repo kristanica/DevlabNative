@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 
@@ -34,66 +33,65 @@ const Achievements = () => {
         {isMutating > 0 && (
           <FillScreenLoading text="Claiming..."></FillScreenLoading>
         )}
-        <AnimatedViewContainer>
-          <CustomGeneralContainer>
-            <AchievementsHeader
-              userData={userData}
-              userAchievements={userAchievements}
-            ></AchievementsHeader>
 
-            <AchievementSelector
-              setSelectedCategory={setSelectedCategory}
-              selectedCategory={selectedCategory}
-            ></AchievementSelector>
+        <CustomGeneralContainer>
+          <AchievementsHeader
+            userData={userData}
+            userAchievements={userAchievements}
+          ></AchievementsHeader>
 
-            <View className="bg-accent flex-[2] ">
-              <View className="flex-[1] ">
-                {isLoading ? (
-                  <SmallLoading></SmallLoading>
-                ) : (
-                  <FlatList
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                    }}
-                    numColumns={2}
-                    columnWrapperStyle={{
-                      justifyContent: "space-between",
-                    }}
-                    keyExtractor={(item) => item.id}
-                    data={achievementsData}
-                    renderItem={({ item, index }) => {
-                      const unlockedAchievement = userAchievements.find(
-                        (achievement: any) => achievement.id === item.id
-                      );
+          <AchievementSelector
+            setSelectedCategory={setSelectedCategory}
+            selectedCategory={selectedCategory}
+          ></AchievementSelector>
 
-                      const isUnlocked = !!unlockedAchievement;
-                      const isClaimed = unlockedAchievement?.isClaimed ?? false;
+          <View className="bg-accent flex-[2] ">
+            <View className="flex-[1] ">
+              {isLoading ? (
+                <SmallLoading></SmallLoading>
+              ) : (
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                  }}
+                  numColumns={2}
+                  columnWrapperStyle={{
+                    justifyContent: "space-between",
+                  }}
+                  keyExtractor={(item) => item.id}
+                  data={achievementsData}
+                  renderItem={({ item, index }) => {
+                    const unlockedAchievement = userAchievements.find(
+                      (achievement: any) => achievement.id === item.id
+                    );
 
-                      return (
-                        <AchievementContainer
-                          isUnlocked={isUnlocked}
-                          index={index}
-                          data={item}
-                          claimMutation={() =>
-                            claimAchievement.mutate({
-                              achievementId: item.id,
-                              expReward: item.expReward,
-                              coinsReward: item.coinsReward,
-                            })
-                          }
-                          isClaimed={isClaimed}
-                          selectedCategory={selectedCategory}
-                        />
-                      );
-                    }}
-                  />
-                )}
-              </View>
+                    const isUnlocked = !!unlockedAchievement;
+                    const isClaimed = unlockedAchievement?.isClaimed ?? false;
+
+                    return (
+                      <AchievementContainer
+                        isUnlocked={isUnlocked}
+                        index={index}
+                        data={item}
+                        claimMutation={() =>
+                          claimAchievement.mutate({
+                            achievementId: item.id,
+                            expReward: item.expReward,
+                            coinsReward: item.coinsReward,
+                          })
+                        }
+                        isClaimed={isClaimed}
+                        selectedCategory={selectedCategory}
+                      />
+                    );
+                  }}
+                />
+              )}
             </View>
-          </CustomGeneralContainer>
-        </AnimatedViewContainer>
+          </View>
+        </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>
   );

@@ -174,6 +174,7 @@ const StageScreen = () => {
           {hintModall.visibility && (
             <HintModal {...hintModall} hint={generatedHint}></HintModal>
           )}
+
           <RenderStageEditor
             category={String(category)}
             databaseQueryingFunctions={databaseQueryingFunctions}
