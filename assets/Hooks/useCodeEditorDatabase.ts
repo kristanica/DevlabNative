@@ -2,7 +2,10 @@ import { useState } from "react";
 
 export const useCodeEditorDatabase = () => {
   const [query, setQuery] = useState<string | undefined>();
-  const [queryRecievedCode, setQueryRecievedCode] = useState<any>();
+  const [queryRecievedCode, setQueryRecievedCode] = useState<any>({
+    query: "",
+    result: "",
+  });
 
   const tableStyle = `
   body {

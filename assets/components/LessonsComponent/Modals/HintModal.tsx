@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text } from "react-native";
 import Animated from "react-native-reanimated";
 type HintModalPayload = ScaleModalPayload & {
   hint: string | undefined;
@@ -13,29 +13,24 @@ const HintModal = ({
 }: HintModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1">
+      <Pressable className="flex-1 bg-black/50">
         <Animated.View
           style={[scaleStyle]}
-          className="   h-[20%] w-3/4 m-auto  rounded-[10px]"
+          className="    w-3/4 bg-modal m-auto  rounded-[10px] border-[#2a3141] border-[1px]"
         >
-          <View className="justify-center items-center flex-[1] bg-red-400 rounded-3xl">
-            <View className="flex-[1] justify-center items-center">
-              <Text className="text-white text-center font-exoBold xs:text-xs">
-                Here is your int
-              </Text>
-            </View>
-            <View className="bg-background w-[80%] rounded-2xl justify-center items-center">
-              <Text className="text-white"> {hint}</Text>
-            </View>
+          <Text className="text-white my-5 text-center font-exoBold xs:text-xs">
+            The code whisper to you
+          </Text>
+          <Text className="text-white text-center font-exoLight text-[11px]">
+            {" "}
+            {hint}
+          </Text>
 
-            <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <Pressable onPress={onConfirm}>
-                <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
-                  Continue
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+          <Pressable onPress={closeModal} className="mx-auto my-5">
+            <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
+              Continue
+            </Text>
+          </Pressable>
         </Animated.View>
       </Pressable>
     </Modal>

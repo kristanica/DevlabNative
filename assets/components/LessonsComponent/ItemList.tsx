@@ -132,7 +132,7 @@ const ItemList = () => {
       console.log("AYES");
     },
     CodeWhisper: async (itemId) => {
-      if (location !== "BugBust") {
+      if (location === "Lesson") {
         // await playSound("wrongAnswer");
 
         showToast("itemError", `You cannot use that, you're in ${location}!`);

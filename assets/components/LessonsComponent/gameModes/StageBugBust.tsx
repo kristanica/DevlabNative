@@ -1,9 +1,8 @@
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
-import codeWhisper from "@/assets/Hooks/mainGameModeFunctions/globalItems/codeWhisper";
 import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
-import React, { useEffect } from "react";
+import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Accordion } from "../../global/Accordion";
 import BugBustModal from "../Modals/BugBustModal";
@@ -15,19 +14,19 @@ const StageBugBust = ({ currentStageData }: CurrentStageDataPayload) => {
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
 
-  const { codeWhisperItem } = codeWhisper(hintModal.setVisibility);
-  useEffect(() => {
-    const run = async () => {
-      const useItem = async (itemName: string, useThisItem: () => any) => {
-        useThisItem();
-        removeActiveBuff(itemName);
-      };
-      if (activeBuffs.includes("revealHint")) {
-        await useItem("revealHint", codeWhisperItem);
-      }
-    };
-    run();
-  }, [activeBuffs]);
+  // const { codeWhisperItem } = codeWhisper(hintModal.setVisibility);
+  // useEffect(() => {
+  //   const run = async () => {
+  //     const useItem = async (itemName: string, useThisItem: () => any) => {
+  //       useThisItem();
+  //       removeActiveBuff(itemName);
+  //     };
+  //     if (activeBuffs.includes("revealHint")) {
+  //       await useItem("revealHint", codeWhisperItem);
+  //     }
+  //   };
+  //   run();
+  // }, [activeBuffs]);
   const bugBust = useModal();
   return (
     <>

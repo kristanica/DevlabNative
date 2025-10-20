@@ -81,17 +81,21 @@ const CodeCrafter = ({
         }}
         numeric={false}
       />
-      <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
-        <Text className="text-white mr-2">Upload a presentation</Text>
 
-        <TouchableOpacity onPress={pickReplicate}>
-          <Ionicons
-            name="cloud-upload-outline"
-            size={20}
-            color={"white"}
-          ></Ionicons>
-        </TouchableOpacity>
-      </View>
+      {/* Disable replication upload on Database Subject */}
+      {category !== "Database" && (
+        <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+          <Text className="text-white mr-2">Upload a Replication file</Text>
+
+          <TouchableOpacity onPress={pickReplicate}>
+            <Ionicons
+              name="cloud-upload-outline"
+              size={20}
+              color={"white"}
+            ></Ionicons>
+          </TouchableOpacity>
+        </View>
+      )}
     </>
   );
 };

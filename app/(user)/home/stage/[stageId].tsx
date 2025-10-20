@@ -1,27 +1,30 @@
-import { hint } from "@/assets/API/openAi/hint";
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import RenderCounter from "@/assets/components/global/RenderCounter";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
+import HintModal from "@/assets/components/LessonsComponent/Modals/HintModal";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
 import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLessonContainer";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import Hearts from "@/assets/components/RenderItems/Hearts";
 import { StageHeader } from "@/assets/components/screen/STAGE/StageHeader";
+import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
+import codeWhisper from "@/assets/Hooks/mainGameModeFunctions/globalItems/codeWhisper";
 import { RenderStageEditor } from "@/assets/Hooks/stageScreenHandles/RenderStageEditor";
 import { useCurrentStageData } from "@/assets/Hooks/stageScreenHandles/useCurrentStageData";
 import { useStageNavigation } from "@/assets/Hooks/stageScreenHandles/useStageNavigation";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
+import useModal from "@/assets/Hooks/useModal";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useIsMutating, useMutation } from "@tanstack/react-query";
+import { useIsMutating } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import React, { useCallback, useMemo, useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 const StageScreen = () => {
   RenderCounter("stage screen");
 
@@ -100,18 +103,46 @@ const StageScreen = () => {
     logs,
     terminalRef,
   } = useCodeEditor();
-  const mutation = useMutation({
-    mutationFn: async ({ description, instruction, receivedCode }: any) =>
-      hint({
-        description: currentStageData.description,
-        instruction: currentStageData.instruction,
-        receivedCode,
-      }),
-  });
+  const hintModall = useModal();
+  const [generatedHint, setGeneratedHint] = useState<string>("");
+  const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
+  const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
+  const codeWhisperItem = codeWhisper(
+    hintModall.setVisibility,
+    setGeneratedHint
+  );
+
+  console.log(category);
+  useEffect(() => {
+    const run = async () => {
+      const useItem = async (itemName: string, useThisItem: any) => {
+        useThisItem();
+        removeActiveBuff(itemName);
+      };
+      if (activeBuffs.includes("revealHint")) {
+        console.log(category + "!!!!!!!!!!!!!!");
+        await useItem(
+          "revealHint",
+          await codeWhisperItem.mutateAsync({
+            description: currentStageData.description,
+            instruction: currentStageData?.instruction,
+            receivedCode:
+              category === "Database"
+                ? databaseQueryingFunctions.queryRecievedCode.query ||
+                  "Query is empty"
+                : receivedCode,
+          })
+        );
+      }
+    };
+    run();
+  }, [activeBuffs, category]);
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
-        {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
+        {(isMutating > 0 || codeWhisperItem.isPending) && (
+          <FillScreenLoading></FillScreenLoading>
+        )}
         <CustomGeneralContainer>
           <StageHeader
             handleBackPress={handleBackPress}
@@ -140,6 +171,9 @@ const StageScreen = () => {
           {/* Shows modal for first time */}
 
           {/* Determines Code editor */}
+          {hintModall.visibility && (
+            <HintModal {...hintModall} hint={generatedHint}></HintModal>
+          )}
           <RenderStageEditor
             category={String(category)}
             databaseQueryingFunctions={databaseQueryingFunctions}
@@ -150,22 +184,10 @@ const StageScreen = () => {
             setLogs={setLogs}
             logs={logs}
           ></RenderStageEditor>
-          <View className="h-[10px] w-[20px] bg-slate-400"></View>
+
           {/* TODO: Hides inventory on completed levels */}
-          {!islevelCompleted && <ItemList></ItemList>}
+          {isMutating === 0 && <ItemList></ItemList>}
           <SwipeLessonContainer>
-            <TouchableOpacity
-              onPress={() => {
-                console.log(receivedCode);
-                mutation.mutate({
-                  description: currentStageData.description,
-                  instruction: currentStageData.instruction,
-                  receivedCode,
-                });
-              }}
-            >
-              <Text className="text-white">Helloasd</Text>
-            </TouchableOpacity>
             {/* Renders the heart system on gamemodes */}
             {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
 

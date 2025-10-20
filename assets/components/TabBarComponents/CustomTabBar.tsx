@@ -15,7 +15,6 @@ export default function CustomTabBar({
   state,
   descriptors,
   navigation,
-  tabIcon,
 }: Props) {
   const lessonModal = useModal();
 

@@ -6,7 +6,7 @@ import {
   FIREBASE_STORAGE,
   FIREBASE_STORE,
 } from "../../firebaseConfig";
-export const URL = `https://b192f8c261d6.ngrok-free.app` as const;
+export const URL = `https://d41603b9d029.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -359,4 +359,9 @@ export const navIcon = [
   require(`@/assets/images/navBarIcons/Dashboard.png`),
   require(`@/assets/images/navBarIcons/Shop.png`),
   require(`@/assets/images/navBarIcons/Achievement.png`),
+];
+
+export const navIconAdmin = [
+  require(`@/assets/images/navBarIcons/userManagement.png`),
+  require(`@/assets/images/navBarIcons/contentManagement.png`),
 ];
