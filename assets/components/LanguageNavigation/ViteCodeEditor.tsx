@@ -30,6 +30,7 @@ type CodingPlaygroundEditorProps = {
   logs: any;
   setLogs: any;
   terminalRef: RefObject<BottomSheet | null>;
+  isOffline?: boolean;
 };
 const ViteCodeEditor = ({
   webRef,
@@ -38,6 +39,7 @@ const ViteCodeEditor = ({
   logs,
   setLogs,
   terminalRef,
+  isOffline,
 }: CodingPlaygroundEditorProps) => {
   const snapPoints = useMemo(() => ["5%", "50%"], []);
   const evaluationModal = useModal();
@@ -114,7 +116,7 @@ const ViteCodeEditor = ({
           <View className="flex-1 bg-[#D9D9D9] rounded-xl  items-center">
             <LottieView
               source={require("@/assets/Lottie/Loading.json")}
-              style={{ height: 160, width: 200 }}
+              style={{ width: "40%", aspectRatio: 1 }}
               autoPlay
               loop
             />
@@ -124,15 +126,16 @@ const ViteCodeEditor = ({
           </View>
         )}
       </View>
-
-      <TouchableOpacity
-        className="absolute  z-50  bottom-16 left-5 "
-        onPress={() => evaluateMutation.mutate({ receivedCode })}
-      >
-        <Text className="text-white px-7 py-2 bg-button text-xs rounded-xl font-exoBold">
-          Evaluate
-        </Text>
-      </TouchableOpacity>
+      {isOffline ? null : (
+        <TouchableOpacity
+          className="absolute  z-50  bottom-16 left-5 "
+          onPress={() => evaluateMutation.mutate({ receivedCode })}
+        >
+          <Text className="text-white px-7 py-2 bg-button text-xs rounded-xl font-exoBold">
+            Evaluate
+          </Text>
+        </TouchableOpacity>
+      )}
 
       <View className="flex-[2]">
         <WebView

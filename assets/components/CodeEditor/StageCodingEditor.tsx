@@ -48,18 +48,18 @@ const StageCodingEditor = ({
       }
     }
   }, [receivedCode]);
-  const runJS = () => {
-    if (!receivedCode?.js) return;
-    const jsCode = `
-      try {
-        ${receivedCode.js}
-      } catch(e) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
-      }
-      true;
-    `;
-    webRef.current?.injectJavaScript(jsCode);
-  };
+  // const runJS = () => {
+  //   if (!receivedCode?.js) return;
+  //   const jsCode = `
+  //     try {
+  //       ${receivedCode.js}
+  //     } catch(e) {
+  //       window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
+  //     }
+  //     true;
+  //   `;
+  //   webRef.current?.injectJavaScript(jsCode);
+  // };
 
   return (
     <View className="bg-accent flex-[1] rounded-[10px] z-0">

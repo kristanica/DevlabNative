@@ -7,6 +7,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const CodingPlayground = () => {
   const {
@@ -25,7 +26,7 @@ const CodingPlayground = () => {
         style={{ position: "relative", zIndex: 1 }}
       >
         <CustomGeneralContainer>
-          <View className="justify-between flex-row items-center mt-2">
+          <View className="justify-between flex-row my-5 items-center">
             <Pressable onPress={() => router.replace("/home/Home")}>
               <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB
@@ -44,15 +45,24 @@ const CodingPlayground = () => {
               sendToWebView={sendToWebView}
             ></SelectLanguageNavigation>
           </View>
-
-          <ViteCodeEditor
-            terminalRef={terminalRef}
-            logs={logs}
-            setLogs={setLogs}
-            webRef={webRef}
-            receivedCode={receivedCode}
-            setReceivedCode={setReceivedCode}
-          ></ViteCodeEditor>
+          <KeyboardAwareScrollView
+            contentContainerStyle={{
+              flex: 1,
+            }}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+          >
+            <ViteCodeEditor
+              isOffline={false}
+              terminalRef={terminalRef}
+              logs={logs}
+              setLogs={setLogs}
+              webRef={webRef}
+              receivedCode={receivedCode}
+              setReceivedCode={setReceivedCode}
+            ></ViteCodeEditor>
+          </KeyboardAwareScrollView>
         </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>

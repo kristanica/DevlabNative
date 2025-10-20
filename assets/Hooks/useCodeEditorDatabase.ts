@@ -8,25 +8,57 @@ export const useCodeEditorDatabase = () => {
   });
 
   const tableStyle = `
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction:column;
-    min-height: 100vh;
+  * {
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+  }
 
+  body {
     margin: 0;
+    padding: 10px;
+    background-color: #f5f5f5;
   }
 
   table {
-    border-collapse: collapse;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
   }
 
-  th,
+ th {
+  background-color: #ff6fb4; /* Soft pink */
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #e0589c;
+}
+
   td {
-    border: 1px solid black;
-    padding: 5px;
+    padding: 10px;
     text-align: center;
+    border-bottom: 1px solid #ececec;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background-color: #f0f0f0;
+  }
+
+  h2 {
+    margin: 15px 0 5px;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .overflow-auto {
+    overflow-x: auto;
   }
 `;
 

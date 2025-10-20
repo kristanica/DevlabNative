@@ -15,18 +15,18 @@ const OfflineScreen = () => {
             loop
             style={{ width: "100%", aspectRatio: 1.5 }}
           ></LottieView>
-          <Text className="text-white font-exoBold text-center">
+          <Text className="text-white font-exoBold text-center text-[12px] px-5">
             Whoops! seems like {"you're"} offline. But dont worry! you can still
             access some of the functions that devlab offers.
           </Text>
 
-          <View className=" flex-row w-[100%] justify-evenly mt-">
+          <View className=" flex-row w-[100%] justify-evenly mt-8">
             <Pressable
               onPress={() =>
                 router.push({ pathname: "/offline/OfflineCodeEditor" })
               }
             >
-              <Text className="bg-button px-7 py-2 rounded-xl text-white">
+              <Text className="bg-button px-7 py-2 rounded-xl text-white text-xs xs:text-[10px]">
                 Code Editor
               </Text>
             </Pressable>
@@ -35,7 +35,7 @@ const OfflineScreen = () => {
                 router.push({ pathname: "/offline/OfflineDatabaseCodeEditor" })
               }
             >
-              <Text className="text-white px-7 py-2 rounded-xl bg-button">
+              <Text className="text-white px-7 py-2 rounded-xl bg-button text-xs xs:text-[10px]">
                 Database Editor
               </Text>
             </Pressable>

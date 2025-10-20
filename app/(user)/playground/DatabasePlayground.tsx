@@ -5,6 +5,7 @@ import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const DatabasePlayground = () => {
   const databaseQueryingFunctions = useCodeEditorDatabase();
@@ -17,9 +18,19 @@ const DatabasePlayground = () => {
               DEVLAB
             </Text>
           </Pressable>
-          <ViteDatabaseCodeEditor
-            {...databaseQueryingFunctions}
-          ></ViteDatabaseCodeEditor>
+          <KeyboardAwareScrollView
+            contentContainerStyle={{
+              flex: 1,
+            }}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+          >
+            <ViteDatabaseCodeEditor
+              isOffline={false}
+              {...databaseQueryingFunctions}
+            ></ViteDatabaseCodeEditor>
+          </KeyboardAwareScrollView>
         </CustomGeneralContainer>
       </View>
     </ProtectedRoutes>

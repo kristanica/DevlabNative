@@ -3,9 +3,11 @@ import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/Sel
 import ViteCodeEditor from "@/assets/components/LanguageNavigation/ViteCodeEditor";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useCallback } from "react";
 import { Pressable, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const OfflineCodeEditor = () => {
   const {
@@ -17,10 +19,14 @@ const OfflineCodeEditor = () => {
     setLogs,
     terminalRef,
   } = useCodeEditor();
+  const handleExpandTerminal = useCallback(() => {
+    terminalRef.current?.expand();
+  }, []);
+
   return (
-    <View className="bg-accent flex-[1] rounded-[10px] z-0">
+    <View className="bg-background flex-[1] rounded-[10px] z-0">
       <CustomGeneralContainer>
-        <View className="justify-between flex-row">
+        <View className="justify-between flex-row my-5 items-center">
           <Pressable
             onPress={() => router.push({ pathname: "/offline/OfflineScreen" })}
           >
@@ -28,20 +34,32 @@ const OfflineCodeEditor = () => {
               DEVLAB
             </Text>
           </Pressable>
+          <Pressable onPress={handleExpandTerminal}>
+            <Ionicons name="terminal" size={20} color="white" />
+          </Pressable>
           <SelectLanguageNavigation
             subject=""
             sendToWebView={sendToWebView}
           ></SelectLanguageNavigation>
         </View>
-
-        <ViteCodeEditor
-          terminalRef={terminalRef}
-          webRef={webRef}
-          receivedCode={receivedCode}
-          setReceivedCode={setReceivedCode}
-          logs={logs}
-          setLogs={setLogs}
-        ></ViteCodeEditor>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flex: 1,
+          }}
+          enableOnAndroid
+          extraScrollHeight={20}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ViteCodeEditor
+            isOffline={true}
+            terminalRef={terminalRef}
+            webRef={webRef}
+            receivedCode={receivedCode}
+            setReceivedCode={setReceivedCode}
+            logs={logs}
+            setLogs={setLogs}
+          ></ViteCodeEditor>
+        </KeyboardAwareScrollView>
       </CustomGeneralContainer>
     </View>
   );

@@ -28,6 +28,7 @@ export const RenderStageEditor = ({
   if (category === "Database") {
     return (
       <StageCodingEditorDatabase
+        isOffline={false}
         {...databaseQueryingFunctions}
       ></StageCodingEditorDatabase>
     );

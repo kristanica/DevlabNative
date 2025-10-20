@@ -6,9 +6,8 @@ import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
 import React from "react";
-import { View } from "react-native";
-// import CodeHighlighter from "react-native-code-highlighter";
-// import { atomOneDarkReasonable } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Text, TouchableOpacity, View } from "react-native";
+
 const index = () => {
   RenderCounter("index");
   const handleLogin = async () => {
@@ -31,17 +30,16 @@ const index = () => {
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>
-        <View className="absolute">
-          {/* <CodeHighlighter
-            hljsStyle={atomOneDarkReasonable}
-            containerStyle={styles.codeContainer}
-            textStyle={styles.text}
-            language="javascript"
-          >
-            {codeString}
-          </CodeHighlighter> */}
-        </View>
-
+        <View className="absolute"></View>
+        <TouchableOpacity
+          onPress={() =>
+            router.replace({
+              pathname: "/offline/OfflineScreen",
+            })
+          }
+        >
+          <Text className="text-white">Offline</Text>
+        </TouchableOpacity>
         <Footer handleLogin={handleLogin}></Footer>
       </View>
     </View>
@@ -49,12 +47,3 @@ const index = () => {
 };
 
 export default index;
-// const styles = StyleSheet.create({
-//   codeContainer: {
-//     padding: 16,
-//     backgroundColor: "#282c34", // matching atomOneDarkReasonable background
-//   },
-//   text: {
-//     fontSize: 10,
-//   },
-// });

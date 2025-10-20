@@ -20,6 +20,7 @@ type ViteDatabaseCodeEditorProps = {
   query: string | undefined;
   setQuery: React.Dispatch<React.SetStateAction<string | undefined>>;
   tableStyle: string;
+  isOffline?: boolean;
 };
 
 const ViteDatabaseCodeEditor = ({
@@ -28,6 +29,7 @@ const ViteDatabaseCodeEditor = ({
   query,
   setQuery,
   tableStyle,
+  isOffline,
 }: ViteDatabaseCodeEditorProps) => {
   const [displayHTML, setDisplayHTML] = useState<any>("");
   const webRef = useRef<WebView>(null);
@@ -48,9 +50,6 @@ const ViteDatabaseCodeEditor = ({
         <FillScreenLoading text={"Evalutaing..."}></FillScreenLoading>
       )}
       <View className="flex-[1] bg-accent rounded-[10px]">
-        <TouchableOpacity onPress={() => console.log(queryRecievedCode)}>
-          <Text>asdsad</Text>
-        </TouchableOpacity>
         {evaluationModal.visibility && (
           <PlaygroundDatabaseEvaluationModal
             {...evaluationModal}
@@ -68,7 +67,7 @@ const ViteDatabaseCodeEditor = ({
         >
           <WebView
             style={{
-              width: 380,
+              width: 365,
               backgroundColor: "#D9D9D9",
               justifyContent: "center",
               alignItems: "center",
@@ -83,7 +82,9 @@ ${tableStyle}
   </style>
   </head>
   <body>
+  <div class="overflow-auto">
   ${displayHTML}
+  </div>
   </body>
 </html>`,
             }}
@@ -124,19 +125,22 @@ ${tableStyle}
           {/* 2nd Screen */}
         </ScrollView>
         <View className="bg-shopAccent flex-[2] m-3 rounded-[10px] ">
-          <TouchableOpacity
-            onPress={() => {
-              evaluateMutation.mutate({
-                receivedCode: queryRecievedCode.query,
-              });
-              console.log(queryRecievedCode.query);
-            }}
-            className="absolute  z-50  bottom-32 left-5 "
-          >
-            <Text className="text-white px-8 py-2 bg-button text-xs rounded-xl font-exoBold">
-              Evaluate
-            </Text>
-          </TouchableOpacity>
+          {isOffline ? null : (
+            <TouchableOpacity
+              onPress={() => {
+                evaluateMutation.mutate({
+                  receivedCode: queryRecievedCode.query,
+                });
+                console.log(queryRecievedCode.query);
+              }}
+              className="absolute  z-50  bottom-32 left-5 "
+            >
+              <Text className="text-white px-8 py-2 bg-button text-xs rounded-xl font-exoBold">
+                Evaluate
+              </Text>
+            </TouchableOpacity>
+          )}
+
           <WebView
             ref={webRef}
             scrollEnabled={false}
