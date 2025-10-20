@@ -39,7 +39,7 @@ const useSubmitAnswer = (
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);
-
+          console.log("HUYES");
           setUnlockNextLevel({
             lessonId: lessonId,
             nextLevelId: unlockData.nextLevelId,
@@ -47,6 +47,12 @@ const useSubmitAnswer = (
 
           console.log("level unlocked??");
           return ["levelUnlocked", "You've finished a level!"];
+        } else if (unlockData.isNextLessonUnlocked) {
+          finalAnswerModall.closeModal();
+          setTimeout(() => {
+            levelFinishedModal.setVisibility(true);
+          }, 200);
+          return ["levelUnlocked", "New lesson unlocked!"];
         } else if (unlockData.isWholeTopicFinished) {
           finalAnswerModall.closeModal();
           setTimeout(() => {

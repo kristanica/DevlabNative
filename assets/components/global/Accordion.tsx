@@ -1,19 +1,26 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
-import { css as beautifyCSS, html as beautifyHTML } from "js-beautify";
-import { useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import {
+  css as beautifyCSS,
+  html as beautifyHTML,
+  js as beautifyJs,
+} from "js-beautify";
+import React, { useMemo, useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import CodeHighlighter from "react-native-code-highlighter";
 import Animated, {
   Easing,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/hljs";
 type AccordionPayload = {
   header: string;
   contents: string;
 };
 
-export const Accordion = ({ header, contents }: AccordionPayload) => {
+const Accordion = ({ header, contents }: AccordionPayload) => {
+  const headerTemp = header;
   const [isOpened, setIsOpened] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   console.log(contentHeight);
@@ -25,17 +32,26 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
     opacity: withTiming(isOpened ? 1 : 0, { duration: 200 }),
     overflow: "hidden",
   }));
+
+  if (!["js", "css", "html"].includes(header)) header = "plaintext";
+  if (header === "js") header = "javascript";
   const formattedContents = useMemo(() => {
-    if (header === "html") return beautifyHTML(contents, { indent_size: 2 });
-    if (header === "css") return beautifyCSS(contents, { indent_size: 2 });
-    return contents;
+    let formatted = contents;
+    if (header === "html")
+      formatted = beautifyHTML(contents, { indent_size: 2 });
+    if (header === "css") formatted = beautifyCSS(contents, { indent_size: 2 });
+    if (header === "js") {
+      formatted = beautifyJs(contents, { indent_size: 2 });
+    }
+
+    return formatted.replace(/\\n/g, "\n");
   }, [header, contents]);
 
   return (
     <View className="bg-accent px-6 py-2 rounded-lg mx-2 my-3">
       <View className="flex flex-row justify-between">
         <Text className="text-blue-400 font-exoBold text-lg xs:text-[13px]">
-          {header.toLocaleUpperCase()}
+          {headerTemp.toLocaleUpperCase()}
         </Text>
         <Pressable
           onPress={() => setIsOpened((prev) => !prev)}
@@ -58,15 +74,20 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
             position: "absolute",
           }}
         >
-          <Text className="text-white font-exoRegular text-[10px] text-justify mt-1">
+          <CodeHighlighter
+            hljsStyle={nightOwl}
+            containerStyle={styles.codeContainer}
+            textStyle={styles.text}
+            language={header}
+          >
             {formattedContents}
-          </Text>
+          </CodeHighlighter>
         </View>
 
         <Pressable
           className="absolute right-0 bottom-2"
           onPress={async () => {
-            await Clipboard.setStringAsync(contents);
+            await Clipboard.setStringAsync(formattedContents);
           }}
         >
           <Ionicons name={"clipboard"} color={"white"} size={13}></Ionicons>
@@ -75,3 +96,15 @@ export const Accordion = ({ header, contents }: AccordionPayload) => {
     </View>
   );
 };
+
+export default React.memo(Accordion);
+const styles = StyleSheet.create({
+  codeContainer: {
+    padding: 16,
+    backgroundColor: "#282c34",
+    width: "100%", // matching atomOneDarkReasonable background
+  },
+  text: {
+    fontSize: 10,
+  },
+});

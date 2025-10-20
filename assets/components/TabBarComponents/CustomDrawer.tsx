@@ -34,14 +34,26 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
         />
       </View>
 
-      <TouchableOpacity onPress={() => props.navigation.navigate("(tabs)")}>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate("(tabs)")}
+        className="flex-row items-center "
+      >
+        <Image
+          source={require("@/assets/images/navBarIcons/Dashboard.png")}
+          className="h-[20px] w-[20px] mt-5 mr-2 "
+        ></Image>
         <Text className="text-white font-exoBold text-sm pt-7">Home</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        className="text-white font-exoBold text-lg pt-7"
+        className="flex-row items-center "
         onPress={() => props.navigation.navigate("Settings")}
       >
-        <Text className="text-white font-exoBold text-sm ">Settings</Text>
+        <Image
+          source={require("@/assets/images/navBarIcons/settings.png")}
+          className="h-[20px] w-[20px] mt-5 mr-2 "
+        ></Image>
+
+        <Text className="text-white font-exoBold text-sm pt-7">Settings</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

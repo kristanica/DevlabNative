@@ -25,6 +25,7 @@ import { useIsMutating } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const StageScreen = () => {
   RenderCounter("stage screen");
 
@@ -146,50 +147,59 @@ const StageScreen = () => {
           <FillScreenLoading></FillScreenLoading>
         )}
         <CustomGeneralContainer>
-          <StageHeader
-            handleBackPress={handleBackPress}
-            handleExpandTerminal={handleExpandTerminal}
-            category={String(category)}
-            sendToWebView={sendToWebView}
-          ></StageHeader>
-          <ModalHandler
-            feedbackArray={feedbackArray}
-            feedBackModal={feedBackModal}
-            setEvaluationData={setEvaluationData}
-            evaluationData={evaluationData}
-            currentStageType={currentStageType}
-            isRewardClaimed={isRewardClaimed}
-            queryRecievedCode={databaseQueryingFunctions.queryRecievedCode}
-            lessonId={String(lessonId)}
-            levelFinishedModal={levelFinishedModal}
-            evaluateModal={evaluateModal}
-            finalAnswerModall={finalAnswerModall}
-            evaluationLessonMutation={evaluationLessonMutation}
-            handleFinalAnswer={handleFinalAnswer}
-            receivedCode={receivedCode}
-            stageData={stageData}
-            category={String(category)}
-          ></ModalHandler>
-          {/* Shows modal for first time */}
+          <KeyboardAwareScrollView
+            contentContainerStyle={{
+              flex: 1,
+            }}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+          >
+            <StageHeader
+              handleBackPress={handleBackPress}
+              handleExpandTerminal={handleExpandTerminal}
+              category={String(category)}
+              sendToWebView={sendToWebView}
+            ></StageHeader>
+            <ModalHandler
+              feedbackArray={feedbackArray}
+              feedBackModal={feedBackModal}
+              setEvaluationData={setEvaluationData}
+              evaluationData={evaluationData}
+              currentStageType={currentStageType}
+              isRewardClaimed={isRewardClaimed}
+              queryRecievedCode={databaseQueryingFunctions.queryRecievedCode}
+              lessonId={String(lessonId)}
+              levelFinishedModal={levelFinishedModal}
+              evaluateModal={evaluateModal}
+              finalAnswerModall={finalAnswerModall}
+              evaluationLessonMutation={evaluationLessonMutation}
+              handleFinalAnswer={handleFinalAnswer}
+              receivedCode={receivedCode}
+              stageData={stageData}
+              category={String(category)}
+            ></ModalHandler>
+            {/* Shows modal for first time */}
 
-          {/* Determines Code editor */}
-          {hintModall.visibility && (
-            <HintModal {...hintModall} hint={generatedHint}></HintModal>
-          )}
+            {/* Determines Code editor */}
+            {hintModall.visibility && (
+              <HintModal {...hintModall} hint={generatedHint}></HintModal>
+            )}
 
-          <RenderStageEditor
-            category={String(category)}
-            databaseQueryingFunctions={databaseQueryingFunctions}
-            terminalRef={terminalRef}
-            webRef={webRef}
-            receivedCode={receivedCode!}
-            setReceivedCode={setReceivedCode}
-            setLogs={setLogs}
-            logs={logs}
-          ></RenderStageEditor>
+            <RenderStageEditor
+              category={String(category)}
+              databaseQueryingFunctions={databaseQueryingFunctions}
+              terminalRef={terminalRef}
+              webRef={webRef}
+              receivedCode={receivedCode!}
+              setReceivedCode={setReceivedCode}
+              setLogs={setLogs}
+              logs={logs}
+            ></RenderStageEditor>
 
-          {/* TODO: Hides inventory on completed levels */}
-          {!hintLoading && <ItemList></ItemList>}
+            {/* TODO: Hides inventory on completed levels */}
+            {!hintLoading && <ItemList></ItemList>}
+          </KeyboardAwareScrollView>
           <SwipeLessonContainer>
             {/* Renders the heart system on gamemodes */}
             {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
@@ -205,11 +215,11 @@ const StageScreen = () => {
               setCurrentStageIndex={setCurrentStageIndex}
             ></StageGameComponent>
 
-            <View className="flex-row justify-evenly">
+            <View className="flex-row justify-evenly mt-12">
               {/* Renders prev button on lesson only */}
               {(currentStageData?.type === "Lesson" || islevelCompleted) && (
                 <Pressable onPress={handlePrevious}>
-                  <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular">
+                  <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular text-xs xs:text-[10px]">
                     Prev
                   </Text>
                 </Pressable>
@@ -230,7 +240,7 @@ const StageScreen = () => {
                   }}
                   className="mx-auto"
                 >
-                  <Text className="px-7 py-2 bg-button self-start rounded-3xl font-exoRegular text-whte text-white">
+                  <Text className="px-7 py-2 bg-button self-start rounded-3xl text-xs xs:text-[10px] font-exoRegular text-whte text-white">
                     Evaluate
                   </Text>
                 </Pressable>
@@ -239,7 +249,7 @@ const StageScreen = () => {
               {(currentStageData?.type !== "BrainBytes" ||
                 islevelCompleted) && (
                 <Pressable onPress={handleNext}>
-                  <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular">
+                  <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular text-xs xs:text-[10px]">
                     Next
                   </Text>
                 </Pressable>

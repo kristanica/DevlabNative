@@ -47,13 +47,18 @@ export const CategoryItem = (
         <Pressable
           onPress={() => {
             handleStageTracker(isLevelLocked, item);
-            lastOpenedLevel.mutate({
-              lessonId: item.lessonId,
-              levelId: item.levelId,
-              subject: categoryId,
-              description: item.description,
-              title: item.title,
-            });
+            lastOpenedLevel.mutate(
+              {
+                lessonId: item.lessonId,
+                levelId: item.levelId,
+                subject: categoryId,
+                description: item.description,
+                title: item.title,
+              },
+              {
+                onSuccess: () => {},
+              }
+            );
           }}
         >
           <LessonContainer

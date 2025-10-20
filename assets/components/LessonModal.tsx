@@ -1,6 +1,14 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { ScaleModalProps } from "../constants/type";
 import LessonsContainer from "./LessonsContainer";
 const mock = ["Html", "Css", "JavaScript", "Database"];
@@ -11,7 +19,7 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
         <View className="   w-full absolute bottom-0 h-[65%] ">
           <View className="justify-center  flex-[1] bg-modal  rounded-3xl rounded-bl-none rounded-br-none border-[#2a3141] border-t-[5px]">
             <View className="flex-col mx-2 flex-[1.5] px-2 py-3 justify-evenly">
-              <Pressable
+              <TouchableOpacity
                 onPress={() =>
                   router.replace({
                     pathname: "/(user)/playground/CodingPlayground",
@@ -31,8 +39,8 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                     Try HTML/CSS/JS
                   </Text>
                 </View>
-              </Pressable>
-              <Pressable
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() =>
                   router.replace({
                     pathname: "/(user)/playground/DatabasePlayground",
@@ -52,7 +60,7 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                     Try Database Querying
                   </Text>
                 </View>
-              </Pressable>
+              </TouchableOpacity>
 
               {mock.map((item, index) => (
                 <LessonsContainer

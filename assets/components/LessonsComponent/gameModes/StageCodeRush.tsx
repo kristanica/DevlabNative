@@ -3,15 +3,9 @@ import codePatchTimeFreeze from "@/assets/Hooks/mainGameModeFunctions/codePatchT
 import useModal from "@/assets/Hooks/useModal";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import * as Clipboard from "expo-clipboard";
 import React, { useCallback, useEffect } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, Text, View } from "react-native";
+import Accordion from "../../global/Accordion";
 import CodeRushModal from "../Modals/CodeRushModal";
 
 const StageCodeRush = ({
@@ -98,77 +92,13 @@ const StageCodeRush = ({
           {currentStageData?.instruction}
         </Text>
         <View className="bg-background p-3 rounded-3xl my-3">
-          {currentStageData?.codingInterface && (
-            <ScrollView
-              className=" flex-[1] m-3 "
-              horizontal={true}
-              pagingEnabled
-              decelerationRate="fast"
-              showsHorizontalScrollIndicator={false}
-              alwaysBounceVertical={false}
-            >
-              <View className=" h-[200px] w-[290px]">
-                <TouchableOpacity
-                  className="absolute right-0 bottom-0"
-                  onPress={async () => {
-                    await Clipboard.setStringAsync(
-                      currentStageData?.codingInterface.html! ||
-                        "HTML code  is not provided"
-                    );
-                  }}
-                >
-                  <Ionicons
-                    name="clipboard-outline"
-                    size={20}
-                    color={"white"}
-                  ></Ionicons>
-                </TouchableOpacity>
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface?.html}
-                </Text>
-              </View>
-              <View className="bg-background h-[200px] w-[320px]">
-                <TouchableOpacity
-                  className="absolute right-0 bottom-0"
-                  onPress={async () => {
-                    await Clipboard.setStringAsync(
-                      currentStageData?.codingInterface.css!
-                    );
-                  }}
-                >
-                  <Ionicons
-                    name="clipboard-outline"
-                    size={20}
-                    color={"white"}
-                  ></Ionicons>
-                </TouchableOpacity>
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface?.css ||
-                    "Css code is not provided"}
-                </Text>
-              </View>
-              <View className="bg-background h-[200px] w-[290px] relative">
-                <TouchableOpacity
-                  className="absolute right-0 bottom-0"
-                  onPress={async () => {
-                    await Clipboard.setStringAsync(
-                      currentStageData?.codingInterface.js! ||
-                        "JavaScript code  is not provided"
-                    );
-                  }}
-                >
-                  <Ionicons
-                    name="clipboard-outline"
-                    size={20}
-                    color={"white"}
-                  ></Ionicons>
-                </TouchableOpacity>
-                <Text className="text-white font-exoRegular xs:text-xs text-justify">
-                  {currentStageData?.codingInterface?.js}
-                </Text>
-              </View>
-            </ScrollView>
-          )}
+          {currentStageData?.codingInterface &&
+            Object.entries(currentStageData.codingInterface).map(
+              ([key, value]: any) => {
+                if (!value) return;
+                return <Accordion header={key} contents={value!} key={key} />;
+              }
+            )}
         </View>
       </View>
     </>

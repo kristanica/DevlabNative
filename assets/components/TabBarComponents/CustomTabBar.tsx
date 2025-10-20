@@ -3,7 +3,7 @@ import { navIcon, width } from "@/assets/constants/constants";
 import useModal from "@/assets/Hooks/useModal";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import LessonModal from "../LessonModal";
 
@@ -71,8 +71,9 @@ export default function CustomTabBar({
       <TouchableOpacity onPress={() => lessonModal.setVisibility(true)}>
         <Image
           source={require("@/assets/images/navBarIcons/Lesson.png")}
-          className="h-[30px] w-[30px]"
+          className="h-[20px] w-[20px] m-auto mt-2"
         ></Image>
+        <Text className="text-white xs:text-[8px] pt-2">Lessons</Text>
       </TouchableOpacity>
 
       {lessonModal.visibility && (
@@ -89,7 +90,7 @@ const tabBarStyle = StyleSheet.create({
   tabBarStyle: {
     borderTopColor: "#FFFFFF",
     borderWidth: 0.5,
-    backgroundColor: "#1E1E2E",
+    backgroundColor: "#111828",
     position: "absolute",
     flexDirection: "row",
     bottom: 0,

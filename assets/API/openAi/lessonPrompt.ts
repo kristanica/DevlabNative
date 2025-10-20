@@ -77,6 +77,7 @@ const lessonPrompt = async ({
         js: receivedCode.js,
         instructions: instruction,
         description: instructionText,
+        subject: category,
       },
       {
         headers: {

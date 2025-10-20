@@ -37,6 +37,7 @@ export const useStageNavigation = (
           return prev;
         }
       }
+      //The user has not completed the level yet, hence the final answer modal will show.
       setFinalAsnwerVisibility(true);
       return prev;
     });

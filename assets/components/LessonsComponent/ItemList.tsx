@@ -6,7 +6,6 @@ import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FlashList } from "@shopify/flash-list";
 import {
   deleteDoc,
   doc,
@@ -15,7 +14,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -29,13 +34,12 @@ const ItemList = () => {
 
   const inventory = useGetUserInfo((state) => state.inventory);
   const activeItem = ActiveItemIcon((state) => state.activeIcon);
-
   const setActiveItem = ActiveItemIcon((state) => state.setActiveIcon);
   const moveToRight = useSharedValue(100);
   const opacity = useSharedValue(1);
   const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
   const location = WhereIsUser((state) => state.location);
-
+  console.log(location + "LCATIONNNN");
   const inventoryX = useSharedValue(300);
   const [disable, setDisable] = useState<boolean>(true);
   const [toggleInventory, setToggleInventory] = useState<boolean>(false);
@@ -127,7 +131,7 @@ const ItemList = () => {
     CodeWhisper: async (itemId) => {
       if (location === "Lesson") {
         // await playSound("wrongAnswer");
-
+        console.log(location + "woahwoahwoha");
         setToastVisibility(
           "error",
           `You cannot use Code whisper in ${location}`
@@ -284,21 +288,26 @@ const ItemList = () => {
           </Text>
         </View>
 
-        <FlashList
-          data={inventory}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => {
-                const action = useItemActions[item.title];
-                action?.(item.id);
-              }}
-            >
-              <UserInventoryItems {...item} />
-            </TouchableOpacity>
-          )}
-          estimatedItemSize={80}
-          showsVerticalScrollIndicator={false}
-        />
+        <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+          <View className="flex-row flex-wrap justify-center">
+            {inventory?.map((userInvItems: any) => {
+              return (
+                <TouchableOpacity
+                  key={userInvItems.id}
+                  onPress={() => {
+                    console.log("Location:", location);
+                    console.log("Item title:", userInvItems.title);
+                    const action = useItemActions[userInvItems.title];
+                    console.log("Action found:", !!action);
+                    action?.(userInvItems.id);
+                  }}
+                >
+                  <UserInventoryItems {...userInvItems} />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
       </Animated.View>
     </>
   );

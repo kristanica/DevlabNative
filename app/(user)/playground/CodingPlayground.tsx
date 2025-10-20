@@ -20,9 +20,12 @@ const CodingPlayground = () => {
   } = useCodeEditor();
   return (
     <ProtectedRoutes>
-      <View className="bg-accent flex-[1] rounded-[10px] z-0">
+      <View
+        className="bg-background flex-[1] rounded-[10px]"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         <CustomGeneralContainer>
-          <View className="justify-between flex-row items-center">
+          <View className="justify-between flex-row items-center mt-2">
             <Pressable onPress={() => router.replace("/home/Home")}>
               <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB

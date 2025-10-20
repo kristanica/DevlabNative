@@ -7,7 +7,8 @@ import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { View } from "react-native";
-
+// import CodeHighlighter from "react-native-code-highlighter";
+// import { atomOneDarkReasonable } from "react-syntax-highlighter/dist/esm/styles/hljs";
 const index = () => {
   RenderCounter("index");
   const handleLogin = async () => {
@@ -18,6 +19,7 @@ const index = () => {
     }
     router.replace({ pathname: "/Login" });
   };
+
   return (
     <View className="bg-background flex-[1] justify-center items-center ">
       <View className="flex-[1] ">
@@ -29,6 +31,16 @@ const index = () => {
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>
+        <View className="absolute">
+          {/* <CodeHighlighter
+            hljsStyle={atomOneDarkReasonable}
+            containerStyle={styles.codeContainer}
+            textStyle={styles.text}
+            language="javascript"
+          >
+            {codeString}
+          </CodeHighlighter> */}
+        </View>
 
         <Footer handleLogin={handleLogin}></Footer>
       </View>
@@ -37,3 +49,12 @@ const index = () => {
 };
 
 export default index;
+// const styles = StyleSheet.create({
+//   codeContainer: {
+//     padding: 16,
+//     backgroundColor: "#282c34", // matching atomOneDarkReasonable background
+//   },
+//   text: {
+//     fontSize: 10,
+//   },
+// });

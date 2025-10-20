@@ -33,7 +33,8 @@ const codePatchTimeFreeze = (
         setTimer((prev) => {
           if (prev <= 0) {
             clearInterval(intervalRef.current);
-            handleDecrementHp();
+            setTimeout(() => handleDecrementHp(), 200);
+
             const currentHp = userHp.getState().userHp;
             if (currentHp <= 1) {
               setTimeout(() => {

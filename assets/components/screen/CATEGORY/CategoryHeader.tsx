@@ -28,18 +28,16 @@ const CategoryHeader = ({ meta, id }: CategoryHeaderPayload) => {
         </View>
       </LinearGradient>
 
-      <View className=" items-center mx-3">
-        <Text className="my-5  text-white text-2xl xs:text-xl font-exoBold">
-          About
-          <Text style={{ color: meta.gradient.color1 }}>
-            {id.toUpperCase().toString()}
-          </Text>
+      <Text className="mt-2  text-white text-2xl xs:text-xl font-exoBold text-center">
+        About{" "}
+        <Text style={{ color: meta.gradient.color1 }}>
+          {id.toUpperCase().toString()}
         </Text>
+      </Text>
 
-        <Text className="text-white  font-exoRegular text-justify my-2 text-xs xs: text-[10px]">
-          {meta.about}
-        </Text>
-      </View>
+      <Text className="text-white  font-exoRegular text-justify my-2 text-xs xs: text-[10px] mx-2">
+        {meta.about}
+      </Text>
     </>
   );
 };

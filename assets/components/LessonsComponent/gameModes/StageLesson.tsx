@@ -3,7 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { ResizeMode, Video } from "expo-av";
 import React, { Suspense, useRef } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { Accordion } from "../../global/Accordion";
+import Accordion from "../../global/Accordion";
 import RenderCounter from "../../global/RenderCounter";
 import SmallLoading from "../../global/SmallLoading";
 const LessonModal = React.lazy(() => import("../Modals/LessonModal"));
@@ -92,14 +92,16 @@ const StageLesson = ({ currentStageData }: any) => {
           }
         })}
       {currentStageData?.videoPresentation && (
-        <Video
-          ref={videoRef}
-          source={{ uri: currentStageData.videoPresentation }}
-          style={styles.video}
-          useNativeControls
-          isLooping
-          resizeMode={ResizeMode.CONTAIN}
-        />
+        <View className="bg-accentContainer p-2">
+          <Video
+            ref={videoRef}
+            source={{ uri: currentStageData.videoPresentation }}
+            style={styles.video}
+            useNativeControls
+            isLooping
+            resizeMode={ResizeMode.CONTAIN}
+          />
+        </View>
       )}
       <View className="bg-accentContainer p-3  my-3">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
@@ -123,6 +125,7 @@ const StageLesson = ({ currentStageData }: any) => {
 export default React.memo(StageLesson);
 const styles = StyleSheet.create({
   container: {
+    zIndex: 1,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

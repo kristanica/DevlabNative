@@ -21,7 +21,7 @@ const JumpBackIn = ({
         JUMP BACK IN
       </Text>
       <Pressable onPress={handleJumpBackIn} className="mx-3 my-2">
-        <View className="flex-row items-center bg-accentContainer rounded-2xl overflow-hidden shadow-md p-3">
+        <View className="flex-row items-center py-5 bg-accentContainer rounded-2xl overflow-hidden shadow-md p-3">
           <Image
             source={categoryIcon[lastOpenedLevel.subject]}
             className="w-14 h-14 rounded-lg"

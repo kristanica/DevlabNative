@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { categoryIcon, lessonMetaData } from "../constants/constants";
 
 type HomeLessonProps = {
@@ -15,7 +15,7 @@ const LessonsContainer = ({ name, closeModal, index }: HomeLessonProps) => {
   const meta = lessonMetaData[id];
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={() => {
         router.push({
           pathname: "/home/category/[categoryId]",
@@ -46,7 +46,7 @@ const LessonsContainer = ({ name, closeModal, index }: HomeLessonProps) => {
           </Text>
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

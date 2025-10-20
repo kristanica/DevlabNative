@@ -22,7 +22,7 @@ export const useCurrentStageData = (stageId: string) => {
     if (!currentStageData?.type) return;
 
     setLocation(currentStageData.type);
-
+    console.log(currentStageData.type + "TYPE KOOOO");
     if (currentStageData.type !== "Lesson") {
       gameIdentifier.current = currentStageData.type;
     }
