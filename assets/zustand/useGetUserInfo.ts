@@ -11,13 +11,7 @@ type userData = {
   id: string;
   profileImage: string;
   backgroundImage: string;
-  lastOpenedLevel: {
-    lessonId: string;
-    levelId: string;
-    subject: string;
-    title: string;
-    description: string;
-  };
+  lastOpenedLevel: any;
 };
 type allProgressType = Record<
   string,
@@ -62,10 +56,10 @@ type InformationProviderProps = {
 
   userAchievements: any;
   setUserAchievementProgress: any;
-  getUserAchievementProgress: () => Promise<void>;
+  getUserAchievementProgress: () => Promise<any>;
   allProgressLevels: allProgressType;
   allProgressStages: allStagesType;
-  getUser: () => Promise<void>;
+  getUser: () => Promise<any>;
   completedLevels: number;
   completedStages: number;
   userUid: string;
@@ -111,16 +105,20 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
         "Achievements"
       );
 
-      onSnapshot(achievmentProgressRef, (achievementSnapShot) => {
-        if (!achievementSnapShot.empty) {
-          const temp = achievementSnapShot.docs.map((achievementDoc) => ({
-            id: achievementDoc.id,
-            ...achievementDoc.data(),
-          }));
+      const unsubAchievement = onSnapshot(
+        achievmentProgressRef,
+        (achievementSnapShot) => {
+          if (!achievementSnapShot.empty) {
+            const temp = achievementSnapShot.docs.map((achievementDoc) => ({
+              id: achievementDoc.id,
+              ...achievementDoc.data(),
+            }));
 
-          set({ userAchievements: temp });
+            set({ userAchievements: temp });
+          }
         }
-      });
+      );
+      return unsubAchievement;
     } catch (error) {
       console.log(error);
       return;
@@ -128,61 +126,73 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
   },
   setUserData: (val: userData) => set({ userData: val }),
   getUser: async () => {
-    console.log("ASDSA");
-    const uid = auth.currentUser?.uid;
-    if (!uid) {
-      console.log("No user UID found");
-      return;
-    }
-    set({ userUid: String(uid) });
-    try {
-      set({ loading: true });
-      const userRef = doc(db, "Users", uid);
+    return new Promise<() => void | undefined>((resolve, reject) => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) {
+        console.log("No user UID found");
+        return resolve(undefined!);
+      }
 
-      onSnapshot(userRef, (docSnap: any) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          set({
-            userData: {
-              username: data.username,
-              bio: data.bio,
-              coins: data.coins,
-              exp: data.exp,
-              userLevel: data.userLevel,
-              isSuspended: data.isSuspended,
-              id: uid,
-              profileImage: data.profileImage,
-              backgroundImage: data.backgroundImage,
-              lastOpenedLevel: {
-                lessonId: data?.lastOpenedLevel?.lessonId,
-                levelId: data?.lastOpenedLevel?.levelId,
-                subject: data?.lastOpenedLevel?.subject,
-                title: data?.lastOpenedLevel?.title,
-                description: data?.lastOpenedLevel?.description,
-              },
-            },
-            loading: false,
-          });
-        } else {
-          set({ loading: false });
-          console.log("No user");
-          return;
-        }
-      });
-      const itemRef = collection(db, "Users", uid, "Inventory");
-      onSnapshot(itemRef, (docSnapitem: any) => {
-        if (!docSnapitem.empty) {
-          const items = docSnapitem.docs.map((item: any) => ({
-            id: item.id,
-            ...item.data(),
-          }));
-          set({ inventory: items });
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ loading: false });
-    }
+      set({ userUid: String(uid), loading: true });
+
+      try {
+        const userRef = doc(db, "Users", uid);
+
+        let unsubUserInfo: () => void;
+        let unsubInventory: () => void;
+        unsubUserInfo = onSnapshot(
+          userRef,
+          (docSnap: any) => {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              set({
+                userData: {
+                  username: data.username,
+                  bio: data.bio,
+                  coins: data.coins,
+                  exp: data.exp,
+                  userLevel: data.userLevel,
+                  isSuspended: data.isSuspended,
+                  id: uid,
+                  profileImage: data.profileImage,
+                  backgroundImage: data.backgroundImage,
+                  lastOpenedLevel: data.lastOpenedLevel,
+                },
+                loading: false,
+              });
+
+              resolve(() => {
+                unsubUserInfo();
+                unsubInventory();
+              });
+            } else {
+              set({ loading: false });
+              console.log("No user");
+              resolve(undefined!);
+            }
+          },
+          (error) => {
+            console.log("Error in user snapshot:", error);
+            set({ loading: false });
+            reject(error);
+          }
+        );
+
+        const itemRef = collection(db, "Users", uid, "Inventory");
+        unsubInventory = onSnapshot(itemRef, (docSnapitem: any) => {
+          if (!docSnapitem.empty) {
+            const items = docSnapitem.docs.map((item: any) => ({
+              id: item.id,
+              ...item.data(),
+            }));
+            set({ inventory: items });
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        set({ loading: false });
+        reject(error);
+      }
+    });
   },
 }));

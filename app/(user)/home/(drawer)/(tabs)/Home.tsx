@@ -9,36 +9,15 @@ import JumpBackIn from "@/assets/components/screen/HOME/JumpBackIn";
 import ProfileHeader from "@/assets/components/screen/HOME/ProfileHeader";
 import UserProgress from "@/assets/components/screen/HOME/UserProgress";
 import { lessons } from "@/assets/constants/constants";
-import tracker from "@/assets/zustand/tracker";
+
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+
 import { useQuery } from "@tanstack/react-query";
-import { router } from "expo-router";
-import { useCallback } from "react";
 
 import { ScrollView, View } from "react-native";
 export default function Home() {
   RenderCounter("Home");
   const { userData, inventory } = useGetUserInfo();
-
-  const setLevelPayload = tracker((state) => state.setTracker);
-  const setLastStageVisibility = tracker(
-    (state) => state.setLastStageVisibility
-  );
-
-  const handleJumpBackIn = useCallback(() => {
-    setLevelPayload({
-      category: userData?.lastOpenedLevel.subject!,
-      lessonId: userData?.lastOpenedLevel.lessonId!,
-      levelId: userData?.lastOpenedLevel.levelId!,
-    });
-    setLastStageVisibility(true);
-    router.push({
-      pathname: `/home/category/[categoryId]`,
-      params: {
-        categoryId: String(userData?.lastOpenedLevel?.subject),
-      },
-    });
-  }, []);
 
   const { data: activeLevel } = useQuery({
     queryKey: ["ActiveLeveld"],
@@ -63,7 +42,6 @@ export default function Home() {
             className="flex-[3] "
           >
             <JumpBackIn
-              handleJumpBackIn={handleJumpBackIn}
               lastOpenedLevel={userData!.lastOpenedLevel!}
             ></JumpBackIn>
             <UserProgress

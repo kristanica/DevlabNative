@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Clipboard from "expo-clipboard";
 import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import { Accordion } from "../../global/Accordion";
+import Accordion from "../../global/Accordion";
 import BugBustModal from "../Modals/BugBustModal";
 import HintModal from "../Modals/HintModal";
 

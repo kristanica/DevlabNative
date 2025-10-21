@@ -36,12 +36,20 @@ const Settings = () => {
 
   const logOutModal = useModal();
   const confirmationModal = useModal();
-  const { userData } = useGetUserInfo();
+  const zustandUserName = useGetUserInfo((state) => state.userData?.username);
+  const zustandBio = useGetUserInfo((state) => state.userData?.bio);
+  const zustandBackgroundImage = useGetUserInfo(
+    (state) => state.userData?.backgroundImage
+  );
+  const zustandProfileImage = useGetUserInfo(
+    (state) => state.userData?.profileImage
+  );
+
   const { logOut } = useSignOut();
 
   const resetPassword = useModal();
-  const [bio, setBio] = useState<string>(userData?.bio!);
-  const [userName, setUserName] = useState<string>(userData?.username!);
+  const [bio, setBio] = useState<string>(zustandBio!);
+  const [userName, setUserName] = useState<string>(zustandUserName!);
   const { keyBoardHandlingStyle } = useKeyBoardHandler();
 
   const isMutating = useIsMutating();
@@ -62,9 +70,9 @@ const Settings = () => {
                   updateImage({ type: "profile" });
                 }}
               >
-                {userData?.profileImage ? (
+                {zustandProfileImage ? (
                   <Image
-                    source={{ uri: userData?.profileImage }}
+                    source={{ uri: zustandProfileImage }}
                     className="rounded-full xs:w-40 xs:h-40 "
                   />
                 ) : (
@@ -80,10 +88,10 @@ const Settings = () => {
                 className=""
                 onPress={() => updateImage({ type: "background" })}
               >
-                {userData?.backgroundImage ? (
+                {zustandBackgroundImage ? (
                   <ImageBackground
                     className=" rounded-2xl overflow-hidden rounded-br-none rounded-bl-none xs:h-[100px]"
-                    source={{ uri: userData?.backgroundImage }}
+                    source={{ uri: zustandBackgroundImage }}
                   ></ImageBackground>
                 ) : (
                   <ImageBackground
@@ -108,7 +116,7 @@ const Settings = () => {
                     <TextInput
                       value={userName}
                       onChangeText={setUserName}
-                      placeholder={userData?.username}
+                      placeholder={zustandUserName}
                       className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]  "
                       placeholderTextColor="rgba(128, 128, 128, 0.5)"
                     />
@@ -124,7 +132,7 @@ const Settings = () => {
                     <TextInput
                       value={bio}
                       onChangeText={setBio}
-                      placeholder={userData?.bio}
+                      placeholder={zustandBio}
                       className="text-[#ffffff9e] bg-[#1E212F] flex-[1] xs:text-xs p-4 rounded-[10px]  "
                       placeholderTextColor="rgba(128, 128, 128, 0.5)"
                     />

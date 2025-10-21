@@ -7,6 +7,7 @@ import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLess
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import Hearts from "@/assets/components/RenderItems/Hearts";
 import { StageHeader } from "@/assets/components/screen/STAGE/StageHeader";
+import { db } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
@@ -20,8 +21,9 @@ import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import useModal from "@/assets/Hooks/useModal";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useIsMutating } from "@tanstack/react-query";
+import { useIsMutating, useMutation } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
+import { doc, updateDoc } from "firebase/firestore";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -43,8 +45,9 @@ const StageScreen = () => {
     gameIdentifier,
     feedbackArray,
     stageLength,
-  } = useCurrentStageData(String(stageId));
+  } = useCurrentStageData(String(stageId), String(category));
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
+  const lastOpenedStage = useGetUserInfo((state) => state.userData);
 
   //useMemos
   const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
@@ -104,7 +107,10 @@ const StageScreen = () => {
   } = useCodeEditor();
 
   const hintModall = useModal();
-  const isMutating = useIsMutating();
+  const isMutating = useIsMutating({
+    predicate: (mutation) =>
+      mutation.options.mutationKey?.[0] !== "lastOpenedStage",
+  });
 
   // Show/hide terminal
   const handleExpandTerminal = useCallback(() => {
@@ -155,6 +161,53 @@ const StageScreen = () => {
     run();
   }, [activeBuffs, category]);
   // CODE WHISPER END
+
+  //Sets the last opened stage on firebase
+  const lastStageOpened = useMutation({
+    mutationKey: ["lastOpenedStage"],
+    mutationFn: async ({
+      lesson,
+      level,
+      subject,
+      stage,
+      title,
+      description,
+    }: {
+      lesson: string;
+      level: string;
+      subject: string;
+      stage: string;
+      title: string;
+      description: string;
+    }) => {
+      const userRef = doc(db, "Users", String(lastOpenedStage?.id));
+
+      //Updates the category of the lastOpenedLevel
+      await updateDoc(userRef, {
+        [`lastOpenedLevel.${subject}`]: {
+          subject: subject,
+          lessonId: lesson,
+          levelId: level,
+          stageId: stage,
+          title: title,
+          description: description,
+        },
+      });
+    },
+  });
+
+  // The actual update of the lastOpenedStage, runs on mount
+  useEffect(() => {
+    lastStageOpened.mutate({
+      lesson: String(lessonId),
+      level: String(levelId),
+      subject: String(category),
+      stage: String(currentStageData.id),
+      title: currentStageData?.title,
+      description: currentStageData?.description,
+    });
+    //Will run if currentStage.id changed
+  }, [lessonId, levelId, currentStageData.id, category]);
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">

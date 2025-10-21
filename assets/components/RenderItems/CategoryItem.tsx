@@ -1,4 +1,3 @@
-import { setLastOpenedLevel } from "@/assets/Hooks/query/mutation/setLastOpenedLevel";
 import { useCallback } from "react";
 import { Pressable } from "react-native";
 import LessonContainer from "../LessonsComponent/LessonContainer";
@@ -14,7 +13,6 @@ export const CategoryItem = (
   id: any,
   categoryId: string
 ) => {
-  const lastOpenedLevel = setLastOpenedLevel();
   const handleStageTracker = useCallback(
     (isLevelLocked: boolean, item: any) => {
       if (!isLevelLocked) {
@@ -47,18 +45,6 @@ export const CategoryItem = (
         <Pressable
           onPress={() => {
             handleStageTracker(isLevelLocked, item);
-            lastOpenedLevel.mutate(
-              {
-                lessonId: item.lessonId,
-                levelId: item.levelId,
-                subject: categoryId,
-                description: item.description,
-                title: item.title,
-              },
-              {
-                onSuccess: () => {},
-              }
-            );
           }}
         >
           <LessonContainer

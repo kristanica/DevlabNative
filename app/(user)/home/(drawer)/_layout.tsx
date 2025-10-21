@@ -1,97 +1,14 @@
-import { fetchAchievements } from "@/assets/API/fireBase/user/achievement/fetchAchievements";
-import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
-import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
-import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
-import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScreen";
 import CustomDrawer from "@/assets/components/TabBarComponents/CustomDrawer";
-import { auth } from "@/assets/constants/constants";
-import { loadSounds } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { DrawerActions } from "@react-navigation/native";
-import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation, usePathname } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { onAuthStateChanged } from "firebase/auth";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { Image, TouchableOpacity } from "react-native";
 
 const DrawerLayout = () => {
   const userData = useGetUserInfo((state) => state.userData);
-  const [isReady, setIsReady] = useState(false);
-  const queryClient = useQueryClient();
-  const getValidUser = useGetUserInfo((state) => state.getUser);
-  const getUserAchivementProgress = useGetUserInfo(
-    (state) => state.getUserAchievementProgress
-  );
 
-  const preFetchAchievements = useCallback(() => {
-    const category = ["Html", "Css", "JavaScript", "Database"];
-
-    return Promise.allSettled(
-      category.map((val: string) =>
-        queryClient.ensureQueryData({
-          queryKey: ["Achievement", val],
-          queryFn: () => fetchAchievements(val),
-          staleTime: 10 * 60 * 1000,
-        })
-      )
-    );
-  }, []);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      console.log("AuthState changed!");
-      if (!user) {
-        console.log("What?");
-        return;
-      }
-      const loadProgress = async () => {
-        const result = await Promise.allSettled([
-          queryClient.ensureQueryData({
-            queryKey: ["ActiveLeveld"],
-            queryFn: activeLevelCounter,
-          }),
-          queryClient.ensureQueryData({
-            queryKey: ["userProgress"],
-            queryFn: userProgress,
-          }),
-          queryClient.ensureQueryData({
-            queryKey: ["shopItems"],
-            queryFn: fetchShopItems,
-            staleTime: 10 * 60 * 1000,
-          }),
-          preFetchAchievements(),
-          loadSounds(),
-          getValidUser(),
-          getUserAchivementProgress(),
-        ]);
-        result.forEach(async (error, index) => {
-          if (error.status === "rejected")
-            console.log(`Query ${index} failed because of ${error.reason}`);
-          return;
-        });
-
-        const isAllFulfiled = result.every(
-          (item) => item.status === "fulfilled"
-        );
-
-        if (isAllFulfiled) {
-          setIsReady(true);
-        }
-      };
-      console.log("ASDasdasd");
-      loadProgress();
-    });
-    return () => unsub();
-  }, []);
-
-  if (!isReady) {
-    return (
-      <>
-        <BootingLoadingScreen></BootingLoadingScreen>
-      </>
-    );
-  }
   return (
     <Drawer
       drawerContent={(props) => <CustomDrawer {...props}></CustomDrawer>}

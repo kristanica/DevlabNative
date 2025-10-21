@@ -1,11 +1,11 @@
-import stageStore from "@/assets/zustand/stageStore";
+import { useStageStore } from "@/assets/zustand/useStageStore";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-export const useCurrentStageData = (stageId: string) => {
+export const useCurrentStageData = (stageId: string, category: string) => {
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const stageData = stageStore((state) => state.stageData);
-  const [stageLength] = useState<number>(stageData.length);
+  const stageData = useStageStore((state) => state.stageData);
+  const stageLength = stageData?.[category]?.length ?? 0;
   const feedbackArray = useRef<
     { stageId: string; evaluation: string; feedback: string }[]
   >([]);
@@ -13,8 +13,8 @@ export const useCurrentStageData = (stageId: string) => {
   const gameIdentifier = useRef<string | undefined>("Lesson");
 
   const currentStageData = useMemo(
-    () => stageData?.[currentStageIndex] ?? null,
-    [stageData, currentStageIndex]
+    () => stageData?.[category]?.[currentStageIndex] ?? null,
+    [stageData, category, currentStageIndex]
   );
 
   const currentStageType = currentStageData?.type ?? "Lesson";
@@ -31,12 +31,12 @@ export const useCurrentStageData = (stageId: string) => {
   useEffect(() => {
     if (!stageData) return;
 
-    const index: number = stageData.findIndex(
+    const index: number = stageData[category].findIndex(
       (stage: any) => stage.id === stageId
     );
 
     setCurrentStageIndex(index);
-    const stage = index !== -1 ? stageData[index] : null;
+    const stage = index !== -1 ? stageData[category][index] : null;
 
     if (stage?.type) {
       setLocation(stage.type as string);
