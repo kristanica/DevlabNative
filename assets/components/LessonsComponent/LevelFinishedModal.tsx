@@ -8,7 +8,7 @@ import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { Accordion } from "../global/Accordion";
+import Accordion from "../global/Accordion";
 import SmallLoading from "../global/SmallLoading";
 type levelFinishedModalPayload = ScaleModalPayload & {
   isRewardClaimed: boolean;
@@ -27,21 +27,25 @@ const LevelFinishedModal = ({
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
   const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);
 
+  // Checks whether the user has used doubleCoins
   useEffect(() => {
     if (!activeBuffs.includes("doubleCoins")) return;
+    // If yes, doubles the user coins
     coinSurgeItem();
-
     removeActiveBuffs("doubleCoins");
   }, [activeBuffs]);
 
+  //Checks whether the user has already claimed the reward on the level
   useEffect(() => {
-    console.log("isReward claimed?" + isRewardClaimed);
+    // If yes, returns immdtly
     if (isRewardClaimed) return;
+
     const giveReward = async () => {
       const uid = auth?.currentUser?.uid;
       const userRef = doc(db, "Users", String(uid));
       const userSnapShot = (await getDoc(userRef)).data();
 
+      // Updates the user's exp and coins
       await setDoc(
         userRef,
         {

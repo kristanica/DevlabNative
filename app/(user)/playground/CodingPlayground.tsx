@@ -9,7 +9,10 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+// Renders the online code editor
 const CodingPlayground = () => {
+  //Neceassry variables for code editor
+
   const {
     webRef,
     sendToWebView,
@@ -40,6 +43,7 @@ const CodingPlayground = () => {
             >
               <Ionicons name="terminal" size={20} color="white" />
             </Pressable>
+            {/* Language selector Html/Css/Js */}
             <SelectLanguageNavigation
               subject=""
               sendToWebView={sendToWebView}

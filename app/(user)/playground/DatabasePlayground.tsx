@@ -7,7 +7,9 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+// Renders the online code editor for devlab
 const DatabasePlayground = () => {
+  //Neceassry variables for database
   const databaseQueryingFunctions = useCodeEditorDatabase();
   return (
     <ProtectedRoutes>
@@ -26,6 +28,7 @@ const DatabasePlayground = () => {
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled"
           >
+            {/* Renders the codeeditor itself */}
             <ViteDatabaseCodeEditor
               isOffline={false}
               {...databaseQueryingFunctions}

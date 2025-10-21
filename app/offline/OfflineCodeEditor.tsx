@@ -8,8 +8,9 @@ import { router } from "expo-router";
 import React, { useCallback } from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+// Renders the offline code editor
 const OfflineCodeEditor = () => {
+  //Neceassry variables for code editor
   const {
     webRef,
     sendToWebView,
@@ -19,6 +20,8 @@ const OfflineCodeEditor = () => {
     setLogs,
     terminalRef,
   } = useCodeEditor();
+
+  // shows/hide terminal
   const handleExpandTerminal = useCallback(() => {
     terminalRef.current?.expand();
   }, []);

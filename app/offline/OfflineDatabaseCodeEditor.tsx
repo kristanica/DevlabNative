@@ -6,7 +6,9 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+// Renders the offline code editor for devlab
 const OfflineDatabaseCodeEditor = () => {
+  //Neceassry variables for database
   const databaseQueryingFunctions = useCodeEditorDatabase();
   return (
     <View className="bg-background flex-[1]">

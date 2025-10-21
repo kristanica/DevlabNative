@@ -3,13 +3,7 @@ import useModal from "@/assets/Hooks/useModal";
 import { useIsMutating, useMutation } from "@tanstack/react-query";
 import LottieView from "lottie-react-native";
 import React, { useRef, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import WebView from "react-native-webview";
 import PlaygroundDatabaseEvaluationModal from "../CodeEditor/PlaygroundDatabaseEvaluationModal";
 import FillScreenLoading from "../global/FillScreenLoading";
@@ -31,9 +25,12 @@ const ViteDatabaseCodeEditor = ({
   tableStyle,
   isOffline,
 }: ViteDatabaseCodeEditorProps) => {
+  //State for displaying the WHOLE table
   const [displayHTML, setDisplayHTML] = useState<any>("");
   const webRef = useRef<WebView>(null);
   const evaluationModal = useModal();
+
+  //Evaluation call
   const evaluateMutation = useMutation({
     mutationFn: async ({ receivedCode }: any) => {
       return databasePlayground({ receivedCode });
@@ -46,6 +43,7 @@ const ViteDatabaseCodeEditor = ({
   const isMutating = useIsMutating();
   return (
     <View className="bg-background flex-[1]">
+      {/* Loading screen when evaluate button is pressed */}
       {isMutating > 0 && (
         <FillScreenLoading text={"Evalutaing..."}></FillScreenLoading>
       )}
@@ -56,6 +54,7 @@ const ViteDatabaseCodeEditor = ({
             evaluationRes={evaluateMutation.data}
           ></PlaygroundDatabaseEvaluationModal>
         )}
+        {/* Horizontal scroll */}
         <ScrollView
           className=" flex-[1] m-3 rounded-[10px]"
           horizontal={true}
@@ -65,6 +64,7 @@ const ViteDatabaseCodeEditor = ({
           showsHorizontalScrollIndicator={false}
           alwaysBounceVertical={false}
         >
+          {/* WebView for displaying ALL the table once the "Display all table" is pressed */}
           <WebView
             style={{
               width: 365,
@@ -82,6 +82,7 @@ ${tableStyle}
   </style>
   </head>
   <body>
+  
   <div class="overflow-auto">
   ${displayHTML}
   </div>
@@ -89,7 +90,7 @@ ${tableStyle}
 </html>`,
             }}
           ></WebView>
-          {/* 2nd Sreen */}
+          {/* Webview for dIsplaying the QUERY result of the user */}
           {queryRecievedCode ? (
             <WebView
               style={{ width: 380, backgroundColor: "#D9D9D9" }}
@@ -109,6 +110,7 @@ ${tableStyle}
               }}
             ></WebView>
           ) : (
+            // Will render if the user doesnt query anything yet
             <View className=" w-[380px] bg-[#D9D9D9] items-center">
               <LottieView
                 source={require("@/assets/Lottie/Loading.json")}
@@ -121,10 +123,9 @@ ${tableStyle}
               </Text>
             </View>
           )}
-
-          {/* 2nd Screen */}
         </ScrollView>
         <View className="bg-shopAccent flex-[2] m-3 rounded-[10px] ">
+          {/* Will not render the button when offline */}
           {isOffline ? null : (
             <TouchableOpacity
               onPress={() => {
@@ -141,6 +142,7 @@ ${tableStyle}
             </TouchableOpacity>
           )}
 
+          {/* The code editor itself */}
           <WebView
             ref={webRef}
             scrollEnabled={false}
@@ -153,17 +155,22 @@ ${tableStyle}
             source={require("@/fontFamily/editor/database/index.html")}
             onMessage={(e) => {
               try {
+                //Gets the data from the webview, can be {query: "", result: ""} or {allTables: ""}
                 const data = JSON.parse(e.nativeEvent.data);
                 if (!data) {
                   console.log("no data");
                 }
+                //Is not using
                 if (!query) {
                   setQuery(data.defaultQuery);
                   return;
                 }
 
+                // if the user ran their query, sets it to the setter then displayed on the webview above
+                // query: actual query code
+                //  result: The actual table if select statement is used. will render no result if create/insert/etc is used
+
                 if (data.query && data.result) {
-                  console.log("set!");
                   setQueryRecievedCode({
                     query: data.query,
                     result: data.result,
@@ -172,6 +179,7 @@ ${tableStyle}
                   return;
                 }
 
+                // If display all table is used, sets the table to a useState then displayed it on the webview above
                 if (data.allTables) {
                   const combinedHtml = data.allTables
                     .map(
@@ -194,5 +202,3 @@ ${tableStyle}
 };
 
 export default ViteDatabaseCodeEditor;
-
-const styles = StyleSheet.create({});

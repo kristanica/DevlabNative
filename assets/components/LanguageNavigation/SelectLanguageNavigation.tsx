@@ -13,6 +13,7 @@ const SelectLanguageNavigation = ({
 }: SelectLanguageNavigationProps) => {
   let visibleButton: string[] = [];
 
+  // Buttons to be displayed (for switching languages) depending on the subject
   switch (subject) {
     case "Html":
       visibleButton = ["Html"];
@@ -24,7 +25,7 @@ const SelectLanguageNavigation = ({
       visibleButton = ["Html", "Css", "Js"];
       break;
     default:
-      visibleButton = ["Html", "Css", "Js"]; // or whatever you want for Database/Playground
+      visibleButton = ["Html", "Css", "Js"];
   }
 
   return (
@@ -32,6 +33,7 @@ const SelectLanguageNavigation = ({
       {visibleButton.map((val: string, index: number) => (
         <TouchableOpacity
           key={index}
+          // The actual switching of the language
           onPress={() => sendToWebView(val.toLowerCase())}
         >
           <Text className="py-2 px-4 mx-2 rounded-2xl bg-shopAccent text-white font-exoBold">

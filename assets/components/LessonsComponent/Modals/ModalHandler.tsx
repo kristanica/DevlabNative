@@ -3,11 +3,10 @@ import { router } from "expo-router";
 import React, { useCallback } from "react";
 import { StyleSheet } from "react-native";
 import EvaluateModal from "../../CodeEditor/EvaluateModal";
-import FillScreenLoading from "../../global/FillScreenLoading";
 import FinalAnswerModal from "../FinalAnswerModal";
 import LevelFinishedModal from "../LevelFinishedModal";
 import FeedBackModal from "./FeedBackModal";
-
+// TODO: FIXED THESE, PLEASE
 type ModalHandlerProps = {
   lessonId: string;
   feedbackArray: any;
@@ -90,15 +89,15 @@ const ModalHandler = ({
   }, [evaluateModal]);
   return (
     <>
+      {/* Currently not in used */}
       {feedBackModal.visibility && (
         <FeedBackModal
           {...feedBackModal}
           evaluationData={evaluationData}
         ></FeedBackModal>
       )}
-      {evaluationLessonMutation.isPending && (
-        <FillScreenLoading></FillScreenLoading>
-      )}
+
+      {/* When level is finished, this will show */}
       {levelFinishedModal.visibility && (
         <LevelFinishedModal
           onConfirm={handleLevelFinished}
@@ -107,7 +106,8 @@ const ModalHandler = ({
           evaluationData={evaluationData}
         ></LevelFinishedModal>
       )}
-      {}
+
+      {/* Once the evaluate button is pressedm this willshow */}
       {evaluateModal.visibility && (
         <EvaluateModal
           onConfirm={handleEvaluate}

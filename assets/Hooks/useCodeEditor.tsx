@@ -18,7 +18,9 @@ const useCodeEditor = () => {
   const [query, setQuery] = useState<string>();
   const terminalRef = useRef<BottomSheet>(null);
   const webRef = useRef<WebView>(null);
+  // Terminal logs
   const [logs, setLogs] = useState<logsProps[]>([]);
+  // Switches betweem Html/Css/Js
   const sendToWebView = useCallback((lang: string) => {
     webRef.current?.postMessage(lang);
   }, []);

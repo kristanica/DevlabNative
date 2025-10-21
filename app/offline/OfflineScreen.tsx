@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-
+// Renders the offline screen
 const OfflineScreen = () => {
   return (
     <View className="flex-1 bg-background">

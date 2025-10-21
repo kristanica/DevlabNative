@@ -1,6 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
-import RenderCounter from "@/assets/components/global/RenderCounter";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import HintModal from "@/assets/components/LessonsComponent/Modals/HintModal";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
@@ -26,10 +25,12 @@ import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-const StageScreen = () => {
-  RenderCounter("stage screen");
 
+// RENDERS THE **MAIN** SCREEN
+const StageScreen = () => {
+  // Gets the variables from the URL
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
+
   //feedback on level end setter
   const [evaluationData, setEvaluationData] = useState<any>();
 
@@ -48,11 +49,13 @@ const StageScreen = () => {
   //useMemos
   const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
 
+  //checks whether the user  has claimed the reward for the level
   const isRewardClaimed = useMemo(
     () =>
       levelProgress?.[String(category)]?.[levelKey]?.isRewardClaimed ?? false,
     [levelProgress, levelKey, category]
   );
+  //checks whether the user has completed the level
   const islevelCompleted = useMemo(
     () => levelProgress?.[String(category)]?.[levelKey]?.isCompleted ?? false,
     [levelProgress, levelKey, category]
@@ -87,14 +90,9 @@ const StageScreen = () => {
     finalAnswerModall.setVisibility,
     levelFinishedModal.setVisibility
   );
+  // Necessary variables for database
   const databaseQueryingFunctions = useCodeEditorDatabase();
-
-  const isMutating = useIsMutating();
-
-  const handleExpandTerminal = useCallback(() => {
-    terminalRef.current?.expand();
-  }, []);
-
+  // Necessary variables for code editor
   const {
     webRef,
     sendToWebView,
@@ -104,32 +102,48 @@ const StageScreen = () => {
     logs,
     terminalRef,
   } = useCodeEditor();
+
   const hintModall = useModal();
+  const isMutating = useIsMutating();
+
+  // Show/hide terminal
+  const handleExpandTerminal = useCallback(() => {
+    terminalRef.current?.expand();
+  }, []);
+
+  // CODE WHISPER START
+
+  // Sets the loading/hint once codewhisper is used
   const [hintLoading, setHintLoading] = useState<boolean>(false);
   const [generatedHint, setGeneratedHint] = useState<string>("");
+
+  //local state zustand
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
+
+  // Actual logic for code whisper
   const codeWhisperItem = codeWhisper(
     hintModall.setVisibility,
     setGeneratedHint,
     setHintLoading
   );
 
-  console.log(category);
   useEffect(() => {
     const run = async () => {
       const useItem = async (itemName: string, useThisItem: any) => {
         useThisItem();
         removeActiveBuff(itemName);
       };
+      // Checks whether revealHint is used
       if (activeBuffs.includes("revealHint")) {
-        console.log(category + "!!!!!!!!!!!!!!");
         await useItem(
           "revealHint",
+          // Sends the necessary data on the mutation
           await codeWhisperItem.mutateAsync({
             description: currentStageData.description,
             instruction: currentStageData?.instruction,
             receivedCode:
+              // Switch
               category === "Database"
                 ? databaseQueryingFunctions.queryRecievedCode.query ||
                   "Query is empty"
@@ -140,6 +154,7 @@ const StageScreen = () => {
     };
     run();
   }, [activeBuffs, category]);
+  // CODE WHISPER END
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -155,12 +170,15 @@ const StageScreen = () => {
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled"
           >
+            {/* Language selector */}
             <StageHeader
               handleBackPress={handleBackPress}
               handleExpandTerminal={handleExpandTerminal}
               category={String(category)}
               sendToWebView={sendToWebView}
             ></StageHeader>
+
+            {/* Handles the displaying of the necessary modals (**Complicated as heck) */}
             <ModalHandler
               feedbackArray={feedbackArray}
               feedBackModal={feedBackModal}
@@ -179,7 +197,6 @@ const StageScreen = () => {
               stageData={stageData}
               category={String(category)}
             ></ModalHandler>
-            {/* Shows modal for first time */}
 
             {/* Determines Code editor */}
             {hintModall.visibility && (
@@ -197,14 +214,15 @@ const StageScreen = () => {
               logs={logs}
             ></RenderStageEditor>
 
-            {/* TODO: Hides inventory on completed levels */}
+            {/* TODO: Hide inventory on completed levels */}
+            {/* TODO: Hide inventory on lesson */}
             {!hintLoading && <ItemList></ItemList>}
           </KeyboardAwareScrollView>
           <SwipeLessonContainer>
             {/* Renders the heart system on gamemodes */}
             {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
 
-            {/* Renders the contents of the page */}
+            {/* Renders the ALL  contents of the page */}
             <StageGameComponent
               currentStageData={currentStageData}
               type={currentStageData?.type}
@@ -235,7 +253,6 @@ const StageScreen = () => {
                       );
                       return;
                     }
-
                     handleEvaluation(receivedCode);
                   }}
                   className="mx-auto"

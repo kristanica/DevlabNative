@@ -10,18 +10,23 @@ export const useStageNavigation = (
   setFinalAsnwerVisibility: (val: boolean) => void,
   setFinishedModalVisibility: (val: boolean) => void
 ) => {
+  //Handles the previous button
   const handlePrevious = useCallback(() => {
     setCurrentStageIndex((prev) => {
+      // Checks if on there are no more pages to prev
       if (prev <= 0) {
-        console.log("last stage");
+        console.log("LAST STAGE");
         return prev;
       }
+      // Actual prev
       const newIndex = prev - 1;
       console.log("UPDATED INDEX:", newIndex);
       return newIndex;
     });
   }, []);
+  // Back button
   const handleBackPress = useCallback(() => {
+    // Emsure all the interactions are made before nagivating back
     InteractionManager.runAfterInteractions(() => {
       router.replace({ pathname: "/home/Home" });
     });
@@ -29,10 +34,12 @@ export const useStageNavigation = (
 
   const handleNext = useCallback(() => {
     setCurrentStageIndex((prev: number) => {
+      // If level is completed, skips the loading
       if (islevelCompleted) {
         if (prev < stageLength - 1) {
           return prev + 1;
         } else {
+          // When level is finished, modal will show
           setFinishedModalVisibility(true);
           return prev;
         }
