@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { Pressable } from "react-native";
+import { useCallback, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import LessonContainer from "../LessonsComponent/LessonContainer";
 
 export const CategoryItem = (
@@ -10,9 +10,10 @@ export const CategoryItem = (
   setTracker: any,
   setCoinsAndExp: any,
   setStagesVisibility: any,
-  id: any,
-  categoryId: string
+  id: any
 ) => {
+  const [stageVisibility, setStageVisiblity] = useState<any>({});
+
   const handleStageTracker = useCallback(
     (isLevelLocked: boolean, item: any) => {
       if (!isLevelLocked) {
@@ -34,17 +35,18 @@ export const CategoryItem = (
     []
   );
 
-  const renderItem = useCallback(
-    ({ item, index }: any) => {
-      const key = `${item.lessonId}-${item.levelId}`; // Access data directly from query
+  const renderItem = ({ item, index }: any) => {
+    const key = `${item.lessonId}-${item.levelId}`;
 
-      const isLevelLocked =
-        useUserProgressData?.allProgress?.[key]?.isActive ?? false;
+    const isLevelLocked =
+      useUserProgressData?.allProgress?.[key]?.isActive ?? false;
 
-      return (
+    return (
+      <>
         <Pressable
+          className="h-[500px]"
           onPress={() => {
-            handleStageTracker(isLevelLocked, item);
+            console.log("hey");
           }}
         >
           <LessonContainer
@@ -60,10 +62,16 @@ export const CategoryItem = (
             }
           ></LessonContainer>
         </Pressable>
-      );
-    },
-    [useUserProgressData]
-  );
+
+        {stageVisibility[key] &&
+          item.stages.map((stage: any) => (
+            <View key={stage.id} className="h-[500px]">
+              <Text>{stage.id}</Text>
+            </View>
+          ))}
+      </>
+    );
+  };
 
   return { renderItem };
 };

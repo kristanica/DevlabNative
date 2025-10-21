@@ -22,17 +22,17 @@ export const StageHeader = ({
         </Text>
       </Pressable>
 
-      {category !== "Database" && category === "JavaScript" && (
-        <>
+      <View>
+        {category !== "Database" && category === "JavaScript" && (
           <Pressable onPress={handleExpandTerminal}>
             <Ionicons name="terminal" size={20} color="white" />
           </Pressable>
-          <SelectLanguageNavigation
-            subject={String(category)}
-            sendToWebView={sendToWebView}
-          />
-        </>
-      )}
+        )}
+        <SelectLanguageNavigation
+          subject={String(category)}
+          sendToWebView={sendToWebView}
+        />
+      </View>
     </View>
   );
 };

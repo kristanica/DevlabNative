@@ -82,7 +82,7 @@ const TabsLayout = () => {
 
   useEffect(() => {
     let cleanupUser: any = null;
-    let cleanupAchievement: any = null;
+
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) {
         console.log("What?");
@@ -94,7 +94,7 @@ const TabsLayout = () => {
           useGetUserInfo.getState().userData?.lastOpenedLevel;
 
         const promises: Promise<any>[] = [
-          (cleanupAchievement = preFetchAchievements()),
+          preFetchAchievements(),
           loadSounds(),
           getUserAchivementProgress(),
           queryClient.ensureQueryData({
@@ -140,7 +140,6 @@ const TabsLayout = () => {
     return () => {
       unsub();
       cleanupUser?.();
-      cleanupAchievement();
     };
   }, []);
 

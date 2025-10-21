@@ -9,14 +9,15 @@ const StagesContainer = ({
   stageInformation,
   index,
   isLocked,
-}: StagesContainerPayload) => {
+  isShown,
+}: any) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
     id: index,
   });
-
+  console.log(isShown);
   return (
     <Animated.View
       style={[

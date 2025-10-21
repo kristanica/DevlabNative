@@ -134,17 +134,19 @@ const LevelFinishedModal = ({
                 )}
               </View>
             </View>
-            <View
-              className={`${
-                isRewardClaimed ? `flex-[1]` : ``
-              } justify-center items-center`}
-            >
-              <Pressable onPress={onConfirm}>
-                <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
-                  Back to Main
-                </Text>
-              </Pressable>
-            </View>
+            {evaluationData ? (
+              <View
+                className={`${
+                  isRewardClaimed ? `flex-[1]` : ``
+                } justify-center items-center`}
+              >
+                <Pressable onPress={onConfirm}>
+                  <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
+                    Back to Main
+                  </Text>
+                </Pressable>
+              </View>
+            ) : null}
           </View>
         </Animated.View>
       </Pressable>

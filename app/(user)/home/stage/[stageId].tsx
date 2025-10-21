@@ -51,6 +51,10 @@ const StageScreen = () => {
 
   //useMemos
   const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
+  // const stageKey = useMemo(
+  //   () => `${lessonId}-${levelId}-${currentStageData.id}`,
+  //   [lessonId, levelId, currentStageData.id]
+  // );
 
   //checks whether the user  has claimed the reward for the level
   const isRewardClaimed = useMemo(
@@ -92,6 +96,7 @@ const StageScreen = () => {
     stageLength,
     finalAnswerModall.setVisibility,
     levelFinishedModal.setVisibility
+    // stageKey
   );
   // Necessary variables for database
   const databaseQueryingFunctions = useCodeEditorDatabase();
@@ -133,7 +138,7 @@ const StageScreen = () => {
     setGeneratedHint,
     setHintLoading
   );
-
+  console.log(category);
   useEffect(() => {
     const run = async () => {
       const useItem = async (itemName: string, useThisItem: any) => {
@@ -196,137 +201,139 @@ const StageScreen = () => {
     },
   });
 
-  // The actual update of the lastOpenedStage, runs on mount
   useEffect(() => {
+    // Add comprehensive null checking
+    if (!currentStageData || !currentStageData.id) {
+      console.log("Waiting for stage data to load...");
+      return;
+    }
+
+    if (!lessonId || !levelId || !category) {
+      console.log("Missing route params");
+      return;
+    }
+
     lastStageOpened.mutate({
       lesson: String(lessonId),
       level: String(levelId),
       subject: String(category),
-      stage: String(currentStageData.id),
-      title: currentStageData?.title,
-      description: currentStageData?.description,
+      stage: currentStageData.id,
+      title: currentStageData.title,
+      description: currentStageData.description,
     });
-    //Will run if currentStage.id changed
-  }, [lessonId, levelId, currentStageData.id, category]);
+  }, [lessonId, levelId, currentStageData, category]);
+  const isStageDataReady = !!currentStageData;
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
-        {(isMutating > 0 || codeWhisperItem.isPending || hintLoading) && (
-          <FillScreenLoading></FillScreenLoading>
-        )}
-        <CustomGeneralContainer>
-          <KeyboardAwareScrollView
-            contentContainerStyle={{
-              flex: 1,
-            }}
-            enableOnAndroid
-            extraScrollHeight={20}
-            keyboardShouldPersistTaps="handled"
-          >
-            {/* Language selector */}
-            <StageHeader
-              handleBackPress={handleBackPress}
-              handleExpandTerminal={handleExpandTerminal}
-              category={String(category)}
-              sendToWebView={sendToWebView}
-            ></StageHeader>
-
-            {/* Handles the displaying of the necessary modals (**Complicated as heck) */}
-            <ModalHandler
-              feedbackArray={feedbackArray}
-              feedBackModal={feedBackModal}
-              setEvaluationData={setEvaluationData}
-              evaluationData={evaluationData}
-              currentStageType={currentStageType}
-              isRewardClaimed={isRewardClaimed}
-              queryRecievedCode={databaseQueryingFunctions.queryRecievedCode}
-              lessonId={String(lessonId)}
-              levelFinishedModal={levelFinishedModal}
-              evaluateModal={evaluateModal}
-              finalAnswerModall={finalAnswerModall}
-              evaluationLessonMutation={evaluationLessonMutation}
-              handleFinalAnswer={handleFinalAnswer}
-              receivedCode={receivedCode}
-              stageData={stageData}
-              category={String(category)}
-            ></ModalHandler>
-
-            {/* Determines Code editor */}
-            {hintModall.visibility && (
-              <HintModal {...hintModall} hint={generatedHint}></HintModal>
+        {!isStageDataReady ? (
+          <FillScreenLoading />
+        ) : (
+          <>
+            {(isMutating > 0 || codeWhisperItem.isPending || hintLoading) && (
+              <FillScreenLoading />
             )}
+            <CustomGeneralContainer>
+              <KeyboardAwareScrollView
+                contentContainerStyle={{ flex: 1 }}
+                enableOnAndroid
+                extraScrollHeight={20}
+                keyboardShouldPersistTaps="handled"
+              >
+                <StageHeader
+                  handleBackPress={handleBackPress}
+                  handleExpandTerminal={handleExpandTerminal}
+                  category={String(category)}
+                  sendToWebView={sendToWebView}
+                />
+                <ModalHandler
+                  feedbackArray={feedbackArray}
+                  feedBackModal={feedBackModal}
+                  setEvaluationData={setEvaluationData}
+                  evaluationData={evaluationData}
+                  currentStageType={currentStageType}
+                  isRewardClaimed={isRewardClaimed}
+                  queryRecievedCode={
+                    databaseQueryingFunctions.queryRecievedCode
+                  }
+                  lessonId={String(lessonId)}
+                  levelFinishedModal={levelFinishedModal}
+                  evaluateModal={evaluateModal}
+                  finalAnswerModall={finalAnswerModall}
+                  evaluationLessonMutation={evaluationLessonMutation}
+                  handleFinalAnswer={handleFinalAnswer}
+                  receivedCode={receivedCode}
+                  stageData={stageData}
+                  category={String(category)}
+                />
+                {hintModall.visibility && (
+                  <HintModal {...hintModall} hint={generatedHint} />
+                )}
+                <RenderStageEditor
+                  category={String(category)}
+                  databaseQueryingFunctions={databaseQueryingFunctions}
+                  terminalRef={terminalRef}
+                  webRef={webRef}
+                  receivedCode={receivedCode!}
+                  setReceivedCode={setReceivedCode}
+                  setLogs={setLogs}
+                  logs={logs}
+                />
+                {!hintLoading && <ItemList />}
+              </KeyboardAwareScrollView>
 
-            <RenderStageEditor
-              category={String(category)}
-              databaseQueryingFunctions={databaseQueryingFunctions}
-              terminalRef={terminalRef}
-              webRef={webRef}
-              receivedCode={receivedCode!}
-              setReceivedCode={setReceivedCode}
-              setLogs={setLogs}
-              logs={logs}
-            ></RenderStageEditor>
-
-            {/* TODO: Hide inventory on completed levels */}
-            {/* TODO: Hide inventory on lesson */}
-            {!hintLoading && <ItemList></ItemList>}
-          </KeyboardAwareScrollView>
-          <SwipeLessonContainer>
-            {/* Renders the heart system on gamemodes */}
-            {currentStageData.type !== "Lesson" && <Hearts></Hearts>}
-
-            {/* Renders the ALL  contents of the page */}
-            <StageGameComponent
-              currentStageData={currentStageData}
-              type={currentStageData?.type}
-              category={category}
-              lessonId={lessonId}
-              levelId={levelId}
-              stageId={currentStageData?.id}
-              setCurrentStageIndex={setCurrentStageIndex}
-            ></StageGameComponent>
-
-            <View className="flex-row justify-evenly mt-12">
-              {/* Renders prev button on lesson only */}
-              {(currentStageData?.type === "Lesson" || islevelCompleted) && (
-                <Pressable onPress={handlePrevious}>
-                  <Text className="px-7 py-2 bg-[#E63946] self-start  text-white rounded-3xl font-exoRegular text-xs xs:text-[10px]">
-                    Prev
-                  </Text>
-                </Pressable>
-              )}
-              {/* TODO: Might consider rendering evaluate button upon level completion on all gamemodes */}
-              {/* Evalutaion button on Lesson */}
-              {currentStageData?.type === "Lesson" && (
-                <Pressable
-                  onPress={() => {
-                    if (category === "Database") {
-                      handleEvaluation(
-                        databaseQueryingFunctions.queryRecievedCode.query
-                      );
-                      return;
-                    }
-                    handleEvaluation(receivedCode);
-                  }}
-                  className="mx-auto"
-                >
-                  <Text className="px-7 py-2 bg-button self-start rounded-3xl text-xs xs:text-[10px] font-exoRegular text-whte text-white">
-                    Evaluate
-                  </Text>
-                </Pressable>
-              )}
-              {/* Renders Next button except on brain bytes as it has its own button. Renders Next button upon level completion */}
-              {(currentStageData?.type !== "BrainBytes" ||
-                islevelCompleted) && (
-                <Pressable onPress={handleNext}>
-                  <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular text-xs xs:text-[10px]">
-                    Next
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-          </SwipeLessonContainer>
-        </CustomGeneralContainer>
+              <SwipeLessonContainer>
+                {currentStageData.type !== "Lesson" && <Hearts />}
+                <StageGameComponent
+                  currentStageData={currentStageData}
+                  type={currentStageData?.type}
+                  category={category}
+                  lessonId={lessonId}
+                  levelId={levelId}
+                  stageId={currentStageData?.id}
+                  setCurrentStageIndex={setCurrentStageIndex}
+                />
+                <View className="flex-row justify-evenly mt-12">
+                  {(currentStageData?.type === "Lesson" ||
+                    islevelCompleted) && (
+                    <Pressable onPress={handlePrevious}>
+                      <Text className="px-7 py-2 bg-[#E63946] self-start text-white rounded-3xl font-exoRegular text-xs xs:text-[10px]">
+                        Prev
+                      </Text>
+                    </Pressable>
+                  )}
+                  {currentStageData?.type === "Lesson" && (
+                    <Pressable
+                      onPress={() => {
+                        if (category === "Database") {
+                          handleEvaluation(
+                            databaseQueryingFunctions.queryRecievedCode.query
+                          );
+                          return;
+                        }
+                        handleEvaluation(receivedCode);
+                      }}
+                      className="mx-auto"
+                    >
+                      <Text className="px-7 py-2 bg-button self-start rounded-3xl text-xs xs:text-[10px] font-exoRegular text-white">
+                        Evaluate
+                      </Text>
+                    </Pressable>
+                  )}
+                  {(currentStageData?.type !== "BrainBytes" ||
+                    islevelCompleted) && (
+                    <Pressable onPress={handleNext}>
+                      <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular text-xs xs:text-[10px]">
+                        Next
+                      </Text>
+                    </Pressable>
+                  )}
+                </View>
+              </SwipeLessonContainer>
+            </CustomGeneralContainer>
+          </>
+        )}
       </View>
     </ProtectedRoutes>
   );

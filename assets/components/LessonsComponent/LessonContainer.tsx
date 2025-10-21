@@ -10,19 +10,22 @@ const LessonContainer = ({
   index,
   icon,
   isLocked,
-}: LessonContainerPayload) => {
+  isShown,
+}: any) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
     id: index,
   });
-
+  console.log(isShown + "A");
   return (
     <Animated.View
       key={levelInformation.id}
       style={onScale}
-      className="bg-shopAccent rounded-3xl h-28 flex-row my-2 border-black border-[2px] mx-3"
+      className={`bg-shopAccent ${
+        isShown ? "" : "rounded-3xl"
+      }  h-28 flex-row mt-2 border-black border-[2px] mx-3`}
     >
       {isLocked && (
         <>

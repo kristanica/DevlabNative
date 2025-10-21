@@ -9,8 +9,10 @@ export const useStageNavigation = (
   stageLength: number,
   setFinalAsnwerVisibility: (val: boolean) => void,
   setFinishedModalVisibility: (val: boolean) => void
+  // stageKey: string
 ) => {
   //Handles the previous button
+
   const handlePrevious = useCallback(() => {
     setCurrentStageIndex((prev) => {
       // Checks if on there are no more pages to prev

@@ -76,7 +76,7 @@ const ModalHandler = ({
     setToastVisibility,
   ]);
   const handleLevelFinished = useCallback(async () => {
-    router.push({
+    router.replace({
       pathname: "/home/category/[categoryId]",
       params: {
         categoryId: category,
