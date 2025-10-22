@@ -1,6 +1,4 @@
-import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsFocused } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -12,17 +10,17 @@ const LessonContainer = ({
   isLocked,
   isShown,
 }: any) => {
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
 
-  const { onScale } = useSequentialAppearAnim({
-    indicator: isFocused,
-    id: index,
-  });
+  // const { onScale } = useSequentialAppearAnim({
+  //   indicator: isFocused,
+  //   id: index,
+  // });
   console.log(isShown + "A");
   return (
     <Animated.View
       key={levelInformation.id}
-      style={onScale}
+      // style={onScale}
       className={`bg-shopAccent ${
         isShown ? "" : "rounded-3xl"
       }  h-28 flex-row mt-2 border-black border-[2px] mx-3`}

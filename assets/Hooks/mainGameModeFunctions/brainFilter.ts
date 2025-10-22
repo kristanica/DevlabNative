@@ -69,7 +69,6 @@ const brainFilter = (
   };
 
   const brainFilterItem = () => {
-    console.log("BRAINFILETER USEDDDDDDDDDDDDDD");
     // const wrongOptions = arrayChoices.filter(
     //   (value: string) => value !== choices.correctAnswer.trim()
     // );

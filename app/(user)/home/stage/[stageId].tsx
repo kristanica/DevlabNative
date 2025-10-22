@@ -1,5 +1,6 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
+import StageDataReadyLoading from "@/assets/components/global/StageDataReadyLoading";
 import ItemList from "@/assets/components/LessonsComponent/ItemList";
 import HintModal from "@/assets/components/LessonsComponent/Modals/HintModal";
 import ModalHandler from "@/assets/components/LessonsComponent/Modals/ModalHandler";
@@ -228,7 +229,7 @@ const StageScreen = () => {
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
         {!isStageDataReady ? (
-          <FillScreenLoading />
+          <StageDataReadyLoading></StageDataReadyLoading>
         ) : (
           <>
             {(isMutating > 0 || codeWhisperItem.isPending || hintLoading) && (
@@ -280,7 +281,9 @@ const StageScreen = () => {
                   setLogs={setLogs}
                   logs={logs}
                 />
-                {!hintLoading && <ItemList />}
+                {!hintLoading && currentStageData?.type !== "Lesson" && (
+                  <ItemList />
+                )}
               </KeyboardAwareScrollView>
 
               <SwipeLessonContainer>

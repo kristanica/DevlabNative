@@ -1,22 +1,27 @@
 import RenderCounter from "@/assets/components/global/RenderCounter";
 import Footer from "@/assets/components/screen/INDEX/Footer";
 import { auth } from "@/assets/constants/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
-import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 const index = () => {
   RenderCounter("index");
   const handleLogin = async () => {
-    const currentuser = auth.currentUser;
-    if (currentuser) {
-      console.log("There is a current user!");
-      await signOut(auth);
+    try {
+      const currentuser = auth.currentUser;
+      const val = await AsyncStorage.getItem("isLoggin");
+      if (val === "true" && currentuser) {
+        router.replace("/home/Home");
+      } else {
+        router.replace({ pathname: "/Login" });
+      }
+    } catch (error) {
+      console.log(error);
     }
-    router.replace({ pathname: "/Login" });
   };
 
   return (
@@ -31,15 +36,7 @@ const index = () => {
           ></LottieView>
         </View>
         <View className="absolute"></View>
-        <TouchableOpacity
-          onPress={() =>
-            router.replace({
-              pathname: "/offline/OfflineScreen",
-            })
-          }
-        >
-          <Text className="text-white">Offline</Text>
-        </TouchableOpacity>
+
         <Footer handleLogin={handleLogin}></Footer>
       </View>
     </View>

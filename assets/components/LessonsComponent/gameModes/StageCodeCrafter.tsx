@@ -3,6 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import WebView from "react-native-webview";
+import Accordion from "../../global/Accordion";
 import RenderCounter from "../../global/RenderCounter";
 import CodeCrafterModal from "../Modals/CodeCrafterModal";
 
@@ -57,11 +58,14 @@ const StageCodeCrafter = ({ currentStageData }: CurrentStageDataPayload) => {
             />
           </View>
         )}
-
-        <View className="bg-background p-3 rounded-3xl my-3">
-          <Text className="text-white font-exoRegular xs:text-xs text-justify">
-            {currentStageData?.copyCode}
-          </Text>
+        <View className="bg-background my-3 flex-col">
+          {currentStageData?.codingInterface &&
+            Object.entries(currentStageData.codingInterface).map(
+              ([key, value]: any) => {
+                if (!value) return;
+                return <Accordion header={key} contents={value!} key={key} />;
+              }
+            )}
         </View>
       </View>
     </>

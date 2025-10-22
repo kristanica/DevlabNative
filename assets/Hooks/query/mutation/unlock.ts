@@ -28,8 +28,10 @@ export const unlock = (
     onSuccess: (data: any) => {
       if (data.isNextStageUnlocked) {
         setCurrentStageIndex((prev: number) => prev + 1);
-        setToastVisibility("stageUnlocked", "You got that one right!");
       }
+    },
+    onMutate: () => {
+      setToastVisibility("stageUnlocked", "You got that one right!");
     },
   });
 };

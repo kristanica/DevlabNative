@@ -147,7 +147,8 @@ const ViteCodeEditor = ({
             margin: 8,
             borderRadius: 10,
           }}
-          source={require("@/fontFamily/editor/index.html")}
+          // source={require("@/fontFamily/editor/index.html")}
+          source={{ html: "<h1>This is a static HTML source!</h1>" }}
           onMessage={(e: WebViewMessageEvent) => {
             try {
               const val: CodeEditorPayload = JSON.parse(e.nativeEvent.data);
@@ -157,6 +158,18 @@ const ViteCodeEditor = ({
               console.log(error);
               alert(error);
             }
+          }}
+          cacheEnabled={true}
+          originWhitelist={["*"]}
+          allowUniversalAccessFromFileURLs={true}
+          allowFileAccess={true}
+          allowFileAccessFromFileURLs={true} // ⚠️ often missing
+          mixedContentMode="always" // helps avoid network
+          onError={(syntheticEvent) => {
+            console.log(
+              "WebView load error (ignored offline):",
+              syntheticEvent.nativeEvent
+            );
           }}
         />
       </View>

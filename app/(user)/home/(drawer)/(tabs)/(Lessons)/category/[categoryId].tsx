@@ -1,9 +1,8 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import RenderCounter from "@/assets/components/global/RenderCounter";
 import SmallLoading from "@/assets/components/global/SmallLoading";
-import LessonContainer from "@/assets/components/LessonsComponent/LessonContainer";
 import LockLessonModal from "@/assets/components/LessonsComponent/LockLessonModal";
-import StagesContainer from "@/assets/components/LessonsComponent/StagesContainer";
+import CategoryItem from "@/assets/components/RenderItems/CategoryItem";
 import CategoryHeader from "@/assets/components/screen/CATEGORY/CategoryHeader";
 import { auth, lessonMetaData, URL } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
@@ -11,19 +10,11 @@ import useModal from "@/assets/Hooks/useModal";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { unlockedStages } from "@/assets/zustand/unlockedStages";
 import { useStageStore } from "@/assets/zustand/useStageStore";
-import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import React, { useMemo, useState } from "react";
-import {
-  Pressable,
-  SectionList,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SectionList, Text, View } from "react-native";
 
 const CategoryScreen = () => {
   RenderCounter("categoryid");
@@ -65,7 +56,7 @@ const CategoryScreen = () => {
       );
 
       setUnlockedStages(response.data.allStagesComplete);
-      console.log(response.data.allStagesComplete);
+
       return response.data;
     },
   });
@@ -117,9 +108,8 @@ const CategoryScreen = () => {
         }))
       : [];
   }, [allData]);
-  const [stageVisibility, setStageVisiblity] = useState<any>({});
-
-  const [selectedStage, setSelectedStage] = useState<any>(null);
+  console.log(categoryId);
+  const [stageVisibility, setStageVisibility] = useState<any>({});
   const [shownLevelKey, setShownLevelKey] = useState<string | null>(null);
   return (
     <View className="bg-accent flex-[1]">
@@ -140,97 +130,29 @@ const CategoryScreen = () => {
               sections={temp}
               stickySectionHeadersEnabled={false}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }: any) => {
-                const key = `${item.lessonId}-${item.levelId}`;
-
-                const isLevelLocked =
-                  useUserProgressData?.allProgress?.[key]?.isActive ?? false;
+              renderItem={({ item, index }) => {
+                const keyId = `${item.lessonId}-${item.levelId}`;
+                const isLevelLocked = !(
+                  useUserProgressData?.allProgress?.[keyId]?.isActive ?? false
+                );
 
                 return (
-                  <>
-                    <Pressable
-                      onPress={() => {
-                        const key = `${item.lessonId}-${item.levelId}`;
-                        setShownLevelKey(key);
-                        setCoinsAndExp({
-                          exp: item.exp,
-                          coins: item.coins,
-                        });
-                        setSelectedStage({
-                          lessonId: item.lessonId,
-                          levelId: item.levelId,
-                          category: String(categoryId),
-                        });
-                        // Remove setTimeout - set immediately
-                        setStageData(String(categoryId), []); // Clear first
-                        setTimeout(() => {
-                          setStageData(String(categoryId), item.stages); // Then set new data
-                        }, 0);
-
-                        setStageVisiblity((prev: any) => ({
-                          ...prev,
-                          [key]: !prev[key],
-                        }));
-                      }}
-                    >
-                      <LessonContainer
-                        isShown={shownLevelKey === key}
-                        isLocked={!isLevelLocked}
-                        levelInformation={item}
-                        index={index}
-                        icon={
-                          meta.ionIcon as
-                            | "cube"
-                            | "logo-javascript"
-                            | "logo-html5"
-                            | "logo-css3"
-                        }
-                      ></LessonContainer>
-                    </Pressable>
-                    {stageVisibility[key] && (
-                      <FlashList
-                        estimatedItemSize={112}
-                        data={item.stages}
-                        className="bg-background mx-3"
-                        keyExtractor={(stage: any) =>
-                          `${item.lessonId}-${item.levelId}-${stage.id}`
-                        }
-                        renderItem={({ item: stage, index }) => {
-                          const stageKey = `${item?.lessonId}-${item?.levelId}-${stage.id}`;
-
-                          const isStageLocked =
-                            useUserProgressData?.allStagesComplete[stageKey];
-                          return (
-                            <TouchableOpacity
-                              key={stage.id}
-                              onPress={() => {
-                                router.push({
-                                  pathname: "/(user)/home/stage/[stageId]",
-                                  params: {
-                                    stageId: stage.id,
-                                    category: String(categoryId), // Use categoryId directly
-                                    lessonId: item.lessonId,
-                                    levelId: item.levelId,
-                                  },
-                                });
-                              }}
-                            >
-                              <StagesContainer
-                                isLocked={isStageLocked}
-                                stageInformation={{
-                                  id: stage.id,
-                                  title: stage.title,
-                                  description: stage.description,
-                                  ...(stage || {}),
-                                }}
-                                index={index}
-                              ></StagesContainer>
-                            </TouchableOpacity>
-                          );
-                        }}
-                      ></FlashList>
-                    )}
-                  </>
+                  <CategoryItem
+                    setLockModalVisibility={setVisibility}
+                    setShowLevelKey={setShownLevelKey}
+                    setCoinsAndExp={setCoinsAndExp}
+                    setStageData={setStageData}
+                    setStageVisibility={setStageVisibility}
+                    categoryId={String(categoryId)}
+                    item={item}
+                    isShown={shownLevelKey === keyId}
+                    isLevelLocked={isLevelLocked}
+                    index={index}
+                    meta={meta}
+                    keyId={keyId}
+                    stageVisibility={stageVisibility}
+                    useUserProgressData={useUserProgressData}
+                  />
                 );
               }}
               renderSectionHeader={({ section }) => (

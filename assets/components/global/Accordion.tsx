@@ -13,7 +13,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 type AccordionPayload = {
   header: string;
   contents: string;
@@ -75,10 +75,10 @@ const Accordion = ({ header, contents }: AccordionPayload) => {
           }}
         >
           <CodeHighlighter
-            hljsStyle={nightOwl}
+            hljsStyle={dracula}
             containerStyle={styles.codeContainer}
             textStyle={styles.text}
-            language={header}
+            language={"html"}
           >
             {formattedContents}
           </CodeHighlighter>

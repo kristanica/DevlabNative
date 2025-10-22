@@ -11,9 +11,7 @@ const claimAchievementMutation = () => {
       coinsReward,
     }: ClaimAchievementsPayload) =>
       claimAchievements({ achievementId, expReward, coinsReward }),
-    onSuccess: async (data) => {
-      console.log(data);
-
+    onSuccess: () => {
       setToastVisibility("success", `You've claimed an achievement!`);
     },
   });

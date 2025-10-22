@@ -5,19 +5,14 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-const StagesContainer = ({
-  stageInformation,
-  index,
-  isLocked,
-  isShown,
-}: any) => {
+const StagesContainer = ({ stageInformation, index, isLocked }: any) => {
   const isFocused = useIsFocused();
 
   const { onScale } = useSequentialAppearAnim({
     indicator: isFocused,
     id: index,
   });
-  console.log(isShown);
+
   return (
     <Animated.View
       style={[
