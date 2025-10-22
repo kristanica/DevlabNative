@@ -289,6 +289,8 @@ const StageScreen = () => {
               <SwipeLessonContainer>
                 {currentStageData.type !== "Lesson" && <Hearts />}
                 <StageGameComponent
+                  levelFinishedModal={levelFinishedModal}
+                  finalAnswerModal={finalAnswerModall}
                   currentStageData={currentStageData}
                   type={currentStageData?.type}
                   category={category}

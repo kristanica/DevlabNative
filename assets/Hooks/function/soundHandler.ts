@@ -22,9 +22,7 @@ const sounds: Record<string, Audio.Sound | null> = {
 };
 
 export const loadSounds = async () => {
-  for (const key in soundFiles) {
-    // prevent reloading if already loaded
-
+  const promise = Object.entries(soundFiles).map(async ([key, value]) => {
     const [result, error] = await tryCatch(
       Audio.Sound.createAsync(soundFiles[key])
     );
@@ -36,7 +34,10 @@ export const loadSounds = async () => {
     if (error) {
       console.error(`Error loading sound "${key}":`, error);
     }
-  }
+  });
+
+  await Promise.all(promise);
+  console.log("allsounds loaded");
 };
 
 export const playSound = async (soundName: string) => {
@@ -48,10 +49,12 @@ export const playSound = async (soundName: string) => {
 };
 
 export const unloadSounds = async () => {
-  for (const key in sounds) {
+  const promise = Object.entries(sounds).map(async ([key]) => {
     if (sounds[key]) {
       await sounds[key]?.unloadAsync();
       sounds[key] = null;
     }
-  }
+  });
+  await Promise.all(promise);
+  console.log("allsounds unloaded");
 };

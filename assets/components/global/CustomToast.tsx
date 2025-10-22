@@ -70,7 +70,7 @@ const CustomToast = () => {
       ]}
       className="h-[50px] w-52 mx-2 z-50  absolute left-50 border-[#ffffffaf] border-[2px] rounded-sm justify-center items-center "
     >
-      <Text className="text-white text-xs font-exoExtraBold">
+      <Text className="text-white text-xs font-exoExtraBold text-center">
         {toastMessage}
       </Text>
     </Animated.View>

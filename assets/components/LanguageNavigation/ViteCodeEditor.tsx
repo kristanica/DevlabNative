@@ -147,8 +147,7 @@ const ViteCodeEditor = ({
             margin: 8,
             borderRadius: 10,
           }}
-          // source={require("@/fontFamily/editor/index.html")}
-          source={{ html: "<h1>This is a static HTML source!</h1>" }}
+          source={require("@/fontFamily/editor/index.html")}
           onMessage={(e: WebViewMessageEvent) => {
             try {
               const val: CodeEditorPayload = JSON.parse(e.nativeEvent.data);

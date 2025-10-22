@@ -9,6 +9,8 @@ type codeCrafterPayload = {
   description: string;
   subject: string;
   gameType: string;
+  correctAnswer: string;
+  userAnswer: string;
 };
 
 export const apiCall = () => {
@@ -20,6 +22,8 @@ export const apiCall = () => {
       description,
       gameType,
       subject,
+      correctAnswer,
+      userAnswer,
     }: codeCrafterPayload) => {
       switch (gameType) {
         case "CodeCrafter": {
@@ -49,6 +53,11 @@ export const apiCall = () => {
             description,
             subject,
           });
+        }
+        case "BrainBytes": {
+          return {
+            correct: correctAnswer === userAnswer,
+          };
         }
         default: {
           throw new Error(`Unhandled subject type: ${subject}`);

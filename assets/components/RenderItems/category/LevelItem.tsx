@@ -20,8 +20,8 @@ const LevelItem = ({
     startTransition(() => {
       setShownLevelKey(key);
       setCoinsAndExp({
-        exp: item.exp,
-        coins: item.coins,
+        exp: item.expReward,
+        coins: item.coinsReward,
       });
       setStageData(String(categoryId), item.stages);
       setStageVisibility((prev: any) => ({

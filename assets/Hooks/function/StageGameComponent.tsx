@@ -14,6 +14,8 @@ const StageGameComponent = ({
   stageId,
   levelId,
   setCurrentStageIndex,
+  levelFinishedModal,
+  finalAnswerModal,
 }: any) => {
   const stageGameIdentier: Record<string, JSX.Element> = {
     Lesson: <StageLesson currentStageData={currentStageData}></StageLesson>,
@@ -22,6 +24,8 @@ const StageGameComponent = ({
     ),
     BrainBytes: (
       <StageBrainBytes
+        finalAnswerModal={finalAnswerModal}
+        levelFinishedModal={levelFinishedModal}
         currentStageData={currentStageData}
         stageId={stageId}
         levelId={levelId}

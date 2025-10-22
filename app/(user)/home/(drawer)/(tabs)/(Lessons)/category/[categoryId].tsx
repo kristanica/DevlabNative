@@ -20,29 +20,14 @@ const CategoryScreen = () => {
   RenderCounter("categoryid");
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
-  // const [stagesVisibility, setStagesVisibility] = useState<boolean>(false);
 
-  // const { setTracker, lastStageVisibility, setLastStageVisibility } = tracker(
-  //   useShallow((state) => ({
-  //     setTracker: state.setTracker,
-  //     lastStageVisibility: state.lastStageVisibility,
-  //     setLastStageVisibility: state.setLastStageVisibility,
-  //   }))
-  // );
   const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
   const setUnlockedStages = unlockedStages((state) => state.setUnlockedStages);
-  // const stageData = useStageStore((state) => state.stageData);
 
-  // const { fetchedLesson, isLoading } = fetchLesson(id);
   const setStageData = useStageStore((state) => state.setStageData);
-  const {
-    data: useUserProgressData,
-    isLoading: progressLoading,
-    isRefetching: isRefetching,
-    refetch: refetchUserProgress,
-  } = useQuery({
+  const { data: useUserProgressData, isLoading: progressLoading } = useQuery({
     queryKey: ["specificUserProgress", String(categoryId)],
     queryFn: async () => {
       const token = await auth.currentUser?.getIdToken(true);
@@ -60,21 +45,6 @@ const CategoryScreen = () => {
       return response.data;
     },
   });
-
-  // const stageVisibilility = useCallback(() => {
-  //   setStagesVisibility(false);
-  //   setLastStageVisibility(false);
-  // }, [setStagesVisibility, setLastStageVisibility]);
-
-  // const { renderItem } = CategoryItem(
-  //   useUserProgressData,
-  //   meta,
-  //   setVisibility,
-  //   setTracker,
-  //   setCoinsAndExp,
-  //   setStagesVisibility,
-  //   id
-  // );
 
   const { data: allData, isLoading } = useQuery({
     queryKey: ["getAllData", categoryId],
@@ -122,7 +92,7 @@ const CategoryScreen = () => {
           scaleStyle={scaleStyle}
           closeModal={closeModal}
         ></LockLessonModal>
-        {isLoading || progressLoading || isRefetching ? (
+        {isLoading || progressLoading ? (
           <SmallLoading />
         ) : (
           <>

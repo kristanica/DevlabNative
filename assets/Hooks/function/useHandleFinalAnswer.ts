@@ -1,3 +1,4 @@
+import { useBrainBytesStore } from "@/assets/zustand/useBrainBytesStore";
 import { RefObject } from "react";
 import { apiCall } from "../query/mutation/apiCall";
 import { makeLevelFeedback } from "../query/mutation/makeLevelFeedback";
@@ -29,14 +30,17 @@ export const useHandleFinalAnswer = ({
   currentStageData,
 }: useHandleFinalAnswerProps) => {
   const evaluateGame = apiCall();
-
-  const { nextStage } = useSubmitAnswer(setCurrentStageIndex);
-
+  const setUserAnswer = useBrainBytesStore.getState().setUserAnswer;
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();
   const levelFinishedModal = useModal();
   const feedBackModal = useModal();
   const makeFeedback = makeLevelFeedback();
+  const { nextStage } = useSubmitAnswer(
+    setCurrentStageIndex,
+    levelFinishedModal,
+    finalAnswerModall
+  );
 
   const { evaluationLessonMutation } = useEvaluationLesson();
 
@@ -64,7 +68,9 @@ export const useHandleFinalAnswer = ({
     receivedCode: any,
     type: string,
     setEvaluationData: any,
-    feedbackArray: any
+    feedbackArray: any,
+    userAnswer?: string,
+    correctAnswer?: string
   ) => {
     return new Promise(async (resolve, reject) => {
       if (type === "Lesson") {
@@ -75,21 +81,22 @@ export const useHandleFinalAnswer = ({
           levelId: levelId,
           category: category,
           setCurrentStageIndex,
-          levelFinishedModal,
-          finalAnswerModall,
           stageType: currentStageData.type,
         });
         resolve(evaluationResult);
         return;
       }
 
-      if (!receivedCode && type !== "Lesson") {
+      if (!receivedCode && type !== "Lesson" && type !== "BrainBytes") {
         console.log(receivedCode);
+        console.log("hey");
         setTimeout(() => finalAnswerModall.closeModal(), 100);
+        await playSound("wrongAnswer");
         resolve(["wrongAnswer", "Your code field is empty!"]);
         return;
       } else {
-        const stringReceivedCode = JSON.stringify(receivedCode);
+        const stringReceivedCode =
+          type === "BrainBytes" ? "" : JSON.stringify(receivedCode);
         evaluateGame.mutate(
           {
             submittedCode: stringReceivedCode,
@@ -101,6 +108,8 @@ export const useHandleFinalAnswer = ({
             description: currentStageData?.description,
             subject: category,
             gameType: currentStageData?.type,
+            correctAnswer: correctAnswer!,
+            userAnswer: userAnswer!,
           },
           {
             onSuccess: async (data) => {
@@ -111,11 +120,7 @@ export const useHandleFinalAnswer = ({
                 levelId: levelId,
                 category: category,
                 answer: data.correct,
-                setCurrentStageIndex,
-                levelFinishedModal,
-                finalAnswerModall,
                 stageType: currentStageData.type,
-                evaluationResult: data,
               });
 
               if (
@@ -132,6 +137,7 @@ export const useHandleFinalAnswer = ({
               }
 
               //Sets the data for the feedback on level end
+              setUserAnswer("");
               if (evaluationResult![0] === "levelUnlocked") {
                 setEvaluationData(
                   await makeFeedback.mutateAsync(feedbackArray.current)

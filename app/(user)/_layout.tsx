@@ -6,11 +6,12 @@ import { View } from "react-native";
 
 import { fetchAchievements } from "@/assets/API/fireBase/user/achievement/fetchAchievements";
 import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
+import { fetchContent } from "@/assets/API/fireBase/user/fetchContent";
 import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
 import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScreen";
 import { auth, URL } from "@/assets/constants/constants";
-import { loadSounds } from "@/assets/Hooks/function/soundHandler";
+import { loadSounds, unloadSounds } from "@/assets/Hooks/function/soundHandler";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useStageStore } from "@/assets/zustand/useStageStore";
@@ -78,6 +79,17 @@ const TabsLayout = () => {
     );
   }, []);
 
+  const preFetchContent = useCallback(() => {
+    return Promise.all(
+      category.map((subject: string) =>
+        queryClient.ensureQueryData({
+          queryKey: ["getAllData", subject],
+          queryFn: () => fetchContent(subject),
+        })
+      )
+    );
+  }, []);
+
   useEffect(() => {
     let cleanupUser: any = null;
 
@@ -94,6 +106,7 @@ const TabsLayout = () => {
         const promises: Promise<any>[] = [
           preFetchAchievements(),
           loadSounds(),
+          preFetchContent(),
           getUserAchivementProgress(),
           queryClient.ensureQueryData({
             queryKey: ["ActiveLeveld"],
@@ -138,6 +151,7 @@ const TabsLayout = () => {
     return () => {
       unsub();
       cleanupUser?.();
+      unloadSounds();
     };
   }, []);
 

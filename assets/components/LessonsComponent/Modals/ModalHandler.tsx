@@ -1,4 +1,5 @@
 import toastHandler from "@/assets/zustand/toastHandler";
+import { useBrainBytesStore } from "@/assets/zustand/useBrainBytesStore";
 import { router } from "expo-router";
 import React, { useCallback } from "react";
 import { StyleSheet } from "react-native";
@@ -43,14 +44,29 @@ const ModalHandler = ({
   feedbackArray,
 }: ModalHandlerProps) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+  const userAnswer = useBrainBytesStore.getState().userAnswer;
+  const correctAnswer = useBrainBytesStore.getState().correctAnswer;
   const handleFinalAnswerModal = useCallback(async () => {
+    let toastResult;
     finalAnswerModall.closeModal();
-    console.log(currentStageType + "modalHandler");
+    if (userAnswer) {
+      console.log(userAnswer + " UserAnswer?");
+      console.log(correctAnswer + " correctnAnwer");
+      toastResult = await handleFinalAnswer(
+        null,
+        currentStageType,
+        setEvaluationData,
+        feedbackArray,
+        userAnswer,
+        correctAnswer
+      );
+      return;
+    }
     if (category === "Database") {
       console.log(queryRecievedCode);
       console.log(queryRecievedCode.query + "modalHandler");
       const recievedCode = queryRecievedCode.query;
-      const toastResult = await handleFinalAnswer(
+      toastResult = await handleFinalAnswer(
         recievedCode,
         currentStageType,
         setEvaluationData,
@@ -59,7 +75,7 @@ const ModalHandler = ({
       setToastVisibility(toastResult[0], toastResult[1]);
       return;
     }
-    const toastResult = await handleFinalAnswer(
+    toastResult = await handleFinalAnswer(
       receivedCode,
       currentStageType,
       setEvaluationData,

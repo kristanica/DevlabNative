@@ -134,7 +134,7 @@ const ItemList = () => {
         console.log(location + "woahwoahwoha");
         setToastVisibility(
           "error",
-          `You cannot use Code whisper in ${location}`
+          `You cannot use CodeWhisper in ${location}`
         );
         return;
       }
@@ -159,10 +159,7 @@ const ItemList = () => {
     TimeFreeze: async (itemId) => {
       if (location !== "CodeRush") {
         // await playSound("wrongAnswer");
-        setToastVisibility(
-          "error",
-          `You cannot use that, you're in ${location}!`
-        );
+        setToastVisibility("error", `You cannot use TimeFreeze in ${location}`);
 
         console.log("youre not in code rush");
         return;
@@ -176,7 +173,7 @@ const ItemList = () => {
         // await playSound("wrongAnswer");
         setToastVisibility(
           "error",
-          `You cannot use that, you're in ${location}!`
+          `You cannot use ErrorShield in ${location}`
         );
 
         console.log("You cannot use items in here");
@@ -200,7 +197,7 @@ const ItemList = () => {
         // await playSound("wrongAnswer");
         setToastVisibility(
           "error",
-          `You cannot use that, you're in ${location}!`
+          `You cannot use BrainFilter in ${location}`
         );
 
         console.log("youre not in Brain Bytes");

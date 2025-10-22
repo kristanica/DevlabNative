@@ -3,7 +3,7 @@ import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
@@ -21,7 +21,7 @@ const LevelFinishedModal = ({
   isRewardClaimed,
   evaluationData,
 }: levelFinishedModalPayload) => {
-  const expAndCoins = setCoinsandExp((state) => state.coinsAndExp);
+  const coinsAndExp = setCoinsandExp((state) => state.coinsAndExp);
   const userHealth = userHealthPoints((state) => state.health);
   const { coinSurgeItem } = coinSurge();
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
@@ -46,20 +46,14 @@ const LevelFinishedModal = ({
       const userSnapShot = (await getDoc(userRef)).data();
 
       // Updates the user's exp and coins
-      await setDoc(
-        userRef,
-        {
-          exp: userSnapShot?.exp + expAndCoins?.exp,
-          coins: userSnapShot?.coins + expAndCoins?.coins,
-        },
-        {
-          merge: true,
-        }
-      );
-      console.log(expAndCoins);
+      await updateDoc(userRef, {
+        exp: (userSnapShot?.exp || 0) + coinsAndExp?.exp,
+        coins: (userSnapShot?.coins || 0) + coinsAndExp?.coins,
+      });
+      console.log(coinsAndExp);
     };
     giveReward();
-  }, [expAndCoins]);
+  }, [coinsAndExp]);
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
@@ -102,13 +96,13 @@ const LevelFinishedModal = ({
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         DevCoins: +
                         <Text className="text-[#e3be00]">
-                          {expAndCoins?.coins}
+                          {coinsAndExp?.coins}
                         </Text>
                       </Text>
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         Experience gained: +
                         <Text className="text-[#21b3cf]">
-                          {expAndCoins?.exp}
+                          {coinsAndExp?.exp}
                         </Text>
                       </Text>
                     </View>

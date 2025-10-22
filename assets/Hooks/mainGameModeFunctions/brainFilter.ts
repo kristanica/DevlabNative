@@ -17,14 +17,19 @@ const brainFilter = (
   lessonId: string,
   category: string,
   stageId: string,
-  levelId: string
+  levelId: string,
+  LevelFinishedModal: any
 ) => {
   const arrayChoices: any = Object.entries(choices)
     .filter(([key]) => key !== "correctAnswer")
     .map(([_, values]: any) => values);
   // const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   const setIsCorrect = isAnswerCorrect((state) => state.setIsCorrect);
-  const unlockNext = unlock(setCurrentStageIndex);
+  const unlockNext = unlock(
+    setCurrentStageIndex,
+    LevelFinishedModal,
+    "BrainBytes"
+  );
   const setActiveItem = ActiveItemIcon.getState().setActiveIcon;
   const { handleDecrementHp } = useHandleDecrementHp();
   const { handleGameOver } = useHandleGameOver();

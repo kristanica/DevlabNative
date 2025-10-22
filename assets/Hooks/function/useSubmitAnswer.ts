@@ -7,7 +7,9 @@ import { useHandleDecrementHp } from "./useHandleDecrementHp";
 import { useHandleGameOver } from "./useHandleGameOver";
 
 const useSubmitAnswer = (
-  setCurrentStageIndex: Dispatch<SetStateAction<number>>
+  setCurrentStageIndex: Dispatch<SetStateAction<number>>,
+  levelFinishedModal: any,
+  finalAnswerModall: any
 ) => {
   const healthPointsTracker = userHp.getState().userHp;
   const unlockNext = unlock(setCurrentStageIndex);
@@ -22,12 +24,9 @@ const useSubmitAnswer = (
       category,
       answer,
 
-      levelFinishedModal,
-      finalAnswerModall,
       stageType,
     }: any) => {
       if (answer || stageType === "Lesson") {
-        console.log("iseSubmitanswer new");
         const unlockData = await unlockNext.mutateAsync({
           category,
           lessonId,

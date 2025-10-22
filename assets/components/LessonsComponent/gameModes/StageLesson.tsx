@@ -1,4 +1,5 @@
 import useModal from "@/assets/Hooks/useModal";
+import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ResizeMode, Video } from "expo-av";
 import React, { Suspense, useRef } from "react";
@@ -13,6 +14,7 @@ type StageLessonprops = {
 };
 
 const StageLesson = ({ currentStageData }: any) => {
+  const coinsAndExp = setCoinsandExp((state) => state.coinsAndExp);
   const videoRef = useRef<Video>(null);
   const lesson = useModal();
   RenderCounter("StageLesson");
@@ -66,8 +68,6 @@ const StageLesson = ({ currentStageData }: any) => {
               );
             }
             case "Image": {
-              console.log("Image value:", item.value);
-              console.log("Image value type:", typeof item.value);
               return (
                 <Image
                   key={item.id}
@@ -106,7 +106,7 @@ const StageLesson = ({ currentStageData }: any) => {
       <View className="bg-accentContainer p-3  my-3">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
-          {currentStageData?.instruction}
+          {currentStageData?.instruction} {coinsAndExp!.exp} 123
         </Text>
         <View className="bg-background my-3 flex-col">
           {currentStageData?.codingInterface &&
