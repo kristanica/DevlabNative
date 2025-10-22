@@ -64,6 +64,8 @@ const CategoryScreen = () => {
 
       return data.data;
     },
+    gcTime: Infinity,
+    staleTime: Infinity,
   });
 
   const temp = useMemo(() => {

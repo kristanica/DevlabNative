@@ -15,7 +15,8 @@ const HomeLesson = ({
       <View className=" flex flex-row  items-center">
         <Image source={icon} className="w-[50px] h-[50px] mr-2"></Image>
         <Text className="text-white font-exoBold   xs:text-xs">
-          {name.toLocaleUpperCase()}
+          {name.toLocaleUpperCase()}{" "}
+          {name !== "Database" ? "DEVELOPMENT" : "QUERYING"}
         </Text>
       </View>
 

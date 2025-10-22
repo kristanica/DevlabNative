@@ -17,7 +17,7 @@ type ModalHandlerProps = {
   evaluationLessonMutation: any;
   handleFinalAnswer: any;
   receivedCode: any;
-  stageData: any;
+
   queryRecievedCode: any;
   finalAnswerModall: any;
   isRewardClaimed: any;

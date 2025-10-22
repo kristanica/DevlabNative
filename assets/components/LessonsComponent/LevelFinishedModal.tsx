@@ -3,10 +3,18 @@ import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import { router } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
 import Accordion from "../global/Accordion";
 import SmallLoading from "../global/SmallLoading";
@@ -126,6 +134,21 @@ const LevelFinishedModal = ({
                     )}
                   </View>
                 )}
+                <TouchableOpacity
+                  onPress={() =>
+                    router.replace({
+                      pathname: "/(user)/home/stage/[stageId]",
+                      params: {
+                        stageId: "Stage1",
+                        category: "Css", // Use categoryId directly
+                        lessonId: "Lesson1",
+                        levelId: "Level2",
+                      },
+                    })
+                  }
+                >
+                  <Text className="text-white">HELLO</Text>
+                </TouchableOpacity>
               </View>
             </View>
 

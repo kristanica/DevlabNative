@@ -14,7 +14,7 @@ import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
 import codeWhisper from "@/assets/Hooks/mainGameModeFunctions/globalItems/codeWhisper";
 import { RenderStageEditor } from "@/assets/Hooks/stageScreenHandles/RenderStageEditor";
-import { useCurrentStageData } from "@/assets/Hooks/stageScreenHandles/useCurrentStageData";
+import { sampleStageData } from "@/assets/Hooks/stageScreenHandles/sampleStageData";
 import { useStageNavigation } from "@/assets/Hooks/stageScreenHandles/useStageNavigation";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
@@ -37,16 +37,31 @@ const StageScreen = () => {
   //feedback on level end setter
   const [evaluationData, setEvaluationData] = useState<any>();
 
+  // const {
+  //   currentStageIndex,
+  //   setCurrentStageIndex,
+  //   currentStageData,
+
+  //   currentStageType,
+  //   gameIdentifier,
+  //   feedbackArray,
+  //   stageLength,
+  // } = useCurrentStageData(String(stageId), String(category));
+
   const {
     currentStageIndex,
     setCurrentStageIndex,
     currentStageData,
-    stageData,
     currentStageType,
     gameIdentifier,
     feedbackArray,
     stageLength,
-  } = useCurrentStageData(String(stageId), String(category));
+  } = sampleStageData(
+    String(category),
+    String(lessonId),
+    String(levelId),
+    String(stageId)
+  );
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
   const lastOpenedStage = useGetUserInfo((state) => state.userData);
 
@@ -102,6 +117,7 @@ const StageScreen = () => {
   // Necessary variables for database
   const databaseQueryingFunctions = useCodeEditorDatabase();
   // Necessary variables for code editor
+
   const {
     webRef,
     sendToWebView,
@@ -123,8 +139,17 @@ const StageScreen = () => {
     terminalRef.current?.expand();
   }, []);
 
-  // CODE WHISPER START
-
+  // CODE WHISPER
+  // const { content, getLessonData, getLevelData, dataCurrentStage } =
+  //   sampleStageData(String(category), String(lessonId), String(levelId));
+  // console.log(dataCurrentStage[currentStageIndex]);
+  // const queryClient = useQueryClient();
+  // const content =
+  //   queryClient.getQueryData<any[]>(["getAllData", String(category)]) ?? [];
+  // console.log(content);
+  // const lesson = content.find((lesson: any) => lesson.id === lessonId);
+  // const temp = lesson.levels.find((level: any) => level.id === levelId);
+  // console.log(temp.stages);
   // Sets the loading/hint once codewhisper is used
   const [hintLoading, setHintLoading] = useState<boolean>(false);
   const [generatedHint, setGeneratedHint] = useState<string>("");
@@ -139,7 +164,7 @@ const StageScreen = () => {
     setGeneratedHint,
     setHintLoading
   );
-  console.log(category);
+
   useEffect(() => {
     const run = async () => {
       const useItem = async (itemName: string, useThisItem: any) => {
@@ -265,7 +290,6 @@ const StageScreen = () => {
                   evaluationLessonMutation={evaluationLessonMutation}
                   handleFinalAnswer={handleFinalAnswer}
                   receivedCode={receivedCode}
-                  stageData={stageData}
                   category={String(category)}
                 />
                 {hintModall.visibility && (
@@ -326,6 +350,7 @@ const StageScreen = () => {
                       </Text>
                     </Pressable>
                   )}
+
                   {(currentStageData?.type !== "BrainBytes" ||
                     islevelCompleted) && (
                     <Pressable onPress={handleNext}>

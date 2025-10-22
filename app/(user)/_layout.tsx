@@ -37,47 +37,51 @@ const TabsLayout = () => {
           queryKey: ["Achievement", val],
           queryFn: () => fetchAchievements(val),
           staleTime: 10 * 60 * 1000,
+          gcTime: Infinity,
         })
       )
     );
-  }, []);
-  const preFetchStageData = useCallback((currentUserData: any) => {
-    console.log(currentUserData["Html"] + "WOAAAAAAAAAAAAAAAAAAAh");
-    return Promise.all(
-      category.map((val: string) =>
-        queryClient.ensureQueryData({
-          queryKey: [
-            "SampleStages",
-            currentUserData[val].subject,
-            currentUserData[val].lessonId,
-            currentUserData[val].levelId,
-          ],
-          queryFn: async () => {
-            const token = await auth.currentUser?.getIdToken(true);
-            const [res, error] = await tryCatch(
-              axios.get(
-                `${URL}/fireBase/getSpecificStage/${currentUserData[val].subject}/${currentUserData[val].lessonId}/${currentUserData[val].levelId}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              )
-            );
+  }, [queryClient]);
+  const preFetchStageData = useCallback(
+    (currentUserData: any) => {
+      console.log(currentUserData["Html"] + "WOAAAAAAAAAAAAAAAAAAAh");
+      return Promise.all(
+        category.map((val: string) =>
+          queryClient.ensureQueryData({
+            queryKey: [
+              "SampleStages",
+              currentUserData[val].subject,
+              currentUserData[val].lessonId,
+              currentUserData[val].levelId,
+            ],
+            queryFn: async () => {
+              const token = await auth.currentUser?.getIdToken(true);
+              const [res, error] = await tryCatch(
+                axios.get(
+                  `${URL}/fireBase/getSpecificStage/${currentUserData[val].subject}/${currentUserData[val].lessonId}/${currentUserData[val].levelId}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                )
+              );
 
-            if (error) {
-              console.log(error);
-              return null; // ✅ ensure no undefined return
-            }
+              if (error) {
+                console.log(error);
+                return null; // ✅ ensure no undefined return
+              }
 
-            const data = res?.data;
-            useSetStageStore(val, data);
-            return data;
-          },
-        })
-      )
-    );
-  }, []);
+              const data = res?.data;
+              useSetStageStore(val, data);
+              return data;
+            },
+          })
+        )
+      );
+    },
+    [queryClient]
+  );
 
   const preFetchContent = useCallback(() => {
     return Promise.all(
@@ -85,10 +89,12 @@ const TabsLayout = () => {
         queryClient.ensureQueryData({
           queryKey: ["getAllData", subject],
           queryFn: () => fetchContent(subject),
+          gcTime: Infinity,
+          staleTime: Infinity,
         })
       )
     );
-  }, []);
+  }, [queryClient]);
 
   useEffect(() => {
     let cleanupUser: any = null;
