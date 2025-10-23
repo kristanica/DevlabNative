@@ -5,14 +5,14 @@ import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 // Renders the online code editor
 const CodingPlayground = () => {
   //Neceassry variables for code editor
-
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
   const {
     webRef,
     sendToWebView,
@@ -45,6 +45,8 @@ const CodingPlayground = () => {
             </Pressable>
             {/* Language selector Html/Css/Js */}
             <SelectLanguageNavigation
+              setSelectedLanguage={setSelectedLanguage}
+              selectedLanguage={selectedLanguage}
               subject=""
               sendToWebView={sendToWebView}
             ></SelectLanguageNavigation>

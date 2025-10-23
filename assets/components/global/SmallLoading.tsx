@@ -1,12 +1,26 @@
 import LottieView from "lottie-react-native";
-import React from "react";
-import { StyleSheet, Text } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
-
+import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import Animated, {
+  FadeIn,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 type SmallLoadingProps = {
   text?: string;
 };
 const SmallLoading = ({ text }: SmallLoadingProps) => {
+  const opacityVal = useSharedValue<number>(0.5);
+
+  const opacityStyle = useAnimatedStyle(() => ({
+    opacity: opacityVal.value,
+  }));
+  useEffect(() => {
+    opacityVal.value = withRepeat(withTiming(1, { duration: 800 }), -1, true);
+  }, []);
+
   return (
     <Animated.View
       entering={FadeIn.duration(1000)}
@@ -18,9 +32,12 @@ const SmallLoading = ({ text }: SmallLoadingProps) => {
         autoPlay
       />
 
-      <Text className="text-white  text-lg xs:text-[10px] font-exoBold">
+      <Animated.Text
+        style={opacityStyle}
+        className="text-white  text-lg xs:text-[10px] font-exoBold"
+      >
         {text || "Please wait"}
-      </Text>
+      </Animated.Text>
     </Animated.View>
   );
 };

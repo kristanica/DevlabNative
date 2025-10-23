@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import SelectLanguageNavigation from "../../LanguageNavigation/SelectLanguageNavigation";
 type StageHeaderProps = {
@@ -14,6 +14,7 @@ export const StageHeader = ({
   category,
   sendToWebView,
 }: StageHeaderProps) => {
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
   return (
     <View className="flex-row justify-between items-center mb-5">
       <Pressable onPress={handleBackPress}>
@@ -21,14 +22,15 @@ export const StageHeader = ({
           Back
         </Text>
       </Pressable>
-
+      {category !== "Database" && category === "JavaScript" && (
+        <Pressable onPress={handleExpandTerminal}>
+          <Ionicons name="terminal" size={20} color="white" />
+        </Pressable>
+      )}
       <View>
-        {category !== "Database" && category === "JavaScript" && (
-          <Pressable onPress={handleExpandTerminal}>
-            <Ionicons name="terminal" size={20} color="white" />
-          </Pressable>
-        )}
         <SelectLanguageNavigation
+          setSelectedLanguage={setSelectedLanguage}
+          selectedLanguage={selectedLanguage}
           subject={String(category)}
           sendToWebView={sendToWebView}
         />

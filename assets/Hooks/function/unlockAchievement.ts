@@ -1,7 +1,8 @@
 import { auth, db } from "@/assets/constants/constants";
+import toastHandler from "@/assets/zustand/toastHandler";
 import { useAchievementStore } from "@/assets/zustand/useAchievementStore";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import Toast from "react-native-toast-message";
+import { playSound } from "./soundHandler";
 
 export const unlockAchievement = async (
   subject: string,
@@ -10,6 +11,7 @@ export const unlockAchievement = async (
 ) => {
   const userId = auth.currentUser?.uid;
   const achievementStore = useAchievementStore.getState().achievementStore;
+  const setToastVisibility = toastHandler.getState().setToastVisibility;
   try {
     for (const achievement of achievementStore[subject]) {
       const condition = achievement?.unlockCondition;
@@ -68,14 +70,8 @@ export const unlockAchievement = async (
           achievementName: achievement.title,
           dateUnlocked: new Date(),
         });
-        Toast.show({
-          type: "success",
-          text1: "Achievement Unlocked",
-          text2: `${achievement?.title}`,
-          visibilityTime: 3000,
-          position: "top",
-          topOffset: 20,
-        });
+        setToastVisibility("success", "You've unlocked an Achievement!");
+        await playSound("achievementUnlocked");
       }
     }
   } catch (error) {

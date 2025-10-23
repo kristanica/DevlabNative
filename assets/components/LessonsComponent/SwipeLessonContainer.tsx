@@ -42,7 +42,7 @@ const SwipeLessonContainer = ({ children }: SwipeLessonContainerProps) => {
   return (
     <Animated.View
       style={[swipeStyle]}
-      className="w-full bg-background px-2 absolute bottom-0 border-[2px]  border-[#1c474d] border-b-0 pt-[20px] rounded-tl-[10px] rounded-tr-[10px]"
+      className="w-full bg-background px-2 absolute bottom-0 border-[2px]  border-[#2a3141] border-[1px]border-b-0 pt-[20px] rounded-tl-[10px] rounded-tr-[10px]"
     >
       <TouchableOpacity
         onPress={toggleContainer}

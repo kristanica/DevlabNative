@@ -95,6 +95,7 @@ const ModalHandler = ({
     category,
     setToastVisibility,
   ]);
+  //Back to main button on LevelfinishedModal
   const handleLevelFinished = useCallback(async () => {
     router.replace({
       pathname: "/home/category/[categoryId]",

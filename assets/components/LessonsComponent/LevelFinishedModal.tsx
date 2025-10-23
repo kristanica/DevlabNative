@@ -83,7 +83,7 @@ const LevelFinishedModal = ({
             isRewardClaimed ? `h-[30%]` : `h-[70%]`
           } ] w-3/4 m-auto  rounded-[10px]`}
         >
-          <View className=" flex-[1] bg-modal rounded-xl border-[##6c37a5] border-[1px]">
+          <View className=" flex-[1] bg-modal rounded-xl border-[#2a3141] border-[1px]">
             <Text className=" text-center text-[#f5ff42] font-exoExtraBold text-3xl mt-2">
               LEVEL COMPLETED
             </Text>
@@ -145,13 +145,13 @@ const LevelFinishedModal = ({
             <View
               className={`${
                 isRewardClaimed ? `flex-[1]` : ``
-              } justify-center items-center`}
+              } items-center flex-row justify-evenly mb-11`}
             >
-              <Pressable onPress={onConfirm}>
+              <TouchableOpacity onPress={onConfirm}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
                   Back to Main
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
               {(nextLevelPayload || nextLessonPayload) && (
                 <TouchableOpacity
                   onPress={() => {
@@ -172,7 +172,9 @@ const LevelFinishedModal = ({
                     });
                   }}
                 >
-                  <Text className="text-white">HELLO</Text>
+                  <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-yellow-500 rounded-2xl">
+                    Contitnue
+                  </Text>
                 </TouchableOpacity>
               )}
             </View>

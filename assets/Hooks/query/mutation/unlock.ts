@@ -10,6 +10,7 @@ export const unlock = (
 ) => {
   const setToastVisibility = toastHandler.getState().setToastVisibility;
   return useMutation({
+    mutationKey: ["unlockNext"],
     mutationFn: async ({
       category,
       lessonId,

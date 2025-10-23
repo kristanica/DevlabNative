@@ -6,7 +6,7 @@ import {
   FIREBASE_STORAGE,
   FIREBASE_STORE,
 } from "../../firebaseConfig";
-export const URL = `https://3bb896c189a1.ngrok-free.app` as const;
+export const URL = `https://c2e539b3c9ac.ngrok-free.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -248,6 +248,29 @@ export const evaluatingCodeLines = [
   "Decoding cryptic variable names...",
   "Blessing your tags with accessibility...",
   "Debugging while humming the internet’s anthem...",
+] as const;
+
+export const devlabEvalLines = [
+  "Consulting ancient code scrolls for syntax approval...",
+  "Rolling d20 to determine if your logic crits or flops...",
+  "Summoning the bug oracle for divine judgment...",
+  "Whispering your code to the AI dungeon master...",
+  "Checking if your semicolons formed a legal alliance...",
+  "Analyzing code aura... chaotic neutral detected...",
+  "Measuring indentation alignment with cosmic standards...",
+  "Running emotional damage test on your variables...",
+  "Injecting your code into the simulation... hope it survives...",
+  "Casting `analyze()` with 87% chance of self-doubt...",
+  "Interrogating your functions under bright debug lights...",
+  "Comparing your logic to prophecies from StackOverflowia...",
+  "Checking if your loop is cursed or just confused...",
+  "Letting the AI judge your if-statements silently...",
+  "Calculating the probability that you forgot a return...",
+  "Feeding your code to the Compiler Dragon...",
+  "Translating your code into binary tears...",
+  "Scanning for vibes... logic suspiciously confident...",
+  "Evaluating... please hold your emotional support duck...",
+  "Weighing your code’s sins on the scales of recursion...",
 ] as const;
 
 //Onboarding Constants

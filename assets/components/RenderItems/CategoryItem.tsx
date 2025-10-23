@@ -51,7 +51,6 @@ const CategoryItem = ({
             if (!isStageLocked && stage.isHidden) {
               return null;
             }
-            console.log(stage.isHidden, stage.id);
 
             return (
               <StageItem

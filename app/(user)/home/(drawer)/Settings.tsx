@@ -62,7 +62,10 @@ const Settings = () => {
             style={[keyBoardHandlingStyle, { marginTop: headerHeight - 20 }]}
           >
             {isMutating > 0 && (
-              <FillScreenLoading text="Updating Profile"></FillScreenLoading>
+              <FillScreenLoading
+                text="Updating Profile"
+                showBoot={false}
+              ></FillScreenLoading>
             )}
             <View className="flex-[1] justify-center items-center">
               <Pressable

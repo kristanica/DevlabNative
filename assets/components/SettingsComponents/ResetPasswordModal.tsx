@@ -53,18 +53,22 @@ const ResetPasswordModal = ({
 
     setToastVisibility("success", "Password has been reset!");
   };
+
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1">
+      <Pressable onPress={closeModal} className="flex-1 bg-black/50">
         <Animated.View
-          className="   w-[250px] h-[200px] m-auto rounded-[10px] "
+          className="   w-[300px] h-[250px] m-auto rounded-[10px] "
           style={[scaleStyle]}
         >
-          <View className="justify-center items-center flex-[1] bg-modal rounded-3xl px-5">
-            <Text className="text-white text-center font-exoBold text-xs">
-              Forgot password
+          <View className="justify-center items-center flex-[1]  border-[#2a3141] border-[1px] bg-modal rounded-3xl px-5">
+            <Text className="text-white text-center font-exoBold text-lg mb-2">
+              FORGOT PASSWORD
             </Text>
-
+            <Text className="text-white/60 text-center font-exoRegular text-xs mb-6">
+              Enter your current and new password and we'll send you a link to
+              reset your password.
+            </Text>
             <View>
               <InputBox
                 icon={"lock-closed"}

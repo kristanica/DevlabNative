@@ -3,6 +3,7 @@ import userHp from "@/assets/zustand/userHp";
 import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { unlock } from "../query/mutation/unlock";
+import { unlockAchievement } from "./unlockAchievement";
 import { useHandleDecrementHp } from "./useHandleDecrementHp";
 import { useHandleGameOver } from "./useHandleGameOver";
 
@@ -18,6 +19,7 @@ const useSubmitAnswer = (
   const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
   const setUnlocknextLesson = unlockNextLevel.getState().unlockNextLevel;
   const nextStage = useMutation({
+    mutationKey: ["submitAnswer"],
     mutationFn: async ({
       stageId,
       lessonId,
@@ -34,6 +36,10 @@ const useSubmitAnswer = (
           levelId,
           stageId,
         });
+        await unlockAchievement(category, "firstLevelComplete", {
+          Levelid: levelId,
+          lessonId: lessonId,
+        });
         if (unlockData.isNextLevelUnlocked) {
           finalAnswerModall.closeModal();
           setTimeout(() => {
@@ -48,6 +54,9 @@ const useSubmitAnswer = (
           return ["levelUnlocked", "You've finished a level!"];
         } else if (unlockData.isNextLessonUnlocked) {
           finalAnswerModall.closeModal();
+          await unlockAchievement(category, "lessonComplete", {
+            lessonId: lessonId,
+          });
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);

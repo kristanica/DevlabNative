@@ -74,7 +74,6 @@ export const useHandleFinalAnswer = ({
   ) => {
     return new Promise(async (resolve, reject) => {
       if (type === "Lesson") {
-        console.log("OKEASE?");
         const evaluationResult = nextStage.mutateAsync({
           stageId: currentStageData.id,
           lessonId: String(lessonId),
@@ -111,6 +110,7 @@ export const useHandleFinalAnswer = ({
             correctAnswer: correctAnswer!,
             userAnswer: userAnswer!,
           },
+
           {
             onSuccess: async (data) => {
               setTimeout(() => finalAnswerModall.closeModal(), 100);

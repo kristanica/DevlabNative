@@ -1,5 +1,6 @@
 import { auth, db, height } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
 import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
@@ -29,10 +30,9 @@ import Animated, {
 } from "react-native-reanimated";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
-const ItemList = () => {
+const ItemList = ({ category }: any) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
-
   const inventory = useGetUserInfo((state) => state.inventory);
   const activeItem = ActiveItemIcon((state) => state.activeIcon);
   const setActiveItem = ActiveItemIcon((state) => state.setActiveIcon);
@@ -182,7 +182,7 @@ const ItemList = () => {
       }
       if (activeItem.ErrorShield) {
         console.log("Errros shiled already in effect");
-        setToastVisibility("error", `You've already used this!`);
+        setToastVisibility("error", `Error Shield is already in effect!`);
         return;
       }
       // await playSound("success");
@@ -295,10 +295,14 @@ const ItemList = () => {
                   key={userInvItems.id}
                   onPress={() => {
                     console.log("Location:", location);
-                    console.log("Item title:", userInvItems.title);
-                    const action = useItemActions[userInvItems.title];
+                    console.log("Item title:", userInvItems.Icon);
+                    const action =
+                      useItemActions[userInvItems.Icon.replace("_Icon", "")];
                     console.log("Action found:", !!action);
                     action?.(userInvItems.id);
+                    unlockAchievement(category, "itemUse", {
+                      itemName: userInvItems.title,
+                    });
                   }}
                 >
                   <UserInventoryItems {...userInvItems} />

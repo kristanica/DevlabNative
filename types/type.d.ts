@@ -7,6 +7,7 @@ type purchaseItemPayload = {
   id: string;
   cost: number;
   itemName: string;
+  itemIcon: string;
 };
 
 type submitAnswerPayload = {

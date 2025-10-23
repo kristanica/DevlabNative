@@ -13,7 +13,6 @@ import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScree
 import { auth } from "@/assets/constants/constants";
 import { loadSounds, unloadSounds } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
-import { useStageStore } from "@/assets/zustand/useStageStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -21,7 +20,7 @@ const TabsLayout = () => {
   const [isReady, setIsReady] = useState(false);
   const queryClient = useQueryClient();
   const getValidUser = useGetUserInfo((state) => state.getUser);
-  const useSetStageStore = useStageStore((state) => state.setStageData);
+  // const useSetStageStore = useStageStore((state) => state.setStageData);
 
   const getUserAchivementProgress = useGetUserInfo(
     (state) => state.getUserAchievementProgress
@@ -67,7 +66,7 @@ const TabsLayout = () => {
 
   //             if (error) {
   //               console.log(error);
-  //               return null; // ✅ ensure no undefined return
+  //               return null;
   //             }
 
   //             const data = res?.data;
@@ -104,8 +103,8 @@ const TabsLayout = () => {
       }
       const loadProgress = async () => {
         cleanupUser = await getValidUser();
-        const currentUserData =
-          useGetUserInfo.getState().userData?.lastOpenedLevel;
+        // const currentUserData =
+        //   useGetUserInfo.getState().userData?.lastOpenedLevel;
 
         const promises: Promise<any>[] = [
           preFetchAchievements(),

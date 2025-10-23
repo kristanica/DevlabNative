@@ -20,6 +20,7 @@ import { useStageNavigation } from "@/assets/Hooks/stageScreenHandles/useStageNa
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";
 import useModal from "@/assets/Hooks/useModal";
+import { unlockedStages } from "@/assets/zustand/unlockedStages";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { useIsMutating, useMutation } from "@tanstack/react-query";
@@ -64,14 +65,29 @@ const StageScreen = () => {
   );
   const levelProgress = useGetUserInfo((state) => state.allProgressLevels);
   const lastOpenedStage = useGetUserInfo((state) => state.userData);
-
+  const unlockStage = unlockedStages((state) => state.unlockedStages);
   //useMemos
   const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
   // const stageKey = useMemo(
   //   () => `${lessonId}-${levelId}-${currentStageData.id}`,
-  //   [lessonId, levelId, currentStageData.id]
+  //   [lessonId, levelId, currentStageData]
   // );
 
+  // const isStageAlreadyCompleted = useMemo(() => unlockStage[stageKey], []);
+  // console.log(isStageAlreadyCompleted + "isStageAlreadyCompleted")
+
+  // const stageKey = useMemo(
+  //   () => `${lessonId}-${levelId}-${currentStageData.id}`,
+  //   [lessonId, levelId, currentStageData.id]
+  // );
+  const stageKey = useMemo(() => {
+    if (!currentStageData) return null;
+    return `${lessonId}-${levelId}-${currentStageData.id}`;
+  }, [lessonId, levelId, currentStageData]);
+  const isStageAlreadyCompleted = useMemo(() => {
+    if (!stageKey) return false;
+    return Boolean(unlockStage[stageKey]);
+  }, [stageKey, unlockStage]);
   //checks whether the user  has claimed the reward for the level
   const isRewardClaimed = useMemo(
     () =>
@@ -111,7 +127,8 @@ const StageScreen = () => {
     islevelCompleted,
     stageLength,
     finalAnswerModall.setVisibility,
-    levelFinishedModal.setVisibility
+    levelFinishedModal.setVisibility,
+    isStageAlreadyCompleted
     // stageKey
   );
   // Necessary variables for database
@@ -130,9 +147,24 @@ const StageScreen = () => {
 
   const hintModall = useModal();
   const isMutating = useIsMutating({
-    predicate: (mutation) =>
-      mutation.options.mutationKey?.[0] !== "lastOpenedStage",
+    predicate: (mutation) => {
+      return mutation.options.mutationKey?.[0] !== "lastOpenedStage";
+    },
   });
+  //NOTE: will skip the loading screen when unlockg next stage. Still unstable
+  // const ignore: string[] = ["lastOpenedStage", "unlockNext", "submitAnswer"];
+  // const hintModall = useModal();
+  // const isMutating = useIsMutating({
+  //   predicate: (mutation) => {
+  //     const key = mutation.options.mutationKey?.[0];
+  //     console.log(key + "WOAHHHH");
+  //     if (ignore.includes(String(key))) {
+  //       return false;
+  //     }
+
+  //     return true;
+  //   },
+  // });
 
   // Show/hide terminal
   const handleExpandTerminal = useCallback(() => {
@@ -203,6 +235,7 @@ const StageScreen = () => {
       stage,
       title,
       description,
+      gameMode,
     }: {
       lesson: string;
       level: string;
@@ -210,6 +243,7 @@ const StageScreen = () => {
       stage: string;
       title: string;
       description: string;
+      gameMode: string;
     }) => {
       const userRef = doc(db, "Users", String(lastOpenedStage?.id));
 
@@ -222,6 +256,7 @@ const StageScreen = () => {
           stageId: stage,
           title: title,
           description: description,
+          gameMode: gameMode,
         },
       });
     },
@@ -246,6 +281,7 @@ const StageScreen = () => {
       stage: currentStageData.id,
       title: currentStageData.title,
       description: currentStageData.description,
+      gameMode: currentStageData?.type,
     });
   }, [lessonId, levelId, currentStageData, category]);
   const isStageDataReady = !!currentStageData;
@@ -315,7 +351,7 @@ const StageScreen = () => {
                   logs={logs}
                 />
                 {!hintLoading && currentStageData?.type !== "Lesson" && (
-                  <ItemList />
+                  <ItemList category={String(category)} />
                 )}
               </KeyboardAwareScrollView>
 
@@ -361,7 +397,7 @@ const StageScreen = () => {
                   )}
 
                   {(currentStageData?.type !== "BrainBytes" ||
-                    islevelCompleted) && (
+                    isStageAlreadyCompleted) && (
                     <Pressable onPress={handleNext}>
                       <Text className="px-7 py-2 bg-[#2ECC71] text-white self-start rounded-3xl font-exoRegular text-xs xs:text-[10px]">
                         Next

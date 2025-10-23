@@ -4,7 +4,7 @@ import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { FlashList } from "@shopify/flash-list";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import React, { useCallback } from "react";
 import ShopItem from "../../ShopItem";
 type ShopListProps = {
   shopItem: any;
@@ -17,13 +17,20 @@ const ShopList = ({ shopItem }: ShopListProps) => {
     mutationFn: async ({
       id,
       cost,
+      itemIcon,
       itemName,
     }: {
       id: string;
       cost: number;
+      itemIcon: string;
       itemName: string;
     }) => {
-      return purchaseItem({ id: id, cost: cost, itemName: itemName });
+      return purchaseItem({
+        id: id,
+        cost: cost,
+        itemIcon: itemIcon,
+        itemName: itemName,
+      });
     },
     onSuccess: async (data) => {
       useGetUserInfo
@@ -31,12 +38,25 @@ const ShopList = ({ shopItem }: ShopListProps) => {
         .setUserData({ ...userData!, coins: data?.newCoins });
       queryClient.invalidateQueries({ queryKey: ["userData"] });
       playSound("purchase");
-      setToastVisibility("success", "You've brought an item!");
+      setToastVisibility("success", "You've bought an item!");
     },
     onError: () => {
       setToastVisibility("error", "Not enough coins!");
     },
   });
+
+  const handlePurchase = useCallback(
+    ({ id, cost, icon, title }: any) => {
+      mutation.mutate({
+        id: String(id),
+        cost: Number(cost),
+        itemIcon: icon.replace(".png", ""),
+        itemName: title,
+      });
+    },
+    [mutation]
+  );
+
   return (
     <>
       <FlashList
@@ -49,11 +69,13 @@ const ShopList = ({ shopItem }: ShopListProps) => {
             index={index}
             key={item.id}
             handlePurchase={() => {
-              console.log("purcahse");
-              mutation.mutate({
-                id: String(item.id),
+              if (!item.id || !item.cost || !item.Icon || !item.title) return;
+
+              handlePurchase({
+                id: item.id,
                 cost: item.cost,
-                itemName: item.Icon.replace(".png", ""),
+                icon: item.Icon,
+                title: item.title,
               });
             }}
           />

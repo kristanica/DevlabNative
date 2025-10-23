@@ -8,8 +8,8 @@ export const useStageNavigation = (
   islevelCompleted: boolean,
   stageLength: number,
   setFinalAsnwerVisibility: (val: boolean) => void,
-  setFinishedModalVisibility: (val: boolean) => void
-  // stageKey: string
+  setFinishedModalVisibility: (val: boolean) => void,
+  isStageAlreadyCompleted: boolean
 ) => {
   //Handles the previous button
 
@@ -37,7 +37,7 @@ export const useStageNavigation = (
   const handleNext = useCallback(() => {
     setCurrentStageIndex((prev: number) => {
       // If level is completed, skips the loading
-      if (islevelCompleted) {
+      if (isStageAlreadyCompleted) {
         if (prev < stageLength - 1) {
           return prev + 1;
         } else {
@@ -50,7 +50,12 @@ export const useStageNavigation = (
       setFinalAsnwerVisibility(true);
       return prev;
     });
-  }, []);
+  }, [
+    isStageAlreadyCompleted,
+    stageLength,
+    setFinishedModalVisibility,
+    setFinalAsnwerVisibility,
+  ]);
 
   return {
     handlePrevious,

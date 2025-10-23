@@ -16,42 +16,29 @@ const CodeCrafterModal = ({
           style={[scaleStyle]}
           className="aspect-square w-5/6 max-w-[350px] m-auto rounded-3xl shadow-2xl shadow-black/80"
         >
-          <View className="flex-1 bg-[#16161A] border border-[#7F5AF0]/40 rounded-3xl p-5 justify-center items-center">
-            <Text className="text-white font-exoBold xs:text-sm text-justify">
-              Welcome to CodeCrafter — a coding challenge that tests both your
-              creativity and precision!
+          <View className="flex-1 bg-[#16161A] border-[#2a3141] border-[1px] rounded-3xl p-5 justify-center items-center">
+            <Text className="text-white font-exoBold text-center text-base mb-3">
+              Welcome to <Text className="text-[#7F5AF0]">Code Crafter</Text> —
+              a coding challenge that tests both your creativity and precision!
             </Text>
 
-            <Text className="text-white font-exoBold xs:text-sm mt-2">
+            <Text className="text-white/90 font-exoBold text-xs xs:text-[10px] text-center">
               🧠 Read the instructions carefully — your task can vary depending
               on what’s shown.
             </Text>
+            <View className="w-full mt-2">
+              <Text className="text-white/90 font-exoBold text-xs xs:text-[10px] text-center">
+                🧱 Write a solution that meets the given requirements.
+              </Text>
+              <Text className="text-white/90 font-exoBold text-xs xs:text-[10px] text-center">
+                🚀 Execute your code and make sure it behaves as expected!
+              </Text>
 
-            <Text className="text-white font-exoBold xs:text-sm mt-2">
-              💡 If you see a sample output:
-            </Text>
-            <Text className="text-white font-exoBold xs:text-sm">
-              🧩 Replicate it by writing code that produces the exact same
-              result.
-            </Text>
-            <Text className="text-white font-exoBold xs:text-sm">
-              ⚙️ Run and refine your code until your output matches perfectly!
-            </Text>
-
-            <Text className="text-white font-exoBold xs:text-sm mt-2">
-              💻 If there’s a problem description instead:
-            </Text>
-            <Text className="text-white font-exoBold xs:text-sm">
-              🧱 Write a solution that meets the given requirements.
-            </Text>
-            <Text className="text-white font-exoBold xs:text-sm">
-              🚀 Execute your code and make sure it behaves as expected!
-            </Text>
-
-            <Text className="text-white font-exoBold xs:text-sm mt-2">
-              Whether you’re recreating outputs or solving problems, CodeCrafter
-              is where you turn logic into creation.
-            </Text>
+              <Text className="text-white/90 mt-2 font-exoBold text-xs xs:text-[10px] text-center">
+                Whether you’re recreating outputs or solving problems,
+                CodeCrafter is where you turn logic into creation.
+              </Text>
+            </View>
             {/* <View className="flex-[1] w-full flex-row p-2 justify-evenly items-center">
                   <Pressable onPress={onConfirm}>
                     <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">

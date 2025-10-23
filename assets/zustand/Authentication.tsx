@@ -14,9 +14,15 @@ export const Protected = create<ProtectedProps>((set) => ({
   setValidUser: (val: User) => set({ user: val }),
   getValidUser: () => {
     set({ loaded: false });
-    const unsub = onAuthStateChanged(auth, (fireBaseUser) => {
-      set({ user: fireBaseUser, loaded: true });
+    return new Promise((resolve, reject) => {
+      const unsub = onAuthStateChanged(auth, (fireBaseUser) => {
+        if (fireBaseUser) {
+          set({ user: fireBaseUser, loaded: true });
+        } else {
+          set({ user: null, loaded: true });
+        }
+        resolve(unsub);
+      });
     });
-    return unsub;
   },
 }));

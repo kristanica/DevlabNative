@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  Easing,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
@@ -7,24 +8,35 @@ import {
 } from "react-native-reanimated";
 const useModal = () => {
   const [visibility, setVisibility] = useState<boolean>(false);
-  // const scaleVal = useSharedValue<number>(0);
+  const scaleVal = useSharedValue<number>(0.95);
   const opacityVal = useSharedValue<number>(0);
 
   const scaleStyle = useAnimatedStyle(() => ({
     // transform: [{ scale: scaleVal.value }],
     opacity: opacityVal.value,
   }));
-
   useEffect(() => {
     if (visibility) {
-      // scaleVal.value = withSpring(1, { damping: 100 });
-      opacityVal.value = withTiming(1, { duration: 200 });
+      // Fast, fluid timing optimized for smooth perceived motion
+      opacityVal.value = withTiming(1, {
+        duration: 180, // <200ms keeps everything tight and responsive
+        easing: Easing.out(Easing.quad),
+      });
+      scaleVal.value = withTiming(1, {
+        duration: 180,
+        easing: Easing.out(Easing.quad),
+      });
     } else {
-      // scaleVal.value = withSpring(0);
-      opacityVal.value = withTiming(0, { duration: 200 });
+      opacityVal.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.in(Easing.quad),
+      });
+      scaleVal.value = withTiming(0.96, {
+        duration: 150,
+        easing: Easing.in(Easing.quad),
+      });
     }
   }, [visibility]);
-
   const closeModal = () => {
     opacityVal.value = withTiming(0, { duration: 200 }, (finishied) => {
       if (finishied) {

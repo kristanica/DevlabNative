@@ -24,8 +24,7 @@ const ProtectedRoutes = ({ children }: childrenProps) => {
   if (!user) return <Redirect href="/" />;
 
   // If user is logged in and loaded, render children
-  if (user && loaded) return <View className="flex-1">{children}</View>;
-  return null;
+  return <>{children}</>;
 };
 
 export default ProtectedRoutes;
