@@ -31,6 +31,7 @@ import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
 const ItemList = () => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+  const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
 
   const inventory = useGetUserInfo((state) => state.inventory);
   const activeItem = ActiveItemIcon((state) => state.activeIcon);
@@ -131,7 +132,7 @@ const ItemList = () => {
     CodeWhisper: async (itemId) => {
       if (location === "Lesson") {
         // await playSound("wrongAnswer");
-        console.log(location + "woahwoahwoha");
+
         setToastVisibility(
           "error",
           `You cannot use CodeWhisper in ${location}`
@@ -249,7 +250,8 @@ const ItemList = () => {
           <Text className="text-white text-xs xs:text-[9px] text-center font-exoBold">
             Active Items
           </Text>
-          {activeItem.ErrorShield && (
+          {/* Shows the icon of the currently active buffs */}
+          {activeBuffs.includes("errorShield") && (
             <>
               <Ionicons
                 name="shield"
@@ -259,12 +261,12 @@ const ItemList = () => {
               />
             </>
           )}
-          {activeItem.CoinSurge && (
+          {activeBuffs.includes("doubleCoins") && (
             <>
               <Ionicons name="cash" size={24} color="yellow" className="my-2" />
             </>
           )}
-          {activeItem.BrainFilter && (
+          {activeBuffs.includes("brainFilter") && (
             <>
               <Ionicons name="book" size={24} color="yellow" className="my-2" />
             </>

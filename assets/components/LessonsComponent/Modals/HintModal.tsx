@@ -13,7 +13,10 @@ const HintModal = ({
 }: HintModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable className="flex-1 bg-black/50">
+      <Pressable
+        onPress={(e) => e.stopPropagation()}
+        className="flex-1 bg-black/50"
+      >
         <Animated.View
           style={[scaleStyle]}
           className="    w-3/4 bg-modal m-auto  rounded-[10px] border-[#2a3141] border-[1px]"
@@ -22,7 +25,6 @@ const HintModal = ({
             The code whisper to you
           </Text>
           <Text className="text-white text-center font-exoLight text-[11px]">
-            {" "}
             {hint}
           </Text>
 

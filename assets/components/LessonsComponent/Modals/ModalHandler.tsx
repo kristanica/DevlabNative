@@ -46,6 +46,7 @@ const ModalHandler = ({
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const userAnswer = useBrainBytesStore.getState().userAnswer;
   const correctAnswer = useBrainBytesStore.getState().correctAnswer;
+  const setUserAnswer = useBrainBytesStore.getState().setUserAnswer;
   const handleFinalAnswerModal = useCallback(async () => {
     let toastResult;
     finalAnswerModall.closeModal();
@@ -60,8 +61,11 @@ const ModalHandler = ({
         userAnswer,
         correctAnswer
       );
+      setUserAnswer("");
+
       return;
     }
+    console.log("pressed!");
     if (category === "Database") {
       console.log(queryRecievedCode);
       console.log(queryRecievedCode.query + "modalHandler");

@@ -2,6 +2,7 @@ import { auth, db } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
+import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
 import { router } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -33,14 +34,17 @@ const LevelFinishedModal = ({
   const userHealth = userHealthPoints((state) => state.health);
   const { coinSurgeItem } = coinSurge();
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
-  const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);
+  // const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);
 
   // Checks whether the user has used doubleCoins
+
+  // FIXME:STILL UNTESTED, will remove all active buffs once level is finished
   useEffect(() => {
     if (!activeBuffs.includes("doubleCoins")) return;
     // If yes, doubles the user coins
     coinSurgeItem();
-    removeActiveBuffs("doubleCoins");
+    // removeActiveBuffs("doubleCoins");
+    activeBuffsLocal.getState().clearActiveBuff();
   }, [activeBuffs]);
 
   //Checks whether the user has already claimed the reward on the level
@@ -62,7 +66,8 @@ const LevelFinishedModal = ({
     };
     giveReward();
   }, [coinsAndExp]);
-
+  const nextLevelPayload = unlockNextLevel((state) => state.nextLevelPayload);
+  const nextLessonPayload = unlockNextLevel((state) => state.nextLessonPayload);
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable className="flex-1 bg-black/50">
@@ -134,21 +139,6 @@ const LevelFinishedModal = ({
                     )}
                   </View>
                 )}
-                <TouchableOpacity
-                  onPress={() =>
-                    router.replace({
-                      pathname: "/(user)/home/stage/[stageId]",
-                      params: {
-                        stageId: "Stage1",
-                        category: "Css", // Use categoryId directly
-                        lessonId: "Lesson1",
-                        levelId: "Level2",
-                      },
-                    })
-                  }
-                >
-                  <Text className="text-white">HELLO</Text>
-                </TouchableOpacity>
               </View>
             </View>
 
@@ -162,6 +152,29 @@ const LevelFinishedModal = ({
                   Back to Main
                 </Text>
               </Pressable>
+              {(nextLevelPayload || nextLessonPayload) && (
+                <TouchableOpacity
+                  onPress={() => {
+                    // FIXME: STILL UNTESTED
+                    const target = nextLevelPayload ?? nextLessonPayload;
+                    if (!target) {
+                      console.log("Next lesson/level cannot be found!");
+                      return;
+                    }
+                    router.replace({
+                      pathname: "/(user)/home/stage/[stageId]",
+                      params: {
+                        stageId: target.stageId,
+                        category: target.category,
+                        lessonId: target.lessonId,
+                        levelId: target.nextLevelId,
+                      },
+                    });
+                  }}
+                >
+                  <Text className="text-white">HELLO</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </Animated.View>

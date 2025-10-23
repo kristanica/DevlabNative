@@ -22,6 +22,7 @@ const JumpBackIn = ({ lastOpenedLevel }: JumpBackInPayload) => {
     [lastOpenedLevel]
   );
   const subject = ["Html", "Css", "JavaScript", "Database"];
+
   return (
     <>
       <Text className="text-white ml-3 mt-4 xs:text-lg font-exoBold tracking-wide">

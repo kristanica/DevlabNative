@@ -1,16 +1,18 @@
 import { create } from "zustand";
 
 type Payload = {
+  category: string;
+  stageId: string;
   lessonId: string;
   nextLevelId: string;
 };
 
 type UnlockNextStageProps = {
   nextLevelPayload: Payload | null;
-  nextLessonPayload: string | null;
+  nextLessonPayload: Payload | null;
   nextSubjectPayload: boolean;
   unlockNextLevel: (val: Payload) => void;
-  unlockNextLesson: (val: string) => void;
+  unlockNextLesson: (val: Payload) => void;
   unlockNextSubject: (val: boolean) => void;
 };
 
@@ -19,7 +21,7 @@ const unlockNextLevel = create<UnlockNextStageProps>((set) => ({
   nextLessonPayload: null,
   nextSubjectPayload: false,
   unlockNextSubject: (val: boolean) => set({ nextSubjectPayload: val }),
-  unlockNextLesson: (val: string) => set({ nextLessonPayload: val }),
+  unlockNextLesson: (val: Payload) => set({ nextLessonPayload: val }),
   unlockNextLevel: (val: Payload) => set({ nextLevelPayload: val }),
 }));
 

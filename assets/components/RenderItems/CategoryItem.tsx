@@ -46,6 +46,13 @@ const CategoryItem = ({
             const stageKey = `${item?.lessonId}-${item?.levelId}-${stage.id}`;
             const isStageLocked =
               useUserProgressData?.allStagesComplete[stageKey];
+
+            // NOTE: If stage is not unlocked yet and is hidden, skips it. Resulting
+            if (!isStageLocked && stage.isHidden) {
+              return null;
+            }
+            console.log(stage.isHidden, stage.id);
+
             return (
               <StageItem
                 setLockModalVisibility={setLockModalVisibility}

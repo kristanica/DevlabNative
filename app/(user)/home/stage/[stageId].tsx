@@ -250,6 +250,15 @@ const StageScreen = () => {
   }, [lessonId, levelId, currentStageData, category]);
   const isStageDataReady = !!currentStageData;
 
+  // FIXME: This will clear all active buffs when user navgiates to a screen.
+  // const clearActiveBuffs = activeBuffsLocal((state) => state.clearActiveBuff);
+  // const activeBuff = activeBuffsLocal((state) => state.activeBuff);
+  // useEffect(() => {
+  //   clearActiveBuffs();
+  //   console.log("cleared active buff!");
+  //   console.log(activeBuff);
+  // }, [lessonId, levelId, stageId, category]);
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">

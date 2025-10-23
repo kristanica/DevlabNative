@@ -5,6 +5,7 @@ type localBuffsPayload = {
 
   addActiveBuff: (itemName: string) => void;
   removeActiveBuff: (itemName: string) => void;
+  clearActiveBuff: () => void;
 };
 
 export const activeBuffsLocal = create<localBuffsPayload>((set) => ({
@@ -15,7 +16,7 @@ export const activeBuffsLocal = create<localBuffsPayload>((set) => ({
         return { activeBuff: [...state.activeBuff, itemName] };
       }
       console.log("You cannot use this item again!");
-      return {};
+      return state;
     }),
   removeActiveBuff: (itemName: string) =>
     set((state) => {
@@ -25,6 +26,10 @@ export const activeBuffsLocal = create<localBuffsPayload>((set) => ({
         );
         return { activeBuff: [...newBuffs] };
       }
-      return {};
+      return state;
+    }),
+  clearActiveBuff: () =>
+    set({
+      activeBuff: [],
     }),
 }));

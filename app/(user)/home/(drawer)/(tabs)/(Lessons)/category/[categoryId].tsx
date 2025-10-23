@@ -27,7 +27,11 @@ const CategoryScreen = () => {
   const setUnlockedStages = unlockedStages((state) => state.setUnlockedStages);
 
   const setStageData = useStageStore((state) => state.setStageData);
-  const { data: useUserProgressData, isLoading: progressLoading } = useQuery({
+  const {
+    data: useUserProgressData,
+    isLoading: progressLoading,
+    isFetching: progressFetching,
+  } = useQuery({
     queryKey: ["specificUserProgress", String(categoryId)],
     queryFn: async () => {
       const token = await auth.currentUser?.getIdToken(true);
@@ -94,7 +98,7 @@ const CategoryScreen = () => {
           scaleStyle={scaleStyle}
           closeModal={closeModal}
         ></LockLessonModal>
-        {isLoading || progressLoading ? (
+        {isLoading || progressLoading || progressFetching ? (
           <SmallLoading />
         ) : (
           <>
