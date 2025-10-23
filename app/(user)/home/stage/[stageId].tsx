@@ -171,7 +171,6 @@ const StageScreen = () => {
     terminalRef.current?.expand();
   }, []);
 
-  // CODE WHISPER
   // const { content, getLessonData, getLevelData, dataCurrentStage } =
   //   sampleStageData(String(category), String(lessonId), String(levelId));
   // console.log(dataCurrentStage[currentStageIndex]);
@@ -182,6 +181,8 @@ const StageScreen = () => {
   // const lesson = content.find((lesson: any) => lesson.id === lessonId);
   // const temp = lesson.levels.find((level: any) => level.id === levelId);
   // console.log(temp.stages);
+
+  // CODE WHISPER
   // Sets the loading/hint once codewhisper is used
   const [hintLoading, setHintLoading] = useState<boolean>(false);
   const [generatedHint, setGeneratedHint] = useState<string>("");
@@ -367,6 +368,7 @@ const StageScreen = () => {
                   levelId={levelId}
                   stageId={currentStageData?.id}
                   setCurrentStageIndex={setCurrentStageIndex}
+                  isStageAlreadyCompleted={isStageAlreadyCompleted}
                 />
                 <View className="flex-row justify-evenly mt-12">
                   {(currentStageData?.type === "Lesson" ||

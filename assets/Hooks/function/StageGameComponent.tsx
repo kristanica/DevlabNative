@@ -16,6 +16,7 @@ const StageGameComponent = ({
   setCurrentStageIndex,
   levelFinishedModal,
   finalAnswerModal,
+  isStageAlreadyCompleted,
 }: any) => {
   const stageGameIdentier: Record<string, JSX.Element> = {
     Lesson: <StageLesson currentStageData={currentStageData}></StageLesson>,
@@ -32,6 +33,7 @@ const StageGameComponent = ({
         category={category}
         lessonId={lessonId}
         setCurrentStageIndex={setCurrentStageIndex}
+        isStageAlreadyCompleted={isStageAlreadyCompleted}
       ></StageBrainBytes>
     ),
     CodeRush: (

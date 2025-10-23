@@ -84,7 +84,7 @@ const CategoryScreen = () => {
         }))
       : [];
   }, [allData]);
-  console.log(categoryId);
+
   const [stageVisibility, setStageVisibility] = useState<any>({});
   const [shownLevelKey, setShownLevelKey] = useState<string | null>(null);
   return (
@@ -99,7 +99,9 @@ const CategoryScreen = () => {
           closeModal={closeModal}
         ></LockLessonModal>
         {isLoading || progressLoading || progressFetching ? (
-          <SmallLoading />
+          <View className="flex-1 justify-center items-center">
+            <SmallLoading />
+          </View>
         ) : (
           <>
             <SectionList

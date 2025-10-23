@@ -3,7 +3,7 @@ import codePatchTimeFreeze from "@/assets/Hooks/mainGameModeFunctions/codePatchT
 import useModal from "@/assets/Hooks/useModal";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Accordion from "../../global/Accordion";
 import CodeRushModal from "../Modals/CodeRushModal";
@@ -16,13 +16,16 @@ const StageCodeRush = ({
   stageId,
   levelId,
 }: any) => {
+  const [isFreezed, setIsFreezed] = useState<boolean>(false);
   const { timer, codePatch, timeFreeze } = codePatchTimeFreeze(
     currentStageData?.timer!,
     setCurrentStageIndex,
     lessonId,
     category,
     stageId,
-    levelId
+    levelId,
+    isFreezed,
+    setIsFreezed
   );
 
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
@@ -77,7 +80,13 @@ const StageCodeRush = ({
           {currentStageData?.title}
         </Text>
 
-        <Text className="text-white font-exoRegular xs:text-xl my-3 text-justify">
+        <Text
+          className={`${
+            isFreezed
+              ? "text-blue-600 font-exoExtraBold"
+              : "text-white font-exoRegular"
+          } xs:text-xl my-3 text-justify `}
+        >
           {formatTimer(Number(timer))}
         </Text>
       </View>

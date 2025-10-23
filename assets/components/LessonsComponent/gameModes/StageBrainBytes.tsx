@@ -18,8 +18,9 @@ const StageBrainBytes = ({
   setCurrentStageIndex,
   levelFinishedModal,
   finalAnswerModal,
+  isStageAlreadyCompleted,
 }: any) => {
-  const { compareUserAnswer, brainFilterItem, optionsArray } = brainFilter(
+  const { brainFilterItem, optionsArray } = brainFilter(
     currentStageData?.choices!,
     setCurrentStageIndex,
     lessonId,
@@ -101,27 +102,33 @@ const StageBrainBytes = ({
                     style={{
                       marginVertical: "auto",
                       marginRight: 100,
-                      height: 8,
-                      width: 8,
+                      height: 20,
+                      width: "100%",
+                      opacity: 0.5,
                       position: "absolute",
-                      right: 0,
-                      bottom: 9,
+                      bottom: 5,
                       borderRadius: 5,
-                      backgroundColor: "green",
+                      backgroundColor: "#3B82F6",
                     }}
                   />
                 )}
               </View>
             ))}
         </View>
-        <TouchableOpacity
-          className="mx-auto bg-button  rounded-xl "
-          onPress={() => finalAnswerModal.setVisibility(true)}
-        >
-          <Text className=" text-xs xs:text-[10px] py-2 px-6 font-exoBold text-white">
-            Final Answer
+        {isStageAlreadyCompleted ? (
+          <Text className=" text-center text-xs xs:text-[10px] py-2 px-6 font-exoBold text-white">
+            Stage is already completed
           </Text>
-        </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            className="mx-auto bg-button  rounded-xl "
+            onPress={() => finalAnswerModal.setVisibility(true)}
+          >
+            <Text className=" text-xs xs:text-[10px] py-2 px-6 font-exoBold text-white">
+              Final Answer
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );

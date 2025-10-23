@@ -1,6 +1,7 @@
 import { bugBust } from "@/assets/API/openAi/gameModes/bugBust";
 import { codeCrafter } from "@/assets/API/openAi/gameModes/codeCrafter";
 import { codeRush } from "@/assets/API/openAi/gameModes/codeRush";
+import { isEvaluatingStore } from "@/assets/zustand/isEvaluatingStore";
 import { useMutation } from "@tanstack/react-query";
 type codeCrafterPayload = {
   submittedCode: any;
@@ -14,6 +15,7 @@ type codeCrafterPayload = {
 };
 
 export const apiCall = () => {
+  const setIsEvaluating = isEvaluatingStore.getState().setIsEvaluating;
   return useMutation({
     mutationFn: async ({
       submittedCode,
@@ -64,6 +66,11 @@ export const apiCall = () => {
         }
       }
     },
-    onMutate: () => {},
+    onMutate: () => {
+      setIsEvaluating(true);
+    },
+    onSuccess: () => {
+      setIsEvaluating(false);
+    },
   });
 };

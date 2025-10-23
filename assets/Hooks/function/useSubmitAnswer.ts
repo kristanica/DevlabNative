@@ -41,6 +41,10 @@ const useSubmitAnswer = (
           lessonId: lessonId,
         });
         if (unlockData.isNextLevelUnlocked) {
+          await unlockAchievement(category, "firstLevelComplete", {
+            Levelid: levelId,
+            lessonId: lessonId,
+          });
           finalAnswerModall.closeModal();
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);

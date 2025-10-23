@@ -1,5 +1,6 @@
 import { auth, db, height } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
+import { playSound } from "@/assets/Hooks/function/soundHandler";
 import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
 import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import toastHandler from "@/assets/zustand/toastHandler";
@@ -125,7 +126,7 @@ const ItemList = ({ category }: any) => {
       });
 
       setToastVisibility("success", `You've used Coin Surge!`);
-
+      await playSound("success");
       useItem(itemId, "doubleCoins");
       console.log("AYES");
     },
@@ -139,7 +140,7 @@ const ItemList = ({ category }: any) => {
         );
         return;
       }
-      // await playSound("success");
+      await playSound("success");
       setToastVisibility("success", `You've used Code Whisper!`);
       await useItem(itemId, "revealHint");
     },
@@ -153,7 +154,7 @@ const ItemList = ({ category }: any) => {
         console.log("youre not in code rush");
         return;
       }
-      // await playSound("success");
+      await playSound("success");
       setToastVisibility("success", `You've used Code Path!`);
       useItem(itemId, "extraTime");
     },
@@ -165,7 +166,7 @@ const ItemList = ({ category }: any) => {
         console.log("youre not in code rush");
         return;
       }
-      // await playSound("success");
+      await playSound("success");
       setToastVisibility("success", `You've used Time freeze!`);
       useItem(itemId, "timeFreeze");
     },
@@ -185,7 +186,7 @@ const ItemList = ({ category }: any) => {
         setToastVisibility("error", `Error Shield is already in effect!`);
         return;
       }
-      // await playSound("success");
+      await playSound("success");
       setActiveItem({
         ErrorShield: true,
       });
@@ -212,7 +213,7 @@ const ItemList = ({ category }: any) => {
         BrainFilter: true,
       });
       setToastVisibility("success", `You've used brain filter!`);
-
+      await playSound("success");
       useItem(itemId, "brainFilter");
     },
   };

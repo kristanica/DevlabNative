@@ -53,8 +53,6 @@ const useRegister = () => {
       const isPasswordValid = validatePassword(state.password);
 
       if (isPasswordValid[0] === "error") {
-        console.log(isEmailValid);
-
         return [isPasswordValid[0], isPasswordValid[1]];
       }
 
@@ -71,93 +69,140 @@ const useRegister = () => {
           position: "top",
           topOffset: 50,
         });
-        await setDoc(doc(db, "Users", user.uid), {
-          email: user.email,
-          username: state.username,
-          age: Number(state.age),
-          exp: 0,
-          userLevel: 1,
-          coins: 0,
-          bio: "",
-          isAdmin: false,
-          isSuspended: false,
-          healthPoints: 3,
-          lastOpenedLevel: {
-            subject: "Html",
-            lessonId: "Lesson1",
-            levelId: "Level1",
-          },
-        });
-        // Optional: Add empty Inventory doc
-        await setDoc(
-          doc(db, "Users", user.uid, "Inventory", "placeholder"),
-          {}
+
+        const promises: any[] = [];
+
+        promises.push(
+          setDoc(doc(db, "Users", user.uid), {
+            email: user.email,
+            username: state.username,
+            age: Number(state.age),
+            exp: 0,
+            userLevel: 1,
+            coins: 0,
+            bio: "",
+            isAdmin: false,
+            isSuspended: false,
+            healthPoints: 3,
+            lastOpenedLevel: {
+              Css: {
+                description:
+                  "Practice using inline CSS to apply styles directly to your HTML tags",
+                title: "Inline CSS CodeRush",
+                lessonId: "Lesson1",
+                levelId: "Level1",
+                stageId: "Stage1",
+                subject: "Css",
+                gameMode: "Lesson",
+              },
+              Html: {
+                description:
+                  "Practice using inline CSS to apply styles directly to your HTML tags",
+                title: "Inline CSS CodeRush",
+                lessonId: "Lesson1",
+                levelId: "Level1",
+                stageId: "Stage1",
+                subject: "Html",
+                gameMode: "Lesson",
+              },
+              Database: {
+                description:
+                  "Practice using inline CSS to apply styles directly to your HTML tags",
+                title: "Inline CSS CodeRush",
+                lessonId: "Lesson1",
+                levelId: "Level1",
+                stageId: "Stage1",
+                subject: "Database",
+                gameMode: "Lesson",
+              },
+              JavaScript: {
+                description:
+                  "Practice using inline CSS to apply styles directly to your HTML tags",
+                title: "Inline CSS CodeRush",
+                lessonId: "Lesson1",
+                levelId: "Level1",
+                stageId: "Stage1",
+                subject: "JavaScript",
+                gameMode: "Lesson",
+              },
+            },
+          })
         );
+
         // Initialize Level1 unlocked for each subject, including Stage1
         const subjects = ["Html", "Css", "JavaScript", "Database"];
 
         for (const subject of subjects) {
-          // Create Level1 document
-          await setDoc(doc(db, "Users", user.uid, "Progress", subject), {
-            status: true,
-          });
-          await setDoc(
-            doc(
-              db,
-              "Users",
-              user.uid,
-              "Progress",
-              subject,
-              "Lessons",
-              "Lesson1"
-            ),
-            {
-              isActive: true,
-              isCompleted: false,
-            }
+          promises.push(
+            setDoc(doc(db, "Users", user.uid, "Progress", subject), {
+              status: true,
+            })
           );
-          await setDoc(
-            doc(
-              db,
-              "Users",
-              user.uid,
-              "Progress",
-              subject,
-              "Lessons",
-              "Lesson1",
-              "Levels",
-              "Level1"
-            ),
-            {
-              isActive: true,
-              isRewardClaimed: false,
-              dateUnlocked: new Date(),
-              isCompleted: false,
-            }
+
+          promises.push(
+            setDoc(
+              doc(
+                db,
+                "Users",
+                user.uid,
+                "Progress",
+                subject,
+                "Lessons",
+                "Lesson1"
+              ),
+              {
+                isActive: true,
+                isCompleted: false,
+              }
+            )
+          );
+          promises.push(
+            setDoc(
+              doc(
+                db,
+                "Users",
+                user.uid,
+                "Progress",
+                subject,
+                "Lessons",
+                "Lesson1",
+                "Levels",
+                "Level1"
+              ),
+              {
+                isActive: true,
+                isRewardClaimed: false,
+                dateUnlocked: new Date(),
+                isCompleted: false,
+              }
+            )
           );
 
           // Create Stage1 document inside Stages subcollection of Level1
-          await setDoc(
-            doc(
-              db,
-              "Users",
-              user.uid,
-              "Progress",
-              subject,
-              "Lessons",
-              "Lesson1",
-              "Levels",
-              "Level1",
-              "Stages",
-              "Stage1"
-            ),
-            {
-              isActive: true,
-              isCompleted: false,
-              dateUnlocked: new Date(),
-            }
+          promises.push(
+            setDoc(
+              doc(
+                db,
+                "Users",
+                user.uid,
+                "Progress",
+                subject,
+                "Lessons",
+                "Lesson1",
+                "Levels",
+                "Level1",
+                "Stages",
+                "Stage1"
+              ),
+              {
+                isActive: true,
+                isCompleted: true,
+                dateUnlocked: new Date(),
+              }
+            )
           );
         }
+        await Promise.all(promises);
       }
       return ["success", "Registration complete!"];
     } catch (error) {

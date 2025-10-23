@@ -38,40 +38,40 @@ const brainFilter = (
     .filter(([key]) => key !== "correctAnswer")
     .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
 
-  const compareUserAnswer = async (answer: string) => {
-    if (
-      answer.toLocaleUpperCase() ===
-      choices.correctAnswer.trim().toLocaleUpperCase()
-    ) {
-      console.log("You are correct");
-      unlockNext.mutate({
-        category: category,
-        lessonId: lessonId,
-        levelId: levelId,
-        stageId: stageId,
-      });
+  // const compareUserAnswer = async (answer: string) => {
+  //   if (
+  //     answer.toLocaleUpperCase() ===
+  //     choices.correctAnswer.trim().toLocaleUpperCase()
+  //   ) {
+  //     console.log("You are correct");
+  //     unlockNext.mutate({
+  //       category: category,
+  //       lessonId: lessonId,
+  //       levelId: levelId,
+  //       stageId: stageId,
+  //     });
 
-      setActiveItem({ BrainFilter: false });
-      setIsCorrect(true);
-      return;
-    } else {
-      handleDecrementHp();
-      setActiveItem({ BrainFilter: false });
-      console.log(healthPointsTracker + "BrainBbvytes health");
-      if (healthPointsTracker <= 1) {
-        handleGameOver({
-          category,
-          lessonId,
-          levelId,
-          stageId,
-          setCurrentStageIndex,
-        });
-      }
-      setActiveItem({ BrainFilter: false });
-      console.log("You are wrong");
-      setIsCorrect(false);
-    }
-  };
+  //     setActiveItem({ BrainFilter: false });
+  //     setIsCorrect(true);
+  //     return;
+  //   } else {
+  //     handleDecrementHp();
+  //     setActiveItem({ BrainFilter: false });
+  //     console.log(healthPointsTracker + "BrainBbvytes health");
+  //     if (healthPointsTracker <= 1) {
+  //       handleGameOver({
+  //         category,
+  //         lessonId,
+  //         levelId,
+  //         stageId,
+  //         setCurrentStageIndex,
+  //       });
+  //     }
+  //     setActiveItem({ BrainFilter: false });
+  //     console.log("You are wrong");
+  //     setIsCorrect(false);
+  //   }
+  // };
 
   const brainFilterItem = () => {
     // const wrongOptions = arrayChoices.filter(
@@ -91,7 +91,7 @@ const brainFilter = (
     return filteredOptions;
   };
 
-  return { arrayChoices, compareUserAnswer, brainFilterItem, optionsArray };
+  return { arrayChoices, brainFilterItem, optionsArray };
 };
 
 export default brainFilter;

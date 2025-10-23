@@ -1,3 +1,4 @@
+import { isEvaluatingStore } from "@/assets/zustand/isEvaluatingStore";
 import userHp from "@/assets/zustand/userHp";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
@@ -10,17 +11,18 @@ const codePatchTimeFreeze = (
   lessonId: string,
   category: string,
   stageId: string,
-  levelId: string
+  levelId: string,
+  isFreezed: boolean,
+  setIsFreezed: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const [timer, setTimer] = useState<number>(initialTime);
   const intervalRef = useRef<any>(null);
-  const [isFreezed, setIsFreezed] = useState<boolean>(false);
+
   const isFocused = useIsFocused();
   const decrementUserHp = userHp?.getState().decrementUserHp;
   const { handleGameOver } = useHandleGameOver();
   const { handleDecrementHp } = useHandleDecrementHp();
-
-  //countdown
+  const isEvaluating = isEvaluatingStore((state) => state.isEvaluating);
   const resetTimer = () => {
     clearInterval(intervalRef.current);
     setTimer(initialTime);
@@ -28,7 +30,7 @@ const codePatchTimeFreeze = (
   };
 
   useEffect(() => {
-    if (!isFreezed && isFocused) {
+    if (!isFreezed && isFocused && !isEvaluating) {
       intervalRef.current = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 0) {
@@ -57,7 +59,7 @@ const codePatchTimeFreeze = (
       }, 1000);
     }
     return () => clearInterval(intervalRef.current);
-  }, [isFreezed, isFocused, resetTimer, decrementUserHp]);
+  }, [isFreezed, isFocused, resetTimer, decrementUserHp, isEvaluating]);
 
   const codePatch = () => {
     setTimer((prev) => prev + 30);
