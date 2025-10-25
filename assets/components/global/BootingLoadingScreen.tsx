@@ -19,7 +19,7 @@ const BootingLoadingScreen = () => {
     const interval = setInterval(() => {
       if (i < devlabBootLines.length) {
         setBootText(devlabBootLines[i]);
-        return i++;
+        i = (i + 1) % devlabBootLines.length;
       } else {
         clearInterval(interval);
         return i;

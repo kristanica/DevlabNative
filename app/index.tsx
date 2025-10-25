@@ -4,25 +4,33 @@ import { auth } from "@/assets/constants/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
+import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { View } from "react-native";
 
 const index = () => {
   RenderCounter("index");
-  const handleLogin = async () => {
-    try {
-      const currentuser = auth.currentUser;
-      const val = await AsyncStorage.getItem("isLoggin");
-      if (val === "true" && currentuser) {
-        router.replace("/home/Home");
-      } else {
-        router.replace({ pathname: "/Login" });
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const currentuser = auth.currentUser;
+        const val = await AsyncStorage.getItem("isLoggin");
+        if (val === "false" && currentuser) {
+          await signOut(auth);
+          return;
+        }
+        if (val === "true" && currentuser) {
+          router.replace("/home/Home");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
+
+    checkLogin();
+  }, []);
 
   return (
     <View className="bg-background flex-[1] justify-center items-center ">
@@ -35,9 +43,10 @@ const index = () => {
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>
-        <View className="absolute"></View>
 
-        <Footer handleLogin={handleLogin}></Footer>
+        <Footer
+          handleLogin={async () => router.replace({ pathname: "/Login" })}
+        ></Footer>
       </View>
     </View>
   );

@@ -121,7 +121,6 @@ const EditStageModal = ({
     setvideoPresentation("");
     setReplicateFile("");
   };
-
   const isMutating = useIsMutating();
   return (
     <Modal visible={visibility} transparent={true}>

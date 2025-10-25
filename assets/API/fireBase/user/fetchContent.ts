@@ -15,6 +15,6 @@ export const fetchContent = async (category: string): Promise<any> => {
   if (error) {
     throw error;
   }
-
+  console.log(data.data);
   return data.data;
 };

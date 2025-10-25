@@ -1,8 +1,8 @@
-import { auth, db, path } from "@/assets/constants/constants";
+import { auth, db } from "@/assets/constants/constants";
 import { doc, getDoc } from "@firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { AuthError, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
 import { useEffect, useReducer } from "react";
 import { Keyboard } from "react-native";
 
@@ -57,12 +57,12 @@ const useLogin = () => {
       const data = await getDoc(userRef);
 
       //check if account is suspended
-      if (data.data()?.isSuspended) {
-        console.log("your account is suspended");
-        await signOut(auth);
-        router.replace({ pathname: path.LOGIN });
-        return;
-      }
+      // if (data.data()?.isSuspended) {
+      //   console.log("your account is suspended");
+      //   await signOut(auth);
+      //   router.replace({ pathname: path.LOGIN });
+      //   return;
+      // }
 
       Keyboard.dismiss();
       // Determine wheter to keep sign in or not

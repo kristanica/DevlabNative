@@ -84,48 +84,7 @@ const useRegister = () => {
             isAdmin: false,
             isSuspended: false,
             healthPoints: 3,
-            lastOpenedLevel: {
-              Css: {
-                description:
-                  "Practice using inline CSS to apply styles directly to your HTML tags",
-                title: "Inline CSS CodeRush",
-                lessonId: "Lesson1",
-                levelId: "Level1",
-                stageId: "Stage1",
-                subject: "Css",
-                gameMode: "Lesson",
-              },
-              Html: {
-                description:
-                  "Practice using inline CSS to apply styles directly to your HTML tags",
-                title: "Inline CSS CodeRush",
-                lessonId: "Lesson1",
-                levelId: "Level1",
-                stageId: "Stage1",
-                subject: "Html",
-                gameMode: "Lesson",
-              },
-              Database: {
-                description:
-                  "Practice using inline CSS to apply styles directly to your HTML tags",
-                title: "Inline CSS CodeRush",
-                lessonId: "Lesson1",
-                levelId: "Level1",
-                stageId: "Stage1",
-                subject: "Database",
-                gameMode: "Lesson",
-              },
-              JavaScript: {
-                description:
-                  "Practice using inline CSS to apply styles directly to your HTML tags",
-                title: "Inline CSS CodeRush",
-                lessonId: "Lesson1",
-                levelId: "Level1",
-                stageId: "Stage1",
-                subject: "JavaScript",
-                gameMode: "Lesson",
-              },
-            },
+            lastOpenedLevel: {},
           })
         );
 

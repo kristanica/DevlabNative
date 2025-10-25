@@ -98,7 +98,6 @@ const TabsLayout = () => {
 
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        console.log("What?");
         return;
       }
       const loadProgress = async () => {
