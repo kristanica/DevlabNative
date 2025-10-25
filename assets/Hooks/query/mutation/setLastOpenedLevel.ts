@@ -1,4 +1,4 @@
-import { auth, db } from "@/assets/constants/constants";
+import { auth, db } from "@/constants";
 import { useMutation } from "@tanstack/react-query";
 import { doc, setDoc } from "firebase/firestore";
 import tryCatch from "../../function/tryCatch";

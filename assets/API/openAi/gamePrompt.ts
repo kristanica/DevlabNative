@@ -1,5 +1,5 @@
 import axios from "axios";
-import { auth, URL } from "../../constants/constants";
+import { auth, URL } from "../../../constants";
 
 type receivedCodePayload = {
   html?: string;

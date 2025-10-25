@@ -1,5 +1,5 @@
-import { db } from "@/assets/constants/constants";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { db } from "@/constants";
 import { doc, increment, setDoc } from "firebase/firestore";
 
 const claimAchievements = async ({

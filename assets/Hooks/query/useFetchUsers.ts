@@ -1,4 +1,4 @@
-import { db } from "@/assets/constants/constants";
+import { db } from "@/constants";
 import { collection, getDocs } from "firebase/firestore";
 type userDataProps = {
   username: string;

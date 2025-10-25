@@ -1,4 +1,4 @@
-import { db } from "@/assets/constants/constants";
+import { db } from "@/constants";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 
 const addNewTopic = async (subject: string, lessonId: any, levelId: any) => {

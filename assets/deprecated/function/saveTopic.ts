@@ -1,5 +1,5 @@
-import { db } from "@/assets/constants/constants";
 import gameIdentifier from "@/assets/zustand/gameIdentifier";
+import { db } from "@/constants";
 import { doc, setDoc } from "firebase/firestore";
 
 const saveTopic = async (state: any, type: any) => {

@@ -1,4 +1,4 @@
-import { categoryIcon } from "@/assets/constants/constants";
+import { categoryIcon } from "@/constants";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import React, { useCallback } from "react";

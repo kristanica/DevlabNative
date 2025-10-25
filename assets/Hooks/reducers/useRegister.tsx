@@ -1,4 +1,4 @@
-import { auth, db } from "@/assets/constants/constants";
+import { auth, db } from "@/constants";
 import {
   AuthError,
   createUserWithEmailAndPassword,

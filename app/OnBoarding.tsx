@@ -1,14 +1,9 @@
 import AnimatedViewContainer from "@/assets/components/AnimatedViewContainer";
 import OnboardingItem from "@/assets/components/OnBoardingComponents/OnboardingItem";
 import Pagination from "@/assets/components/OnBoardingComponents/Pagination";
-import {
-  auth,
-  onboardingData,
-  path,
-  width,
-} from "@/assets/constants/constants";
 import ButtonComponent from "@/assets/deprecated/ButtonComponent";
 import usePresstoScroll from "@/assets/Hooks/usePresstoScroll";
+import { auth, onboardingData, path, width } from "@/constants";
 
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";

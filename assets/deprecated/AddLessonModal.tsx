@@ -1,4 +1,4 @@
-import { db } from "@/assets/constants/constants";
+import { db } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 import React from "react";

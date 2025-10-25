@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { auth, db } from "../constants/constants";
+import { auth, db } from "../../constants";
 import useMounted from "../Hooks/useMounted";
 
 type userData = {

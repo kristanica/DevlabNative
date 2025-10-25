@@ -1,5 +1,5 @@
-import { auth, URL } from "@/assets/constants/constants";
 import { useAchievementStore } from "@/assets/zustand/useAchievementStore";
+import { auth, URL } from "@/constants";
 import axios from "axios";
 
 export const fetchAchievements = async (category: string) => {

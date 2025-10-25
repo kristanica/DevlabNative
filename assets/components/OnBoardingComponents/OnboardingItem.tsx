@@ -1,4 +1,4 @@
-import { height, width } from "@/assets/constants/constants";
+import { height, width } from "@/constants";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Text, View } from "react-native";

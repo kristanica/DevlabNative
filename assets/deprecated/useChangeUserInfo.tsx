@@ -1,5 +1,5 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../constants/constants";
+import { auth, db } from "../../constants";
 
 const useChangeUserInfo = () => {
   const changeUserInfo = async (userName: string, bio: string) => {

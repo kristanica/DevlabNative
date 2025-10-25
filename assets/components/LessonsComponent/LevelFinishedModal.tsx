@@ -1,9 +1,9 @@
-import { auth, db } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
 import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import { auth, db } from "@/constants";
 import { router } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";

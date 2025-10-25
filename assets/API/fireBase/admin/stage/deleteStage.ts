@@ -1,5 +1,5 @@
-import { auth, URL } from "@/assets/constants/constants";
 import tracker from "@/assets/zustand/tracker";
+import { auth, URL } from "@/constants";
 import axios from "axios";
 
 const deleteStage = async () => {

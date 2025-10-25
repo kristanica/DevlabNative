@@ -2,8 +2,8 @@ import { fetchUsers } from "@/assets/API/fireBase/admin/userManagement/fetchUser
 import { activeLevelCounter } from "@/assets/API/fireBase/user/activeLevelCounter";
 import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScreen";
 import CustomTabBarAdmin from "@/assets/components/TabBarComponents/CustomTabBarAdmin";
-import { adminIcon } from "@/assets/constants/constants";
 import adminAuthentication from "@/assets/zustand/adminAuthentication";
+import { adminIcon } from "@/constants";
 import { useQueryClient } from "@tanstack/react-query";
 import { Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";

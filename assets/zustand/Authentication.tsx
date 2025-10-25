@@ -1,6 +1,6 @@
 import { onAuthStateChanged, User } from "firebase/auth";
 import { create } from "zustand";
-import { auth } from "../constants/constants";
+import { auth } from "../../constants";
 type ProtectedProps = {
   user: User | null;
   loaded: boolean;

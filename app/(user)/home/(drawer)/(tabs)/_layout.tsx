@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import CustomTabBar from "@/assets/components/TabBarComponents/CustomTabBar";
-import { userIcon } from "@/assets/constants/constants";
+import { userIcon } from "@/constants";
 
 const _layout = () => {
   return (

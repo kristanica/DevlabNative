@@ -5,12 +5,13 @@ import ViteCodeEditor from "@/assets/components/LanguageNavigation/ViteCodeEdito
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // Renders the offline code editor
 const OfflineCodeEditor = () => {
   //Neceassry variables for code editor
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
   const {
     webRef,
     sendToWebView,
@@ -41,6 +42,8 @@ const OfflineCodeEditor = () => {
             <Ionicons name="terminal" size={20} color="white" />
           </Pressable>
           <SelectLanguageNavigation
+            setSelectedLanguage={setSelectedLanguage}
+            selectedLanguage={selectedLanguage}
             subject=""
             sendToWebView={sendToWebView}
           ></SelectLanguageNavigation>

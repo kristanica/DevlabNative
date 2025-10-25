@@ -1,5 +1,5 @@
-import { auth, URL } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
+import { auth, URL } from "@/constants";
 import axios from "axios";
 
 type codeRushPayload = {

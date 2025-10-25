@@ -1,4 +1,4 @@
-import { auth, db } from "@/assets/constants/constants";
+import { auth, db } from "@/constants";
 import { router } from "expo-router";
 import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";

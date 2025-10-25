@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { auth, URL } from "../constants/constants";
+import { auth, URL } from "../../constants";
 import tracker from "../zustand/tracker";
 import ListStages from "./query/ListStages";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { itemIcon } from "../constants/constants";
+import { itemIcon } from "../../constants";
 
 type ShopItemProps = {
   Icon: string;

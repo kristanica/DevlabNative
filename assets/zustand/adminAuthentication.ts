@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { create } from "zustand";
-import { auth, db } from "../constants/constants";
+import { auth, db } from "../../constants";
 
 type adminAuthenticationProps = {
   user: User | null;

@@ -1,4 +1,4 @@
-import { devlabBootLines, devlabTips } from "@/assets/constants/constants";
+import { devlabBootLines, devlabTips } from "@/constants";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";

@@ -1,4 +1,4 @@
-import { auth, db, storage } from "@/assets/constants/constants";
+import { auth, db, storage } from "@/constants";
 import { useMutation } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { doc, setDoc } from "firebase/firestore";

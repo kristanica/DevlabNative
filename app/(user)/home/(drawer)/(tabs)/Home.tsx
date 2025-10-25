@@ -8,7 +8,7 @@ import HomeInventory from "@/assets/components/screen/HOME/HomeInventory";
 import JumpBackIn from "@/assets/components/screen/HOME/JumpBackIn";
 import ProfileHeader from "@/assets/components/screen/HOME/ProfileHeader";
 import UserProgress from "@/assets/components/screen/HOME/UserProgress";
-import { lessons } from "@/assets/constants/constants";
+import { lessons } from "@/constants";
 
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 

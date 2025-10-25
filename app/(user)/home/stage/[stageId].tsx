@@ -8,7 +8,6 @@ import SwipeLessonContainer from "@/assets/components/LessonsComponent/SwipeLess
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import Hearts from "@/assets/components/RenderItems/Hearts";
 import { StageHeader } from "@/assets/components/screen/STAGE/StageHeader";
-import { db } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import StageGameComponent from "@/assets/Hooks/function/StageGameComponent";
 import { useHandleFinalAnswer } from "@/assets/Hooks/function/useHandleFinalAnswer";
@@ -16,6 +15,7 @@ import codeWhisper from "@/assets/Hooks/mainGameModeFunctions/globalItems/codeWh
 import { RenderStageEditor } from "@/assets/Hooks/stageScreenHandles/RenderStageEditor";
 import { sampleStageData } from "@/assets/Hooks/stageScreenHandles/sampleStageData";
 import { useStageNavigation } from "@/assets/Hooks/stageScreenHandles/useStageNavigation";
+import { db } from "@/constants";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import { useCodeEditorDatabase } from "@/assets/Hooks/useCodeEditorDatabase";

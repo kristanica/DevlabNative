@@ -1,6 +1,6 @@
-import { auth, db } from "@/assets/constants/constants";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useAchievementStore } from "@/assets/zustand/useAchievementStore";
+import { auth, db } from "@/constants";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { playSound } from "./soundHandler";
 

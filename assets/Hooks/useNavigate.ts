@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { SharedValue, withTiming } from "react-native-reanimated";
-import { path } from "../constants/constants";
+import { path } from "../../constants";
 
 const useNavigate = (opacityVal: SharedValue<number>) => {
   setTimeout(() => {

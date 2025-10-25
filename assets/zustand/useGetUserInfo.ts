@@ -1,6 +1,6 @@
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { create } from "zustand";
-import { auth, db } from "../constants/constants";
+import { auth, db } from "../../constants";
 type userData = {
   username: string;
   bio: string;

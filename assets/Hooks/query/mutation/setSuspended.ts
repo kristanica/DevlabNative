@@ -1,4 +1,4 @@
-import { db } from "@/assets/constants/constants";
+import { db } from "@/constants";
 import { doc, updateDoc } from "firebase/firestore";
 
 const setSuspended = async (uid: any, isSuspended: boolean) => {

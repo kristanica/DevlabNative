@@ -5,7 +5,7 @@ import {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
-import { onboardingData, width } from "../constants/constants";
+import { onboardingData, width } from "../../constants";
 
 const usePresstoScroll = () => {
   const xVal = useSharedValue(0);

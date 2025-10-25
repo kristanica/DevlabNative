@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
-import { auth } from "../constants/constants";
+import { auth } from "../../constants";
 
 const useSignOut = () => {
   const logOut = async () => {

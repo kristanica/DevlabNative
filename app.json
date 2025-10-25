@@ -4,7 +4,7 @@
     "slug": "DevlabNative",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/devlabIcon/devlab-icon.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "devlabnative",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -20,7 +20,7 @@
       "package": "com.devlab.devlabNative",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0D1117"
       },
       "edgeToEdgeEnabled": true
     },
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/devlabIcon/devlab-splash.png",
+          "image": "./assets/images/splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#0D1117"

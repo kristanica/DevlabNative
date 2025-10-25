@@ -1,4 +1,4 @@
-import { path } from "@/assets/constants/constants";
+import { path } from "@/constants";
 import { router } from "expo-router";
 import React from "react";
 import {

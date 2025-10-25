@@ -1,5 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
-import { auth, db, storage } from "../constants/constants";
+import { auth, db, storage } from "../../constants";
 
 import { doc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";

@@ -1,13 +1,13 @@
 import RenderCounter from "@/assets/components/global/RenderCounter";
 import Footer from "@/assets/components/screen/INDEX/Footer";
-import { auth } from "@/assets/constants/constants";
+import { auth } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const index = () => {
   RenderCounter("index");
@@ -43,7 +43,15 @@ const index = () => {
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>
-
+        <TouchableOpacity
+          onPress={() =>
+            router.replace({
+              pathname: "/offline/OfflineScreen",
+            })
+          }
+        >
+          <Text>Offline</Text>
+        </TouchableOpacity>
         <Footer
           handleLogin={async () => router.replace({ pathname: "/Login" })}
         ></Footer>

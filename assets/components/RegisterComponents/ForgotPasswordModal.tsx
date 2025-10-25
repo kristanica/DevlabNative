@@ -1,6 +1,6 @@
-import { auth } from "@/assets/constants/constants";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
 import toastHandler from "@/assets/zustand/toastHandler";
+import { auth } from "@/constants";
 import { sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";

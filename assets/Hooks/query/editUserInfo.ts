@@ -1,4 +1,4 @@
-import { auth, db } from "@/assets/constants/constants";
+import { auth, db } from "@/constants";
 import { doc, updateDoc } from "firebase/firestore";
 
 const editUserInfo = async (userName: string, bio: string) => {

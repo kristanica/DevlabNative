@@ -1,4 +1,4 @@
-import { auth, URL } from "@/assets/constants/constants";
+import { auth, URL } from "@/constants";
 import axios from "axios";
 
 const fetchLessonsForAdmin = async (category: string) => {

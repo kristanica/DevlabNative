@@ -1,4 +1,3 @@
-import { auth, db, height } from "@/assets/constants/constants";
 import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { playSound } from "@/assets/Hooks/function/soundHandler";
 import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
@@ -6,6 +5,7 @@ import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
+import { auth, db, height } from "@/constants";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {

@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth, db, path } from "../constants/constants";
+import { auth, db, path } from "../../constants";
 
 const useGetUserInfo = (p0: (state: any) => any) => {
   const [userData, setUserData] = useState<any>();

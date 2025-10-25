@@ -1,5 +1,5 @@
-import { auth, URL } from "@/assets/constants/constants";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { auth, URL } from "@/constants";
 import axios from "axios";
 
 export const userProgress = async () => {

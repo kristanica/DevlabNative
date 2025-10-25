@@ -1,5 +1,5 @@
-import { auth, URL } from "@/assets/constants/constants";
 import { payloadProps } from "@/assets/constants/type";
+import { auth, URL } from "@/constants";
 import axios from "axios";
 type uploadVideoProps = payloadProps & {
   video: any;

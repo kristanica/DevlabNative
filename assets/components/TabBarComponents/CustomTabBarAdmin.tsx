@@ -1,6 +1,6 @@
 import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsButton";
-import { auth, navIconAdmin, width } from "@/assets/constants/constants";
 import useModal from "@/assets/Hooks/useModal";
+import { auth, navIconAdmin, width } from "@/constants";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 import { router } from "expo-router";

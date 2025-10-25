@@ -1,4 +1,4 @@
-import { auth } from "@/assets/constants/constants";
+import { auth } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchUserData = () => {

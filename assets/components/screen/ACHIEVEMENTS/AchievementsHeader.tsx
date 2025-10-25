@@ -1,4 +1,4 @@
-import { achievementPlaceHolder } from "@/assets/constants/constants";
+import { achievementPlaceHolder } from "@/constants";
 import React, { useCallback } from "react";
 import {
   FlatList,

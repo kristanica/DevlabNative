@@ -1,5 +1,5 @@
-import { auth, db } from "@/assets/constants/constants";
 import toastHandler from "@/assets/zustand/toastHandler";
+import { auth, db } from "@/constants";
 import { doc, setDoc } from "firebase/firestore";
 import { useEffect } from "react";
 import { Text, View } from "react-native";

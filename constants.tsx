@@ -1,13 +1,13 @@
 //GENERAL CONSTANTS
 
-import { Dimensions, ImageSourcePropType } from "react-native";
 import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,
   FIREBASE_STORE,
-} from "../../firebaseConfig";
-export const URL =
-  `https://b1ce163a5ef7f8e297a210c6d6fac286.serveo.net` as const;
+} from "@/firebaseConfig";
+
+import { Dimensions, ImageSourcePropType } from "react-native";
+export const URL = `https://api-soyulx5clq-uc.a.run.app` as const;
 //icon for tabs
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -364,12 +364,12 @@ export const filters: Record<
   },
 };
 export const itemIcon: Record<string, ImageSourcePropType> = {
-  CodePatch_Icon: require("../images/iconItems/CodePatch_Icon.png"),
-  CodeWhisper_Icon: require("../images/iconItems/CodeWhisper_Icon.png"),
-  CoinSurge_Icon: require("../images/iconItems/CoinSurge_Icon.png"),
-  BrainFilter_Icon: require("../images/iconItems/BrainFilter_Icon.png"),
-  ErrorShield_Icon: require("../images/iconItems/ErrorShield_Icon.png"),
-  TimeFreeze_Icon: require("../images/iconItems/TimeFreeze_Icon.png"),
+  CodePatch_Icon: require("@/assets/images/iconItems/CodePatch_Icon.png"),
+  CodeWhisper_Icon: require("@/assets/images/iconItems/CodeWhisper_Icon.png"),
+  CoinSurge_Icon: require("@/assets/images/iconItems/CoinSurge_Icon.png"),
+  BrainFilter_Icon: require("@/assets/images/iconItems/BrainFilter_Icon.png"),
+  ErrorShield_Icon: require("@/assets/images/iconItems/ErrorShield_Icon.png"),
+  TimeFreeze_Icon: require("@/assets/images/iconItems/TimeFreeze_Icon.png"),
 };
 
 export const categoryIcon: Record<string, ImageSourcePropType> = {

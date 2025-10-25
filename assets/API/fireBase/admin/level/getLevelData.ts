@@ -1,5 +1,5 @@
-import { auth } from "@/assets/constants/constants";
 import { payloadProps } from "@/assets/constants/type";
+import { auth } from "@/constants";
 import axios from "axios";
 type levelDataType = {
   title: string;

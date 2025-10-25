@@ -1,5 +1,5 @@
-import { db } from "@/assets/constants/constants";
 import levelIdentifier from "@/assets/zustand/levelIdentifier";
+import { db } from "@/constants";
 import { doc, setDoc } from "firebase/firestore";
 
 const saveLevel = async ({ updateLevelInformation }: any) => {

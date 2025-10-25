@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { categoryIcon, lessonMetaData } from "../constants/constants";
+import { categoryIcon, lessonMetaData } from "../../constants";
 
 type HomeLessonProps = {
   name: string;

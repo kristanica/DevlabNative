@@ -10,9 +10,9 @@ import { fetchContent } from "@/assets/API/fireBase/user/fetchContent";
 import { userProgress } from "@/assets/API/fireBase/user/fetchUserProgress";
 import { fetchShopItems } from "@/assets/API/fireBase/user/shop/fetchShopItems";
 import BootingLoadingScreen from "@/assets/components/global/BootingLoadingScreen";
-import { auth } from "@/assets/constants/constants";
 import { loadSounds, unloadSounds } from "@/assets/Hooks/function/soundHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import { auth } from "@/constants";
 import { useQueryClient } from "@tanstack/react-query";
 import { onAuthStateChanged } from "firebase/auth";
 

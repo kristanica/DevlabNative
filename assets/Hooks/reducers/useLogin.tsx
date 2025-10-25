@@ -1,4 +1,4 @@
-import { auth, db } from "@/assets/constants/constants";
+import { auth, db } from "@/constants";
 import { doc, getDoc } from "@firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";

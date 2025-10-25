@@ -1,6 +1,6 @@
 import CustomTabsButton from "@/assets/components/TabBarComponents/CustomTabsButton";
-import { navIcon, width } from "@/assets/constants/constants";
 import useModal from "@/assets/Hooks/useModal";
+import { navIcon, width } from "@/constants";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
