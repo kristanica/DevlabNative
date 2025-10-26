@@ -5,12 +5,14 @@ type hintPayload = {
   description: string;
   instruction: string;
   receivedCode: any;
+  submittedCode: any;
 };
 
 export const hint = async ({
   description,
   instruction,
   receivedCode,
+  submittedCode,
 }: hintPayload) => {
   const token = await auth?.currentUser?.getIdToken(true);
 
@@ -21,6 +23,7 @@ export const hint = async ({
         description: description,
         instruction: instruction,
         recievedCode: receivedCode,
+        submittedCode: submittedCode,
       },
       {
         headers: {

@@ -212,12 +212,13 @@ const StageScreen = () => {
           await codeWhisperItem.mutateAsync({
             description: currentStageData.description,
             instruction: currentStageData?.instruction,
-            receivedCode:
-              // Switch
+            submittedCode:
               category === "Database"
                 ? databaseQueryingFunctions.queryRecievedCode.query ||
                   "Query is empty"
                 : receivedCode,
+            receivedCode: currentStageData?.codingInterface || {},
+            // Switch
           })
         );
       }

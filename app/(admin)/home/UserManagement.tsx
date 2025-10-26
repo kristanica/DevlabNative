@@ -10,6 +10,7 @@ import { useDeleteAccount } from "@/assets/Hooks/query/mutation/deleteAccount";
 import { useSuspendAccount } from "@/assets/Hooks/query/mutation/suspendAccount";
 import { useDeleteAllProgress } from "@/assets/Hooks/query/mutation/useDeleteAllProgress";
 import { useDeleteProgress } from "@/assets/Hooks/query/mutation/useDeleteProgress";
+import { useDeleteSpecificAchievement } from "@/assets/Hooks/query/mutation/useDeleteSpecificAchievement";
 import { useEditUser } from "@/assets/Hooks/query/mutation/useEditUser";
 import useDebounce from "@/assets/Hooks/useDebounce";
 import useModal from "@/assets/Hooks/useModal";
@@ -70,6 +71,7 @@ const UserManagement = () => {
   const deleteProgress = useDeleteProgress();
   const deleteAllProgress = useDeleteAllProgress();
   const editUser = useEditUser();
+  const deleteAchievement = useDeleteSpecificAchievement();
 
   return (
     <AdminProtectedRoutes>
@@ -141,6 +143,7 @@ const UserManagement = () => {
             deleteProgress={deleteProgress}
             deleteAllProgress={deleteAllProgress}
             editUser={editUser}
+            deleteAchievement={deleteAchievement}
           ></EditUserModal>
         )}
       </View>

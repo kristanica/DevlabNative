@@ -15,11 +15,17 @@ const codeWhisper = (
   // Imddtly removes the item on activeBuffs array once used.
   const removeActiveBuff = activeBuffsLocal.getState().removeActiveBuff;
   return useMutation({
-    mutationFn: async ({ description, instruction, receivedCode }: any) =>
+    mutationFn: async ({
+      description,
+      instruction,
+      receivedCode,
+      submittedCode,
+    }: any) =>
       hint({
         description: description,
         instruction: instruction,
-        receivedCode,
+        submittedCode: submittedCode,
+        receivedCode: receivedCode,
       }),
     // On button pressed, this will run
     onMutate: () => {

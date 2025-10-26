@@ -39,6 +39,17 @@ const Footer = ({ handleLogin }: FooterPayload) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        onPress={() =>
+          router.replace({
+            pathname: "/offline/OfflineScreen",
+          })
+        }
+      >
+        <Text className="text-pink-400 mt-5 font-exoRegular xs:text-xs sm:text-sm md:text-xl lg:text-2xl xl:text-2xl">
+          No connection?
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

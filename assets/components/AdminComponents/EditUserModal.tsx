@@ -25,6 +25,7 @@ type EditUserModalPayload = ScaleModalPayload & {
   deleteProgress: any;
   deleteAllProgress: any;
   editUser: any;
+  deleteAchievement: any;
 };
 
 const EditUserModal = ({
@@ -36,6 +37,7 @@ const EditUserModal = ({
   deleteProgress,
   deleteAllProgress,
   editUser,
+  deleteAchievement,
 }: EditUserModalPayload) => {
   const queryClient = useQueryClient();
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
@@ -123,6 +125,29 @@ const EditUserModal = ({
 
                 {toggleView ? (
                   <>
+                    <Text className="text-white font-exoBold my-2 text-center">
+                      USER ACHIEVEMENT PROGRESS
+                    </Text>
+                    {categories.map((category, index) => (
+                      <React.Fragment key={index}>
+                        <ProgressBar
+                          activeLevel={10}
+                          category={category}
+                          userProgress={
+                            userInfo.achievements[category]["quantity"]
+                          }
+                          onDeleteSpecific={() => {
+                            deleteAchievement.mutate({
+                              category: category,
+                              uid: uid,
+                            });
+                          }}
+                        ></ProgressBar>
+                      </React.Fragment>
+                    ))}
+                    <Text className="text-white font-exoBold my-2 text-center">
+                      USER LEVEL PROGRESS
+                    </Text>
                     {categories.map((category, index) => (
                       <React.Fragment key={index}>
                         <ProgressBar

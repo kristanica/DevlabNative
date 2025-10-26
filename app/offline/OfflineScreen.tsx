@@ -1,14 +1,25 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 // Renders the offline screen
 const OfflineScreen = () => {
   return (
     <View className="flex-1 bg-background">
       <CustomGeneralContainer>
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 justify-center items-center relative">
+          <TouchableOpacity
+            className="absolute top-5 left-5"
+            onPress={() =>
+              router.replace({
+                pathname: "/Login",
+              })
+            }
+          >
+            <Ionicons name="backspace" size={20} color={"white"}></Ionicons>
+          </TouchableOpacity>
           <LottieView
             source={require("@/assets/Lottie/Loading.json")}
             autoPlay
@@ -21,7 +32,7 @@ const OfflineScreen = () => {
           </Text>
 
           <View className=" flex-row w-[100%] justify-evenly mt-8">
-            <Pressable
+            <TouchableOpacity
               onPress={() =>
                 router.push({ pathname: "/offline/OfflineCodeEditor" })
               }
@@ -29,16 +40,7 @@ const OfflineScreen = () => {
               <Text className="bg-button px-7 py-2 rounded-xl text-white text-xs xs:text-[10px]">
                 Code Editor
               </Text>
-            </Pressable>
-            <Pressable
-              onPress={() =>
-                router.push({ pathname: "/offline/OfflineDatabaseCodeEditor" })
-              }
-            >
-              <Text className="text-white px-7 py-2 rounded-xl bg-button text-xs xs:text-[10px]">
-                Database Editor
-              </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </CustomGeneralContainer>

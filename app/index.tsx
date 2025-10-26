@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 const index = () => {
   RenderCounter("index");
@@ -43,15 +43,7 @@ const index = () => {
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
         </View>
-        <TouchableOpacity
-          onPress={() =>
-            router.replace({
-              pathname: "/offline/OfflineScreen",
-            })
-          }
-        >
-          <Text>Offline</Text>
-        </TouchableOpacity>
+
         <Footer
           handleLogin={async () => router.replace({ pathname: "/Login" })}
         ></Footer>

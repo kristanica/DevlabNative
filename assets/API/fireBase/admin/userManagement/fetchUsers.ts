@@ -17,6 +17,7 @@ export const fetchUsers = async () => {
     throw error; // React Query will handle this
   }
   console.log("Success!");
+  console.log(allUserData.data);
   if (allUserData?.status !== 200) {
     console.log(
       "This errror comes from fetchUsers function. The client reached the backend but failed to get a response"
