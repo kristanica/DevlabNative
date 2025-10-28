@@ -85,6 +85,11 @@ const EditUserModal = ({
 
   const deleteConfirmation = useModal();
   const functionToPerfrom = useRef<any>(null);
+  const hasProgress = useMemo(() => {
+    if (!userInfo?.levelCount) return false;
+
+    return Object.values(userInfo.levelCount).some((count: any) => count > 0);
+  }, [userInfo]);
   return (
     <Modal
       visible={visibility}
@@ -179,12 +184,15 @@ const EditUserModal = ({
                       </React.Fragment>
                     ))}
                     <TouchableOpacity
+                      disabled={!hasProgress}
                       onPress={() => {
                         deleteConfirmation.setVisibility(true);
                         functionToPerfrom.current = () =>
                           deleteAllProgress.mutate({ uid });
                       }}
-                      className="mt-5 bg-red-500 p-3 rounded-[10px] items-center "
+                      className={`mt-5 p-3 rounded-[10px] items-center ${
+                        hasProgress ? "bg-red-500" : "bg-gray-600 opacity-50"
+                      }`}
                     >
                       <Text className="text-white font-exoBold">
                         DELETE ALL PROGRESS

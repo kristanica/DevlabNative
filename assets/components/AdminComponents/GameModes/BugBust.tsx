@@ -33,12 +33,7 @@ const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
         }}
         numeric={false}
       />
-      {/* Renders input containers for coding interfaces */}
-      <CodingInterfaces
-        state={state}
-        dispatch={dispatch}
-        category={category!}
-      ></CodingInterfaces>
+
       <InputContainer
         title={"Instruction"}
         value={state.instruction}
@@ -51,18 +46,12 @@ const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
         }}
         numeric={false}
       />
-      <InputContainer
-        title={"Hint"}
-        value={state.hint}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_FIELD",
-            field: "hint",
-            value: text,
-          });
-        }}
-        numeric={false}
-      />
+      {/* Renders input containers for coding interfaces */}
+      <CodingInterfaces
+        state={state}
+        dispatch={dispatch}
+        category={category!}
+      ></CodingInterfaces>
     </>
   );
 };

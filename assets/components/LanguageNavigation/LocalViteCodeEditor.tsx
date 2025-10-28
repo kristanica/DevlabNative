@@ -113,6 +113,7 @@ const LocalViteCodeEditor = ({
       </View>
 
       {/* --- 2. SYNTAX HIGHLIGHTING EDITOR --- */}
+
       <View className="flex-[2] bg-[#1E1E2E] m-2 rounded-xl p-1 relative">
         <TouchableOpacity onPress={handleRunCode}>
           <Text className="text-white bg-button absolute z-50">Run Code</Text>
@@ -161,7 +162,10 @@ const LocalViteCodeEditor = ({
       </View>
 
       <TouchableOpacity
-        onPress={handleRunCode}
+        onPress={() => {
+          handleRunCode();
+          console.log(executedCode);
+        }}
         className="absolute bottom-10 right-5 p-4 rounded-full z-10" // Adjust padding and size as needed
       >
         <Text className="bg-button p-4 rounded-full font-exoBold text-white">

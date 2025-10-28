@@ -1,6 +1,6 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
-import ViteCodeEditor from "@/assets/components/LanguageNavigation/ViteCodeEditor";
+import CodeLanguageSeletor from "@/assets/components/LanguageNavigation/CodeLanguageSelector";
+import LocalViteCodeEditor from "@/assets/components/LanguageNavigation/LocalViteCodeEditor";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,15 +12,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 const OfflineCodeEditor = () => {
   //Neceassry variables for code editor
   const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
-  const {
-    webRef,
-    sendToWebView,
-    receivedCode,
-    setReceivedCode,
-    logs,
-    setLogs,
-    terminalRef,
-  } = useCodeEditor();
+  const { logs, setLogs, terminalRef } = useCodeEditor();
 
   // shows/hide terminal
   const handleExpandTerminal = useCallback(() => {
@@ -41,12 +33,11 @@ const OfflineCodeEditor = () => {
           <Pressable onPress={handleExpandTerminal}>
             <Ionicons name="terminal" size={20} color="white" />
           </Pressable>
-          <SelectLanguageNavigation
-            setSelectedLanguage={setSelectedLanguage}
+          <CodeLanguageSeletor
+            subject={""}
             selectedLanguage={selectedLanguage}
-            subject=""
-            sendToWebView={sendToWebView}
-          ></SelectLanguageNavigation>
+            setSelectedLanguage={setSelectedLanguage}
+          ></CodeLanguageSeletor>
         </View>
         <KeyboardAwareScrollView
           contentContainerStyle={{
@@ -56,7 +47,13 @@ const OfflineCodeEditor = () => {
           extraScrollHeight={20}
           keyboardShouldPersistTaps="handled"
         >
-          <ViteCodeEditor
+          <LocalViteCodeEditor
+            logs={logs}
+            setLogs={setLogs}
+            terminalRef={terminalRef}
+            selectedLanguage={selectedLanguage}
+          ></LocalViteCodeEditor>
+          {/* <ViteCodeEditor
             isOffline={true}
             terminalRef={terminalRef}
             webRef={webRef}
@@ -64,7 +61,7 @@ const OfflineCodeEditor = () => {
             setReceivedCode={setReceivedCode}
             logs={logs}
             setLogs={setLogs}
-          ></ViteCodeEditor>
+          ></ViteCodeEditor> */}
         </KeyboardAwareScrollView>
       </CustomGeneralContainer>
     </View>

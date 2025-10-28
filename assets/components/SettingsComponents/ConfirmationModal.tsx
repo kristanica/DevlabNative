@@ -16,12 +16,12 @@ const ConfirmationModal = ({
 
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1">
+      <Pressable onPress={closeModal} className="flex-1 bg-black/50">
         <Animated.View
           style={[scaleStyle]}
           className="   w-[250px] h-[300px] m-auto  rounded-[10px]"
         >
-          <View className="justify-center items-center flex-[1] bg-modal rounded-xl border-[1px] border-[#FFFFFF]">
+          <View className="justify-center items-center flex-[1] bg-modal rounded-xl border-[#2a3141] border-[1px]">
             <LottieView
               source={require("@/assets/Lottie/Loading.json")}
               loop

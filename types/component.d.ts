@@ -54,6 +54,7 @@ type DropDownMenuPayload = {
   onSelect: (item: string) => void;
   placeHolder: string;
   value: string;
+  isStageOne?: string;
 };
 
 type InputContainerForAdminPayload = {
@@ -83,7 +84,7 @@ type StageInformation = {
 
 type StagesContainerPayload = {
   stageInformation: StageInformation;
-  index: number;
+  // index: number;
   isLocked?: boolean;
   id?: string;
 };
@@ -142,7 +143,7 @@ type stageDataPayload = {
   type?: string | undefined;
   instruction?: string | undefined;
   codingInterface?: string | undefined;
-  hint?: string | undefined;
+
   timer?: number | undefined;
   choices?: BrainBytesChoicesPayload;
   blocks?: BlockPayload[];

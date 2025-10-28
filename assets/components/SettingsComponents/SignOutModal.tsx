@@ -1,6 +1,13 @@
 import LottieView from "lottie-react-native";
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated from "react-native-reanimated";
 
 const SignOutModal = ({
@@ -11,10 +18,10 @@ const SignOutModal = ({
 }: ScaleModalPayload) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1 bg-black/40">
+      <Pressable onPress={closeModal} className="flex-1 bg-black/50">
         <Animated.View
           style={[scaleStyle]}
-          className="   aspect-square w-3/4 m-auto  rounded-[10px]"
+          className="aspect-square w-3/4 m-auto  rounded-[10px]"
         >
           <View className="justify-center items-center flex-[1] bg-modal rounded-3xl border-[#2a3141] border-[1px]">
             <LottieView
@@ -35,16 +42,16 @@ const SignOutModal = ({
               </Text>
             </View>
             <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <Pressable onPress={onConfirm}>
+              <TouchableOpacity onPress={onConfirm}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
                   Continue
                 </Text>
-              </Pressable>
-              <Pressable onPress={closeModal}>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={closeModal}>
                 <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px]  bg-[#FF6166] rounded-2xl">
                   No
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </Animated.View>

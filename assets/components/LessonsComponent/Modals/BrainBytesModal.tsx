@@ -16,7 +16,7 @@ const BrainBytesModal = ({
           style={[scaleStyle]}
           className="aspect-square w-5/6 max-w-[350px] m-auto rounded-3xl shadow-2xl shadow-black/80"
         >
-          <View className="flex-1 bg-[#16161A] border border-[#7F5AF0]/40 rounded-3xl p-5 justify-center items-center">
+          <View className="flex-1 bg-[#16161A] border-[#2a3141] border-[1px]  rounded-3xl p-5 justify-center items-center">
             <Text className="text-white font-exoBold text-center text-base mb-3">
               Welcome to <Text className="text-[#7F5AF0]">Brainbytes</Text> — a
               quiz mode where you’ll test your programming knowledge through fun

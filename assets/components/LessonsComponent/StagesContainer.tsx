@@ -21,9 +21,8 @@ const StagesContainer = ({ stageInformation, index, isLocked }: any) => {
       //       stageInformation.type === "Lesson" ? "#111827" : "#2B1118",
       //   },
       // ]}
-      className={`my-2 rounded-2xl border-2 border-black h-28 p-3 mx-3 relative ${
-        stageInformation.type === "Lesson" ? "bg-[#111827]" : "bg-[#2B1118]"
-      }`}
+      className={`bg-[#111827] my-2 rounded-2xl border-2 border-black h-28 p-3 mx-3 relative 
+              `}
     >
       {!isLocked && (
         <>
@@ -35,7 +34,11 @@ const StagesContainer = ({ stageInformation, index, isLocked }: any) => {
       )}
 
       <View>
-        <Text className="text-white font-exoBold  text-xl xs:text-[12px]">
+        <Text
+          className={`font-exoBold  text-xl xs:text-[12px]  ${
+            stageInformation.type === "Lesson" ? "text-white" : "text-red-500"
+          }`}
+        >
           {stageInformation.title}
         </Text>
       </View>

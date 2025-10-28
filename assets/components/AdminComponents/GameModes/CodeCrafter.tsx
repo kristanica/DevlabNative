@@ -50,12 +50,6 @@ const CodeCrafter = ({
         }}
         numeric={false}
       />
-      {/* Renders input containers for coding interfaces */}
-      <CodingInterfaces
-        state={state}
-        dispatch={dispatch}
-        category={category!}
-      ></CodingInterfaces>
       <InputContainer
         title={"Instruction"}
         value={state.instruction}
@@ -68,8 +62,14 @@ const CodeCrafter = ({
         }}
         numeric={false}
       />
+      {/* Renders input containers for coding interfaces */}
+      <CodingInterfaces
+        state={state}
+        dispatch={dispatch}
+        category={category!}
+      ></CodingInterfaces>
 
-      <InputContainer
+      {/* <InputContainer
         title={"Copy Code"}
         value={state.copyCode}
         setValue={(text) => {
@@ -80,11 +80,11 @@ const CodeCrafter = ({
           });
         }}
         numeric={false}
-      />
+      /> */}
 
       {/* Disable replication upload on Database Subject */}
       {category !== "Database" && (
-        <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+        <View className="flex-row  justify-between bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">
           <Text className="text-white mr-2">Upload a Replication file</Text>
 
           <TouchableOpacity onPress={pickReplicate}>

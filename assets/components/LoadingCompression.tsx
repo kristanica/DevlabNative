@@ -19,7 +19,7 @@ const LoadingCompression = ({ progress }: LoadingScreen) => {
           style={{ width: "100%", aspectRatio: 1 }}
         ></LottieView>
         <Text className="text-white font-exoBold text-xs mx-auto text-center ">
-          Your new profile is being updated. Please wait.
+          123
         </Text>
         <Progress.Circle
           style={{ margin: "auto" }}

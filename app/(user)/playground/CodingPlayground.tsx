@@ -1,8 +1,10 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import ExitPlaygroundModal from "@/assets/components/LanguageNavigation/ExitPlaygroundModal";
 import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
 import ViteCodeEditor from "@/assets/components/LanguageNavigation/ViteCodeEditor";
 import ProtectedRoutes from "@/assets/components/ProtectedRoutes";
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+import useModal from "@/assets/Hooks/useModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -22,15 +24,24 @@ const CodingPlayground = () => {
     setLogs,
     terminalRef,
   } = useCodeEditor();
+  const exitPlaygroundModal = useModal();
   return (
     <ProtectedRoutes>
       <View
         className="bg-background flex-[1] rounded-[10px]"
         style={{ position: "relative", zIndex: 1 }}
       >
+        {exitPlaygroundModal.visibility && (
+          <ExitPlaygroundModal
+            {...exitPlaygroundModal}
+            onConfirm={() => router.replace({ pathname: "/home/Home" })}
+          ></ExitPlaygroundModal>
+        )}
         <CustomGeneralContainer>
           <View className="justify-between flex-row my-5 items-center">
-            <Pressable onPress={() => router.replace("/home/Home")}>
+            <Pressable
+              onPress={() => exitPlaygroundModal.setVisibility((prev) => !prev)}
+            >
               <Text className="text-white ml-3 text-2xl font-exoExtraBold">
                 DEVLAB
               </Text>

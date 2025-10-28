@@ -5,8 +5,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
+import LottieView from "lottie-react-native";
 import React, { useEffect } from "react";
-import { Image, View } from "react-native";
+import { View } from "react-native";
 
 const index = () => {
   RenderCounter("index");
@@ -35,16 +36,16 @@ const index = () => {
     <View className="bg-background flex-[1] justify-center items-center ">
       <View className="flex-[1] ">
         <View className="flex-[2] justify-center items-center">
-          {/* <LottieView
-            source={require("@/assets/Lottie/devlab-lottie-final.json")}
+          <LottieView
+            source={require("@/assets/Lottie/Loading.json")}
             autoPlay
-            loop={false}
+            loop={true}
             style={{ width: "100%", aspectRatio: 1 }}
-          ></LottieView> */}
-          <Image
+          ></LottieView>
+          {/* <Image
             source={require("@/assets/images/devlabIcon.png")}
             style={{ width: "100%", height: 500 }}
-          ></Image>
+          ></Image> */}
         </View>
 
         <Footer

@@ -133,8 +133,11 @@ const Lesson = ({
         <LoadingCompression progress={progress}></LoadingCompression>
       )}
 
-      <View className="bg-slate-600 px-1 my-3 py-3">
-        <View className="flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl ">
+      <View className="bg-slate-700 px-1 my-3 py-3 rounded-xl">
+        <Text className="text-white font-exoLight text-sm   text-center py-2">
+          This is the content that will be shown to the users
+        </Text>
+        <View className="flex-row justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl ">
           <TestDropDownMenu
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
@@ -142,7 +145,7 @@ const Lesson = ({
         </View>
         <Pressable
           onPress={addBlocks}
-          className="flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3"
+          className="flex-row justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3"
         >
           <Text className="text-white mx-auto font-exoBold text-lg ">
             ADD A BLOCK
@@ -170,9 +173,9 @@ const Lesson = ({
         </View>
       </View>
 
-      <View className="flex-row  justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+      <View className="flex-row  justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3">
         <View className="flex-row">
-          <Text className="text-white mr-2">Upload a presentation</Text>
+          <Text className="text-white mr-2">Upload a video presentation</Text>
           {progress === 0.9984151721000671 && (
             <Ionicons
               name="checkbox-sharp"

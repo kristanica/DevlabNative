@@ -1,29 +1,17 @@
 import useModal from "@/assets/Hooks/useModal";
-import useSequentialAppearAnim from "@/assets/Hooks/useSequentialAppearAnim";
-import { useIsFocused } from "@react-navigation/native";
-import React, { useState } from "react";
+import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import Animated from "react-native-reanimated";
 import SmallLoading from "../global/SmallLoading";
 import DeleteUserConfirmation from "./DeleteUserConfirmation";
 
 const AdminUserContainer = ({
   allUsersInformation,
   mutation,
-  index,
-  activeLevel,
+
   loading,
   deleteAccount,
   more,
 }: AdminUserContainerPayload) => {
-  console.log(loading + "loading");
-  const [visible, setVisible] = useState<boolean>(false);
-  const isFocused = useIsFocused();
-  const { onScale } = useSequentialAppearAnim({
-    indicator: isFocused,
-    id: index,
-  });
-
   const toUse = allUsersInformation?.profileImage
     ? { uri: allUsersInformation.profileImage }
     : require("@/assets/images/profile.png");
@@ -32,10 +20,7 @@ const AdminUserContainer = ({
 
   return (
     <>
-      <Animated.View
-        style={onScale}
-        className="bg-background flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#56EBFF] border-[1px] relative "
-      >
+      <View className="bg-background flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#90b6bb] border-[1px]  relative ">
         <View className="flex-[1] justify-center items-center ">
           {deleteUserModal.visibility && (
             <DeleteUserConfirmation
@@ -141,7 +126,7 @@ const AdminUserContainer = ({
             )}
           </View>
         </View>
-      </Animated.View>
+      </View>
     </>
   );
 };

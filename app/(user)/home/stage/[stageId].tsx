@@ -352,12 +352,14 @@ const StageScreen = () => {
                   setLogs={setLogs}
                   logs={logs}
                 />
-                {!hintLoading && currentStageData?.type !== "Lesson" && (
+                {!hintLoading ||
+                currentStageData?.type !== "Lesson" ||
+                islevelCompleted ? null : (
                   <ItemList category={String(category)} />
                 )}
               </KeyboardAwareScrollView>
 
-              <SwipeLessonContainer>
+              <SwipeLessonContainer gameType={currentStageData.type}>
                 {currentStageData.type !== "Lesson" && <Hearts />}
                 <StageGameComponent
                   levelFinishedModal={levelFinishedModal}

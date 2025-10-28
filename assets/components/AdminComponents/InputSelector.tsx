@@ -45,7 +45,7 @@ const InputSelector = ({
     Paragraph: (
       <View
         key={block.id}
-        className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3"
+        className="bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3"
       >
         <View className="flex-row justify-between">
           <Text className="text-white my-2">{block.type}</Text>
@@ -76,7 +76,7 @@ const InputSelector = ({
     Header: (
       <View
         key={block.id}
-        className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3"
+        className="bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3"
       >
         <View className="flex-row justify-between">
           <Text className="text-white my-2">{block.type}</Text>
@@ -106,7 +106,7 @@ const InputSelector = ({
     Image: (
       <View
         key={block.id}
-        className=" flex-row justify-between bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3"
+        className=" flex-row justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3"
       >
         {index ? (
           <Ionicons
@@ -141,7 +141,7 @@ const InputSelector = ({
     Divider: (
       <View
         key={block.id}
-        className=" justify-center items-center py-2 bg-background border-[#56EBFF] border-[2px] p-1 rounded-2xl mt-3 "
+        className=" justify-center items-center py-2 bg-background border-[#2a3141] border-[1px] p-1 rounded-2xl mt-3 "
       >
         <Pressable
           onPress={() => dispatch({ type: "REMOVE_BLOCK", id: block.id })}

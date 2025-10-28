@@ -19,12 +19,14 @@ const AdminLayout = () => {
         queryClient.ensureQueryData({
           queryKey: ["Active level admin"],
           queryFn: activeLevelCounter,
-          staleTime: 5 * 60 * 1000,
+
+          staleTime: 10 * 60 * 1000,
         }),
         queryClient.ensureQueryData({
           queryKey: ["allUser"],
           queryFn: fetchUsers,
-          staleTime: 5 * 60 * 1000,
+          //NOTE: Might change to gc time and stale time to infinity
+          staleTime: 10 * 60 * 1000,
         }),
 
         getValidAdmin(),

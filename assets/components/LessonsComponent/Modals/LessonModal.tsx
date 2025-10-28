@@ -16,7 +16,7 @@ const LessonModal = ({
           style={[scaleStyle]}
           className="aspect-square w-5/6 max-w-[350px] m-auto rounded-3xl shadow-2xl shadow-black/80"
         >
-          <View className="flex-1 bg-[#16161A] border border-[#1c474d] rounded-3xl p-5 justify-center items-center">
+          <View className="flex-1 bg-[#16161A] border-[#2a3141] border-[1px]  rounded-3xl p-5 justify-center items-center">
             <Text className="text-white font-exoBold text-center text-base mb-3">
               Welcome to <Text className="text-[#7F5AF0]">Lesson Mode</Text> —
               where your coding journey begins!

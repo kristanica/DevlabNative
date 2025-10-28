@@ -28,7 +28,6 @@ type State = {
   };
 
   //Bug Bust
-  hint?: string;
 
   //Code Rush
   timer?: number;
@@ -55,7 +54,6 @@ const initialState = {
   },
 
   //Bug Bust
-  hint: "",
 
   //Code Rush
   timer: undefined,

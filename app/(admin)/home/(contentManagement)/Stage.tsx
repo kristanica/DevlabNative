@@ -11,11 +11,11 @@ import useModal from "@/assets/Hooks/useModal";
 import { cancelVideoCompression } from "@/assets/zustand/cancelVideoCompression";
 import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { FlashList } from "@shopify/flash-list";
 import { useIsMutating } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import DraggableFlatList from "react-native-draggable-flatlist";
 
 const Stage = () => {
   const setCancelCompression = cancelVideoCompression(
@@ -28,18 +28,18 @@ const Stage = () => {
     useListStage();
   const tutorial = useModal();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
-  const firstStage = stagesData?.[0];
-  const draggableStages = stagesData?.slice(1) ?? [];
-  const onDragEnd = (data: any) => {
-    const newOrderedData = [
-      firstStage,
-      ...data.map((item: any, index: number) => ({
-        ...item,
-        order: index + 2,
-      })),
-    ];
-    updateOrderMutation.mutate({ newOrder: newOrderedData });
-  };
+  // const firstStage = stagesData?.[0];
+  // const draggableStages = stagesData?.slice(1) ?? [];
+  // const onDragEnd = (data: any) => {
+  //   const newOrderedData = [
+  //     firstStage,
+  //     ...data.map((item: any, index: number) => ({
+  //       ...item,
+  //       order: index + 2,
+  //     })),
+  //   ];
+  //   updateOrderMutation.mutate({ newOrder: newOrderedData });
+  // };
   const isMutating = useIsMutating();
   return (
     <AdminProtectedRoutes>
@@ -74,63 +74,40 @@ const Stage = () => {
                 {isLoading ? (
                   <SmallLoading></SmallLoading>
                 ) : (
-                  <DraggableFlatList
-                    onDragEnd={({ data }) => onDragEnd(data)}
-                    data={draggableStages ?? []}
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={(item: any) => item.id}
-                    ListHeaderComponent={
-                      firstStage ? (
-                        <Pressable
-                          onPress={() => {
-                            stageTracker(firstStage.id);
-                            setVisibility(true);
-                            setCancelCompression(true);
-                          }}
+                  <>
+                    <FlashList
+                      data={stagesData ?? []}
+                      showsVerticalScrollIndicator={false}
+                      keyExtractor={(item: any) => item.id}
+                      renderItem={({ item }) => {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              onPress={() => {
+                                stageTracker(item.id);
+                                setVisibility(true);
+                                setCancelCompression(true);
+                              }}
+                            >
+                              <StageContainer
+                                stageInformation={item}
+                              ></StageContainer>
+                            </TouchableOpacity>
+                          </>
+                        );
+                      }}
+                      ListFooterComponent={() => (
+                        <TouchableOpacity
+                          className="mx-auto mt-1"
+                          onPress={() => addNewStageMutation.mutate()}
                         >
-                          <StageContainer
-                            stageInformation={firstStage}
-                            index={0}
-                          ></StageContainer>
-                        </Pressable>
-                      ) : null
-                    }
-                    renderItem={({ item, getIndex, drag, isActive }) => {
-                      const index = getIndex();
-                      if (index === undefined) {
-                        return;
-                      }
-
-                      return (
-                        <>
-                          <TouchableOpacity
-                            onLongPress={drag}
-                            onPress={() => {
-                              stageTracker(item.id);
-                              setVisibility(true);
-                              setCancelCompression(true);
-                            }}
-                            disabled={isActive}
-                          >
-                            <StageContainer
-                              stageInformation={item}
-                              index={index ?? 0}
-                            ></StageContainer>
-                          </TouchableOpacity>
-                        </>
-                      );
-                    }}
-                    ListFooterComponent={() => (
-                      <TouchableOpacity
-                        className="mx-auto mt-1"
-                        onPress={() => addNewStageMutation.mutate()}
-                      >
-                        <Text className="text-white font-exoExtraBold text-3xl bg-green-400 self-start py-2 px-7 rounded-3xl ">
-                          +
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  ></DraggableFlatList>
+                          <Text className="text-white font-exoExtraBold text-3xl bg-green-400 self-start py-2 px-7 rounded-3xl ">
+                            +
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    ></FlashList>
+                  </>
                 )}
               </View>
 
@@ -153,3 +130,62 @@ const Stage = () => {
 };
 
 export default Stage;
+{
+  /* <DraggableFlatList
+                      onDragEnd={({ data }) => onDragEnd(data)}
+                      data={draggableStages ?? []}
+                      showsVerticalScrollIndicator={false}
+                      keyExtractor={(item: any) => item.id}
+                      ListHeaderComponent={
+                        firstStage ? (
+                          <Pressable
+                            onPress={() => {
+                              stageTracker(firstStage.id);
+                              setVisibility(true);
+                              setCancelCompression(true);
+                            }}
+                          >
+                            <StageContainer
+                              stageInformation={firstStage}
+                              index={0}
+                            ></StageContainer>
+                          </Pressable>
+                        ) : null
+                      }
+                      renderItem={({ item, getIndex, drag, isActive }) => {
+                        const index = getIndex();
+                        if (index === undefined) {
+                          return;
+                        }
+
+                        return (
+                          <>
+                            <TouchableOpacity
+                              onLongPress={drag}
+                              onPress={() => {
+                                stageTracker(item.id);
+                                setVisibility(true);
+                                setCancelCompression(true);
+                              }}
+                              disabled={isActive}
+                            >
+                              <StageContainer
+                                stageInformation={item}
+                                index={index ?? 0}
+                              ></StageContainer>
+                            </TouchableOpacity>
+                          </>
+                        );
+                      }}
+                      ListFooterComponent={() => (
+                        <TouchableOpacity
+                          className="mx-auto mt-1"
+                          onPress={() => addNewStageMutation.mutate()}
+                        >
+                          <Text className="text-white font-exoExtraBold text-3xl bg-green-400 self-start py-2 px-7 rounded-3xl ">
+                            +
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    ></DraggableFlatList> */
+}

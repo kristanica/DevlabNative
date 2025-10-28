@@ -6,7 +6,13 @@ import {
   js as beautifyJs,
 } from "js-beautify";
 import React, { useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import CodeHighlighter from "react-native-code-highlighter";
 import Animated, {
   Easing,
@@ -78,20 +84,20 @@ const Accordion = ({ header, contents }: AccordionPayload) => {
             hljsStyle={dracula}
             containerStyle={styles.codeContainer}
             textStyle={styles.text}
-            language={"html"}
+            language={header}
           >
             {formattedContents}
           </CodeHighlighter>
         </View>
 
-        <Pressable
-          className="absolute right-0 bottom-2"
+        <TouchableOpacity
+          className="absolute right-0 bottom-0"
           onPress={async () => {
             await Clipboard.setStringAsync(formattedContents);
           }}
         >
-          <Ionicons name={"clipboard"} color={"white"} size={13}></Ionicons>
-        </Pressable>
+          <Ionicons name={"clipboard"} color={"white"} size={20}></Ionicons>
+        </TouchableOpacity>
       </Animated.View>
     </View>
   );

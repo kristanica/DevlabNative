@@ -7,8 +7,10 @@ import {
 } from "@/firebaseConfig";
 
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL = `` as const;
+export const URL =
+  `https://devlab-server-railway-production.up.railway.app` as const;
 //icon for tabs
+// https://devlab-server-railway-production.up.railway.app/
 // https://api-soyulx5clq-uc.a.run.app
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
@@ -174,61 +176,62 @@ export const mockUpShopItem = [
 
 //LoadingScreen constants
 export const devlabTips = [
-  "Breaking your code is just ✨unit testing✨ in disguise.",
-  "If Google ever crashes, we riot.",
-  "Learning to code? Step 1: Panic. Step 2: Google it.",
-  "If it works on your machine, it's basically production-ready.",
-  "Syntax errors are just your code asking for attention.",
-  "Comment your code like you're leaving instructions for aliens.",
+  "Remember: breaking your code is just ✨learning✨ with extra steps.",
+  "If Google ever goes down, we all just… take a nap.",
+  "Step 1: Panic. Step 2: Google. Step 3: Pretend you knew it all along.",
+  "If it runs on your machine, that’s basically production, right?",
+  "Syntax errors are just your code trying to talk to you. Loudly.",
+  "Write comments like you’re leaving notes for your future, confused self.",
 
-  "Console.log is the duct tape of JavaScript.",
-  "Commit early, commit often, regret nothing (until production).",
-  "`===` saves lives. `==` starts fires.",
-  "Naming things is hard. Just call it `thingyMcThingface` and move on.",
-  "Don’t repeat yourself… unless you're debugging, then repeat yourself loudly.",
+  "Console.log: because debugging deserves emotional support too.",
+  "Commit early, commit often, and never look back. (Until something breaks.)",
+  "`===` means true love. `==` is a toxic relationship.",
+  "Can’t think of a name? ‘thingyMcThingface’ never failed anyone.",
+  "Debugging mantra: ‘Did I really write this?’ — probably yes.",
 
-  "There’s no place like 127.0.0.1 — unless you forgot the port number.",
-  "Programming: turning coffee into bugs since forever.",
-  "It’s not a bug, it’s a surprise mechanic.",
-  "Want to feel alive? Deploy without testing.",
-  "CSS is just sorcery we pretend to understand.",
-  "You miss 100% of the semicolons you don’t place.",
+  "There’s no place like 127.0.0.1 — unless you forgot the port again.",
+  "Programming: turning caffeine and chaos into slightly functional code.",
+  "It’s not a bug, it’s an unplanned feature.",
+  "Deploying without testing? Bold. Dangerous. We respect it.",
+  "CSS is black magic, and we’re all just apprentices.",
+  "Missing a semicolon is the dev equivalent of forgetting your house keys.",
 
-  "DevLab Tip: Pressing 'Run' counts as bravery.",
-  "XP Bonus: Read your error message *before* crying.",
-  "JS functions are like spells. Forget the parentheses, summon chaos.",
-  "HTML is like pizza dough. Easy to make, hard to get crispy.",
-  "Your bugs fear one thing: `console.log('you')`",
+  "DevLab Tip: Hitting 'Run' takes courage. You’re doing great.",
+  "XP Bonus: Read the error message *before* having an existential crisis.",
+  "JavaScript is basically a fantasy RPG. Forget one bracket, summon a demon.",
+  "HTML is simple — until it suddenly isn’t.",
+  "If in doubt, console.log your feelings.",
 
-  "You’re one crash away from greatness.",
-  "Even the best devs once misspelled `console`.",
-  "Keep pushing. The bugs are more afraid of you than you are of them.",
-  "A failed build is just a plot twist.",
-  "Coding is 10% writing and 90% explaining to your rubber duck.",
-  "Your future self will look at this and say: 'why tho?' — and that's growth.",
+  "Remember: Every bug you fix levels you up.",
+  "Even pros misspell `console` sometimes. You’re in good company.",
+  "Your bugs are scared of your persistence. Keep going!",
+  "A failed build is just a dramatic plot twist.",
+  "Coding is 10% writing, 90% explaining what happened to your rubber duck.",
+  "If your past self could see this code, they’d be proud (and slightly confused).",
 ] as const;
-
 export const devlabBootLines = [
-  "Injecting 3 shots of espresso into mainframe...",
-  "Unleashing the rubber duck debugger army...",
-  "Bribing the compiler with compliments...",
-  "Assembling pixels into something vaguely UI-ish...",
-  "Reciting forbidden Stack Overflow incantations...",
-  "Drawing a pentagram with flexbox...",
-  "Sacrificing semicolons for stronger typings...",
-  "Reviving dead commits from Git graveyard...",
-  "Slapping bugs with a keyboard (gently)...",
-  "Brewing dark mode potions...",
-  "Installing `hope`... failed. Retrying...",
-  "Deploying divs into the void...",
-  "Asking ChatGPT for life advice...",
-  "Converting caffeine to source code...",
-  "Taming rogue animations with duct tape...",
-  "Binding the soul of a junior dev to this project...",
-  "Buffing syntax with +5 chaos energy...",
-  "Enabling God Mode for your console.logs...",
-  "All systems unstable. Proceed anyway 🚀",
+  "Starting your DevLab workspace...",
+  "Warming up the code editor just for you...",
+  "Gathering your snippets and shortcuts...",
+  "Making sure your pixels are in the right place...",
+  "Organizing your syntax highlighters...",
+  "Preparing a cozy environment for your creativity...",
+  "Spinning up tiny virtual servers (they’re shy)...",
+  "Double-checking if semicolons are behaving today...",
+  "Encouraging your code to be on its best behavior...",
+  "Refilling the virtual coffee pot...",
+  "Lining up the tools for your next big idea...",
+  "Shining the console for your next run...",
+  "Making sure your variables feel appreciated...",
+  "Compiling your imagination into reality...",
+  "Adjusting code vibes... almost ready...",
+  "Reassuring the compiler everything will be fine...",
+  "Fetching inspiration from the cloud ☁️...",
+  "Humming a little tune while preparing your workspace...",
+  "You're doing great — just a few more bytes...",
+  "Almost there... your lab is waking up 🔧",
 ] as const;
+
 export const evaluatingCodeLines = [
   "Parsing the sacred markup scrolls...",
   "Whispering sweet nothings to your CSS...",

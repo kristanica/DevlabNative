@@ -15,8 +15,8 @@ const InputContainer = ({
   }, [value]);
 
   return (
-    <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
-      <Text className="text-white my-2">{title}</Text>
+    <View className="bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">
+      <Text className="text-white my-2 font-exoBold">{title}</Text>
       <TextInput
         multiline
         keyboardType={numeric ? "numeric" : "default"}

@@ -74,6 +74,7 @@ const EditStageModal = ({
   const deleteConfirmationModal = useModal();
 
   // Use to make useReducer, state.type, sync.
+  //FIXME: Not updating the isHidden
   useEffect(() => {
     if (state.type === "") {
       dispatch({
@@ -128,17 +129,30 @@ const EditStageModal = ({
     setReplicateFile("");
   };
   const isMutating = useIsMutating();
+
+  const aboutGamemode: any = {
+    BugBust: "Users will be tasked to fix the given code with a bug.",
+    BrainBytes:
+      "Users will be tasked to choose the correct answer from the given choices.",
+    CodeRush:
+      "Users will be tasked to finish the activity before the timer runs out.",
+    CodeCrafter:
+      "A code-building activity where users must create what is tasked. A reference file can be uploaded for replication. Disabled on Database",
+    Lesson:
+      "A learning activity in which users study a given topic or concept before proceeding to challenges.",
+  };
+
   return (
     <Modal visible={visibility} transparent={true}>
       {(isMutating > 0 || isLoading) && <FillScreenLoading></FillScreenLoading>}
       <Pressable
-        className="flex-[1] justify-center items-center bg-black/30 "
+        className="flex-[1] justify-center items-center bg-black/50"
         onPress={() => {
           setCancelCompression(false);
         }}
       >
         <Pressable
-          className="w-[80%] h-[90%] "
+          className="w-[90%]  "
           onPress={(e) => {
             e.stopPropagation();
           }}
@@ -154,7 +168,7 @@ const EditStageModal = ({
               className="  h-full  rounded-xl  "
               style={[scaleStyle]}
             >
-              <View className=" bg-modal pb-5 rounded-2xl border-white border-[2px] mb-5 px-2">
+              <View className=" bg-modal pb-5 rounded-2xl border-[#2a3141] border-[1px] mb-5 px-2">
                 <Pressable onPress={() => closeModal()}>
                   <Ionicons
                     name={"close"}
@@ -163,9 +177,7 @@ const EditStageModal = ({
                     className="py-2"
                   ></Ionicons>
                 </Pressable>
-                <Pressable onPress={() => console.log(videoPresentation)}>
-                  <Text>HEllo</Text>
-                </Pressable>
+
                 <View>
                   <Text className="text-white font-exoBold text-lg mx-auto my-3">
                     Currently editing {stageIdentifier}
@@ -175,7 +187,7 @@ const EditStageModal = ({
                     automatically set to Visible, and gamemodes to Hidden.
                   </Text>
                 </View>
-                <View className="bg-background border-[#56EBFF] border-[2px]  rounded-2xl p-2 ">
+                <View className="bg-background border-[#90b6bb] border-[1px]  rounded-2xl p-2 ">
                   <Text className="text-white font-exoRegular my-2">
                     Stage Visibility
                   </Text>
@@ -185,9 +197,14 @@ const EditStageModal = ({
                 </View>
               </View>
 
-              <View className=" flex-[3] bg-modal rounded-2xl border-white border-[2px] px-2">
+              <View className=" flex-[3] bg-modal rounded-2xl border-[#2a3141] border-[1px] px-2">
+                <Text className="text-white font-exoLight text-sm   text-center py-2">
+                  {(state.type && aboutGamemode[state.type]) ||
+                    "Select a gamemode to see its description."}
+                </Text>
                 <View>
                   <DropDownMenu
+                    isStageOne={stageIdentifier || ""}
                     onSelect={(item) => {
                       // set type to gamemodes
                       dispatch({
@@ -217,9 +234,9 @@ const EditStageModal = ({
                     setReplicateFile={setReplicateFile}
                   ></GameComponent>
 
-                  <View className="flex-row my-3">
+                  <View className="flex-row my-3 mx-2">
                     <TouchableOpacity
-                      className="px-7 py-2 bg-red-400 self-start mx-auto mt-2 rounded-lg"
+                      className="px-7 py-2 bg-red-500 w-[50%]  rounded-lg "
                       onPress={() => {
                         if (stageData?.order === 1) {
                           setToastVisibility(
@@ -232,15 +249,20 @@ const EditStageModal = ({
                         deleteConfirmationModal.setVisibility(true);
                       }}
                     >
-                      <Text className="text-white font-exoBold">Delete</Text>
+                      <Text className="text-white font-exoBold text-center">
+                        Delete
+                      </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      className="px-7 py-2 bg-green-400 self-start mx-auto mt-2 rounded-lg "
+                      className="px-7 py-2 bg-green-500 w-[50%]  rounded-lg "
+                      // className="px-7 py-2 bg-green-500 self-start mx-auto mt-2 rounded-lg "
                       onPress={() => {
                         editConfirmationModal.setVisibility(true);
                       }}
                     >
-                      <Text className="text-white">Save</Text>
+                      <Text className="text-white font-exoBold text-center">
+                        Save
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>

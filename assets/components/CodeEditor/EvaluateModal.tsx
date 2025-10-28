@@ -11,11 +11,11 @@ const EvaluateModal = (props: EvaluateMoalProps) => {
       <Pressable onPress={props.closeModal} className="flex-1 mx-5 bg-black/50">
         <Pressable
           onPress={(e) => e.stopPropagation()}
-          className="my-auto h-[200px]"
+          className="my-auto h-[200px]  "
         >
           <Animated.View
             style={[props.scaleStyle]}
-            className="w-fit  rounded-[10px] mx-2 bg-modal"
+            className="w-fit  rounded-[10px] mx-2 bg-modal border-[#2a3141] border-[1px]"
           >
             <Accordion
               header={"Feedback"}

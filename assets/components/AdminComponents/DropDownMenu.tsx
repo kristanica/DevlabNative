@@ -12,6 +12,7 @@ const DropDownMenu = ({
   onSelect,
   placeHolder,
   value,
+  isStageOne,
 }: DropDownMenuPayload) => {
   const [openDropDown, setOpenDropDown] = useState<boolean>(false);
   const dropDown = [
@@ -24,9 +25,22 @@ const DropDownMenu = ({
 
   return (
     <>
-      <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3 ">
-        <Text className="text-white font-exoRegular">Choose a gamemode</Text>
-        <Pressable onPress={() => setOpenDropDown((prev: boolean) => !prev)}>
+      <View className="bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3 ">
+        <Text className="text-white font-exoRegular">Choose a gamemode </Text>
+        {isStageOne === "Stage1" ? (
+          <Text className="text-white  font-exoLight text-xs opacity-50">
+            Cannot be changes on stage 1
+          </Text>
+        ) : null}
+
+        <Pressable
+          onPress={() => {
+            //DIsables the dropdown bmenu on Stage1 on every topic
+            if (isStageOne === "Stage1") return;
+
+            setOpenDropDown((prev: boolean) => !prev);
+          }}
+        >
           <Text className="text-white border-[#a8b3b575] border-[2px] rounded-xl p-2 my-2">
             {value
               ? value

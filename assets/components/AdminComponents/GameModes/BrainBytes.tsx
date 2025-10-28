@@ -8,7 +8,13 @@ type BrainBytesProps = {
 };
 const BrainBytes = ({ dispatch, state }: BrainBytesProps) => {
   // const category = tracker((state) => state.levelPayload?.category);
-
+  const handleChoiceChange = (field: string, value: string) => {
+    dispatch({
+      type: "UPDATE_FIELD_CHOICES",
+      field,
+      value,
+    });
+  };
   return (
     <>
       <InputContainer
@@ -53,88 +59,45 @@ const BrainBytes = ({ dispatch, state }: BrainBytesProps) => {
         }}
         numeric={false}
       />
-      <View className="bg-background border-[#56EBFF] border-[2px] p-3 rounded-2xl mt-3">
+      <View className="bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">
         <Text className="text-white my-2">Choices</Text>
-        <View className="flex flex-row justify-center items-center">
-          <Text className="text-white">A. </Text>
 
+        {[
+          { label: "A", key: "a" },
+          { label: "B", key: "b" },
+          { label: "C", key: "c" },
+          { label: "D", key: "d" },
+        ].map(({ label, key }) => (
+          <View
+            key={key}
+            className="flex-row items-center mb-3 bg-[#1c1f26] rounded-xl p-2"
+            style={{ borderColor: "#a8b3b575", borderWidth: 1 }}
+          >
+            <Text className="text-white mr-2 font-medium">{label}.</Text>
+            <TextInput
+              multiline
+              placeholder={`Enter choice ${label}`}
+              placeholderTextColor="#8b8b8b"
+              value={state.choices?.[key] || ""}
+              onChangeText={(text) => handleChoiceChange(key, text)}
+              className="flex-1 text-white"
+            />
+          </View>
+        ))}
+
+        <View
+          className="flex-row items-center bg-[#1c1f26] rounded-xl p-2"
+          style={{ borderColor: "#a8b3b575", borderWidth: 1 }}
+        >
+          <Text className="text-white mr-2 font-medium">Answer:</Text>
           <TextInput
             multiline
-            value={state.choices.a}
-            onChangeText={(text) =>
-              dispatch({
-                type: "UPDATE_FIELD_CHOICES",
-                field: "a",
-                value: text,
-              })
-            }
-            className="rounded-xl p-2 text-white"
-            style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-          ></TextInput>
-        </View>
-        <View className="flex flex-row justify-center items-center">
-          <Text className="text-white">C. </Text>
-          <TextInput
-            multiline
-            value={state.choices?.b}
-            onChangeText={(text) =>
-              dispatch({
-                type: "UPDATE_FIELD_CHOICES",
-                field: "b",
-                value: text,
-              })
-            }
-            className="rounded-xl p-2 text-white my-2"
-            style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-          ></TextInput>
-        </View>
-        <View className="flex flex-row justify-center items-center">
-          <Text className="text-white">B. </Text>
-          <TextInput
-            multiline
-            value={state.choices?.c}
-            onChangeText={(text) =>
-              dispatch({
-                type: "UPDATE_FIELD_CHOICES",
-                field: "c",
-                value: text,
-              })
-            }
-            className="rounded-xl p-2 text-white my-2"
-            style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-          ></TextInput>
-        </View>
-        <View className="flex flex-row justify-center items-center">
-          <Text className="text-white">D. </Text>
-          <TextInput
-            multiline
-            value={state.choices?.d}
-            onChangeText={(text) =>
-              dispatch({
-                type: "UPDATE_FIELD_CHOICES",
-                field: "d",
-                value: text,
-              })
-            }
-            className="rounded-xl p-2 text-white"
-            style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-          ></TextInput>
-        </View>
-        <View className="flex flex-row justify-center items-center">
-          <Text className="text-white">Answer </Text>
-          <TextInput
-            multiline
-            value={state.choices?.correctAnswer}
-            onChangeText={(text) =>
-              dispatch({
-                type: "UPDATE_FIELD_CHOICES",
-                field: "correctAnswer",
-                value: text,
-              })
-            }
-            className="rounded-xl p-2 text-white"
-            style={{ borderColor: "#a8b3b575", borderWidth: 2 }}
-          ></TextInput>
+            placeholder="Enter correct answer (A, B, C, or D)"
+            placeholderTextColor="#8b8b8b"
+            value={state.choices?.correctAnswer || ""}
+            onChangeText={(text) => handleChoiceChange("correctAnswer", text)}
+            className="flex-1 text-white"
+          />
         </View>
       </View>
     </>

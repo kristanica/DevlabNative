@@ -29,6 +29,26 @@ const codePatchTimeFreeze = (
     setIsFreezed(false);
   };
 
+  // Prevents cheating when user exits the game. Uses the last reset savedTime
+  // useEffect(() => {
+  //   (async () => {
+  //     const savedTime = await AsyncStorage.getItem("savedTime");
+  //     if (savedTime) {
+  //       if (savedTime === "0") {
+  //         setTimer(Number(initialTime));
+  //       }
+  //       setTimer(Number(savedTime));
+  //     }
+  //   })();
+  // }, []);
+
+  // // Always saves the last reset time. Might be expensive
+  // useEffect(() => {
+  //   (async () => {
+  //     await AsyncStorage.setItem("savedTime", String(timer));
+  //   })();
+  // }, [timer]);
+
   useEffect(() => {
     if (!isFreezed && isFocused && !isEvaluating) {
       intervalRef.current = setInterval(() => {
@@ -66,11 +86,11 @@ const codePatchTimeFreeze = (
   };
 
   const timeFreeze = () => {
-    // setIsFreezed(true);
-    // setTimeout(() => setIsFreezed(false), 10000);
-    // FIXME: MIGHT BREAK IF USER ENCOUNTERS A NEW CODE RUSH CHALLENGE OR ATTEMPT TO USE THE ITEM AGAIN
-    clearInterval(intervalRef.current); // stop immediately
     setIsFreezed(true);
+    setTimeout(() => setIsFreezed(false), 10000);
+    // // FIXME: MIGHT BREAK IF USER ENCOUNTERS A NEW CODE RUSH CHALLENGE OR ATTEMPT TO USE THE ITEM AGAIN
+    // clearInterval(intervalRef.current); // stop immediately
+    // setIsFreezed(true);
   };
 
   return { timer, codePatch, timeFreeze };

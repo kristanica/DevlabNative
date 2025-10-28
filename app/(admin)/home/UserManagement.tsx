@@ -101,28 +101,33 @@ const UserManagement = () => {
               bounces={false}
               data={displayedUsers}
               keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <AdminUserContainer
-                  more={() => {
-                    uidRef.current = item.id;
-                    console.log(uidRef.current);
-                    setTimeout(() => {
-                      editUserModal.setVisibility(true);
-                    }, 200);
-                  }}
-                  allUsersInformation={item}
-                  activeLevel={activeLevel?.active || 0}
-                  mutation={() =>
-                    suspendAccount.mutate({
-                      id: item.id,
-                      toggleDisable: item.isAccountSuspended,
-                    })
-                  }
-                  deleteAccount={deleteAccount}
-                  loading={loadingUserId === item.id}
-                  index={index}
-                />
-              )}
+              renderItem={({ item, index }) => {
+                if (item.isAdmin) {
+                  return null;
+                }
+                return (
+                  <AdminUserContainer
+                    more={() => {
+                      uidRef.current = item.id;
+                      console.log(uidRef.current);
+                      setTimeout(() => {
+                        editUserModal.setVisibility(true);
+                      }, 200);
+                    }}
+                    allUsersInformation={item}
+                    activeLevel={activeLevel?.active || 0}
+                    mutation={() =>
+                      suspendAccount.mutate({
+                        id: item.id,
+                        toggleDisable: item.isAccountSuspended,
+                      })
+                    }
+                    deleteAccount={deleteAccount}
+                    loading={loadingUserId === item.id}
+                    index={index}
+                  />
+                );
+              }}
             />
           ) : isSearching && !isFetchingUser ? (
             <Text className="text-white text-center my-4">
