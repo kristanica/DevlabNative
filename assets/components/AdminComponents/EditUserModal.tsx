@@ -1,14 +1,13 @@
 import { useEditUser } from "@/assets/Hooks/reducers/useEditUser";
+import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Image,
   ImageBackground,
-  Keyboard,
   Modal,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -17,6 +16,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import DeleteAchievementProgressModal from "./DeleteAchievementProgressModal";
 import ProgressBar from "./ProgressBar";
 
 type EditUserModalPayload = ScaleModalPayload & {
@@ -77,8 +77,14 @@ const EditUserModal = ({
     });
   }, []);
 
-  const categories = ["Html", "Css", "JavaScript", "Database"];
+  //USed for looping
+  const categories = useMemo(
+    () => ["Html", "Css", "JavaScript", "Database"],
+    []
+  );
 
+  const deleteConfirmation = useModal();
+  const functionToPerfrom = useRef<any>(null);
   return (
     <Modal
       visible={visibility}
@@ -86,26 +92,23 @@ const EditUserModal = ({
       animationType="fade"
       statusBarTranslucent={true} // Required for proper keyboard behavi  r
     >
-      <Pressable
-        className="flex-1 justify-center items-center bg-black/50"
-        onPress={closeModal}
-      >
+      <View className="flex-1 justify-center items-center bg-black/50">
+        {deleteConfirmation.visibility && (
+          <DeleteAchievementProgressModal
+            onConfirm={functionToPerfrom.current}
+            {...deleteConfirmation}
+          ></DeleteAchievementProgressModal>
+        )}
         <View className="w-[80%]">
-          <KeyboardAwareScrollView
-            enableOnAndroid={true} // Required for Android
-            keyboardShouldPersistTaps="handled" // Allows taps on buttons
-            showsVerticalScrollIndicator={false}
-            extraScrollHeight={20} // Extra padding above keyboard
-            enableResetScrollToCoords={false} // Prevents auto-scroll when keyboard closes
-          >
-            <Pressable
-              onPress={(e) => {
-                e.stopPropagation();
-                Keyboard.dismiss();
-              }}
-              className="bg-modal rounded-xl p-3 border-[#2a3141] border-[1px]  "
+          <Animated.View style={scaleStyle}>
+            <KeyboardAwareScrollView
+              enableOnAndroid={true} // Required for Android
+              keyboardShouldPersistTaps="handled" // Allows taps on buttons
+              showsVerticalScrollIndicator={false}
+              extraScrollHeight={20} // Extra padding above keyboard
+              enableResetScrollToCoords={false} // Prevents auto-scroll when keyboard closes
             >
-              <Animated.View style={scaleStyle}>
+              <View className="bg-modal rounded-xl p-3 border-[#2a3141] border-[1px]  ">
                 <ImageBackground
                   source={background}
                   className="h-28 w-full justify-center items-center relative"
@@ -116,8 +119,15 @@ const EditUserModal = ({
                   ></Image>
 
                   <TouchableOpacity
-                    onPress={() => setToggleView((prev) => !prev)}
+                    onPress={closeModal}
                     className="absolute  right-5"
+                  >
+                    <Ionicons name="close-circle" size={20} color={"red"} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => setToggleView((prev) => !prev)}
+                    className="absolute  left-5"
                   >
                     <Ionicons name="reload-circle" size={20} color={"yellow"} />
                   </TouchableOpacity>
@@ -137,10 +147,13 @@ const EditUserModal = ({
                             userInfo.achievements[category]["quantity"]
                           }
                           onDeleteSpecific={() => {
-                            deleteAchievement.mutate({
-                              category: category,
-                              uid: uid,
-                            });
+                            deleteConfirmation.setVisibility(true);
+                            functionToPerfrom.current = () => {
+                              deleteAchievement.mutate({
+                                category: category,
+                                uid: uid,
+                              });
+                            };
                           }}
                         ></ProgressBar>
                       </React.Fragment>
@@ -155,25 +168,21 @@ const EditUserModal = ({
                           category={category}
                           userProgress={userInfo.levelCount[category]}
                           onDeleteSpecific={() => {
-                            deleteProgress.mutate({
-                              uid: uid,
-                              subject: category,
-                            });
-                            setToastVisibility(
-                              "success",
-                              `Progress on ${category} for ${userInfo.username} reset succesfully`
-                            );
+                            deleteConfirmation.setVisibility(true);
+                            functionToPerfrom.current = () =>
+                              deleteProgress.mutate({
+                                uid: uid,
+                                subject: category,
+                              });
                           }}
                         ></ProgressBar>
                       </React.Fragment>
                     ))}
                     <TouchableOpacity
                       onPress={() => {
-                        deleteAllProgress.mutate({ uid });
-                        setToastVisibility(
-                          "success",
-                          `Progress on all for ${userInfo.username}reset succesfully`
-                        );
+                        deleteConfirmation.setVisibility(true);
+                        functionToPerfrom.current = () =>
+                          deleteAllProgress.mutate({ uid });
                       }}
                       className="mt-5 bg-red-500 p-3 rounded-[10px] items-center "
                     >
@@ -279,11 +288,11 @@ const EditUserModal = ({
                     </TouchableOpacity>
                   </>
                 )}
-              </Animated.View>
-            </Pressable>
-          </KeyboardAwareScrollView>
+              </View>
+            </KeyboardAwareScrollView>
+          </Animated.View>
         </View>
-      </Pressable>
+      </View>
     </Modal>
   );
 };

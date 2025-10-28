@@ -2,8 +2,9 @@ import { databasePlayground } from "@/assets/API/openAi/databasePlayground";
 import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useIsMutating, useMutation } from "@tanstack/react-query";
+import { Asset } from "expo-asset";
 import LottieView from "lottie-react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import WebView from "react-native-webview";
 import PlaygroundDatabaseEvaluationModal from "../CodeEditor/PlaygroundDatabaseEvaluationModal";
@@ -38,10 +39,32 @@ const ViteDatabaseCodeEditor = ({
     },
     onSuccess: () => {
       evaluationModal.setVisibility(true);
+      console.log(displayHTML);
+    },
+    onMutate: () => {
+      console.log(queryRecievedCode.result);
     },
   });
 
   const isMutating = useIsMutating();
+  const [htmlUri, setHtmlUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadHtml = async () => {
+      const asset = Asset.fromModule(
+        require("@/fontFamily/editor/database/DatabaseEditor.html")
+      );
+      await asset.downloadAsync(); // ensures it’s available locally
+      setHtmlUri(asset.localUri);
+    };
+
+    loadHtml();
+  }, []);
+
+  if (!htmlUri) {
+    return <FillScreenLoading text={"Loading editor...."}></FillScreenLoading>; // show loader until asset is ready
+  }
+
   return (
     <>
       {evaluationModal.visibility && (
@@ -76,20 +99,20 @@ const ViteDatabaseCodeEditor = ({
               }}
               source={{
                 html: `<!DOCTYPE html>
-<html lang="en">
-  <head>
- 
-  <style>
-${tableStyle}
-  </style>
-  </head>
-  <body>
+  <html lang="en">
+    <head>
   
-  <div class="overflow-auto">
-  ${displayHTML}
-  </div>
-  </body>
-</html>`,
+    <style>
+  ${tableStyle}
+    </style>
+    </head>
+    <body>
+    
+    <div class="overflow-auto">
+    ${displayHTML}
+    </div>
+    </body>
+  </html>`,
               }}
             ></WebView>
             {/* Webview for dIsplaying the QUERY result of the user */}
@@ -98,17 +121,17 @@ ${tableStyle}
                 style={{ width: 380, backgroundColor: "#D9D9D9" }}
                 source={{
                   html: `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    
- <style>
-${tableStyle}
-  </style>
-  </head>
-  <body>
-   ${queryRecievedCode.result}
-  </body>
-</html>`,
+  <html lang="en">
+    <head>
+      
+  <style>
+  ${tableStyle}
+    </style>
+    </head>
+    <body>
+    ${queryRecievedCode.result}
+    </body>
+  </html>`,
                 }}
               ></WebView>
             ) : (
@@ -157,7 +180,7 @@ ${tableStyle}
                 margin: 8,
                 borderRadius: 10,
               }}
-              source={require("@/fontFamily/editor/database/index.html")}
+              source={{ uri: htmlUri }}
               onMessage={(e) => {
                 try {
                   //Gets the data from the webview, can be {query: "", result: ""} or {allTables: ""}
@@ -198,6 +221,18 @@ ${tableStyle}
                 } catch (error) {
                   console.log(error);
                 }
+              }}
+              allowFileAccess
+              allowUniversalAccessFromFileURLs
+              allowFileAccessFromFileURLs
+              cacheEnabled={true}
+              originWhitelist={["*"]}
+              mixedContentMode="always" // helps avoid network
+              onError={(syntheticEvent) => {
+                console.log(
+                  "WebView load error (ignored offline):",
+                  syntheticEvent.nativeEvent
+                );
               }}
             />
           </View>

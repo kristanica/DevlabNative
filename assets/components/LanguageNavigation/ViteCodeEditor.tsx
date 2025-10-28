@@ -3,8 +3,9 @@ import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useIsMutating, useMutation } from "@tanstack/react-query";
+import { Asset } from "expo-asset";
 import LottieView from "lottie-react-native";
-import React, { RefObject, useMemo } from "react";
+import React, { RefObject, useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -52,9 +53,26 @@ const ViteCodeEditor = ({
       evaluationModal.setVisibility(true);
     },
   });
+
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
 
   const isMutating = useIsMutating();
+  const [htmlUri, setHtmlUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadHtml = async () => {
+      const asset = Asset.fromModule(require("@/fontFamily/editor/index.html"));
+      await asset.downloadAsync(); // ensures it’s available locally
+      setHtmlUri(asset.localUri || asset.uri);
+    };
+
+    loadHtml();
+  }, []);
+
+  if (!htmlUri) {
+    return <FillScreenLoading text={"Loading editor...."}></FillScreenLoading>; // show loader until asset is ready
+  }
+
   return (
     <View className="bg-accent flex-[1] rounded-[10px] z-0">
       {isMutating > 0 && (
@@ -155,7 +173,9 @@ const ViteCodeEditor = ({
             margin: 8,
             borderRadius: 10,
           }}
-          source={require("@/fontFamily/editor/index.html")}
+          source={{
+            uri: htmlUri,
+          }}
           onMessage={(e: WebViewMessageEvent) => {
             try {
               const val: CodeEditorPayload = JSON.parse(e.nativeEvent.data);
@@ -166,11 +186,11 @@ const ViteCodeEditor = ({
               alert(error);
             }
           }}
+          allowFileAccess
+          allowUniversalAccessFromFileURLs
+          allowFileAccessFromFileURLs
           cacheEnabled={true}
           originWhitelist={["*"]}
-          allowUniversalAccessFromFileURLs={true}
-          allowFileAccess={true}
-          allowFileAccessFromFileURLs={true} // ⚠️ often missing
           mixedContentMode="always" // helps avoid network
           onError={(syntheticEvent) => {
             console.log(

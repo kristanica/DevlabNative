@@ -58,7 +58,6 @@ const StageCodeRush = ({
       }
     };
     run();
-    console.log("ASDSAHGDASDGJH");
   }, [activeBuffs]);
   const codeRush = useModal();
 
@@ -75,8 +74,8 @@ const StageCodeRush = ({
         ></Ionicons>
       </Pressable>
       {codeRush.visibility && <CodeRushModal {...codeRush}></CodeRushModal>}
-      <View className="flex-row items-center justify-between pr-10">
-        <Text className="font-exoBold xs:text-xl text-justify text-red-500">
+      <View className="flex-row items-center  pr-10">
+        <Text className="font-exoBold xs:text-xl  text-red-500">
           {currentStageData?.title}
         </Text>
 
@@ -85,7 +84,7 @@ const StageCodeRush = ({
             isFreezed
               ? "text-blue-600 font-exoExtraBold"
               : "text-white font-exoRegular"
-          } xs:text-xl my-3 text-justify `}
+          } xs:text-xl my-3 text-justify absolute right-0`}
         >
           {formatTimer(Number(timer))}
         </Text>

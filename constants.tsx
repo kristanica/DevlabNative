@@ -7,9 +7,9 @@ import {
 } from "@/firebaseConfig";
 
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL =
-  `https://43eeda30f0eb917bb6e48b6f9dd194be.serveo.net` as const;
+export const URL = `` as const;
 //icon for tabs
+// https://api-soyulx5clq-uc.a.run.app
 export const userIcon = ["home", "cart", "book", "trophy"] as const;
 export const adminIcon = ["people-circle", "archive"] as const;
 

@@ -3,9 +3,10 @@ import { cssRegex } from "@/assets/Hooks/regexChecker/cssRegex";
 import { htmlRegex } from "@/assets/Hooks/regexChecker/htmlRegex";
 import { jsRegex } from "@/assets/Hooks/regexChecker/jsRegex";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { Asset } from "expo-asset";
 import LottieView from "lottie-react-native";
-import React, { useEffect, useMemo } from "react";
-import { Linking, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { Linking, ScrollView, Text, View } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
 
 const StageCodingEditor = ({
@@ -17,6 +18,9 @@ const StageCodingEditor = ({
   terminalRef,
 }: CodeMirrorPayload) => {
   const snapPoints = useMemo(() => ["5%", "50%"], []);
+  const editorHtml = Asset.fromModule(
+    require("@/fontFamily/editor/index.html")
+  ).uri;
 
   useEffect(() => {
     if (!receivedCode) return;
@@ -48,18 +52,20 @@ const StageCodingEditor = ({
       }
     }
   }, [receivedCode]);
-  // const runJS = () => {
-  //   if (!receivedCode?.js) return;
-  //   const jsCode = `
-  //     try {
-  //       ${receivedCode.js}
-  //     } catch(e) {
-  //       window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
-  //     }
-  //     true;
-  //   `;
-  //   webRef.current?.injectJavaScript(jsCode);
-  // };
+  const [htmlUri, setHtmlUri] = useState<string | null>(null);
+  useEffect(() => {
+    const loadHtml = async () => {
+      const asset = Asset.fromModule(require("@/fontFamily/editor/index.html"));
+      await asset.downloadAsync(); // ensures it’s available locally
+      setHtmlUri(asset.uri); //URI FOR STAGE EDITOR BUT LOCALURI ON PLAYGROUND????????????? well see
+    };
+
+    loadHtml();
+  }, []);
+
+  if (!htmlUri) {
+    return <Text>Loading editor...</Text>; // show loader until asset is ready
+  }
 
   return (
     <View className="bg-accent flex-[1] rounded-[10px] z-0">
@@ -147,7 +153,10 @@ const StageCodingEditor = ({
             margin: 8,
             borderRadius: 10,
           }}
-          source={require("@/fontFamily/editor/index.html")}
+          source={{ uri: htmlUri }}
+          allowFileAccess
+          allowUniversalAccessFromFileURLs
+          allowFileAccessFromFileURLs
           onMessage={(e: WebViewMessageEvent) => {
             try {
               const val: CodeEditorPayload = JSON.parse(e.nativeEvent.data);
@@ -193,5 +202,3 @@ const StageCodingEditor = ({
 };
 
 export default React.memo(StageCodingEditor);
-
-const styles = StyleSheet.create({});

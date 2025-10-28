@@ -16,7 +16,7 @@ export const StageHeader = ({
 }: StageHeaderProps) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
   return (
-    <View className="flex-row justify-between items-center mb-5">
+    <View className="flex-row justify-between items-center mb-5 mt-3">
       <Pressable onPress={handleBackPress}>
         <Text className="font-exoBold text-white px-5 py-2 mx-3 bg-shopAccent rounded-3xl">
           Back
@@ -27,14 +27,16 @@ export const StageHeader = ({
           <Ionicons name="terminal" size={20} color="white" />
         </Pressable>
       )}
-      <View>
-        <SelectLanguageNavigation
-          setSelectedLanguage={setSelectedLanguage}
-          selectedLanguage={selectedLanguage}
-          subject={String(category)}
-          sendToWebView={sendToWebView}
-        />
-      </View>
+      {category === "Database" ? null : (
+        <View>
+          <SelectLanguageNavigation
+            setSelectedLanguage={setSelectedLanguage}
+            selectedLanguage={selectedLanguage}
+            subject={String(category)}
+            sendToWebView={sendToWebView}
+          />
+        </View>
+      )}
     </View>
   );
 };

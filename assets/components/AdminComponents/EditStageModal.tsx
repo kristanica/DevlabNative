@@ -40,7 +40,12 @@ const EditStageModal = ({
 
   const { state, dispatch } = useEditStage();
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+
+  const [videoPresentation, setvideoPresentation] = useState<string>();
+  const [replicationFile, setReplicateFile] = useState<string>();
   useEffect(() => {
+    if (!stageData) return; // exit early if stageData is undefined or null
+
     dispatch({
       type: "UPDATE_ALL_FIELDS",
       payload: {
@@ -58,11 +63,11 @@ const EditStageModal = ({
       },
     });
 
+    //FIXME: SHOW IF THERE IS ALREADY A FILE UPLOADAED
+    console.log(stageData?.replicationFile + "ASDHJGASHJDGASHJDGHJASGDJHSA");
+
     console.log(state);
   }, [stageData]);
-
-  const [videoPresentation, setvideoPresentation] = useState<string>();
-  const [replicationFile, setReplicateFile] = useState<string>();
 
   const editConfirmationModal = useModal();
 
@@ -103,6 +108,7 @@ const EditStageModal = ({
       );
     }
     if (replicationFile) {
+      console.log("tehre is a file!: " + replicationFile);
       Promises.push(
         uploadFileReplication!.mutateAsync({
           file: replicationFile,

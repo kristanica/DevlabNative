@@ -40,6 +40,7 @@ const LessonModal = ({ visibility, closeModal }: ScaleModalProps) => {
                   </Text>
                 </View>
               </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() =>
                   router.replace({

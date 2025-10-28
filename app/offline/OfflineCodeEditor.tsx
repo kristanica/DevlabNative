@@ -1,6 +1,6 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import CodeLanguageSeletor from "@/assets/components/LanguageNavigation/CodeLanguageSelector";
-import LocalViteCodeEditor from "@/assets/components/LanguageNavigation/LocalViteCodeEditor";
+import SelectLanguageNavigation from "@/assets/components/LanguageNavigation/SelectLanguageNavigation";
+import ViteCodeEditor from "@/assets/components/LanguageNavigation/ViteCodeEditor";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -11,7 +11,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // Renders the offline code editor
 const OfflineCodeEditor = () => {
   //Neceassry variables for code editor
-
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
   const {
     webRef,
     sendToWebView,
@@ -21,7 +21,7 @@ const OfflineCodeEditor = () => {
     setLogs,
     terminalRef,
   } = useCodeEditor();
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
+
   // shows/hide terminal
   const handleExpandTerminal = useCallback(() => {
     terminalRef.current?.expand();
@@ -41,12 +41,12 @@ const OfflineCodeEditor = () => {
           <Pressable onPress={handleExpandTerminal}>
             <Ionicons name="terminal" size={20} color="white" />
           </Pressable>
-
-          <CodeLanguageSeletor
-            selectedLanguage={selectedLanguage}
+          <SelectLanguageNavigation
             setSelectedLanguage={setSelectedLanguage}
-            subject={""}
-          ></CodeLanguageSeletor>
+            selectedLanguage={selectedLanguage}
+            subject=""
+            sendToWebView={sendToWebView}
+          ></SelectLanguageNavigation>
         </View>
         <KeyboardAwareScrollView
           contentContainerStyle={{
@@ -56,12 +56,15 @@ const OfflineCodeEditor = () => {
           extraScrollHeight={20}
           keyboardShouldPersistTaps="handled"
         >
-          <LocalViteCodeEditor
-            selectedLanguage={selectedLanguage}
+          <ViteCodeEditor
+            isOffline={true}
             terminalRef={terminalRef}
+            webRef={webRef}
+            receivedCode={receivedCode}
+            setReceivedCode={setReceivedCode}
             logs={logs}
             setLogs={setLogs}
-          ></LocalViteCodeEditor>
+          ></ViteCodeEditor>
         </KeyboardAwareScrollView>
       </CustomGeneralContainer>
     </View>
@@ -69,3 +72,75 @@ const OfflineCodeEditor = () => {
 };
 
 export default OfflineCodeEditor;
+
+// import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+// import CodeLanguageSeletor from "@/assets/components/LanguageNavigation/CodeLanguageSelector";
+// import LocalViteCodeEditor from "@/assets/components/LanguageNavigation/LocalViteCodeEditor";
+
+// import useCodeEditor from "@/assets/Hooks/useCodeEditor";
+// import Ionicons from "@expo/vector-icons/Ionicons";
+// import { router } from "expo-router";
+// import React, { useCallback, useState } from "react";
+// import { Pressable, Text, View } from "react-native";
+// import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+// // Renders the offline code editor
+// const OfflineCodeEditor = () => {
+//   //Neceassry variables for code editor
+
+//   const {
+//     webRef,
+//     sendToWebView,
+//     receivedCode,
+//     setReceivedCode,
+//     logs,
+//     setLogs,
+//     terminalRef,
+//   } = useCodeEditor();
+//   const [selectedLanguage, setSelectedLanguage] = useState<string>("Html");
+//   // shows/hide terminal
+//   const handleExpandTerminal = useCallback(() => {
+//     terminalRef.current?.expand();
+//   }, []);
+
+//   return (
+//     <View className="bg-background flex-[1] rounded-[10px] z-0">
+//       <CustomGeneralContainer>
+//         <View className="justify-between flex-row my-5 items-center">
+//           <Pressable
+//             onPress={() => router.push({ pathname: "/offline/OfflineScreen" })}
+//           >
+//             <Text className="text-white ml-3 text-2xl font-exoExtraBold">
+//               DEVLAB
+//             </Text>
+//           </Pressable>
+//           <Pressable onPress={handleExpandTerminal}>
+//             <Ionicons name="terminal" size={20} color="white" />
+//           </Pressable>
+
+//           <CodeLanguageSeletor
+//             selectedLanguage={selectedLanguage}
+//             setSelectedLanguage={setSelectedLanguage}
+//             subject={""}
+//           ></CodeLanguageSeletor>
+//         </View>
+//         <KeyboardAwareScrollView
+//           contentContainerStyle={{
+//             flex: 1,
+//           }}
+//           enableOnAndroid
+//           extraScrollHeight={20}
+//           keyboardShouldPersistTaps="handled"
+//         >
+//           <LocalViteCodeEditor
+//             selectedLanguage={selectedLanguage}
+//             terminalRef={terminalRef}
+//             logs={logs}
+//             setLogs={setLogs}
+//           ></LocalViteCodeEditor>
+//         </KeyboardAwareScrollView>
+//       </CustomGeneralContainer>
+//     </View>
+//   );
+// };
+
+// export default OfflineCodeEditor;

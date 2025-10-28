@@ -44,6 +44,7 @@ const SelectLanguageNavigation = ({
               console.log(val);
               sendToWebView(val.toLowerCase());
             }}
+            disabled={isSelected}
           >
             <Text
               className={`

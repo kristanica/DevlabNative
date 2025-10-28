@@ -88,6 +88,9 @@ const CodeCrafter = ({
           <Text className="text-white mr-2">Upload a Replication file</Text>
 
           <TouchableOpacity onPress={pickReplicate}>
+            {state.replicationFile ? (
+              <Ionicons name="checkbox" size={20} color={"white"}></Ionicons>
+            ) : null}
             <Ionicons
               name="cloud-upload-outline"
               size={20}

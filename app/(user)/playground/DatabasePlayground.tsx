@@ -15,11 +15,14 @@ const DatabasePlayground = () => {
     <ProtectedRoutes>
       <View className="bg-background flex-[1]">
         <CustomGeneralContainer>
-          <Pressable onPress={() => router.push({ pathname: "/home/Home" })}>
-            <Text className="text-white ml-3 text-2xl font-exoExtraBold">
-              DEVLAB
-            </Text>
-          </Pressable>
+          <View className="justify-between flex-row my-5 items-center">
+            <Pressable onPress={() => router.replace("/home/Home")}>
+              <Text className="text-white ml-3 text-2xl font-exoExtraBold">
+                DEVLAB
+              </Text>
+            </Pressable>
+          </View>
+
           <KeyboardAwareScrollView
             contentContainerStyle={{
               flex: 1,

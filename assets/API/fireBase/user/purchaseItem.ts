@@ -5,9 +5,9 @@ import axios from "axios";
 const purchaseItem = async ({
   id,
   cost,
-  itemIcon,
+  // itemIcon,
   itemName,
-}: purchaseItemPayload) => {
+}: any) => {
   const token = await auth.currentUser?.getIdToken(true);
 
   const [res, error] = await tryCatch(
@@ -17,7 +17,7 @@ const purchaseItem = async ({
         itemId: id,
         itemCost: cost,
         itemName: itemName,
-        itemIcon: itemIcon,
+        // itemIcon: itemIcon,
       },
       {
         headers: {

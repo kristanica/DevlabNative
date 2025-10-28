@@ -10,7 +10,7 @@ const editStage = async (state: any, stageType: string) => {
     throw new Error("Something went wrong with the payload");
   }
 
-  console.log("Original state:", JSON.stringify(state, null, 2));
+  // console.log("Original state:", JSON.stringify(state, null, 2));
 
   const normalizedBlocks = state.blocks?.map((block: any) => {
     if (
@@ -74,7 +74,7 @@ const editStage = async (state: any, stageType: string) => {
       blocks: processedBlocks,
     };
 
-    console.log("Modified state:", JSON.stringify(modifiedState, null, 2));
+    // console.log("Modified state:", JSON.stringify(modifiedState, null, 2));
 
     formData.append("state", JSON.stringify(modifiedState));
 

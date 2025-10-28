@@ -297,8 +297,7 @@ const ItemList = ({ category }: any) => {
                   onPress={() => {
                     console.log("Location:", location);
                     console.log("Item title:", userInvItems.Icon);
-                    const action =
-                      useItemActions[userInvItems.Icon.replace("_Icon", "")];
+                    const action = useItemActions[userInvItems.title];
                     console.log("Action found:", !!action);
                     action?.(userInvItems.id);
                     unlockAchievement(category, "itemUse", {

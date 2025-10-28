@@ -66,8 +66,11 @@ const codePatchTimeFreeze = (
   };
 
   const timeFreeze = () => {
+    // setIsFreezed(true);
+    // setTimeout(() => setIsFreezed(false), 10000);
+    // FIXME: MIGHT BREAK IF USER ENCOUNTERS A NEW CODE RUSH CHALLENGE OR ATTEMPT TO USE THE ITEM AGAIN
+    clearInterval(intervalRef.current); // stop immediately
     setIsFreezed(true);
-    setTimeout(() => setIsFreezed(false), 10000);
   };
 
   return { timer, codePatch, timeFreeze };

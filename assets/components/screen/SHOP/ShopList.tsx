@@ -17,18 +17,18 @@ const ShopList = ({ shopItem }: ShopListProps) => {
     mutationFn: async ({
       id,
       cost,
-      itemIcon,
+      // itemIcon,
       itemName,
     }: {
       id: string;
       cost: number;
-      itemIcon: string;
+      // itemIcon: string;
       itemName: string;
     }) => {
       return purchaseItem({
         id: id,
         cost: cost,
-        itemIcon: itemIcon,
+        // itemIcon: itemIcon,
         itemName: itemName,
       });
     },
@@ -46,13 +46,14 @@ const ShopList = ({ shopItem }: ShopListProps) => {
   });
 
   const handlePurchase = useCallback(
-    ({ id, cost, icon, title }: any) => {
+    ({ id, cost, icon, itemName }: any) => {
       mutation.mutate({
         id: String(id),
         cost: Number(cost),
-        itemIcon: icon.replace(".png", ""),
-        itemName: title,
+        // itemIcon: icon.replace(".png", ""),
+        itemName: itemName,
       });
+      // console.log(itemName);
     },
     [mutation]
   );
@@ -74,8 +75,8 @@ const ShopList = ({ shopItem }: ShopListProps) => {
               handlePurchase({
                 id: item.id,
                 cost: item.cost,
-                icon: item.Icon,
-                title: item.title,
+                // icon: item.Icon,
+                itemName: item.Icon,
               });
             }}
           />

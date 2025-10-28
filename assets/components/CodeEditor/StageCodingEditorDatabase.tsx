@@ -1,15 +1,11 @@
 import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
 import { sqlRegex } from "@/assets/Hooks/regexChecker/sqlRegex";
+import { Asset } from "expo-asset";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import WebView from "react-native-webview";
+import FillScreenLoading from "../global/FillScreenLoading";
 
 type ViteDatabaseCodeEditorProps = {
   queryRecievedCode: any;
@@ -40,12 +36,29 @@ const StageCodingEditorDatabase = ({
     }
   }, [queryRecievedCode]);
 
+  const [htmlUri, setHtmlUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadHtml = async () => {
+      const asset = Asset.fromModule(
+        require("@/fontFamily/editor/database/DatabaseEditor.html")
+      );
+      await asset.downloadAsync(); // ensures it’s available locally
+      setHtmlUri(asset.localUri); //URI TLGA PAG STAGES? hmmm isaidsadkhgashjdgss
+    };
+
+    loadHtml();
+  }, []);
+
+  if (!htmlUri) {
+    return <FillScreenLoading text={"Loading editor...."}></FillScreenLoading>; // show loader until asset is ready
+  }
+  const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+  const webViewWidth = screenWidth - 40; // Account for margins (m-3 = 12px * 2, plus padding)
+  const webViewHeight = screenHeight * 0.4 - 40;
   return (
     <View className="bg-background flex-[1]">
       <View className="flex-[1] bg-accent rounded-[10px]">
-        <TouchableOpacity onPress={() => console.log(queryRecievedCode)}>
-          <Text>asdsad</Text>
-        </TouchableOpacity>
         <ScrollView
           className=" flex-[1] m-3 rounded-[10px]"
           horizontal={true}
@@ -57,10 +70,10 @@ const StageCodingEditorDatabase = ({
         >
           <WebView
             style={{
-              width: 380,
+              width: webViewWidth,
+              height: webViewHeight,
               backgroundColor: "#D9D9D9",
-              justifyContent: "center",
-              alignItems: "center",
+              borderRadius: 10,
             }}
             source={{
               html: `<!DOCTYPE html>
@@ -80,7 +93,12 @@ ${tableStyle}
           {/* 2nd Sreen */}
           {queryRecievedCode ? (
             <WebView
-              style={{ width: 380, backgroundColor: "#D9D9D9" }}
+              style={{
+                width: webViewWidth,
+                height: webViewHeight,
+                backgroundColor: "#D9D9D9",
+                borderRadius: 10,
+              }}
               source={{
                 html: `<!DOCTYPE html>
 <html lang="en">
@@ -109,8 +127,6 @@ ${tableStyle}
               </Text>
             </View>
           )}
-
-          {/* 2nd Screen */}
         </ScrollView>
         <View className="bg-shopAccent flex-[2] m-3 rounded-[10px] ">
           <WebView
@@ -122,7 +138,10 @@ ${tableStyle}
               margin: 8,
               borderRadius: 10,
             }}
-            source={require("@/fontFamily/editor/database/index.html")}
+            source={{ uri: htmlUri }}
+            allowFileAccess
+            allowUniversalAccessFromFileURLs
+            allowFileAccessFromFileURLs
             onMessage={(e) => {
               try {
                 const data = JSON.parse(e.nativeEvent.data);

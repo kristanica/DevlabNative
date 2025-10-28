@@ -17,7 +17,7 @@ const uploadFile = async ({
 
   try {
     fileForm.append("replicateFile", {
-      uri: file,
+      uri: file.uri || file, // ensure it's a valid local URI
       type: "text/html",
       name: "file.html",
     } as any);
@@ -26,16 +26,17 @@ const uploadFile = async ({
     fileForm.append("lessonId", lessonId);
     fileForm.append("levelId", levelId);
     fileForm.append("stageId", stageId);
-    await axios.post(`${URL}fireBaseAdmin/uploadFile`, fileForm, {
+    await axios.post(`${URL}/fireBaseAdmin/uploadFile`, fileForm, {
       headers: {
         "Content-Type": "multipart/form-data",
+
         Authorization: `Bearer ${token}`,
       },
     });
 
     return;
   } catch (error) {
-    console.log(error);
+    console.log(error + "uploADIFLEEEEEEEEEE");
   }
 };
 

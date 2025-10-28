@@ -20,7 +20,7 @@ const DeleteFireBaseConfirmationModal = ({
   return (
     <Modal visible={visibility} transparent={true}>
       <Pressable
-        className="flex-[1] justify-center items-center bg-black/50"
+        className="flex-[1] justify-center items-center bg-black/10"
         onPress={closeModal}
       >
         <Pressable

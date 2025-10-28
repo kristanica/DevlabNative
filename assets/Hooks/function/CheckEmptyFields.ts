@@ -52,11 +52,11 @@ const CheckEmptyFields = (
   state: Record<string, any>,
   type: ExemptionType
 ): boolean => {
-  console.log("Checking state:", state);
+  // console.log("Checking state:", state);
 
   return Object.entries(state).some(([key, value]) => {
     if (exemptions[type]?.includes(key)) {
-      console.log(`${key} is EXEMPT - skipping`);
+      // console.log(`${key} is EXEMPT - skipping`);
       return false;
     }
 
@@ -67,12 +67,12 @@ const CheckEmptyFields = (
       typeof value === "object"
     ) {
       const isEmpty = hasEmptyInObject(value);
-      console.log(`${key} (object) is ${isEmpty ? "EMPTY" : "VALID"}`);
+      // console.log(`${key} (object) is ${isEmpty ? "EMPTY" : "VALID"}`);
       return isEmpty;
     }
 
     const isEmpty = isEmptyValue(value);
-    console.log(`${key} = "${value}" is ${isEmpty ? "EMPTY" : "VALID"}`);
+    // console.log(`${key} = "${value}" is ${isEmpty ? "EMPTY" : "VALID"}`);
     return isEmpty;
   });
 };

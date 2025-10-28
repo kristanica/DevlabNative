@@ -20,22 +20,32 @@ const ProgressBar = ({
       }),
     };
   }, [userProgress, activeLevel]);
+  const categoryColors: Record<string, string> = {
+    Html: "#FF6B4A",
+    Css: "#5AB4FF",
+    JavaScript: "#FFE156",
+    Database: "#4DB6AC",
+  };
 
+  const barColor = categoryColors[category] || "#A8E6CF"; // fallback
   return (
     <View className="bg-modal justify-center items-center mt-2  ">
       {/* Label above progress bar */}
       <View className="flex-row justify-between w-full mb-1">
         <TouchableOpacity
           onPress={onDeleteSpecific}
+          disabled={userProgress <= 0}
           className="flex-row justify-center items-center"
         >
           <Ionicons
             name="trash-bin"
-            color={"red"}
+            color={userProgress <= 0 ? "gray" : "red"}
             size={20}
             style={{ marginRight: 20 }}
           ></Ionicons>
-          <Text className="text-white text-xs font-exoBold">{category}</Text>
+          <Text className="text-white text-xs font-exoBold">
+            {category.toUpperCase()}
+          </Text>
         </TouchableOpacity>
         <Text className="text-white/60 text-xs">
           {userProgress} / {activeLevel}
@@ -47,7 +57,7 @@ const ProgressBar = ({
           style={[
             animatedStye,
             {
-              backgroundColor: "#A8E6CF",
+              backgroundColor: barColor,
               height: "100%",
             },
           ]}
