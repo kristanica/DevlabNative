@@ -21,7 +21,7 @@ const AdminLoginForm = ({
         <Ionicons name="person-circle" size={140} color={"#314A70"} />
       </View>
 
-      <View className=" flex-[1] justify-center items-center  px-3">
+      <View className="flex-[1] justify-center items-center  px-3">
         <InputBox
           icon={"person"}
           placeHolder={"Email"}
@@ -47,13 +47,13 @@ const AdminLoginForm = ({
           }
           isPassword={true}
         />
-        <TouchableOpacity
-          className="bg-button  justify-center items-center my-16 py-2 px-7 rounded-full "
-          onPress={handleAdminLogin}
-        >
-          <Text className="color-white text-sm font-exoBold">LOGIN</Text>
+        <TouchableOpacity className=" w-full" onPress={handleAdminLogin}>
+          <Text className="text-white font-exoBold  text-center bg-button px-7 py-2 xs: text-sm xs:text-[12px] md:lg my-5 rounded-2xl">
+            LOGIN
+          </Text>
         </TouchableOpacity>
-        <Text className="color-[#FFFFFE] font-exoRegular xs: text-xs">
+
+        <Text className=" color-white font-exoRegular text-sm xs:text-[11px] ">
           {"Not an administrator?"}
         </Text>
         <Pressable
@@ -61,7 +61,7 @@ const AdminLoginForm = ({
             router.replace({ pathname: "/Login" });
           }}
         >
-          <Text className=" color-[#4F80C5] -2 font-exoRegula xs:text-xs ">
+          <Text className=" color-[#4F80C5] -2 font-exoRegular text-sm xs:text-[10px] ">
             Back to user login
           </Text>
         </Pressable>

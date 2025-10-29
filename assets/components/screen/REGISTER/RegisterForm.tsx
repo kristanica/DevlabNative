@@ -89,12 +89,12 @@ const RegisterForm = ({
         </TouchableOpacity>
       </View>
       <View className="justify-center items-center">
-        <Text className="color-[#FFFFFE] font-exoRegular xs:text-[8px]">
+        <Text className="color-[#FFFFFE] font-exoRegular text-sm xs:text-[12px]">
           Already have an Account?
         </Text>
 
         <TouchableOpacity onPress={() => router.replace("/Login")}>
-          <Text className="color-[#4F80C5] mt-2 font-exoRegular xs:text-[8px]">
+          <Text className="color-[#4F80C5] mt-2 font-exoRegular text-sm xs:text-[10px]">
             Login here
           </Text>
         </TouchableOpacity>

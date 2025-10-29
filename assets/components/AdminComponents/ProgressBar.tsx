@@ -29,7 +29,7 @@ const ProgressBar = ({
 
   const barColor = categoryColors[category] || "#A8E6CF"; // fallback
   return (
-    <View className="bg-modal justify-center items-center mt-2  ">
+    <View className="bg-modal justify-center items-center mt-2  p-2 rounded-lg">
       {/* Label above progress bar */}
       <View className="flex-row justify-between w-full mb-1">
         <TouchableOpacity

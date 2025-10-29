@@ -92,13 +92,15 @@ const Onboarding = () => {
               }}
             >
               <Pressable
+                className="w-full"
                 onPress={() => router.replace({ pathname: path.LOGIN })}
               >
-                <Text className="text-white text-center rounded-2xl bg-button px-7 py-2 xs:text-xs font-exoBold">
+                <Text className="text-white text-center rounded-2xl bg-button px-7 py-2 text-sm xs:text-[13px] font-exoBold">
                   Login
                 </Text>
               </Pressable>
               <Pressable
+                className="w-full"
                 onPress={async () => {
                   const currentUser = auth?.currentUser;
                   if (currentUser) {
@@ -108,7 +110,7 @@ const Onboarding = () => {
                   router.replace({ pathname: path.REGISTER });
                 }}
               >
-                <Text className="text-white text-center rounded-2xl bg-accent px-7 xs:text-xs py-2 mt-2 font-exoBold">
+                <Text className="text-white text-center rounded-2xl bg-accent mt-2 px-7 py-2 text-sm xs:text-[13px] font-exoBold">
                   Sign up
                 </Text>
               </Pressable>

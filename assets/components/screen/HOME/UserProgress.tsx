@@ -22,7 +22,7 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
           >
             <View className="flex-row items-center justify-between  bg-accentContainer rounded-2xl shadow-md">
               <AnimatedProgressWheel
-                progress={userProgress[item.name] || 0}
+                progress={userProgress[item.name] - 1 || 0}
                 showProgressLabel={true}
                 rotation="-90deg"
                 subtitle={` / ${activeLevel[item.name]?.levelCounter || 0}`}

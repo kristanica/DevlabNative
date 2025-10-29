@@ -1,6 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import AdminLoginForm from "@/assets/components/screen/ADMINLOGIN/AdminLoginForm";
-import Logo from "@/assets/components/screen/LOGIN/Logo";
 import useAdminLogin from "@/assets/Hooks/reducers/useAdminLogin";
 import toastHandler from "@/assets/zustand/toastHandler";
 
@@ -34,7 +33,7 @@ const AdminLogin = () => {
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled"
           >
-            <Logo></Logo>
+            {/* <Logo></Logo> */}
             <AdminLoginForm
               state={state}
               dispatch={dispatch}

@@ -19,7 +19,7 @@ export const pickImage = () => {
           await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ["images"],
             allowsEditing: true,
-            aspect: [16, 9],
+            aspect: [4, 3],
             quality: 1,
           });
         if (result.canceled) return;

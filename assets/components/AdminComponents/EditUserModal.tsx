@@ -3,18 +3,15 @@ import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { JSX, useEffect, useMemo, useRef, useState } from "react";
 import {
   Image,
   ImageBackground,
   Modal,
-  StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import DeleteAchievementProgressModal from "./DeleteAchievementProgressModal";
 import ProgressBar from "./ProgressBar";
@@ -68,7 +65,7 @@ const EditUserModal = ({
       },
     });
   }, [userInfo, uid]);
-  const [toggleView, setToggleView] = useState<boolean>(false);
+
   const progressValue = useSharedValue(0);
 
   useEffect(() => {
@@ -90,6 +87,132 @@ const EditUserModal = ({
 
     return Object.values(userInfo.levelCount).some((count: any) => count > 0);
   }, [userInfo]);
+
+  const optionNav = ["About", "Achievement", "Progress"];
+  const [navigation, setNavigation] = useState<string>("About");
+  const nav: Record<string, JSX.Element> = {
+    About: (
+      <>
+        <View className="pb-2 mb-2 border-b-[2px] border-[#2a3340]">
+          <Text className="text-sm text-cyan-400 font-exoBold">
+            User Information
+          </Text>
+        </View>
+        <View className="gap-3">
+          <View>
+            <Text className="text-white font-exoLight mb-1 text-xs xs: text-[10px] ">
+              EMAIL
+            </Text>
+            <Text className="w-full p-2.5 rounded-lg bg-gray-800 text-white border border-gray-700 text-sm">
+              {userInfo.email}
+            </Text>
+          </View>
+          <View>
+            <Text className="text-white font-exoLight mb-1 text-xs xs: text-[10px] ">
+              USERNAME
+            </Text>
+            <Text className="w-full p-2.5 rounded-lg bg-gray-800 text-white border border-gray-700 text-sm">
+              {userInfo.username}
+            </Text>
+          </View>
+          <View>
+            <Text className="text-white font-exoLight mb-1 text-xs xs: text-[10px] ">
+              COINS
+            </Text>
+            <Text className="w-full p-2.5 rounded-lg bg-gray-800 text-white border border-gray-700 text-sm">
+              {userInfo.coins}
+            </Text>
+          </View>
+
+          <View>
+            <Text className="text-white font-exoLight mb-1 text-xs xs: text-[10px] ">
+              EXP
+            </Text>
+            <Text className="w-full p-2.5 rounded-lg bg-gray-800 text-white border border-gray-700 text-sm">
+              {userInfo.exp} {"EXP"}
+            </Text>
+          </View>
+
+          <View>
+            <Text className="text-white font-exoLight mb-1 text-xs xs: text-[10px] ">
+              LEVEL
+            </Text>
+            <Text className="w-full p-2.5 rounded-lg bg-gray-800 text-white border border-gray-700 text-sm">
+              {userInfo.userLevel}
+            </Text>
+          </View>
+        </View>
+      </>
+    ),
+    Progress: (
+      <>
+        <View className="pb-2 mb-2 border-b-[2px] border-[#2a3340]">
+          <Text className="text-sm text-cyan-400 font-exoBold">
+            User Progress
+          </Text>
+        </View>
+
+        {categories.map((category, index) => (
+          <React.Fragment key={index}>
+            <ProgressBar
+              activeLevel={10}
+              category={category}
+              userProgress={userInfo.achievements[category]["quantity"]}
+              onDeleteSpecific={() => {
+                deleteConfirmation.setVisibility(true);
+                functionToPerfrom.current = () => {
+                  deleteAchievement.mutate({
+                    category: category,
+                    uid: uid,
+                  });
+                };
+              }}
+            ></ProgressBar>
+          </React.Fragment>
+        ))}
+      </>
+    ),
+
+    Achievement: (
+      <>
+        <View className="pb-2 mb-2 border-b-[2px] border-[#2a3340]">
+          <Text className="text-sm text-cyan-400 font-exoBold">
+            User Achievement progress
+          </Text>
+        </View>
+        {categories.map((category, index) => (
+          <React.Fragment key={index}>
+            <ProgressBar
+              activeLevel={activeLevel[category].levelCounter}
+              category={category}
+              userProgress={userInfo.levelCount[category]}
+              onDeleteSpecific={() => {
+                deleteConfirmation.setVisibility(true);
+                functionToPerfrom.current = () =>
+                  deleteProgress.mutate({
+                    uid: uid,
+                    subject: category,
+                  });
+              }}
+            ></ProgressBar>
+          </React.Fragment>
+        ))}
+        {/* <TouchableOpacity
+          disabled={!hasProgress}
+          onPress={() => {
+            deleteConfirmation.setVisibility(true);
+            functionToPerfrom.current = () => deleteAllProgress.mutate({ uid });
+          }}
+          className={`mt-5 p-3 rounded-[10px] items-center ${
+            hasProgress ? "bg-red-500" : "bg-gray-600 opacity-50"
+          }`}
+        >
+          <Text className="text-white font-exoBold">DELETE ALL PROGRESS</Text>
+        </TouchableOpacity> */}
+      </>
+    ),
+  };
+
   return (
     <Modal
       visible={visibility}
@@ -106,102 +229,63 @@ const EditUserModal = ({
         )}
         <View className="w-[80%]">
           <Animated.View style={scaleStyle}>
-            <KeyboardAwareScrollView
-              enableOnAndroid={true} // Required for Android
-              keyboardShouldPersistTaps="handled" // Allows taps on buttons
-              showsVerticalScrollIndicator={false}
-              extraScrollHeight={20} // Extra padding above keyboard
-              enableResetScrollToCoords={false} // Prevents auto-scroll when keyboard closes
-            >
-              <View className="bg-modal rounded-xl p-3 border-[#2a3141] border-[1px]  ">
-                <ImageBackground
-                  source={background}
-                  className="h-28 w-full justify-center items-center relative"
-                >
-                  <Image
-                    source={profile}
-                    className="h-20 w-20 rounded-xl"
-                  ></Image>
+            <View className="bg-[#1a2334] rounded-xl p-3 border-[#2a3141] border-[1px]  ">
+              <View className="pb-2 flex-row justify-between">
+                <Text className="text-sm text-blue-500 font-exoBold">
+                  {state.username}'s Profile
+                </Text>
 
+                <TouchableOpacity onPress={closeModal}>
+                  <Ionicons name="close" size={20} color={"gray"}></Ionicons>
+                </TouchableOpacity>
+              </View>
+              <ImageBackground
+                source={background}
+                className="h-28 w-full justify-center items-center relative"
+              >
+                <Image
+                  source={profile}
+                  className="h-20 w-20 rounded-xl"
+                ></Image>
+              </ImageBackground>
+
+              <View className="flex-row justify-evenly mb-2 mt-2 border-b-[2px] border-[#2a3340]">
+                {optionNav.map((item) => (
                   <TouchableOpacity
-                    onPress={closeModal}
-                    className="absolute  right-5"
+                    key={item}
+                    onPress={() => setNavigation(item)}
+                    className="items-center flex-1"
                   >
-                    <Ionicons name="close-circle" size={20} color={"red"} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => setToggleView((prev) => !prev)}
-                    className="absolute  left-5"
-                  >
-                    <Ionicons name="reload-circle" size={20} color={"yellow"} />
-                  </TouchableOpacity>
-                </ImageBackground>
-
-                {toggleView ? (
-                  <>
-                    <Text className="text-white font-exoBold my-2 text-center">
-                      USER ACHIEVEMENT PROGRESS
-                    </Text>
-                    {categories.map((category, index) => (
-                      <React.Fragment key={index}>
-                        <ProgressBar
-                          activeLevel={10}
-                          category={category}
-                          userProgress={
-                            userInfo.achievements[category]["quantity"]
-                          }
-                          onDeleteSpecific={() => {
-                            deleteConfirmation.setVisibility(true);
-                            functionToPerfrom.current = () => {
-                              deleteAchievement.mutate({
-                                category: category,
-                                uid: uid,
-                              });
-                            };
-                          }}
-                        ></ProgressBar>
-                      </React.Fragment>
-                    ))}
-                    <Text className="text-white font-exoBold my-2 text-center">
-                      USER LEVEL PROGRESS
-                    </Text>
-                    {categories.map((category, index) => (
-                      <React.Fragment key={index}>
-                        <ProgressBar
-                          activeLevel={activeLevel[category].levelCounter}
-                          category={category}
-                          userProgress={userInfo.levelCount[category]}
-                          onDeleteSpecific={() => {
-                            deleteConfirmation.setVisibility(true);
-                            functionToPerfrom.current = () =>
-                              deleteProgress.mutate({
-                                uid: uid,
-                                subject: category,
-                              });
-                          }}
-                        ></ProgressBar>
-                      </React.Fragment>
-                    ))}
-                    <TouchableOpacity
-                      disabled={!hasProgress}
-                      onPress={() => {
-                        deleteConfirmation.setVisibility(true);
-                        functionToPerfrom.current = () =>
-                          deleteAllProgress.mutate({ uid });
-                      }}
-                      className={`mt-5 p-3 rounded-[10px] items-center ${
-                        hasProgress ? "bg-red-500" : "bg-gray-600 opacity-50"
+                    <Text
+                      className={`font-exoBold text-sm ${
+                        navigation === item ? "text-cyan-400" : "text-gray-400"
                       }`}
                     >
-                      <Text className="text-white font-exoBold">
-                        DELETE ALL PROGRESS
-                      </Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <>
-                    <View className="mb-2 bg-[#2a3141] p-3 rounded-lg  mt-2">
+                      {item}
+                    </Text>
+
+                    {/* Underline indicator */}
+                    <View
+                      className={`h-[2px] w-3/4 mt-1 rounded-full ${
+                        navigation === item ? "bg-cyan-400" : "bg-transparent"
+                      }`}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <View>{nav[navigation]}</View>
+            </View>
+          </Animated.View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+export default EditUserModal;
+
+{
+  /*<> <View className="mb-2 bg-[#2a3141] p-3 rounded-lg  mt-2">
                       <Text className="text-white/70 text-xs ">USER EMAIL</Text>
                       <Text className="text-white font-exoBold">
                         {userInfo.email}
@@ -256,6 +340,7 @@ const EditUserModal = ({
                       EXPERIENCE POINTS:
                     </Text>
                     <TextInput
+                      disableFullscreenUI
                       value={String(state.exp)}
                       onChangeText={(text) =>
                         dispatch({
@@ -294,17 +379,19 @@ const EditUserModal = ({
                     >
                       <Text className="text-white font-exoBold">SAVE</Text>
                     </TouchableOpacity>
-                  </>
-                )}
-              </View>
-            </KeyboardAwareScrollView>
-          </Animated.View>
-        </View>
-      </View>
-    </Modal>
-  );
-};
 
-export default EditUserModal;
+                    <TouchableOpacity
+                      className="mt-5 bg-green-500 p-3 rounded-[10px] items-center "
+                      onPress={() => {
+                        editUser.mutate({ uid: uid, state: state });
+                        setToastVisibility(
+                          "success",
+                          `User ${userInfo.username} updated succesfully`
+                        );
+                      }}
+                    >
+                      <Text className="text-white font-exoBold">SAVE</Text>
+                    </TouchableOpacity>
 
-const styles = StyleSheet.create({});
+                    </> */
+}

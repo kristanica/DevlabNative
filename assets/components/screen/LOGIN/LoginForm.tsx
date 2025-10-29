@@ -81,20 +81,24 @@ const LoginForm = ({
           </Text>
         </View>
 
-        <TouchableOpacity onPress={handleLogin} disabled={state.isLoggingIn}>
-          <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
+        <TouchableOpacity
+          onPress={handleLogin}
+          disabled={state.isLoggingIn}
+          className=" w-full px-3"
+        >
+          <Text className="text-white font-exoBold  text-center bg-button px-7 py-2 xs: text-sm xs:text-[12px] md:lg my-5 rounded-2xl">
             LOGIN
           </Text>
         </TouchableOpacity>
 
-        <Text className="color-[#FFFFFE] font-exoRegular xs: text-xs">
+        <Text className="color-[#FFFFFE] font-exoRegular xs: text-[11px]">
           {"Don't have an account?"}
         </Text>
 
         <TouchableOpacity
           onPress={() => router.push({ pathname: "/Register" })}
         >
-          <Text className=" color-[#4F80C5] -2 font-exoRegula xs:text-xs ">
+          <Text className=" color-[#4F80C5] -2 font-exoRegular text-sm xs:text-[12px] ">
             Register here
           </Text>
         </TouchableOpacity>
@@ -102,7 +106,7 @@ const LoginForm = ({
           onPress={() => router.push({ pathname: "/AdminLogin" })}
           className="mt-5"
         >
-          <Text className=" color-[#4F80C5] -2 font-exoRegula xs:text-xs ">
+          <Text className=" color-[#4F80C5] -2 font-exoRegular text-sm xs:text-[10px] ">
             Login as Administrator
           </Text>
         </TouchableOpacity>

@@ -36,12 +36,12 @@ const ForgotPasswordModal = ({
   };
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1">
+      <Pressable onPress={closeModal} className="flex-1 bg-black/50  ">
         <Animated.View
-          className="   w-[250px] h-[200px] m-auto rounded-[10px] "
+          className="   w-[250px] m-auto  border-[#2a3141] border-[1px] rounded-xl"
           style={[scaleStyle]}
         >
-          <View className="bg-modal rounded-3xl px-6 py-6">
+          <View className="bg-modal rounded-xl px-6 py-6">
             <Text className="text-white text-center font-exoBold text-lg mb-2">
               Reset Password
             </Text>
@@ -59,7 +59,7 @@ const ForgotPasswordModal = ({
               ></InputBox>
             </View>
             <TouchableOpacity onPress={() => handleForgotPassword(email)}>
-              <Text className="text-center text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
+              <Text className="text-center text-white font-exoBold  bg-button px-7 py-2 xs: text-sm rounded-xl xs:text-[12px]  my-5 ">
                 Send to email
               </Text>
             </TouchableOpacity>

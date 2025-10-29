@@ -102,9 +102,9 @@ const UserManagement = () => {
               data={displayedUsers}
               keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => {
-                if (item.isAdmin) {
-                  return null;
-                }
+                // if (item.isAdmin) {
+                //   return null;
+                // }
                 return (
                   <AdminUserContainer
                     more={() => {

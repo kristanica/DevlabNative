@@ -20,7 +20,7 @@ const AdminUserContainer = ({
 
   return (
     <>
-      <View className="bg-background flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#90b6bb] border-[1px]  relative ">
+      <View className="bg-background flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#2a3141] border-[2px]  relative ">
         <View className="flex-[1] justify-center items-center ">
           {deleteUserModal.visibility && (
             <DeleteUserConfirmation
@@ -39,11 +39,11 @@ const AdminUserContainer = ({
             }}
             source={toUse}
           ></Image>
-          <TouchableOpacity onPress={() => deleteUserModal.setVisibility(true)}>
+          {/* <TouchableOpacity onPress={() => deleteUserModal.setVisibility(true)}>
             <Text className="text-white font-exoBold text-xs xs:text-[10px] bg-red-500 px-7 py-2 rounded-xl mt-1 ">
               Delete
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <View

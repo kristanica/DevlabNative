@@ -51,7 +51,7 @@ const ExperienceBar = ({
     width: progressValue.value * 210,
   }));
   return (
-    <View className="h-[30px] ">
+    <View className="h-[15px] ">
       <View
         className="bg-white h-full w-full rounded-lg"
         style={{

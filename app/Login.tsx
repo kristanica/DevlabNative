@@ -2,7 +2,6 @@ import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
 import RenderCounter from "@/assets/components/global/RenderCounter";
 import ForgotPasswordModal from "@/assets/components/RegisterComponents/ForgotPasswordModal";
 import LoginForm from "@/assets/components/screen/LOGIN/LoginForm";
-import Logo from "@/assets/components/screen/LOGIN/Logo";
 import useLogin from "@/assets/Hooks/reducers/useLogin";
 import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
@@ -52,7 +51,7 @@ const Login = () => {
             {forgotPassword.visibility && (
               <ForgotPasswordModal {...forgotPassword}></ForgotPasswordModal>
             )}
-            <Logo></Logo>
+            {/* <Logo></Logo> */}
             <LoginForm
               handleLogin={handleLogin}
               state={state}
