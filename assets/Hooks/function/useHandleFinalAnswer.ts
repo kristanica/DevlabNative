@@ -24,9 +24,7 @@ type useHandleFinalAnswerProps = {
 export const useHandleFinalAnswer = ({
   lessonId,
   levelId,
-
   category,
-
   setCurrentStageIndex,
   currentStageData,
   currentStageIndex,
@@ -40,6 +38,7 @@ export const useHandleFinalAnswer = ({
   const levelFinishedModal = useModal();
   const feedBackModal = useModal();
   const makeFeedback = makeLevelFeedback();
+
   const { nextStage } = useSubmitAnswer(
     setCurrentStageIndex,
     levelFinishedModal,
@@ -137,24 +136,23 @@ export const useHandleFinalAnswer = ({
                   feedback: data.feedback,
                   evaluation: data.evaluation,
                 };
-                //Sets the visibiility of the feedback after stage game completion
-                feedBackModal.setVisibility(true);
+                //Sets the visibiility of the feedback after stage game completion. ONLY IF ITS NOT THE LAST STAGE
+                if (!isLastStage) {
+                  feedBackModal.setVisibility(true);
+                }
                 feedbackStore.getState().addFeedback(category, {
                   stageId: currentStageData.id,
                   evaluation: data.evaluation,
                   feedback: data.feedback,
                 });
-                if (isLastStage) {
-                  // delay slightly so LevelFinishedModal doesn’t overlap
-                  setTimeout(() => {
-                    levelFinishedModal.setVisibility(true);
-                  }, 800); // or after user presses Continue
-                }
               }
 
               //Sets the data for the feedback on level end
               setUserAnswer("");
-              if (evaluationResult![0] === "levelUnlocked") {
+              if (
+                evaluationResult![0] === "levelUnlocked" ||
+                evaluationResult![0] === "topicFinished"
+              ) {
                 // Sends the generated feedback to the makeFeedback call
                 setEvaluationData(
                   await makeFeedback.mutateAsync(

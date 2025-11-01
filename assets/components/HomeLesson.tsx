@@ -21,9 +21,7 @@ const HomeLesson = ({
       </View>
 
       {/* Render's Name */}
-      <View className=" items-center my-2 flex-row justify-between  mr-3 ml-2">
-        {children}
-      </View>
+      <View className=" items-center my-2   mr-3 ml-2">{children}</View>
     </Animated.View>
   );
 };

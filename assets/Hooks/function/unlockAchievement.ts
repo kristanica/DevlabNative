@@ -7,7 +7,7 @@ import { playSound } from "./soundHandler";
 export const unlockAchievement = async (
   subject: string,
   actionType: string,
-  payload: any
+  payload?: any
 ) => {
   const userId = auth.currentUser?.uid;
   const achievementStore = useAchievementStore.getState().achievementStore;

@@ -41,6 +41,7 @@ const ModalHandler = ({
   setEvaluationData,
   evaluationData,
   category,
+
   feedbackArray,
 }: ModalHandlerProps) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
@@ -125,6 +126,7 @@ const ModalHandler = ({
           {...levelFinishedModal}
           isRewardClaimed={isRewardClaimed}
           evaluationData={evaluationData}
+          feedbackArray={feedbackArray.current}
         ></LevelFinishedModal>
       )}
 

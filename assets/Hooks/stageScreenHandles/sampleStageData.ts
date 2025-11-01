@@ -1,4 +1,5 @@
 // @refresh reset
+import { levelRewardStore } from "@/assets/zustand/levelRewardStore";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -14,6 +15,7 @@ export const sampleStageData = (
     { stageId: string; evaluation: string; feedback: string }[]
   >([]);
   const setLocation = WhereIsUser((state) => state.setLocation);
+  const setLevelReward = levelRewardStore.getState().setLevelReward;
   const gameIdentifier = useRef<string | undefined>("Lesson");
   const queryClient = useQueryClient();
   const content = useMemo(
@@ -30,6 +32,22 @@ export const sampleStageData = (
     () => getLessonData?.levels.find((level: any) => level.id === levelId),
     [getLessonData, levelId]
   );
+
+  useEffect(() => {
+    if (getLevelData) {
+      console.log(
+        getLevelData.coinsReward,
+        getLevelData.expReward,
+        levelId,
+        category
+      );
+      setLevelReward(
+        getLevelData.coinsReward || 0,
+        getLevelData.expReward || 0
+      );
+    }
+  }, [getLevelData, setLevelReward]);
+
   const getStageData = useMemo(
     () => getLevelData?.stages ?? [],
     [getLevelData]

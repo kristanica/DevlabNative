@@ -18,6 +18,7 @@ const useSubmitAnswer = (
   const { handleDecrementHp } = useHandleDecrementHp();
   const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
   const setUnlocknextLesson = unlockNextLevel.getState().unlockNextLevel;
+  const markTopicFinished = unlockNextLevel.getState().markTopicFinished;
   const nextStage = useMutation({
     mutationKey: ["submitAnswer"],
     mutationFn: async ({
@@ -50,6 +51,7 @@ const useSubmitAnswer = (
             category: category,
             stageId: "Stage1",
             lessonId: lessonId,
+            prevLevelId: levelId,
             nextLevelId: unlockData.nextLevelId,
           });
           return ["levelUnlocked", "You've finished a level!"];
@@ -65,11 +67,16 @@ const useSubmitAnswer = (
             category: category,
             stageId: "Stage1",
             nextLevelId: "Level1",
+            prevLevelId: levelId,
             lessonId: unlockData.nextLessonId,
           });
           return ["levelUnlocked", "New lesson unlocked!"];
         } else if (unlockData.isWholeTopicFinished) {
+          //Sets the lesson completion per category
+          markTopicFinished(category);
+          await unlockAchievement(category, "subjectComplete", {});
           finalAnswerModall.closeModal();
+
           setTimeout(() => {
             levelFinishedModal.setVisibility(true);
           }, 200);

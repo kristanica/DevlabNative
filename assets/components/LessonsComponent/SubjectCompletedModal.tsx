@@ -1,13 +1,5 @@
-import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
-import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
-import { levelRewardStore } from "@/assets/zustand/levelRewardStore";
-import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
-import userHp from "@/assets/zustand/userHp";
-import { auth, db } from "@/constants";
-import { router } from "expo-router";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
 import LottieView from "lottie-react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Modal,
   Pressable,
@@ -24,7 +16,7 @@ type levelFinishedModalPayload = ScaleModalPayload & {
   evaluationData: any;
   feedbackArray: any;
 };
-const LevelFinishedModal = ({
+const SubjectCompletedModal = ({
   visibility,
   scaleStyle,
   onConfirm,
@@ -32,53 +24,6 @@ const LevelFinishedModal = ({
   evaluationData,
   feedbackArray,
 }: levelFinishedModalPayload) => {
-  const userHealth = userHp((state) => state.userHp);
-  const levelCoinsReward = levelRewardStore((state) => state.coinsReward);
-  const levelExpReward = levelRewardStore((state) => state.expReward);
-  const { coinSurgeItem } = coinSurge();
-  const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
-  // const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);
-
-  // Checks whether the user has used doubleCoins
-
-  // FIXME:STILL UNTESTED, will remove all active buffs once level is finished
-  useEffect(() => {
-    if (!activeBuffs.includes("doubleCoins")) return;
-    // If yes, doubles the user coins
-    coinSurgeItem();
-    // removeActiveBuffs("doubleCoins");
-    activeBuffsLocal.getState().clearActiveBuff();
-  }, [activeBuffs]);
-
-  //Checks whether the user has already claimed the reward on the level
-  useEffect(() => {
-    // If yes, returns immdtly
-    if (isRewardClaimed) return;
-    //resets Userhp upon level completion
-
-    const giveReward = async () => {
-      const uid = auth?.currentUser?.uid;
-      const userRef = doc(db, "Users", String(uid));
-      const userSnapShot = (await getDoc(userRef)).data();
-
-      // Updates the user's exp and coins
-      await updateDoc(userRef, {
-        exp: (userSnapShot?.exp || 0) + levelExpReward,
-        coins: (userSnapShot?.coins || 0) + levelCoinsReward,
-      });
-    };
-    userHp.getState().resetUserHp();
-    giveReward();
-  }, [isRewardClaimed, levelCoinsReward, levelExpReward]);
-  const nextLevelPayload = unlockNextLevel((state) => state.nextLevelPayload);
-
-  const nextLessonPayload = unlockNextLevel((state) => state.nextLessonPayload);
-  const finishedTopics = unlockNextLevel((state) => state.finishedTopics);
-  const shouldShowContinue =
-    (nextLevelPayload || nextLessonPayload) &&
-    !finishedTopics[
-      nextLevelPayload?.category || nextLessonPayload?.category || ""
-    ];
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable className="flex-1 bg-black/50">
@@ -96,7 +41,7 @@ const LevelFinishedModal = ({
         >
           <View className=" flex-[1] bg-modal rounded-xl border-[#2a3141] border-[1px]">
             <Text className=" text-center text-[#f5ff42] font-exoExtraBold text-3xl mt-2">
-              LEVEL COMPLETED
+              SUBJECT COMPLETED
             </Text>
 
             <View className="flex-[1]  mt-2 border-[#2a3141] border-0 border-t-[1px]">
@@ -115,17 +60,14 @@ const LevelFinishedModal = ({
                     <View className="bg-[#080c15]  m-3 py-3 rounded-lg">
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         Lives Remaining:
-                        <Text className="text-[#ad3532]"> {userHealth}x</Text>
+                        <Text className="text-[#ad3532]"> </Text>
                       </Text>
                       <Text className="text-white text-center font-exoBold xs:text-xs">
-                        DevCoins: +
-                        <Text className="text-[#e3be00]">
-                          {levelCoinsReward}
-                        </Text>
+                        DevCoins: +<Text className="text-[#e3be00]"></Text>
                       </Text>
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         Experience gained: +
-                        <Text className="text-[#21b3cf]">{levelExpReward}</Text>
+                        <Text className="text-[#21b3cf]"></Text>
                       </Text>
                     </View>
                     <View className="bg-[#080c15]  mx-3 py-3 rounded-lg">
@@ -168,34 +110,6 @@ const LevelFinishedModal = ({
                   Back to Main
                 </Text>
               </TouchableOpacity>
-              {
-                // completionType !== "subject" &&
-                shouldShowContinue && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      // FIXME: STILL UNTESTED
-                      const target = nextLevelPayload ?? nextLessonPayload;
-                      if (!target) {
-                        console.log("Next lesson/level cannot be found!");
-                        return;
-                      }
-                      router.replace({
-                        pathname: "/(user)/home/stage/[stageId]",
-                        params: {
-                          stageId: target.stageId,
-                          category: target.category,
-                          lessonId: target.lessonId,
-                          levelId: target.nextLevelId,
-                        },
-                      });
-                    }}
-                  >
-                    <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-yellow-500 rounded-2xl">
-                      Continue
-                    </Text>
-                  </TouchableOpacity>
-                )
-              }
             </View>
           </View>
         </Animated.View>
@@ -204,6 +118,6 @@ const LevelFinishedModal = ({
   );
 };
 
-export default LevelFinishedModal;
+export default SubjectCompletedModal;
 
 const styles = StyleSheet.create({});
