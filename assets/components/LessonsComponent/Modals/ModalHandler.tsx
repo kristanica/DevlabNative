@@ -114,7 +114,7 @@ const ModalHandler = ({
       {feedBackModal.visibility && (
         <FeedBackModal
           {...feedBackModal}
-          evaluationData={evaluationData}
+          feedbackArray={feedbackArray.current}
         ></FeedBackModal>
       )}
 

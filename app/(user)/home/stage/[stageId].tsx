@@ -107,6 +107,7 @@ const StageScreen = () => {
     levelFinishedModal,
     finalAnswerModall,
     feedBackModal,
+
     evaluationLessonMutation,
   } = useHandleFinalAnswer({
     lessonId: String(lessonId),
@@ -352,11 +353,10 @@ const StageScreen = () => {
                   setLogs={setLogs}
                   logs={logs}
                 />
-                {!hintLoading ||
-                currentStageData?.type !== "Lesson" ||
-                islevelCompleted ? null : (
-                  <ItemList category={String(category)} />
-                )}
+
+                {!hintLoading &&
+                  currentStageData?.type !== "Lesson" &&
+                  !islevelCompleted && <ItemList category={String(category)} />}
               </KeyboardAwareScrollView>
 
               <SwipeLessonContainer gameType={currentStageData.type}>

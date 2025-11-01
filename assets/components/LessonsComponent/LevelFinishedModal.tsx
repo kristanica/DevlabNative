@@ -2,7 +2,7 @@ import { activeBuffsLocal } from "@/assets/Hooks/function/activeBuffsLocal";
 import { coinSurge } from "@/assets/Hooks/mainGameModeFunctions/globalItems/coinSurge";
 import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import unlockNextLevel from "@/assets/zustand/unlockNextLevel";
-import { userHealthPoints } from "@/assets/zustand/userHealthPoints";
+import userHp from "@/assets/zustand/userHp";
 import { auth, db } from "@/constants";
 import { router } from "expo-router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -31,7 +31,7 @@ const LevelFinishedModal = ({
   evaluationData,
 }: levelFinishedModalPayload) => {
   const coinsAndExp = setCoinsandExp((state) => state.coinsAndExp);
-  const userHealth = userHealthPoints((state) => state.health);
+  const userHealth = userHp.getState().userHp;
   const { coinSurgeItem } = coinSurge();
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
   // const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);

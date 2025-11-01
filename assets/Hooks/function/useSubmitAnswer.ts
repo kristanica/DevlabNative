@@ -36,10 +36,7 @@ const useSubmitAnswer = (
           levelId,
           stageId,
         });
-        await unlockAchievement(category, "firstLevelComplete", {
-          Levelid: levelId,
-          lessonId: lessonId,
-        });
+
         if (unlockData.isNextLevelUnlocked) {
           await unlockAchievement(category, "firstLevelComplete", {
             Levelid: levelId,

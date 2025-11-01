@@ -1,4 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import RenderCounter from "@/assets/components/global/RenderCounter";
 import ForgotPasswordModal from "@/assets/components/RegisterComponents/ForgotPasswordModal";
 import LoginForm from "@/assets/components/screen/LOGIN/LoginForm";
@@ -48,6 +49,9 @@ const Login = () => {
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled"
           >
+            {state.isLoggingIn && (
+              <FillScreenLoading text="Logging in...."></FillScreenLoading>
+            )}
             {forgotPassword.visibility && (
               <ForgotPasswordModal {...forgotPassword}></ForgotPasswordModal>
             )}

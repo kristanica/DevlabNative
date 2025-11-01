@@ -1,3 +1,4 @@
+import { feedbackStore } from "@/assets/zustand/feedbackStore";
 import { useBrainBytesStore } from "@/assets/zustand/useBrainBytesStore";
 import { RefObject } from "react";
 import { apiCall } from "../query/mutation/apiCall";
@@ -28,11 +29,14 @@ export const useHandleFinalAnswer = ({
 
   setCurrentStageIndex,
   currentStageData,
+  currentStageIndex,
+  stageLength,
 }: useHandleFinalAnswerProps) => {
   const evaluateGame = apiCall();
   const setUserAnswer = useBrainBytesStore.getState().setUserAnswer;
   const finalAnswerModall = useModal();
   const evaluateModal = useModal();
+
   const levelFinishedModal = useModal();
   const feedBackModal = useModal();
   const makeFeedback = makeLevelFeedback();
@@ -128,20 +132,39 @@ export const useHandleFinalAnswer = ({
                 currentStageData.type !== "Lesson" &&
                 currentStageData.type !== "BrainBytes"
               ) {
-                feedbackArray.current.push({
+                const isLastStage = currentStageIndex === stageLength - 1;
+                feedbackArray.current = {
+                  feedback: data.feedback,
+                  evaluation: data.evaluation,
+                };
+                //Sets the visibiility of the feedback after stage game completion
+                feedBackModal.setVisibility(true);
+                feedbackStore.getState().addFeedback(category, {
                   stageId: currentStageData.id,
-                  evaluation: data.feedback,
-                  feedback: data.evaluation,
+                  evaluation: data.evaluation,
+                  feedback: data.feedback,
                 });
-                console.log(feedbackArray);
+                if (isLastStage) {
+                  // delay slightly so LevelFinishedModal doesn’t overlap
+                  setTimeout(() => {
+                    levelFinishedModal.setVisibility(true);
+                  }, 800); // or after user presses Continue
+                }
               }
 
               //Sets the data for the feedback on level end
               setUserAnswer("");
               if (evaluationResult![0] === "levelUnlocked") {
+                // Sends the generated feedback to the makeFeedback call
                 setEvaluationData(
-                  await makeFeedback.mutateAsync(feedbackArray.current)
+                  await makeFeedback.mutateAsync(
+                    feedbackStore.getState().getFeedback(category)
+                  )
                 );
+
+                console.log(feedbackStore.getState().getFeedback(category));
+                // Deletes the specific feedback on AsyncStorage
+                feedbackStore.getState().clearFeedback(category);
               }
               resolve(evaluationResult);
             },
@@ -165,3 +188,9 @@ export const useHandleFinalAnswer = ({
     feedBackModal,
   };
 };
+// feedbackArray.current.push({
+//   stageId: currentStageData.id,
+//   evaluation: data.feedback,
+//   feedback: data.evaluation,
+// });
+// console.log(feedbackArray);

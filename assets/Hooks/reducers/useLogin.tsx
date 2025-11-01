@@ -1,5 +1,4 @@
-import { auth, db } from "@/constants";
-import { doc, getDoc } from "@firebase/firestore";
+import { auth } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { AuthError, signInWithEmailAndPassword } from "firebase/auth";
@@ -42,7 +41,7 @@ const useLogin = () => {
         state.email,
         state.password
       );
-
+      dispatch({ type: "UPDATE_FIELD", field: "isLoggingIn", value: true });
       //Checks wether user has verified their username. If not, will show a custom toast.
       await userCredential.user.reload();
       if (!userCredential.user.emailVerified) {
@@ -52,17 +51,6 @@ const useLogin = () => {
       if (!userCredential.user) {
         return;
       }
-
-      const userRef = doc(db, "Users", userCredential?.user.uid);
-      const data = await getDoc(userRef);
-
-      //check if account is suspended
-      // if (data.data()?.isSuspended) {
-      //   console.log("your account is suspended");
-      //   await signOut(auth);
-      //   router.replace({ pathname: path.LOGIN });
-      //   return;
-      // }
 
       Keyboard.dismiss();
       // Determine wheter to keep sign in or not

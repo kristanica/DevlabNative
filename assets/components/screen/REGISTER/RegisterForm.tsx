@@ -9,7 +9,7 @@ type RegisterFormPayload = {
     email: string;
     password: string;
     username: string;
-    age: any;
+    confirmPassword: string;
   };
   handleRegister: () => Promise<void>;
 };
@@ -56,6 +56,19 @@ const RegisterForm = ({
         />
 
         <InputBox
+          placeHolder={"Confirm Password"}
+          value={String(state.confirmPassword)}
+          setValue={(text) =>
+            dispatch({
+              type: "UPDATE_FIELD",
+              field: "confirmPassword",
+              value: text,
+            })
+          }
+          icon={"lock-closed"}
+          isPassword={true}
+        />
+        <InputBox
           placeHolder={"Username"}
           value={state.username}
           setValue={(text) =>
@@ -66,18 +79,6 @@ const RegisterForm = ({
             })
           }
           icon={"person"}
-        />
-        <InputBox
-          placeHolder={"Age"}
-          value={String(state.age)}
-          setValue={(text) =>
-            dispatch({
-              type: "UPDATE_FIELD",
-              field: "age",
-              value: text,
-            })
-          }
-          icon={"calendar"}
         />
       </View>
 

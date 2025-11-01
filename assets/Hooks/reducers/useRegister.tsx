@@ -13,7 +13,7 @@ type State = {
   email: string;
   password: string;
   username: string;
-  age: number;
+  confirmPassword: string;
 };
 
 type Action = {
@@ -38,7 +38,7 @@ const useRegister = () => {
     email: "",
     password: "",
     username: "",
-    age: 0,
+    confirmPassword: "",
   });
 
   const handleRegister = async () => {
@@ -54,6 +54,9 @@ const useRegister = () => {
 
       if (isPasswordValid[0] === "error") {
         return [isPasswordValid[0], isPasswordValid[1]];
+      }
+      if (state.password !== state.confirmPassword) {
+        return ["error", "Password does not match!"];
       }
 
       await createUserWithEmailAndPassword(auth, state.email, state.password);
@@ -76,7 +79,6 @@ const useRegister = () => {
           setDoc(doc(db, "Users", user.uid), {
             email: user.email,
             username: state.username,
-            age: Number(state.age),
             exp: 0,
             userLevel: 1,
             coins: 0,

@@ -21,6 +21,7 @@ import {
   Pressable,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import Animated from "react-native-reanimated";
@@ -86,14 +87,14 @@ const Settings = () => {
                 )}
               </Pressable>
             </View>
-            <View className=" bg-shopAccent flex-[4] m-3 rounded-2xl">
+            <View className=" bg-shopAccent flex-[4] m-3 rounded-xl border-[#2a3141] border-[1px]">
               <Pressable
                 className=""
                 onPress={() => updateImage({ type: "background" })}
               >
                 {zustandBackgroundImage ? (
                   <ImageBackground
-                    className=" rounded-2xl overflow-hidden rounded-br-none rounded-bl-none xs:h-[100px]"
+                    className=" rounded-xl overflow-hidden rounded-br-none rounded-bl-none xs:h-[100px]"
                     source={{ uri: zustandBackgroundImage }}
                   ></ImageBackground>
                 ) : (
@@ -104,16 +105,14 @@ const Settings = () => {
                 )}
               </Pressable>
 
-              <View className=" items-center justify-center">
-                <Text className="text-white text-center text-2xl font-exoBold xs:text-sm">
-                  UPDATE PROFILE INFORMATION
-                </Text>
-              </View>
+              <Text className="text-white my-3 text-center font-exoBold text-xs xs:text-[15px]">
+                UPDATE PROFILE INFORMATION
+              </Text>
 
               <View className="my-3">
                 <View>
-                  <Text className="text-white mx-5 mb-2 xs:text-xs font-exoBold">
-                    Username
+                  <Text className="text-white mx-5 mb-2 text-xs xs:text-[12px] font-exoLight">
+                    USERNAME
                   </Text>
                   <View className="flex-row bg-[#1E212F] mx-5 rounded-[10px]">
                     <TextInput
@@ -127,8 +126,8 @@ const Settings = () => {
                 </View>
 
                 <View className="mt-3">
-                  <Text className="text-white mx-5 mb-2 xs:text-xs font-exoBold ">
-                    Bio
+                  <Text className="text-white mx-5 mb-2 text-xs xs:text-[12px]  font-exoLight  ">
+                    BIO
                   </Text>
 
                   <View className="flex-row bg-[#1E212F] mx-5 rounded-[10px]">
@@ -149,8 +148,8 @@ const Settings = () => {
                   Reset Password
                 </Text>
               </Pressable>
-              <View className=" items-center pt-10   ">
-                <Pressable
+              <View className=" pt-10   gap-3 ">
+                <TouchableOpacity
                   onPress={() => {
                     // Keyboard.dismiss;
                     if (!userName.trim() && !bio.trim()) {
@@ -160,17 +159,21 @@ const Settings = () => {
 
                     confirmationModal.setVisibility(true);
                   }}
+                  className="w-full px-3"
                 >
-                  <Text className="text-white py-2 px-7 font-exoBold rounded-2xl bg-green-400  xs: text-xs">
+                  <Text className="text-white text-center py-2 px-7 font-exoBold rounded-xl bg-green-500 text-xs xs:text-[12px]">
                     Save Changes
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
 
-                <Pressable onPress={() => logOutModal.setVisibility(true)}>
-                  <Text className="text-white py-2 px-12 rounded-2xl font-exoBold my-3 bg-red-600 xs: text-xs">
+                <TouchableOpacity
+                  onPress={() => logOutModal.setVisibility(true)}
+                  className="w-full px-3 "
+                >
+                  <Text className="text-white text-center py-2 px-7 font-exoBold rounded-xl bg-red-500 text-xs xs:text-[12px]">
                     Log out
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </View>
           </Animated.View>
