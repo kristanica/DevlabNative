@@ -94,10 +94,11 @@
       import { html } from "@codemirror/lang-html";
       import { css } from "@codemirror/lang-css";
       import { javascript } from "@codemirror/lang-javascript";
+      import { autocompletion } from "codemirror/autocomplete";
 
       import { defaultKeymap } from "codemirror/commands";
       let language = { html: html(), css: css(), js: javascript() };
-      const extensionList = [lineNumbers(), tokyoNight];
+      const extensionList = [lineNumbers(), autocompletion(), tokyoNight];
       let code = { html: "", css: "", js: "" };
 
       let editor;

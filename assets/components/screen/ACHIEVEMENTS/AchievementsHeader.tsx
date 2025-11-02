@@ -1,46 +1,10 @@
-import { achievementPlaceHolder } from "@/constants";
-import React, { useCallback } from "react";
-import {
-  FlatList,
-  Image,
-  ImageBackground,
-  ListRenderItemInfo,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import AchievementsProgressBar from "../../AchievementsComponents/AchievementsProgressBar";
+import React from "react";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 type AchievementsHeaderPayload = {
   userData: any;
   userAchievements: any;
 };
-const AchievementsHeader = ({
-  userData,
-  userAchievements,
-}: AchievementsHeaderPayload) => {
-  const id = useCallback((item: any) => String(item.id), []);
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<any>) => {
-      if (item.subject === "JavaScript") {
-        item.subject = "Js";
-      }
-      if (item.subject === "Database") {
-        item.subject = "Db";
-      }
-
-      const totalAchievementsCompleted = userAchievements.filter(
-        (achievement: any) => achievement.id.startsWith(item.subject)
-      ).length;
-
-      return (
-        <AchievementsProgressBar
-          progress={totalAchievementsCompleted}
-          name={item.subject}
-        />
-      );
-    },
-    [userData, userAchievements]
-  );
+const AchievementsHeader = ({ userData }: AchievementsHeaderPayload) => {
   return (
     <ImageBackground
       source={
@@ -48,7 +12,7 @@ const AchievementsHeader = ({
           ? { uri: userData?.backgroundImage }
           : require("@/assets/images/default-background.jpg")
       }
-      className="flex-[1.3]"
+      className="flex-[1]"
     >
       <View className="flex-[1] justify-center items-center mt-3  -z-1">
         <Image
@@ -63,15 +27,6 @@ const AchievementsHeader = ({
 
       <View className="justify-center items-center flex-[.5] ">
         <Text className="text-white font-exoBold">HALL OF ACHIEVEMENTS</Text>
-      </View>
-
-      <View className="flex-[1]  flex-row justify-between items-center">
-        <FlatList
-          data={achievementPlaceHolder ?? []}
-          horizontal={true}
-          keyExtractor={id}
-          renderItem={renderItem}
-        ></FlatList>
       </View>
     </ImageBackground>
   );

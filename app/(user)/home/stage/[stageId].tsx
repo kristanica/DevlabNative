@@ -27,7 +27,7 @@ import { useIsMutating, useMutation } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { doc, updateDoc } from "firebase/firestore";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 // RENDERS THE **MAIN** SCREEN
@@ -298,6 +298,10 @@ const StageScreen = () => {
   //   console.log(activeBuff);
   // }, [lessonId, levelId, stageId, category]);
 
+  const [isSwipeShown, setIsSwipeShown] = useState<boolean>(true);
+
+  const handleToggleSwipe = () => setIsSwipeShown((prev) => !prev);
+
   return (
     <ProtectedRoutes>
       <View className="flex-1 bg-background p-3">
@@ -309,6 +313,17 @@ const StageScreen = () => {
               <FillScreenLoading />
             )}
             <CustomGeneralContainer>
+              {isSwipeShown ? null : (
+                <TouchableOpacity
+                  className="z-10 absolute bottom-36 right-8 "
+                  onPress={handleToggleSwipe}
+                >
+                  <Text className="text-white font-exoBold bg-button h-[40px] rounded-lg w-[90px] text-center ">
+                    TOGGLE PANEL
+                  </Text>
+                </TouchableOpacity>
+              )}
+
               <KeyboardAwareScrollView
                 contentContainerStyle={{ flex: 1 }}
                 enableOnAndroid
@@ -361,7 +376,11 @@ const StageScreen = () => {
                   !islevelCompleted && <ItemList category={String(category)} />}
               </KeyboardAwareScrollView>
 
-              <SwipeLessonContainer gameType={currentStageData.type}>
+              <SwipeLessonContainer
+                gameType={currentStageData.type}
+                isShown={isSwipeShown}
+                onToggle={handleToggleSwipe}
+              >
                 {currentStageData.type !== "Lesson" && <Hearts />}
                 <StageGameComponent
                   levelFinishedModal={levelFinishedModal}

@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, { ReactNode, useEffect } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -15,33 +15,33 @@ import Animated, {
 type SwipeLessonContainerProps = {
   children: ReactNode;
   gameType: string;
+  isShown: boolean; // controlled from parent
+  onToggle?: () => void; // toggle callback from parent
 };
 const SwipeLessonContainer = ({
   children,
   gameType,
+  isShown,
+  onToggle,
 }: SwipeLessonContainerProps) => {
   const { height } = Dimensions.get("screen");
-  const [isShown, setIsShown] = useState<boolean>(true);
 
   const heightVal = useSharedValue(height - 100);
+  const opacityVal = useSharedValue(1);
 
   const swipeStyle = useAnimatedStyle(() => ({
     height: heightVal.value,
+    opacity: opacityVal.value,
   }));
-
-  const toggleContainer = useCallback(() => {
-    if (!isShown) {
-      heightVal.value = withSpring(height - 100, {
-        damping: 50,
-        stiffness: 50,
-      });
-      setIsShown(true);
-      return;
-    } else {
-      heightVal.value = withSpring(50, { damping: 50, stiffness: 50 });
-      setIsShown(false);
-    }
-  }, [isShown, height, heightVal]);
+  useEffect(() => {
+    heightVal.value = withSpring(isShown ? height - 100 : 0, {
+      damping: 50,
+      stiffness: 50,
+    });
+    setTimeout(() => {
+      opacityVal.value = withSpring(isShown ? 1 : 0);
+    }, 200);
+  }, [isShown]);
 
   return (
     <Animated.View
@@ -50,7 +50,7 @@ const SwipeLessonContainer = ({
     >
       {gameType !== "BrainBytes" && (
         <TouchableOpacity
-          onPress={toggleContainer}
+          onPress={onToggle}
           className="absolute  z-50"
           style={{
             top: 18,
@@ -64,7 +64,6 @@ const SwipeLessonContainer = ({
           ></Ionicons>
         </TouchableOpacity>
       )}
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}

@@ -13,7 +13,8 @@
           "codemirror/state": "https://esm.sh/@codemirror/state",
           "@ddietr/codemirror-theme-tokyo-night": "https://esm.sh/@ddietr/codemirror-themes/tokyo-night",
           "codemirror/autocomplete": "https://esm.sh/@codemirror/autocomplete",
-          "@codemirror/lang-sql": "https://esm.sh/@codemirror/lang-sql"
+          "@codemirror/lang-sql": "https://esm.sh/@codemirror/lang-sql",
+          "codemirror/commands": "https://esm.sh/@codemirror/commands"
         }
       }
     </script>
@@ -82,14 +83,20 @@
     <div id="editor"></div>
 
     <script type="module">
-      import { EditorView, lineNumbers } from "codemirror/view";
+      import { EditorView, lineNumbers, keymap } from "codemirror/view";
       import { EditorState } from "codemirror/state";
       import { tokyoNight } from "@ddietr/codemirror-theme-tokyo-night";
       import { autocompletion } from "codemirror/autocomplete";
       import { sql } from "@codemirror/lang-sql";
+      import { defaultKeymap } from "codemirror/commands";
 
       const runButton = document.querySelector(".run");
-      const extensionList = [lineNumbers(), autocompletion(), tokyoNight];
+      const extensionList = [
+        lineNumbers(),
+        autocompletion(),
+        tokyoNight,
+        keymap.of(defaultKeymap),
+      ];
       let editor, val, db;
 
       // ✅ Initialize database and send all tables immediately

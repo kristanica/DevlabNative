@@ -24,7 +24,6 @@ type AdminLessonContainerPayload = {
     title: string;
     description: string;
   };
-  index: number;
 };
 
 type AdminUserContainerPayload = {

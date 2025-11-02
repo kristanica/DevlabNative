@@ -42,12 +42,14 @@ const UserProgress = ({ lessons, activeLevel, userProgress }: any) => {
                     borderWidth={0}
                     borderRadius={10}
                   />
-                  <Text className="text-white font-exoSemi text-xs">
-                    {Math.round(progressPercent * 100)}%
-                  </Text>
-                  <Text className="text-[10px] text-white  text-right">
-                    {progressValue} / {totalLevels} levels completed
-                  </Text>
+                  <View className="flex-row justify-between mt-1">
+                    <Text className="text-white font-exoSemi text-xs">
+                      {Math.round(progressPercent * 100)}%
+                    </Text>
+                    <Text className="text-[10px] text-white  text-right">
+                      {progressValue} / {totalLevels} levels completed
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>

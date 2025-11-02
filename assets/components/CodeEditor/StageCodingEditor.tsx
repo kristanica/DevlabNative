@@ -55,9 +55,11 @@ const StageCodingEditor = ({
   const [htmlUri, setHtmlUri] = useState<string | null>(null);
   useEffect(() => {
     const loadHtml = async () => {
-      const asset = Asset.fromModule(require("@/fontFamily/editor/index.html"));
+      const asset = Asset.fromModule(
+        require("@/fontFamily/editor/codeMirror.html")
+      );
       await asset.downloadAsync(); // ensures it’s available locally
-      setHtmlUri(asset.localUri); //URI FOR STAGE EDITOR BUT LOCALURI ON PLAYGROUND????????????? well see
+      setHtmlUri(asset.localUri);
     };
 
     loadHtml();

@@ -110,8 +110,7 @@ const AddLessonModal = ({
                     }}
                   >
                     <AdminLessonContainer
-                      item={item}
-                      index={index}
+                      itemContents={item}
                     ></AdminLessonContainer>
                   </TouchableOpacity>
                 </>

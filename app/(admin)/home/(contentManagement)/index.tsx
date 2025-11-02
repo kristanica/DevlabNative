@@ -119,7 +119,6 @@ const ContentManagement = () => {
                       <AdminLessonContainer
                         itemContents={item}
                         // key={index}
-                        index={globalCounter}
                       />
                     </TouchableOpacity>
 

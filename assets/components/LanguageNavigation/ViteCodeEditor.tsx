@@ -61,7 +61,9 @@ const ViteCodeEditor = ({
 
   useEffect(() => {
     const loadHtml = async () => {
-      const asset = Asset.fromModule(require("@/fontFamily/editor/index.html"));
+      const asset = Asset.fromModule(
+        require("@/fontFamily/editor/PlaygroundCodeEditor.html")
+      );
       await asset.downloadAsync(); // ensures it’s available locally
       setHtmlUri(asset.localUri);
     };
