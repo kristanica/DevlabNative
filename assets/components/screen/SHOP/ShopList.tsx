@@ -50,7 +50,7 @@ const ShopList = ({ shopItem }: ShopListProps) => {
       mutation.mutate({
         id: String(id),
         cost: Number(cost),
-        // itemIcon: icon.replace(".png", ""),
+
         itemName: itemName,
       });
       // console.log(itemName);

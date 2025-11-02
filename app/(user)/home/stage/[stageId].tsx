@@ -107,7 +107,7 @@ const StageScreen = () => {
     levelFinishedModal,
     finalAnswerModall,
     feedBackModal,
-
+    gameOverModal,
     evaluationLessonMutation,
   } = useHandleFinalAnswer({
     lessonId: String(lessonId),
@@ -322,6 +322,8 @@ const StageScreen = () => {
                   sendToWebView={sendToWebView}
                 />
                 <ModalHandler
+                  setCurrentStageIndex={setCurrentStageIndex}
+                  gameOverModal={gameOverModal}
                   feedbackArray={feedbackArray}
                   feedBackModal={feedBackModal}
                   setEvaluationData={setEvaluationData}

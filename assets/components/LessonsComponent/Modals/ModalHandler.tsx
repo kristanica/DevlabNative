@@ -1,10 +1,11 @@
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useBrainBytesStore } from "@/assets/zustand/useBrainBytesStore";
 import { router } from "expo-router";
-import React, { useCallback } from "react";
+import React, { Dispatch, SetStateAction, useCallback } from "react";
 import { StyleSheet } from "react-native";
 import EvaluateModal from "../../CodeEditor/EvaluateModal";
 import FinalAnswerModal from "../FinalAnswerModal";
+import GameOverModal from "../GameOverModal";
 import LevelFinishedModal from "../LevelFinishedModal";
 import FeedBackModal from "./FeedBackModal";
 // TODO: FIXED THESE, PLEASE
@@ -25,6 +26,10 @@ type ModalHandlerProps = {
   currentStageType: string;
   evaluationData: any;
   feedBackModal: any;
+
+  //will show game over once user ran outof hp
+  gameOverModal: any;
+  setCurrentStageIndex: Dispatch<SetStateAction<number>>;
 };
 
 const ModalHandler = ({
@@ -41,8 +46,9 @@ const ModalHandler = ({
   setEvaluationData,
   evaluationData,
   category,
-
+  gameOverModal,
   feedbackArray,
+  setCurrentStageIndex,
 }: ModalHandlerProps) => {
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   const userAnswer = useBrainBytesStore.getState().userAnswer;
@@ -128,6 +134,17 @@ const ModalHandler = ({
           evaluationData={evaluationData}
           feedbackArray={feedbackArray.current}
         ></LevelFinishedModal>
+      )}
+
+      {gameOverModal.visibility && (
+        <GameOverModal
+          {...gameOverModal}
+          onConfirm={() => {
+            setCurrentStageIndex(0);
+            gameOverModal.closeModal();
+          }}
+          category={category}
+        ></GameOverModal>
       )}
 
       {/* Once the evaluate button is pressedm this willshow */}

@@ -162,9 +162,9 @@ const ViteDatabaseCodeEditor = ({
                     receivedCode: queryRecievedCode.query,
                   });
                 }}
-                className="absolute  z-50  bottom-32 left-5 "
+                className="absolute z-50 bottom-9 left-6"
               >
-                <Text className="text-white px-8 py-2 bg-button text-xs rounded-xl font-exoBold">
+                <Text className="text-white px-8 py-2 bg-[#9333ea] text-xs rounded-xl font-exoBold">
                   Evaluate
                 </Text>
               </TouchableOpacity>
@@ -183,31 +183,29 @@ const ViteDatabaseCodeEditor = ({
               source={{ uri: htmlUri }}
               onMessage={(e) => {
                 try {
-                  //Gets the data from the webview, can be {query: "", result: ""} or {allTables: ""}
                   const data = JSON.parse(e.nativeEvent.data);
-                  if (!data) {
-                    console.log("no data");
-                  }
-                  //Is not using
-                  if (!query) {
-                    setQuery(data.defaultQuery);
+                  if (!data) return;
+
+                  // ✅ Display predefined tables immediately on load
+                  if (data.defaultTables) {
+                    const combinedHtml = data.defaultTables
+                      .map(
+                        (table: any) =>
+                          `<h2 style="color: black; font-family: Arial, sans-serif">${table.name}</h2>${table.html}`
+                      )
+                      .join("<br/><br/>");
+                    setDisplayHTML(combinedHtml);
                     return;
                   }
 
-                  // if the user ran their query, sets it to the setter then displayed on the webview above
-                  // query: actual query code
-                  //  result: The actual table if select statement is used. will render no result if create/insert/etc is used
-
+                  // Existing logic for query + results
                   if (data.query && data.result) {
                     setQueryRecievedCode({
                       query: data.query,
                       result: data.result,
                     });
-
-                    return;
                   }
 
-                  // If display all table is used, sets the table to a useState then displayed it on the webview above
                   if (data.allTables) {
                     const combinedHtml = data.allTables
                       .map(
@@ -215,11 +213,10 @@ const ViteDatabaseCodeEditor = ({
                           `<h2 style="color: black; font-family: Arial, sans-serif">${table.name}</h2>${table.html}`
                       )
                       .join("<br/><br/>");
-
                     setDisplayHTML(combinedHtml);
                   }
                 } catch (error) {
-                  console.log(error);
+                  console.log("Error parsing WebView message:", error);
                 }
               }}
               allowFileAccess

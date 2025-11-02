@@ -94,12 +94,12 @@ const StageCodeRush = ({
         {currentStageData?.description}
       </Text>
 
-      <View className="bg-accentContainer p-3 rounded-3xl my-3">
+      <View className="bg-accentContainer p-3 rounded-xl my-3 ">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        <View className="bg-background p-3 rounded-3xl my-3">
+        <View className="p-3 rounded-3xl my-3">
           {currentStageData?.codingInterface &&
             Object.entries(currentStageData.codingInterface).map(
               ([key, value]: any) => {

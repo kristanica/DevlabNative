@@ -38,7 +38,7 @@ const CategoryItem = ({
         <FlashList
           estimatedItemSize={112}
           data={item.stages}
-          className="bg-background mx-3"
+          className="bg-[#101727] mx-3 rounded-2xl"
           keyExtractor={(stage: any) =>
             `${item.lessonId}-${item.levelId}-${stage.id}`
           }
@@ -71,63 +71,3 @@ const CategoryItem = ({
   );
 };
 export default React.memo(CategoryItem);
-// const [stageVisibility, setStageVisiblity] = useState<any>({});
-
-// const handleStageTracker = useCallback(
-//   (isLevelLocked: boolean, item: any) => {
-//     if (!isLevelLocked) {
-//       setVisibility(true);
-//     } else {
-//       setTracker({
-//         category: id,
-//         lessonId: item.lessonId,
-//         levelId: item.levelId,
-//       });
-//       setCoinsAndExp({
-//         coins: item.coinsReward,
-//         exp: item.expReward,
-//       });
-
-//       setStagesVisibility(true);
-//     }
-//   },
-//   []
-// );
-
-// const renderItem = ({ item, index }: any) => {
-//   const key = `${item.lessonId}-${item.levelId}`;
-
-//   const isLevelLocked =
-//     useUserProgressData?.allProgress?.[key]?.isActive ?? false;
-
-//   return (
-//     <>
-//       <Pressable
-//         className="h-[500px]"
-//         onPress={() => {
-//           console.log("hey");
-//         }}
-//       >
-//         <LessonContainer
-//           isLocked={!isLevelLocked}
-//           levelInformation={item}
-//           index={index}
-//           icon={
-//             meta.ionIcon as
-//               | "cube"
-//               | "logo-javascript"
-//               | "logo-html5"
-//               | "logo-css3"
-//           }
-//         ></LessonContainer>
-//       </Pressable>
-
-//       {stageVisibility[key] &&
-//         item.stages.map((stage: any) => (
-//           <View key={stage.id} className="h-[500px]">
-//             <Text>{stage.id}</Text>
-//           </View>
-//         ))}
-//     </>
-//   );
-// };

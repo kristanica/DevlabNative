@@ -10,11 +10,12 @@ import { useHandleGameOver } from "./useHandleGameOver";
 const useSubmitAnswer = (
   setCurrentStageIndex: Dispatch<SetStateAction<number>>,
   levelFinishedModal: any,
-  finalAnswerModall: any
+  finalAnswerModall: any,
+  gameOverModal: any
 ) => {
   const healthPointsTracker = userHp.getState().userHp;
   const unlockNext = unlock(setCurrentStageIndex);
-  const { handleGameOver } = useHandleGameOver();
+  const { handleGameOver } = useHandleGameOver(gameOverModal);
   const { handleDecrementHp } = useHandleDecrementHp();
   const setUnlockNextLevel = unlockNextLevel.getState().unlockNextLevel;
   const setUnlocknextLesson = unlockNextLevel.getState().unlockNextLevel;
@@ -94,8 +95,9 @@ const useSubmitAnswer = (
           category,
           setCurrentStageIndex,
         });
-        return ["reset", "You've ran out of hp!"];
       }
+
+      // If useranswered incorrectly
       handleDecrementHp();
 
       return ["loseOneHp", "You got that one wrong!"];

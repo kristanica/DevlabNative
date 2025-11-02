@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 type ShopHeader = {
   coins: number | undefined;
 };
@@ -9,7 +9,7 @@ const ShopHeader = ({ coins }: ShopHeader) => {
       <View className="flex-row  items-center justify-between  ">
         <View className="flex-row">
           <Text className="xs:text-2xl text-white font-exoExtraBold px-3">
-            DEVLAB
+            DEVSHOP
           </Text>
           <Image
             source={require("@/assets/images/navBarIcons/Shop.png")}
@@ -28,8 +28,8 @@ const ShopHeader = ({ coins }: ShopHeader) => {
         </View>
       </View>
 
-      <View>
-        <Text className="text-white xs:text-xs text-justify font- px-3 my-2">
+      <View className="mx-3 my-3 p-3 bg-accentContainer rounded-xl shadow-md">
+        <Text className="text-white xs:text-xs text-justify font- px-3 my-2 opacity-65">
           Welcome to the DevLab Shop, where learning meets gamification! Earn
           rewards as you code, learn, and complete challenges, then spend them
           on awesome upgrades to enhance your experience.
@@ -40,5 +40,3 @@ const ShopHeader = ({ coins }: ShopHeader) => {
 };
 
 export default React.memo(ShopHeader);
-
-const styles = StyleSheet.create({});

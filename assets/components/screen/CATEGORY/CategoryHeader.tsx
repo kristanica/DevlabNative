@@ -26,7 +26,7 @@ const CategoryHeader = ({ meta, id }: CategoryHeaderPayload) => {
           <Text className="text-white text-xl font-exoBold shadow">
             {meta.title}
           </Text>
-          <Text className="text-white text-xs xs:text-[8px] font-exoLight mt-1">
+          <Text className="text-white text-xs xs:text-[8px] font-exoLight mt-1 text-justify">
             {meta.description}
           </Text>
         </View>

@@ -1,29 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useIsFocused } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-const StagesContainer = ({ stageInformation, index, isLocked }: any) => {
-  const isFocused = useIsFocused();
-
-  // const { onScale } = useSequentialAppearAnim({
-  //   indicator: isFocused,
-  //   id: index,
-  // });
-
+const StagesContainer = ({ stageInformation, isLocked }: any) => {
   return (
-    <Animated.View
-      // style={[
-      // onScale,
-      //   {
-      //     backgroundColor:
-      //       stageInformation.type === "Lesson" ? "#111827" : "#2B1118",
-      //   },
-      // ]}
-      className={`bg-[#111827] my-2 rounded-2xl border-2 border-black h-28 p-3 mx-3 relative 
-              `}
-    >
+    <Animated.View className="bg-[#1f1e2e] my-2 rounded-2xl h-28 p-3 mx-3 relative">
       {!isLocked && (
         <>
           <View className="absolute inset-0 z-10 rounded-2xl bg-black opacity-60" />

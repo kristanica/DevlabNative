@@ -9,7 +9,7 @@ type useHandleGameOverPayload = {
   stageId: string;
   levelId: string;
 };
-export const useHandleGameOver = () => {
+export const useHandleGameOver = (gameOverModal: any) => {
   const gameOver = useGameOver();
   const resetUserHp = userHp?.getState().resetUserHp;
 
@@ -18,7 +18,6 @@ export const useHandleGameOver = () => {
     category,
     stageId,
     levelId,
-    setCurrentStageIndex,
   }: useHandleGameOverPayload) => {
     gameOver.mutate({
       lessonId,
@@ -27,8 +26,8 @@ export const useHandleGameOver = () => {
       levelId,
     });
     resetUserHp();
-    setCurrentStageIndex(0);
-    return ["error", "You've ran out of lives!"];
+
+    setTimeout(() => gameOverModal.setVisibility(true), 50);
   };
   return { handleGameOver };
 };

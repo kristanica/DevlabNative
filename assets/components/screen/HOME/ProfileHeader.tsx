@@ -9,7 +9,7 @@ const ProfileHeader = ({ userData }: any) => {
         source={
           userData?.backgroundImage
             ? { uri: userData.backgroundImage }
-            : require("@/assets/images/profile.png")
+            : require("@/assets/images/default-background.jpg")
         }
         className="flex-row flex-1 border-b-[2px] border-gray-500 rounded-b-3xl overflow-hidden p-3"
       >

@@ -5,25 +5,16 @@ import Animated from "react-native-reanimated";
 
 const LessonContainer = ({
   levelInformation,
-  index,
+
   icon,
   isLocked,
   isShown,
 }: any) => {
-  // const isFocused = useIsFocused();
-
-  // const { onScale } = useSequentialAppearAnim({
-  //   indicator: isFocused,
-  //   id: index,
-  // });
-  console.log(isShown + "A");
   return (
     <Animated.View
       key={levelInformation.id}
-      // style={onScale}
-      className={`bg-shopAccent ${
-        isShown ? "" : "rounded-3xl"
-      }  h-28 flex-row mt-2 border-black border-[2px] mx-3`}
+      className={` rounded-3xl 
+        h-28 flex-row mt-2 border-black border-[1px] mx-3 bg-[#111827]`}
     >
       {isLocked && (
         <>

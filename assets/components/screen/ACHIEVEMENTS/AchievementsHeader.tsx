@@ -31,7 +31,7 @@ const AchievementsHeader = ({
       const totalAchievementsCompleted = userAchievements.filter(
         (achievement: any) => achievement.id.startsWith(item.subject)
       ).length;
-      console.log(totalAchievementsCompleted);
+
       return (
         <AchievementsProgressBar
           progress={totalAchievementsCompleted}
@@ -46,9 +46,9 @@ const AchievementsHeader = ({
       source={
         userData?.backgroundImage
           ? { uri: userData?.backgroundImage }
-          : require("@/assets/images/pink-background-sample.jpg")
+          : require("@/assets/images/default-background.jpg")
       }
-      className="flex-[1]"
+      className="flex-[1.3]"
     >
       <View className="flex-[1] justify-center items-center mt-3  -z-1">
         <Image
@@ -62,7 +62,7 @@ const AchievementsHeader = ({
       </View>
 
       <View className="justify-center items-center flex-[.5] ">
-        <Text className="text-white font-exoBold">Hall of Achievements</Text>
+        <Text className="text-white font-exoBold">HALL OF ACHIEVEMENTS</Text>
       </View>
 
       <View className="flex-[1]  flex-row justify-between items-center">

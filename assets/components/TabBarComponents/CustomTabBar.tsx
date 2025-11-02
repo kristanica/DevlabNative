@@ -5,6 +5,7 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LessonModal from "../LessonModal";
 
 type Props = BottomTabBarProps & {
@@ -17,12 +18,20 @@ export default function CustomTabBar({
   navigation,
 }: Props) {
   const lessonModal = useModal();
+  const insets = useSafeAreaInsets();
 
   return (
     <Animated.View
       entering={FadeIn.duration(500)}
       exiting={FadeOut.duration(200)}
-      style={[tabBarStyle.tabBarStyle, { width: width }]}
+      style={[
+        tabBarStyle.tabBarStyle,
+        {
+          width: width,
+          paddingBottom: insets.bottom + 10, // 👈 dynamic padding
+          height: 70 + insets.bottom, // 👈 increase height dynamically
+        },
+      ]}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

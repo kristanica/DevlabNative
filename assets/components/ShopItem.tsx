@@ -30,9 +30,9 @@ const ShopItem = ({
   return (
     <Animated.View
       // style={[onScale]}
-      className="w-[90%]  mx-auto sm:w-3/4 md:w-2/3 lg:w-1/2  my-2 items-center justify-center "
+      className="w-[90%]  mx-auto sm:w-[30%] md:w-2/3 lg:w-1/2  my-2 items-center justify-center "
     >
-      <View className="bg-shopAccent rounded-xl flex-row flex-[1]  ">
+      <View className="bg-shopAccent rounded-xl flex-row flex-[1] border-[#2a3141] border-[1px]">
         <View className="flex-col justify-evenly items-center flex-1 py-6 px-5">
           <Image
             source={itemIcon[iconNameTrimmed]}
@@ -42,13 +42,12 @@ const ShopItem = ({
             {title}
           </Text>
 
-          <Text className="text-[#00FFBF] xs:text-xs  text-center my-4">
+          <Text className="text-white xs:text-[11px]  text-center my-4 :text-xs  font- px-3 opacity-65">
             {desc}
-            {Icon}
           </Text>
 
-          <TouchableOpacity onPress={handlePurchase}>
-            <Text className="text-white xs:text-[8px] bg-[#1ABC9C]  px-7 font-exoRegular py-2 rounded-2xl">
+          <TouchableOpacity onPress={handlePurchase} className="w-full">
+            <Text className="text-white xs:text-[12px] bg-[#1ABC9C]  text-center px-7 font-exoRegular py-2 rounded-2xl">
               ${cost}
             </Text>
           </TouchableOpacity>

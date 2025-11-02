@@ -18,11 +18,9 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
       bounces={false}
       style={{
         backgroundColor: "#0D1117",
-        borderRightColor: "white",
-        borderRightWidth: 0.5,
       }}
     >
-      <View className="w-full border-b-[1px] border-white justify-center items-center  pb-5">
+      <View className="w-full border-b-[1px] border-white justify-center items-center  pb-1">
         <Image
           source={
             userData?.profileImage
@@ -32,6 +30,9 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
           } // your image
           style={{ width: 100, height: 100, borderRadius: 15 }}
         />
+        <Text className="text-white font-exoBold mt-1">
+          {userData?.username}
+        </Text>
       </View>
 
       <TouchableOpacity

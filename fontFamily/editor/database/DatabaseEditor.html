@@ -78,7 +78,7 @@
   </head>
   <body>
     <button class="run">RUN</button>
-    <button class="getTable">DISPLAY</button>
+
     <div id="editor"></div>
 
     <script type="module">
@@ -89,15 +89,10 @@
       import { sql } from "@codemirror/lang-sql";
 
       const runButton = document.querySelector(".run");
-      const getTableButton = document.querySelector(".getTable");
-
       const extensionList = [lineNumbers(), autocompletion(), tokyoNight];
+      let editor, val, db;
 
-      let editor;
-      let val;
-      let db;
-      let result;
-
+      // ✅ Initialize database and send all tables immediately
       const fetchSQL = async () => {
         try {
           val = await initSqlJs({
@@ -105,41 +100,82 @@
               `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/${file}`,
           });
           db = new val.Database();
-          db.exec(
-            "CREATE TABLE orders (id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER, name TEXT, product TEXT,amount REAL,order_date TEXT);"
+
+          // --- PREDEFINED TABLES AND DATA ---
+          db.exec(`
+        CREATE TABLE students (
+          id INTEGER PRIMARY KEY,
+          name TEXT,
+          age INTEGER,
+          course TEXT
+        );
+
+        CREATE TABLE enrollments (
+          id INTEGER PRIMARY KEY,
+          student_id INTEGER,
+          subject TEXT,
+          grade INTEGER
+        );
+
+        INSERT INTO students VALUES
+          (1, 'Anna', 20, 'Computer Science'),
+          (2, 'Ben', 22, 'Information Technology'),
+          (3, 'Clara', 21, 'Software Engineering'),
+          (4, 'David', 23, 'Information Systems'),
+          (5, 'Ella', 20, 'Computer Science');
+
+        INSERT INTO enrollments VALUES
+          (1, 1, 'Database Systems', 95),
+          (2, 2, 'Web Development', 88),
+          (3, 3, 'Operating Systems', 92),
+          (4, 1, 'Web Development', 89),
+          (5, 5, 'Database Systems', 85),
+          (6, 4, 'Data Structures', 91),
+          (7, 2, 'Networking', 90),
+          (8, 3, 'Database Systems', 87),
+          (9, 5, 'Programming 101', 93);
+      `);
+
+          // ✅ Automatically fetch and send ALL predefined tables
+          const tables = db.exec(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
           );
-          db.run(
-            "INSERT INTO orders (user_id, name, product, amount, order_date) VALUES (1, 'Alice', 'Mouse', 19.99, '2025-06-02'),(2, 'Bob', 'Monitor', 199.99, '2025-06-05'),(3, 'Charlie', 'Desk Lamp', 29.99, '2025-06-03'),(3, 'Charlie', 'USB Hub', 14.99, '2025-06-04'),(5, 'Eve', 'Webcam', 89.99, '2025-06-06');"
-          );
-          const query = "SELECT * FROM orders";
-          const result = displaySQLAsTable(query);
+
+          let tableHTMLs = [];
+          if (tables.length > 0) {
+            tables[0].values.forEach((element) => {
+              const tableName = element[0];
+              const htmlTable = {
+                name: tableName,
+                html: displaySQLAsTable(`SELECT * FROM ${tableName}`),
+              };
+              tableHTMLs.push(htmlTable);
+            });
+          }
+
+          // Send all predefined tables to React Native immediately
           window.ReactNativeWebView.postMessage(
             JSON.stringify({
-              defaultQuery: result,
+              defaultTables: tableHTMLs,
             })
           );
         } catch (error) {
-          console.log(error);
+          console.error("SQL init error:", error);
         }
       };
 
       fetchSQL();
 
+      // ✅ Handle user’s RUN button
       runButton.addEventListener("click", () => {
         const query = editor.state.doc.toString();
-        const val = displaySQLAsTable(query);
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            result: val,
-            query: query,
-          })
-        );
-      });
+        const queryResult = displaySQLAsTable(query);
 
-      getTableButton.addEventListener("click", () => {
+        // Always fetch updated table data as well
         const tables = db.exec(
           "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
         );
+
         let tableHTMLs = [];
         if (tables.length > 0) {
           tables[0].values.forEach((element) => {
@@ -151,8 +187,12 @@
             tableHTMLs.push(htmlTable);
           });
         }
+
+        // Send both query result + full table list
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
+            query: query,
+            result: queryResult,
             allTables: tableHTMLs,
           })
         );
@@ -161,22 +201,30 @@
       function displaySQLAsTable(query) {
         try {
           const result = db.exec(query);
-          let html = `<table><tr>`;
-          if (!result.length) {
-            return "<p>No results</p>";
-          }
-          let { columns, values } = result[0];
-          html += columns.map((e) => `<th>${e}</th>`).join("");
-          html += `</tr>`;
+          if (!result.length)
+            return `<p style="
+    color: #2e7d32;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    background-color: #e8f5e9;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+  ">
+    ✅ Query executed successfully (No results returned)
+  </p>`;
+
+          const { columns, values } = result[0];
+          let html = `<table><tr>${columns
+            .map((e) => `<th>${e}</th>`)
+            .join("")}</tr>`;
           html += values
             .map(
-              (e) =>
-                `<tr>` +
-                e.map((event) => `<td>${event}</td>`).join("") +
-                "</tr>"
+              (row) =>
+                `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
             )
             .join("");
-          html += `</table>`;
+          html += "</table>";
           return html;
         } catch (error) {
           return `<p style="color:red;">${error.message}</p>`;

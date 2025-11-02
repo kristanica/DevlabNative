@@ -39,46 +39,6 @@ const TabsLayout = () => {
       )
     );
   }, [queryClient]);
-  // const preFetchStageData = useCallback(
-  //   (currentUserData: any) => {
-  //     console.log(currentUserData["Html"] + "WOAAAAAAAAAAAAAAAAAAAh");
-  //     return Promise.all(
-  //       category.map((val: string) =>
-  //         queryClient.ensureQueryData({
-  //           queryKey: [
-  //             "SampleStages",
-  //             currentUserData[val].subject,
-  //             currentUserData[val].lessonId,
-  //             currentUserData[val].levelId,
-  //           ],
-  //           queryFn: async () => {
-  //             const token = await auth.currentUser?.getIdToken(true);
-  //             const [res, error] = await tryCatch(
-  //               axios.get(
-  //                 `${URL}/fireBase/getSpecificStage/${currentUserData[val].subject}/${currentUserData[val].lessonId}/${currentUserData[val].levelId}`,
-  //                 {
-  //                   headers: {
-  //                     Authorization: `Bearer ${token}`,
-  //                   },
-  //                 }
-  //               )
-  //             );
-
-  //             if (error) {
-  //               console.log(error);
-  //               return null;
-  //             }
-
-  //             const data = res?.data;
-  //             useSetStageStore(val, data);
-  //             return data;
-  //           },
-  //         })
-  //       )
-  //     );
-  //   },
-  //   [queryClient]
-  // );
 
   const preFetchContent = useCallback(() => {
     return Promise.all(
@@ -124,14 +84,7 @@ const TabsLayout = () => {
             staleTime: 10 * 60 * 1000,
           }),
         ];
-        // if (currentUserData) {
-        //   console.log(currentUserData?.subject + "RAAAAAAAAAAAAAAAAAAAAN");
-        //   promises.push(preFetchStageData(currentUserData));
-        // } else {
-        //   console.log(
-        //     "⚠️ Skipping Stages query because lastOpenedLevel is missing."
-        //   );
-        // }
+
         const result = await Promise.allSettled(promises);
         result.forEach(async (error, index) => {
           if (error.status === "rejected")

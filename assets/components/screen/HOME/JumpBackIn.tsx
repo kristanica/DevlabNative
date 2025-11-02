@@ -39,11 +39,12 @@ const JumpBackIn = ({ lastOpenedLevel }: JumpBackInPayload) => {
                   onPress={() => handleJumpBackIn(item)}
                   className="mx-3 my-2"
                 >
-                  <View className="flex-row items-center py-6 bg-accentContainer rounded-2xl overflow-hidden shadow-md p-3">
+                  <View className="flex-row items-center py-6 bg-accentContainer rounded-2xl overflow-hidden shadow-md p-3 border-[#2a3141] border-[1px] ">
                     <Image
                       source={categoryIcon[lastOpenedLevel[item].subject]}
                       className="w-14 h-14 rounded-lg"
                     />
+
                     <View className="flex-1 ml-3">
                       <Text className="text-white xs:text-sm font-exoBold">
                         {lastOpenedLevel[item].title}

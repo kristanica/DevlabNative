@@ -15,6 +15,7 @@ const DrawerLayout = () => {
       screenOptions={{
         headerTransparent: true,
         drawerActiveTintColor: "#4caf50",
+
         headerLeft: () => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
           const navigation = useNavigation();

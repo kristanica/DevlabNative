@@ -39,10 +39,13 @@ export const useHandleFinalAnswer = ({
   const feedBackModal = useModal();
   const makeFeedback = makeLevelFeedback();
 
+  const gameOverModal = useModal();
+
   const { nextStage } = useSubmitAnswer(
     setCurrentStageIndex,
     levelFinishedModal,
-    finalAnswerModall
+    finalAnswerModall,
+    gameOverModal
   );
 
   const { evaluationLessonMutation } = useEvaluationLesson();
@@ -90,11 +93,11 @@ export const useHandleFinalAnswer = ({
       }
 
       if (!receivedCode && type !== "Lesson" && type !== "BrainBytes") {
-        console.log(receivedCode);
-        console.log("hey");
         setTimeout(() => finalAnswerModall.closeModal(), 100);
+
         await playSound("wrongAnswer");
         resolve(["wrongAnswer", "Your code field is empty!"]);
+        console.log("this should urn");
         return;
       } else {
         const stringReceivedCode =
@@ -184,6 +187,7 @@ export const useHandleFinalAnswer = ({
     evaluateModal,
     levelFinishedModal,
     feedBackModal,
+    gameOverModal,
   };
 };
 // feedbackArray.current.push({

@@ -63,7 +63,7 @@ const ViteCodeEditor = ({
     const loadHtml = async () => {
       const asset = Asset.fromModule(require("@/fontFamily/editor/index.html"));
       await asset.downloadAsync(); // ensures it’s available locally
-      setHtmlUri(asset.localUri || asset.uri);
+      setHtmlUri(asset.localUri);
     };
 
     loadHtml();
@@ -148,7 +148,7 @@ const ViteCodeEditor = ({
       </View>
       {isOffline ? null : (
         <TouchableOpacity
-          className="absolute  z-50  bottom-16 left-5 "
+          className="absolute  z-50  bottom-16 left-6 "
           onPress={() => {
             if (!receivedCode) {
               setToastVisibility("noAnswer", "Emp1ty codebase!");
@@ -157,7 +157,7 @@ const ViteCodeEditor = ({
             evaluateMutation.mutate({ receivedCode });
           }}
         >
-          <Text className="text-white px-7 py-2 bg-button text-xs rounded-xl font-exoBold">
+          <Text className="text-white px-7 py-2 bg-[#9333ea]  text-xs rounded-xl font-exoBold">
             Evaluate
           </Text>
         </TouchableOpacity>

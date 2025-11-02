@@ -101,12 +101,12 @@ const StageLesson = ({ currentStageData }: any) => {
           />
         </View>
       )}
-      <View className="bg-accentContainer p-3  my-3">
+      <View className="bg-accentContainer p-3  my-3 rounded-2xl">
         <Text className="font-exoBold text-xl text-white">Instructions</Text>
         <Text className="text-white font-exoRegular xs:text-xs text-justify my-3">
           {currentStageData?.instruction}
         </Text>
-        <View className="bg-background my-3 flex-col">
+        <View className="my-3 flex-col ">
           {currentStageData?.codingInterface &&
             Object.entries(currentStageData.codingInterface).map(
               ([key, value]: any) => {

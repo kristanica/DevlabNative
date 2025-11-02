@@ -1,6 +1,7 @@
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { create } from "zustand";
 import { auth, db } from "../../constants";
+
 type userData = {
   username: string;
   bio: string;
@@ -13,6 +14,7 @@ type userData = {
   backgroundImage: string;
   lastOpenedLevel: any;
 };
+
 type allProgressType = Record<
   string,
   Record<
@@ -26,7 +28,7 @@ type allProgressType = Record<
     }
   >
 >;
-// Return type for stage progress
+
 type allStagesType = Record<
   string,
   Record<
@@ -35,7 +37,6 @@ type allStagesType = Record<
       isActive: boolean;
       isCompleted: boolean;
       dateUnlocked?: Date;
-
       completedAt?: Date;
     }
   >
@@ -54,96 +55,102 @@ type InformationProviderProps = {
   }) => void;
   inventory: any[];
 
-  userAchievements: any;
-  setUserAchievementProgress: any;
-  getUserAchievementProgress: () => Promise<any>;
+  userAchievements: any[];
+  setUserAchievementProgress: (val: any[]) => void;
+  getUserAchievementProgress: () => Promise<void>;
   allProgressLevels: allProgressType;
   allProgressStages: allStagesType;
-  getUser: () => Promise<any>;
+  getUser: () => Promise<(() => void) | undefined>;
   completedLevels: number;
   completedStages: number;
   userUid: string;
 };
 
-export const useGetUserInfo = create<InformationProviderProps>((set) => ({
-  loading: false,
-  userData: null,
-  inventory: [],
-  userAchievements: [],
-  allProgress: [],
-  allProgressLevels: {},
-  allProgressStages: {},
-  completedLevels: 0,
-  completedStages: 0,
-  userUid: "",
-  setUserProgress: ({
-    allProgressLevels,
-    allProgressStages,
-    completedLevels,
-    completedStages,
-  }) => {
-    set({
+export const useGetUserInfo = create<InformationProviderProps>((set, get) => {
+  let unsubUserInfo: (() => void) | null = null;
+  let unsubInventory: (() => void) | null = null;
+  let unsubAchievements: (() => void) | null = null;
+
+  return {
+    loading: false,
+    userData: null,
+    inventory: [],
+    userAchievements: [],
+    allProgressLevels: {},
+    allProgressStages: {},
+    completedLevels: 0,
+    completedStages: 0,
+    userUid: "",
+
+    setUserProgress: ({
       allProgressLevels,
       allProgressStages,
       completedLevels,
       completedStages,
-    });
-  },
-  setUserAchievementProgress: (val: any) => set({ userAchievements: val }),
+    }) => {
+      set({
+        allProgressLevels,
+        allProgressStages,
+        completedLevels,
+        completedStages,
+      });
+    },
 
-  getUserAchievementProgress: async () => {
-    const uid = auth.currentUser?.uid;
-    if (!uid) {
-      console.log("No user UID found");
-    }
+    setUserAchievementProgress: (val) => set({ userAchievements: val }),
 
-    try {
+    getUserAchievementProgress: async () => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) return;
+
+      unsubAchievements?.();
+
       const achievmentProgressRef = collection(
         db,
         "Users",
-        String(uid),
+        uid,
         "Achievements"
       );
+      unsubAchievements = onSnapshot(achievmentProgressRef, (snapshot) => {
+        const achievements = snapshot.empty
+          ? []
+          : snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        set({ userAchievements: achievements });
+      });
+    },
 
-      const unsubAchievement = onSnapshot(
-        achievmentProgressRef,
-        (achievementSnapShot) => {
-          if (!achievementSnapShot.empty) {
-            const temp = achievementSnapShot.docs.map((achievementDoc) => ({
-              id: achievementDoc.id,
-              ...achievementDoc.data(),
-            }));
+    setUserData: (val) => set({ userData: val }),
 
-            set({ userAchievements: temp });
-          }
-        }
-      );
-      return unsubAchievement;
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-  },
-  setUserData: (val: userData) => set({ userData: val }),
-  getUser: async () => {
-    return new Promise<() => void | undefined>((resolve, reject) => {
-      const uid = auth.currentUser?.uid;
-      if (!uid) {
-        console.log("No user UID found");
-        return resolve(undefined!);
-      }
+    getUser: async () => {
+      return new Promise<(() => void) | undefined>(async (resolve, reject) => {
+        const uid = auth.currentUser?.uid;
+        if (!uid) return resolve(undefined);
 
-      set({ userUid: String(uid), loading: true });
+        // 1️⃣ Unsubscribe previous listeners
+        unsubUserInfo?.();
+        unsubInventory?.();
+        unsubAchievements?.();
 
-      try {
-        const userRef = doc(db, "Users", uid);
+        // 2️⃣ Reset state immediately for new user
+        set({
+          loading: true,
+          userData: null,
+          inventory: [],
+          userAchievements: [],
+          allProgressLevels: {},
+          allProgressStages: {},
+          completedLevels: 0,
+          completedStages: 0,
+          userUid: uid,
+        });
 
-        let unsubUserInfo: () => void;
-        let unsubInventory: () => void;
-        unsubUserInfo = onSnapshot(
-          userRef,
-          (docSnap: any) => {
-            if (docSnap.exists()) {
+        try {
+          // User info
+          const userRef = doc(db, "Users", uid);
+          unsubUserInfo = onSnapshot(
+            userRef,
+            (docSnap: any) => {
+              if (!docSnap.exists()) return;
+
               const data = docSnap.data();
               set({
                 userData: {
@@ -161,38 +168,40 @@ export const useGetUserInfo = create<InformationProviderProps>((set) => ({
                 loading: false,
               });
 
+              // Resolve cleanup function once user loaded
               resolve(() => {
-                unsubUserInfo();
-                unsubInventory();
+                unsubUserInfo?.();
+                unsubInventory?.();
+                unsubAchievements?.();
               });
-            } else {
+            },
+            (error) => {
+              console.log("User snapshot error:", error);
               set({ loading: false });
-              console.log("No user");
-              resolve(undefined!);
+              reject(error);
             }
-          },
-          (error) => {
-            console.log("Error in user snapshot:", error);
-            set({ loading: false });
-            reject(error);
-          }
-        );
+          );
 
-        const itemRef = collection(db, "Users", uid, "Inventory");
-        unsubInventory = onSnapshot(itemRef, (docSnapitem: any) => {
-          if (!docSnapitem.empty) {
-            const items = docSnapitem.docs.map((item: any) => ({
-              id: item.id,
-              ...item.data(),
-            }));
+          // Inventory listener
+          const itemRef = collection(db, "Users", uid, "Inventory");
+          unsubInventory = onSnapshot(itemRef, (snapshot: any) => {
+            const items = snapshot.empty
+              ? []
+              : snapshot.docs.map((doc: any) => ({
+                  id: doc.id,
+                  ...doc.data(),
+                }));
             set({ inventory: items });
-          }
-        });
-      } catch (error) {
-        console.log(error);
-        set({ loading: false });
-        reject(error);
-      }
-    });
-  },
-}));
+          });
+
+          // Achievements
+          await get().getUserAchievementProgress();
+        } catch (error) {
+          console.log("getUser error:", error);
+          set({ loading: false });
+          reject(error);
+        }
+      });
+    },
+  };
+});

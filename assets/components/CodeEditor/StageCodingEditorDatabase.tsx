@@ -145,22 +145,28 @@ ${tableStyle}
             onMessage={(e) => {
               try {
                 const data = JSON.parse(e.nativeEvent.data);
-                console.log("test");
-                console.log(data);
-                if (!query) {
-                  setQuery(data.defaultQuery);
+                if (!data) return;
+
+                // ✅ Display predefined tables immediately on load
+                if (data.defaultTables) {
+                  const combinedHtml = data.defaultTables
+                    .map(
+                      (table: any) =>
+                        `<h2 style="color: black; font-family: Arial, sans-serif">${table.name}</h2>${table.html}`
+                    )
+                    .join("<br/><br/>");
+                  setDisplayHTML(combinedHtml);
                   return;
                 }
 
+                // Existing logic for query + results
                 if (data.query && data.result) {
-                  console.log("set!");
                   setQueryRecievedCode({
                     query: data.query,
                     result: data.result,
                   });
-
-                  return;
                 }
+
                 if (data.allTables) {
                   const combinedHtml = data.allTables
                     .map(
@@ -168,11 +174,10 @@ ${tableStyle}
                         `<h2 style="color: black; font-family: Arial, sans-serif">${table.name}</h2>${table.html}`
                     )
                     .join("<br/><br/>");
-
                   setDisplayHTML(combinedHtml);
                 }
               } catch (error) {
-                console.log(error);
+                console.log("Error parsing WebView message:", error);
               }
             }}
           />

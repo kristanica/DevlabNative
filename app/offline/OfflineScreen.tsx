@@ -14,7 +14,7 @@ const OfflineScreen = () => {
             className="absolute top-5 left-5"
             onPress={() =>
               router.replace({
-                pathname: "/Login",
+                pathname: "/",
               })
             }
           >

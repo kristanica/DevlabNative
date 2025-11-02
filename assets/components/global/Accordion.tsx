@@ -54,7 +54,7 @@ const Accordion = ({ header, contents }: AccordionPayload) => {
   }, [header, contents]);
 
   return (
-    <View className="bg-accent px-6 py-2 rounded-lg mx-2 my-3">
+    <View className="bg-[#1e2a3a] px-6 py-2 rounded-lg mx-2 my-3 ">
       <View className="flex flex-row justify-between">
         <Text className="text-blue-400 font-exoBold text-lg xs:text-[13px]">
           {headerTemp.toLocaleUpperCase()}

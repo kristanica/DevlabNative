@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 import {
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,11 +20,13 @@ import {
 import Animated from "react-native-reanimated";
 import Accordion from "../global/Accordion";
 import SmallLoading from "../global/SmallLoading";
-type levelFinishedModalPayload = ScaleModalPayload & {
+
+type LevelFinishedModalPayload = ScaleModalPayload & {
   isRewardClaimed: boolean;
   evaluationData: any;
   feedbackArray: any;
 };
+
 const LevelFinishedModal = ({
   visibility,
   scaleStyle,
@@ -31,47 +34,42 @@ const LevelFinishedModal = ({
   isRewardClaimed,
   evaluationData,
   feedbackArray,
-}: levelFinishedModalPayload) => {
+}: LevelFinishedModalPayload) => {
   const userHealth = userHp((state) => state.userHp);
   const levelCoinsReward = levelRewardStore((state) => state.coinsReward);
   const levelExpReward = levelRewardStore((state) => state.expReward);
   const { coinSurgeItem } = coinSurge();
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
-  // const removeActiveBuffs = activeBuffsLocal((state) => state.removeActiveBuff);
 
-  // Checks whether the user has used doubleCoins
-
-  // FIXME:STILL UNTESTED, will remove all active buffs once level is finished
+  // Apply doubleCoins buff if active
   useEffect(() => {
     if (!activeBuffs.includes("doubleCoins")) return;
-    // If yes, doubles the user coins
     coinSurgeItem();
-    // removeActiveBuffs("doubleCoins");
     activeBuffsLocal.getState().clearActiveBuff();
   }, [activeBuffs]);
 
-  //Checks whether the user has already claimed the reward on the level
+  // Give reward if not claimed
   useEffect(() => {
-    // If yes, returns immdtly
     if (isRewardClaimed) return;
-    //resets Userhp upon level completion
 
     const giveReward = async () => {
       const uid = auth?.currentUser?.uid;
-      const userRef = doc(db, "Users", String(uid));
+      if (!uid) return;
+
+      const userRef = doc(db, "Users", uid);
       const userSnapShot = (await getDoc(userRef)).data();
 
-      // Updates the user's exp and coins
       await updateDoc(userRef, {
         exp: (userSnapShot?.exp || 0) + levelExpReward,
         coins: (userSnapShot?.coins || 0) + levelCoinsReward,
       });
     };
+
     userHp.getState().resetUserHp();
     giveReward();
   }, [isRewardClaimed, levelCoinsReward, levelExpReward]);
-  const nextLevelPayload = unlockNextLevel((state) => state.nextLevelPayload);
 
+  const nextLevelPayload = unlockNextLevel((state) => state.nextLevelPayload);
   const nextLessonPayload = unlockNextLevel((state) => state.nextLessonPayload);
   const finishedTopics = unlockNextLevel((state) => state.finishedTopics);
   const shouldShowContinue =
@@ -79,6 +77,7 @@ const LevelFinishedModal = ({
     !finishedTopics[
       nextLevelPayload?.category || nextLessonPayload?.category || ""
     ];
+
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable className="flex-1 bg-black/50">
@@ -88,68 +87,80 @@ const LevelFinishedModal = ({
           autoPlay
           style={[StyleSheet.absoluteFillObject]}
         />
-        <Animated.View
-          style={[scaleStyle]}
-          className={`  ${
-            isRewardClaimed ? `h-[30%]` : `h-[80%]`
-          } w-3/4 m-auto  rounded-[10px]`}
-        >
-          <View className=" flex-[1] bg-modal rounded-xl border-[#2a3141] border-[1px]">
-            <Text className=" text-center text-[#f5ff42] font-exoExtraBold text-3xl mt-2">
-              LEVEL COMPLETED
-            </Text>
 
-            <View className="flex-[1]  mt-2 border-[#2a3141] border-0 border-t-[1px]">
+        <Animated.View
+          style={[scaleStyle, { maxHeight: "85%" }]} // maxHeight prevents overflow
+          className="w-3/4 m-auto rounded-[10px] bg-modal border-[#2a3141] border-[1px]"
+        >
+          <Text className="text-center text-[#f5ff42] font-exoExtraBold text-3xl mt-2">
+            LEVEL COMPLETED
+          </Text>
+
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="mt-2 border-t border-[#2a3141]">
               <Text className="text-white text-center font-exoBold xs:text-xl mt-2">
                 PERFORMANCE SUMMARY
               </Text>
+
               <View className="mt-3">
                 {isRewardClaimed ? (
                   <Text className="text-white text-center font-exoBold xs:text-xs">
                     You've already claimed the reward for this level!
                   </Text>
                 ) : !evaluationData ? (
-                  <SmallLoading text="getting your performance summary"></SmallLoading>
+                  <SmallLoading text="Getting your performance summary" />
                 ) : (
                   <View>
-                    <View className="bg-[#080c15]  m-3 py-3 rounded-lg">
+                    {/* Reward summary */}
+                    <View className="bg-[#080c15] m-3 py-3 rounded-lg">
                       <Text className="text-white text-center font-exoBold xs:text-xs">
-                        Lives Remaining:
-                        <Text className="text-[#ad3532]"> {userHealth}x</Text>
-                      </Text>
-                      <Text className="text-white text-center font-exoBold xs:text-xs">
-                        DevCoins: +
-                        <Text className="text-[#e3be00]">
-                          {levelCoinsReward}
+                        Lives Remaining:{" "}
+                        <Text className="text-[#ad3532]">
+                          {userHealth - 1}x
                         </Text>
                       </Text>
                       <Text className="text-white text-center font-exoBold xs:text-xs">
-                        Experience gained: +
-                        <Text className="text-[#21b3cf]">{levelExpReward}</Text>
+                        DevCoins:{" "}
+                        <Text className="text-[#e3be00]">
+                          +{levelCoinsReward}
+                        </Text>
+                      </Text>
+                      <Text className="text-white text-center font-exoBold xs:text-xs">
+                        Experience gained:{" "}
+                        <Text className="text-[#21b3cf]">
+                          +{levelExpReward}
+                        </Text>
                       </Text>
                     </View>
-                    <View className="bg-[#080c15]  mx-3 py-3 rounded-lg">
-                      <Text className="text-white text-center font-exoBold xs:text-xs px-2">
-                        {evaluationData.encouragement}
-                      </Text>
-                    </View>
+
+                    {/* Feedback */}
                     {feedbackArray && (
-                      <View className="bg-[#080c15]  mx-3 py-3 rounded-lg mt-2">
+                      <View className="bg-[#080c15] mx-3 py-3 rounded-lg">
                         <Text className="text-white text-center font-exoBold xs:text-xs px-2">
+                          Last Stage Feedback
+                        </Text>
+                        <Text className="text-white text-justify font-exoLight xs:text-[8px] px-2 opacity-65 mt-1">
                           {feedbackArray.feedback}
                         </Text>
                       </View>
                     )}
+
+                    {/* Encouragement */}
+                    <View className="bg-[#080c15] mx-3 py-3 rounded-lg mt-2">
+                      <Text className="text-white text-center font-exoBold xs:text-xs px-2">
+                        {evaluationData.encouragement}
+                      </Text>
+                    </View>
+
+                    {/* Accordion for detailed evaluation */}
                     {Object.entries(evaluationData).map(
                       ([key, value]: [string, any]) => {
-                        if (!value) return;
-                        if (key === "encouragement") return null;
+                        if (!value || key === "encouragement") return null;
                         return (
-                          <Accordion
-                            header={key}
-                            contents={value}
-                            key={key}
-                          ></Accordion>
+                          <Accordion header={key} contents={value} key={key} />
                         );
                       }
                     )}
@@ -157,46 +168,38 @@ const LevelFinishedModal = ({
                 )}
               </View>
             </View>
+          </ScrollView>
 
-            <View
-              className={`${
-                isRewardClaimed ? `flex-[1]` : ``
-              } items-center flex-row justify-evenly mb-11`}
-            >
-              <TouchableOpacity onPress={onConfirm}>
-                <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
-                  Back to Main
+          {/* Buttons */}
+          <View className="flex-row justify-evenly items-center mb-4 mt-2">
+            <TouchableOpacity onPress={onConfirm}>
+              <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
+                Back to Main
+              </Text>
+            </TouchableOpacity>
+
+            {shouldShowContinue && (
+              <TouchableOpacity
+                onPress={() => {
+                  const target = nextLevelPayload ?? nextLessonPayload;
+                  if (!target)
+                    return console.log("Next lesson/level not found!");
+                  router.replace({
+                    pathname: "/(user)/home/stage/[stageId]",
+                    params: {
+                      stageId: target.stageId,
+                      category: target.category,
+                      lessonId: target.lessonId,
+                      levelId: target.nextLevelId,
+                    },
+                  });
+                }}
+              >
+                <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-yellow-500 rounded-2xl">
+                  Continue
                 </Text>
               </TouchableOpacity>
-              {
-                // completionType !== "subject" &&
-                shouldShowContinue && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      // FIXME: STILL UNTESTED
-                      const target = nextLevelPayload ?? nextLessonPayload;
-                      if (!target) {
-                        console.log("Next lesson/level cannot be found!");
-                        return;
-                      }
-                      router.replace({
-                        pathname: "/(user)/home/stage/[stageId]",
-                        params: {
-                          stageId: target.stageId,
-                          category: target.category,
-                          lessonId: target.lessonId,
-                          levelId: target.nextLevelId,
-                        },
-                      });
-                    }}
-                  >
-                    <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-yellow-500 rounded-2xl">
-                      Continue
-                    </Text>
-                  </TouchableOpacity>
-                )
-              }
-            </View>
+            )}
           </View>
         </Animated.View>
       </Pressable>

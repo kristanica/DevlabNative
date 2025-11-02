@@ -6,7 +6,6 @@ export const useCodeEditorDatabase = () => {
     query: "",
     result: "",
   });
-
   const tableStyle = `
   * {
     font-family: Arial, sans-serif;
@@ -28,14 +27,14 @@ export const useCodeEditorDatabase = () => {
     overflow: hidden;
   }
 
- th {
-  background-color: #ff6fb4; /* Soft pink */
-  color: white;
-  font-weight: bold;
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #e0589c;
-}
+  th {
+    background-color: #ff6fb4; /* Soft pink */
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #e0589c;
+  }
 
   td {
     padding: 10px;

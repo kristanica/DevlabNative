@@ -1,35 +1,65 @@
+import { router } from "expo-router";
+import LottieView from "lottie-react-native";
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
+
+type GameOverModalProps = ScaleModalPayload & {
+  category: string;
+};
 
 const GameOverModal = ({
   visibility,
   scaleStyle,
   onConfirm,
-}: ScaleModalPayload) => {
+  category,
+  closeModal,
+}: GameOverModalProps) => {
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable className=" bg-blue-300">
+      <View className="flex-1 bg-black/60">
         <Animated.View
           style={[scaleStyle]}
-          className="   aspect-square w-3/4 m-auto  rounded-[10px]"
+          className="w-3/4  bg-white rounded-2xl border border-[#2a3141] p-5 z-50 m-auto "
         >
-          <View className="justify-center items-center flex-[1] bg-background rounded-3xl">
-            <View className="flex-[1] justify-center items-center">
-              <Text className="text-white text-center font-exoBold xs:text-xs">
-                You've lost all your lives
+          <Text className=" text-3xl text-center font-exoBold text-[#ea3333]">
+            GAME OVER
+          </Text>
+          <LottieView
+            source={require("@/assets/Lottie/Sad Signout.json")}
+            loop
+            autoPlay
+            style={{ width: "40%", aspectRatio: 1, marginHorizontal: "auto" }}
+          />
+
+          <Text className=" font-exoBold text-sm text-center">
+            System Crash: No remaining lives detected in memory. Restart
+            required to allocate new hearts.
+          </Text>
+
+          <View className="gap-2 mt-3">
+            <TouchableOpacity onPress={onConfirm}>
+              <Text className="bg-button font-exoRegular text-white px-2 py-2 text-xs xs:text-[12px] text-center rounded-xl">
+                Go back to first stage
               </Text>
-            </View>
-            <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <Pressable onPress={onConfirm}>
-                <Text className="text-white py-2 px-7 font-exoBold self-start xs:text-[8px] bg-[#7F5AF0] rounded-2xl">
-                  Return
-                </Text>
-              </Pressable>
-            </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                router.push({
+                  pathname: "/home/category/[categoryId]",
+                  params: { categoryId: category },
+                });
+                closeModal();
+              }}
+            >
+              <Text className="bg-button text-white font-exoRegular px-2 py-2 text-xs xs:text-[12px] text-center rounded-xl">
+                Back to main
+              </Text>
+            </TouchableOpacity>
           </View>
         </Animated.View>
-      </Pressable>
+      </View>
     </Modal>
   );
 };

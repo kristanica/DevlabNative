@@ -57,7 +57,7 @@ const StageCodingEditor = ({
     const loadHtml = async () => {
       const asset = Asset.fromModule(require("@/fontFamily/editor/index.html"));
       await asset.downloadAsync(); // ensures it’s available locally
-      setHtmlUri(asset.uri); //URI FOR STAGE EDITOR BUT LOCALURI ON PLAYGROUND????????????? well see
+      setHtmlUri(asset.localUri); //URI FOR STAGE EDITOR BUT LOCALURI ON PLAYGROUND????????????? well see
     };
 
     loadHtml();

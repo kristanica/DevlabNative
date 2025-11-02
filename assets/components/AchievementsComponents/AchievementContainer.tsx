@@ -34,13 +34,13 @@ const AchievementContainer = ({
       className="w-[50%] aspect-[3/5] mx-auto  rounded-[10px] my-2"
     >
       <View
-        className=" h-full w-full absolute "
+        className=" h-full w-full absolute rounded-xl"
         style={{
           backgroundColor: isUnlocked ? undefined : "black",
         }}
       >
         <View
-          className="bg-[#111827]  m-[1px] flex-col flex-1 border-blue-400 border-[1px]"
+          className="bg-[#111827]  m-[1px] flex-col flex-1 border-[#2a3141] border-[1px] rounded-xl"
           style={[{ opacity: isUnlocked ? 1 : 0.5 }]}
         >
           <View className="flex-[2] justify-center items-center">
