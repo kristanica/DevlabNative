@@ -3,17 +3,13 @@ import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 
+// Will render when changing user information
 const ConfirmationModal = ({
   visibility,
   scaleStyle,
   closeModal,
   onConfirm,
 }: ScaleModalPayload) => {
-  // const mutation = useMutation({
-  //   mutationFn: async ({ userName, bio }: { userName: string; bio: string }) =>
-  //     await useEditUserInfo(userName, bio),
-  // });
-
   return (
     <Modal visible={visibility} animationType="none" transparent={true}>
       <Pressable onPress={closeModal} className="flex-1 bg-black/50">

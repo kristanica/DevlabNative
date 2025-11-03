@@ -1,6 +1,7 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import CodeLanguageSeletor from "@/assets/components/LanguageNavigation/CodeLanguageSelector";
-import LocalViteCodeEditor from "@/assets/components/LanguageNavigation/LocalViteCodeEditor";
+import CodeLanguageSelector from "@/assets/components/Offline/CodeLanguageSelector";
+
+import LocalViteCodeEditor from "@/assets/components/Offline/LocalViteCodeEditor";
 
 import useCodeEditor from "@/assets/Hooks/useCodeEditor";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -33,11 +34,11 @@ const OfflineCodeEditor = () => {
           <Pressable onPress={handleExpandTerminal}>
             <Ionicons name="terminal" size={20} color="white" />
           </Pressable>
-          <CodeLanguageSeletor
+          <CodeLanguageSelector
             subject={""}
             selectedLanguage={selectedLanguage}
             setSelectedLanguage={setSelectedLanguage}
-          ></CodeLanguageSeletor>
+          ></CodeLanguageSelector>
         </View>
         <KeyboardAwareScrollView
           contentContainerStyle={{

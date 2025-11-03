@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+// WIll show if user exits playground
 import Animated from "react-native-reanimated";
 const ExitPlaygroundModal = ({
   scaleStyle,

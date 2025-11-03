@@ -3,9 +3,9 @@ import React from "react";
 import LevelItem from "./category/LevelItem";
 import StageItem from "./category/StageItem";
 
+//Renders the item needed for the [categoryid]
 const CategoryItem = ({
   setShowLevelKey,
-  setCoinsAndExp,
   setStageData,
   setStageVisibility,
   categoryId,
@@ -21,9 +21,9 @@ const CategoryItem = ({
 }: any) => {
   return (
     <>
+      {/* Renders the upper level (The level itslef) */}
       <LevelItem
         setShownLevelKey={setShowLevelKey}
-        setCoinsAndExp={setCoinsAndExp}
         setStageData={setStageData}
         setStageVisibility={setStageVisibility}
         categoryId={String(categoryId)}
@@ -33,7 +33,10 @@ const CategoryItem = ({
         index={index}
         meta={meta}
         keyId={keyId}
+        setLockModalVisibility={setLockModalVisibility}
+        useUserProgressData={useUserProgressData}
       ></LevelItem>
+      {/* Once the levelis pressed, wil lrender all the stages under it */}
       {stageVisibility[keyId] && (
         <FlashList
           estimatedItemSize={112}
@@ -43,6 +46,7 @@ const CategoryItem = ({
             `${item.lessonId}-${item.levelId}-${stage.id}`
           }
           renderItem={({ item: stage, index }) => {
+            // Determines wheter the stage is locked or unlocked
             const stageKey = `${item?.lessonId}-${item?.levelId}-${stage.id}`;
             const isStageLocked =
               useUserProgressData?.allStagesComplete[stageKey];

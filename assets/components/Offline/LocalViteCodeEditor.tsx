@@ -60,32 +60,35 @@ const LocalViteCodeEditor = ({
             source={{
               html: `<!DOCTYPE html>
 <html lang="en">
-  <head>
-   
-   <style>
-     ${executedCode?.css}
-    </style>
-  </head> 
-  <body>
-      ${executedCode?.html}
-          <script>(function(){
-        const oldLog = console.log;
-        console.log = function(...args) {
-          oldLog.apply(console, args);
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: "log", data: args }));
-        };
-        const oldErr = console.error;
-        console.error = function(...args) {
-          oldErr.apply(console, args);
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: args }));
-        };
-      })();
-      try {
-        ${executedCode?.js || ""}
-      } catch(e) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
-      }</script>
-  </body>
+<head>
+
+  <style>
+   
+    ${executedCode?.css || ""}
+  </style>
+</head>
+<body>
+  ${executedCode?.html || ""}
+  <script>
+    (function(){
+      const oldLog = console.log;
+      console.log = function(...args){
+        oldLog.apply(console, args);
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'log', data: args }));
+      };
+      const oldErr = console.error;
+      console.error = function(...args){
+        oldErr.apply(console, args);
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'error', data: args }));
+      };
+    })();
+    try {
+      ${executedCode?.js || ""}
+    } catch(e) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'error', data: [e.message] }));
+    }
+  </script>
+</body>
 </html>`,
             }}
             onMessage={(e: WebViewMessageEvent) => {

@@ -161,7 +161,7 @@ const EditUserModal = ({
               onDeleteSpecific={() => {
                 deleteConfirmation.setVisibility(true);
                 functionToPerfrom.current = () => {
-                  deleteAchievement.mutate({
+                  deleteProgress.mutate({
                     category: category,
                     uid: uid,
                   });
@@ -189,7 +189,7 @@ const EditUserModal = ({
               onDeleteSpecific={() => {
                 deleteConfirmation.setVisibility(true);
                 functionToPerfrom.current = () =>
-                  deleteProgress.mutate({
+                  deleteAchievement.mutate({
                     uid: uid,
                     subject: category,
                   });

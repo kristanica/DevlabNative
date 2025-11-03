@@ -7,13 +7,14 @@ type SelectLanguageNavigationProps = {
   setSelectedLanguage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const CodeLanguageSeletor = ({
+const CodeLanguageSelector = ({
   selectedLanguage,
   setSelectedLanguage,
   subject,
 }: SelectLanguageNavigationProps) => {
   let visibleButton: string[] = [];
 
+  // Determines what  codde editor to render per subject
   switch (subject) {
     case "Html":
       visibleButton = ["Html"];
@@ -61,4 +62,4 @@ const CodeLanguageSeletor = ({
     </View>
   );
 };
-export default CodeLanguageSeletor;
+export default CodeLanguageSelector;

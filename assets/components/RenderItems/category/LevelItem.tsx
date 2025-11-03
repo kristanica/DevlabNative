@@ -2,9 +2,10 @@ import React, { startTransition, useCallback } from "react";
 import { Pressable } from "react-native";
 import LessonContainer from "../../LessonsComponent/LessonContainer";
 
+// Renders the upper level (Level)
 const LevelItem = ({
   setShownLevelKey,
-  setCoinsAndExp,
+
   setStageData,
   setStageVisibility,
   categoryId,
@@ -14,15 +15,17 @@ const LevelItem = ({
   index,
   meta,
   keyId,
+  useUserProgressData,
+  setLockModalVisibility,
 }: any) => {
   const handlePress = useCallback(() => {
     const key = `${item.lessonId}-${item.levelId}`;
+    if (!useUserProgressData.allProgress[key]) {
+      setLockModalVisibility(true);
+      return;
+    }
     startTransition(() => {
       setShownLevelKey(key);
-      setCoinsAndExp({
-        exp: item.expReward,
-        coins: item.coinsReward,
-      });
       setStageData(String(categoryId), item.stages);
       setStageVisibility((prev: any) => ({
         ...prev,
@@ -34,7 +37,7 @@ const LevelItem = ({
     item,
     categoryId,
     setShownLevelKey,
-    setCoinsAndExp,
+
     setStageData,
     setStageVisibility,
   ]);

@@ -17,6 +17,7 @@ const SmallLoading = ({ text }: SmallLoadingProps) => {
   const opacityStyle = useAnimatedStyle(() => ({
     opacity: opacityVal.value,
   }));
+  // Pulse effect
   useEffect(() => {
     opacityVal.value = withRepeat(withTiming(1, { duration: 800 }), -1, true);
   }, []);

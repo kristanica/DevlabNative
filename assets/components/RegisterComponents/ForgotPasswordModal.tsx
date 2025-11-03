@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import InputBox from "../InputBox";
-
+// Will show eif forgot password is pressed on Login page
 const ForgotPasswordModal = ({
   visibility,
   scaleStyle,
@@ -21,6 +21,7 @@ const ForgotPasswordModal = ({
     }
     //Custom tryCatch
 
+    // Sends the request on the email
     const [_, error] = await tryCatch(sendPasswordResetEmail(auth, email));
 
     if (error) {

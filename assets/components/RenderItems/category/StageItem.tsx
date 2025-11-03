@@ -12,17 +12,19 @@ const StageItem = ({
   levelId,
   setLockModalVisibility,
 }: any) => {
+  // If the stage is pressed, will navigate to its corresponding screen
   const handlePress = useCallback(() => {
+    // Determines wether stage is locked
     if (!isStageLocked) {
       setLockModalVisibility(true);
       return;
     }
-    // console.log(stage.id, categoryId, lessonId, levelId);
+
     router.push({
       pathname: "/(user)/home/stage/[stageId]",
       params: {
         stageId: stage.id,
-        category: String(categoryId), // Use categoryId directly
+        category: String(categoryId),
         lessonId: lessonId,
         levelId: levelId,
       },
@@ -32,6 +34,8 @@ const StageItem = ({
   return (
     <>
       <TouchableOpacity key={stage.id} onPress={handlePress}>
+        {/* The rendering of the stage itself */}
+
         <StagesContainer
           isLocked={isStageLocked}
           stageInformation={{

@@ -6,7 +6,6 @@ import CategoryItem from "@/assets/components/RenderItems/CategoryItem";
 import CategoryHeader from "@/assets/components/screen/CATEGORY/CategoryHeader";
 import tryCatch from "@/assets/Hooks/function/tryCatch";
 import useModal from "@/assets/Hooks/useModal";
-import { setCoinsandExp } from "@/assets/zustand/setCoinsandExp";
 import { unlockedStages } from "@/assets/zustand/unlockedStages";
 import { useStageStore } from "@/assets/zustand/useStageStore";
 import { auth, lessonMetaData, URL } from "@/constants";
@@ -21,7 +20,6 @@ const CategoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
 
-  const setCoinsAndExp = setCoinsandExp((state) => state.setCoinsAndExp);
   const id = categoryId as keyof typeof lessonMetaData;
   const meta = lessonMetaData[id];
   const setUnlockedStages = unlockedStages((state) => state.setUnlockedStages);
@@ -118,7 +116,6 @@ const CategoryScreen = () => {
                   <CategoryItem
                     setLockModalVisibility={setVisibility}
                     setShowLevelKey={setShownLevelKey}
-                    setCoinsAndExp={setCoinsAndExp}
                     setStageData={setStageData}
                     setStageVisibility={setStageVisibility}
                     categoryId={String(categoryId)}

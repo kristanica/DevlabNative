@@ -1,35 +1,16 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import Animated, {
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
 
 const AchievementContainer = ({
   data,
-  selectedCategory,
+
   isUnlocked,
-  index,
+
   isClaimed,
   claimMutation,
 }: AchievementContainerPayload) => {
-  const interpolateVal = useSharedValue(0);
-
-  // const { onScale } = useSequentialAppearAnim({
-  //   indicator: selectedCategory,
-  //   id: index,
-  // });
-
-  useEffect(() => {
-    interpolateVal.value = withRepeat(
-      withTiming(1, { duration: 1000 }),
-      -1,
-      true
-    );
-  }, []);
   return (
-    <Animated.View
+    <View
       // style={[onScale]}
       className="w-[50%] aspect-[3/5] mx-auto  rounded-[10px] my-2"
     >
@@ -81,7 +62,7 @@ const AchievementContainer = ({
           </View>
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 

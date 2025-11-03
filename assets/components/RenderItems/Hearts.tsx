@@ -1,8 +1,9 @@
 import userHp from "@/assets/zustand/userHp";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
+// WIll render the heart system on [stageid]
 const Hearts = () => {
   const healthPoints = userHp((state) => state.userHp);
   return (
@@ -15,5 +16,3 @@ const Hearts = () => {
 };
 
 export default Hearts;
-
-const styles = StyleSheet.create({});

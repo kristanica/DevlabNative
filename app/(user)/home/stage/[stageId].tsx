@@ -35,19 +35,7 @@ const StageScreen = () => {
   // Gets the variables from the URL
   const { stageId, lessonId, levelId, category } = useLocalSearchParams();
 
-  //feedback on level end setter
   const [evaluationData, setEvaluationData] = useState<any>();
-
-  // const {
-  //   currentStageIndex,
-  //   setCurrentStageIndex,
-  //   currentStageData,
-
-  //   currentStageType,
-  //   gameIdentifier,
-  //   feedbackArray,
-  //   stageLength,
-  // } = useCurrentStageData(String(stageId), String(category));
 
   const {
     currentStageIndex,
@@ -68,18 +56,6 @@ const StageScreen = () => {
   const unlockStage = unlockedStages((state) => state.unlockedStages);
   //useMemos
   const levelKey = useMemo(() => `${lessonId}-${levelId}`, [lessonId, levelId]);
-  // const stageKey = useMemo(
-  //   () => `${lessonId}-${levelId}-${currentStageData.id}`,
-  //   [lessonId, levelId, currentStageData]
-  // );
-
-  // const isStageAlreadyCompleted = useMemo(() => unlockStage[stageKey], []);
-  // console.log(isStageAlreadyCompleted + "isStageAlreadyCompleted")
-
-  // const stageKey = useMemo(
-  //   () => `${lessonId}-${levelId}-${currentStageData.id}`,
-  //   [lessonId, levelId, currentStageData.id]
-  // );
   const stageKey = useMemo(() => {
     if (!currentStageData) return null;
     return `${lessonId}-${levelId}-${currentStageData.id}`;
@@ -88,6 +64,7 @@ const StageScreen = () => {
     if (!stageKey) return false;
     return Boolean(unlockStage[stageKey]);
   }, [stageKey, unlockStage]);
+
   //checks whether the user  has claimed the reward for the level
   const isRewardClaimed = useMemo(
     () =>

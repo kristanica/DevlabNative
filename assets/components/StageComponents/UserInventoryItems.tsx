@@ -1,7 +1,7 @@
 import { itemIcon } from "@/constants";
 import React from "react";
 import { Image, Text, View } from "react-native";
-
+//Will render the items for [stageid]
 const UserInventoryItems = ({
   title,
   Icon,
