@@ -14,9 +14,10 @@ const StageGameComponent = ({
   stageId,
   levelId,
   setCurrentStageIndex,
-  levelFinishedModal,
+
   finalAnswerModal,
   isStageAlreadyCompleted,
+  gameOverModal,
 }: any) => {
   const stageGameIdentier: Record<string, JSX.Element> = {
     Lesson: <StageLesson currentStageData={currentStageData}></StageLesson>,
@@ -26,24 +27,20 @@ const StageGameComponent = ({
     BrainBytes: (
       <StageBrainBytes
         finalAnswerModal={finalAnswerModal}
-        levelFinishedModal={levelFinishedModal}
         currentStageData={currentStageData}
-        stageId={stageId}
-        levelId={levelId}
-        category={category}
-        lessonId={lessonId}
-        setCurrentStageIndex={setCurrentStageIndex}
         isStageAlreadyCompleted={isStageAlreadyCompleted}
       ></StageBrainBytes>
     ),
     CodeRush: (
       <StageCodeRush
+        isStageAlreadyCompleted={isStageAlreadyCompleted}
         currentStageData={currentStageData}
         stageId={stageId}
         levelId={levelId}
         category={category}
         lessonId={lessonId}
         setCurrentStageIndex={setCurrentStageIndex}
+        gameOverModal={gameOverModal}
       ></StageCodeRush>
     ),
     BugBust: <StageBugBust currentStageData={currentStageData}></StageBugBust>,

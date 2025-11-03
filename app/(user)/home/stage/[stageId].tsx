@@ -347,10 +347,6 @@ const StageScreen = () => {
                   setLogs={setLogs}
                   logs={logs}
                 />
-
-                {!hintLoading &&
-                  currentStageData?.type !== "Lesson" &&
-                  !islevelCompleted && <ItemList category={String(category)} />}
               </KeyboardAwareScrollView>
 
               <SwipeLessonContainer
@@ -360,6 +356,7 @@ const StageScreen = () => {
               >
                 {currentStageData.type !== "Lesson" && <Hearts />}
                 <StageGameComponent
+                  gameOverModal={gameOverModal}
                   levelFinishedModal={levelFinishedModal}
                   finalAnswerModal={finalAnswerModall}
                   currentStageData={currentStageData}
@@ -380,24 +377,26 @@ const StageScreen = () => {
                       </Text>
                     </Pressable>
                   )}
-                  {currentStageData?.type === "Lesson" && (
-                    <Pressable
-                      onPress={() => {
-                        if (category === "Database") {
-                          handleEvaluation(
-                            databaseQueryingFunctions.queryRecievedCode.query
-                          );
-                          return;
-                        }
-                        handleEvaluation(receivedCode);
-                      }}
-                      className="mx-auto"
-                    >
-                      <Text className="px-7 py-2 bg-button self-start rounded-3xl text-xs xs:text-[10px] font-exoRegular text-white">
-                        Evaluate
-                      </Text>
-                    </Pressable>
-                  )}
+                  {(currentStageData?.type === "Lesson" ||
+                    isStageAlreadyCompleted) &&
+                    currentStageData?.type !== "BrainBytes" && (
+                      <Pressable
+                        onPress={() => {
+                          if (category === "Database") {
+                            handleEvaluation(
+                              databaseQueryingFunctions.queryRecievedCode.query
+                            );
+                            return;
+                          }
+                          handleEvaluation(receivedCode);
+                        }}
+                        className="mx-auto"
+                      >
+                        <Text className="px-7 py-2 bg-button self-start rounded-3xl text-xs xs:text-[10px] font-exoRegular text-white">
+                          Evaluate
+                        </Text>
+                      </Pressable>
+                    )}
 
                   {(currentStageData?.type !== "BrainBytes" ||
                     isStageAlreadyCompleted) && (
@@ -408,6 +407,11 @@ const StageScreen = () => {
                     </Pressable>
                   )}
                 </View>
+                {!hintLoading &&
+                  currentStageData?.type !== "Lesson" &&
+                  !isStageAlreadyCompleted && (
+                    <ItemList category={String(category)} />
+                  )}
               </SwipeLessonContainer>
             </CustomGeneralContainer>
           </>

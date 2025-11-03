@@ -33,14 +33,6 @@ const HowToUseStageEditor = ({
               </Text>
 
               {/* Reordering */}
-              <Text className="font-exoBold text-md text-blue-500 mt-2">
-                🔁 Reordering Stages
-              </Text>
-              <Text className="text-white font-exoRegular text-xs text-justify mt-1">
-                Press and hold a stage, then drag it up or down to reorder. ⚠️
-                The first stage cannot be moved or deleted, as it serves as the
-                entry point.
-              </Text>
 
               {/* Editing */}
               <Text className="font-exoBold text-md text-pink-400 mt-3">

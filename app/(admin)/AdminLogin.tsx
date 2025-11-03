@@ -1,4 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import AdminLoginForm from "@/assets/components/screen/ADMINLOGIN/AdminLoginForm";
 import useAdminLogin from "@/assets/Hooks/reducers/useAdminLogin";
 import toastHandler from "@/assets/zustand/toastHandler";
@@ -34,6 +35,9 @@ const AdminLogin = () => {
             keyboardShouldPersistTaps="handled"
           >
             {/* <Logo></Logo> */}
+            {state.isLoggingIn && (
+              <FillScreenLoading text="Logging in...."></FillScreenLoading>
+            )}
             <AdminLoginForm
               state={state}
               dispatch={dispatch}

@@ -15,6 +15,8 @@ const StageCodeRush = ({
   category,
   stageId,
   levelId,
+  isStageAlreadyCompleted,
+  gameOverModal,
 }: any) => {
   const [isFreezed, setIsFreezed] = useState<boolean>(false);
   const { timer, codePatch, timeFreeze } = codePatchTimeFreeze(
@@ -25,7 +27,9 @@ const StageCodeRush = ({
     stageId,
     levelId,
     isFreezed,
-    setIsFreezed
+    setIsFreezed,
+    isStageAlreadyCompleted,
+    gameOverModal
   );
 
   const removeActiveBuff = activeBuffsLocal((state) => state.removeActiveBuff);
@@ -52,9 +56,6 @@ const StageCodeRush = ({
       };
       if (activeBuffs.includes("timeFreeze")) {
         await useItem("timeFreeze", timeFreeze);
-      }
-      if (activeBuffs.includes("extraTime")) {
-        await useItem("extraTime", codePatch);
       }
     };
     run();

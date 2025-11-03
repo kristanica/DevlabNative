@@ -13,53 +13,37 @@ const codePatchTimeFreeze = (
   stageId: string,
   levelId: string,
   isFreezed: boolean,
-  setIsFreezed: React.Dispatch<React.SetStateAction<boolean>>
+  setIsFreezed: React.Dispatch<React.SetStateAction<boolean>>,
+  isStageAlreadyCompleted: any,
+  gameOverModal: any
 ) => {
   const [timer, setTimer] = useState<number>(initialTime);
   const intervalRef = useRef<any>(null);
 
   const isFocused = useIsFocused();
-  const decrementUserHp = userHp?.getState().decrementUserHp;
-  const { handleGameOver } = useHandleGameOver();
+  const { handleGameOver } = useHandleGameOver(gameOverModal);
   const { handleDecrementHp } = useHandleDecrementHp();
   const isEvaluating = isEvaluatingStore((state) => state.isEvaluating);
+
   const resetTimer = () => {
     clearInterval(intervalRef.current);
     setTimer(initialTime);
     setIsFreezed(false);
   };
 
-  // Prevents cheating when user exits the game. Uses the last reset savedTime
-  // useEffect(() => {
-  //   (async () => {
-  //     const savedTime = await AsyncStorage.getItem("savedTime");
-  //     if (savedTime) {
-  //       if (savedTime === "0") {
-  //         setTimer(Number(initialTime));
-  //       }
-  //       setTimer(Number(savedTime));
-  //     }
-  //   })();
-  // }, []);
-
-  // // Always saves the last reset time. Might be expensive
-  // useEffect(() => {
-  //   (async () => {
-  //     await AsyncStorage.setItem("savedTime", String(timer));
-  //   })();
-  // }, [timer]);
-
   useEffect(() => {
-    if (!isFreezed && isFocused && !isEvaluating) {
+    if (!isFreezed && isFocused && !isEvaluating && !isStageAlreadyCompleted) {
       intervalRef.current = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 0) {
             clearInterval(intervalRef.current);
-            setTimeout(() => handleDecrementHp(), 200);
 
-            const currentHp = userHp.getState().userHp;
-            if (currentHp <= 1) {
-              setTimeout(() => {
+            setTimeout(() => {
+              // Decrement HP and then check the updated HP value
+              handleDecrementHp();
+
+              const newHp = userHp.getState().userHp; // ✅ get the updated HP after decrement
+              if (newHp <= 0) {
                 handleGameOver({
                   lessonId,
                   category,
@@ -67,19 +51,24 @@ const codePatchTimeFreeze = (
                   levelId,
                   setCurrentStageIndex,
                 });
-              }, 0);
-            }
+              }
+            }, 200);
+
+            // Reset the timer after running out
             setTimeout(() => {
               setTimer(initialTime);
             }, 100);
+
             return 0;
           }
+
           return prev - 1;
         });
       }, 1000);
     }
+
     return () => clearInterval(intervalRef.current);
-  }, [isFreezed, isFocused, resetTimer, decrementUserHp, isEvaluating]);
+  }, [isFreezed, isFocused, resetTimer, isEvaluating]);
 
   const codePatch = () => {
     setTimer((prev) => prev + 30);
@@ -88,9 +77,6 @@ const codePatchTimeFreeze = (
   const timeFreeze = () => {
     setIsFreezed(true);
     setTimeout(() => setIsFreezed(false), 10000);
-    // // FIXME: MIGHT BREAK IF USER ENCOUNTERS A NEW CODE RUSH CHALLENGE OR ATTEMPT TO USE THE ITEM AGAIN
-    // clearInterval(intervalRef.current); // stop immediately
-    // setIsFreezed(true);
   };
 
   return { timer, codePatch, timeFreeze };

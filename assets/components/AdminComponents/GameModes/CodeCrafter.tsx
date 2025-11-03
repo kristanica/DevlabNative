@@ -69,19 +69,6 @@ const CodeCrafter = ({
         category={category!}
       ></CodingInterfaces>
 
-      {/* <InputContainer
-        title={"Copy Code"}
-        value={state.copyCode}
-        setValue={(text) => {
-          dispatch({
-            type: "UPDATE_FIELD",
-            field: "copyCode",
-            value: text,
-          });
-        }}
-        numeric={false}
-      /> */}
-
       {/* Disable replication upload on Database Subject */}
       {category !== "Database" && (
         <View className="flex-row  justify-between bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">

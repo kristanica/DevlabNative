@@ -4,10 +4,10 @@ import { unlockAchievement } from "@/assets/Hooks/function/unlockAchievement";
 import { ActiveItemIcon } from "@/assets/zustand/ActiveItemIcon";
 import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
+import userHp from "@/assets/zustand/userHp";
 import { WhereIsUser } from "@/assets/zustand/WhereIsUser";
-import { auth, db, height } from "@/constants";
+import { auth, db } from "@/constants";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   deleteDoc,
   doc,
@@ -15,20 +15,8 @@ import {
   increment,
   updateDoc,
 } from "firebase/firestore";
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSequence,
-  withTiming,
-} from "react-native-reanimated";
+import React, { useCallback, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import UserInventoryItems from "../StageComponents/UserInventoryItems";
 
 const ItemList = ({ category }: any) => {
@@ -37,50 +25,9 @@ const ItemList = ({ category }: any) => {
   const inventory = useGetUserInfo((state) => state.inventory);
   const activeItem = ActiveItemIcon((state) => state.activeIcon);
   const setActiveItem = ActiveItemIcon((state) => state.setActiveIcon);
-  const moveToRight = useSharedValue(100);
-  const opacity = useSharedValue(1);
+
   const addActiveBuff = activeBuffsLocal((state) => state.addActiveBuff);
   const location = WhereIsUser((state) => state.location);
-  console.log(location + "LCATIONNNN");
-  const inventoryX = useSharedValue(300);
-  const [disable, setDisable] = useState<boolean>(true);
-  const [toggleInventory, setToggleInventory] = useState<boolean>(false);
-
-  const moveToRightStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: moveToRight.value }],
-    opacity: opacity.value,
-  }));
-
-  const moveToLeftInventoryStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: inventoryX.value }],
-  }));
-
-  useEffect(() => {
-    let timeoutClear: any;
-    const hasSeen = async () => {
-      try {
-        const hasSeenInv = await AsyncStorage.getItem("hasSeenInvAppear");
-        console.log(hasSeenInv);
-        setDisable(false);
-        if (!hasSeenInv) {
-          moveToRight.value = withSequence(
-            withTiming(-50, { duration: 1000 }),
-            withTiming(100, { duration: 1000 })
-          );
-          timeoutClear = setTimeout(() => {
-            setDisable(false);
-          }, 2000);
-          await AsyncStorage.setItem("hasSeenInvAppear", "true");
-          return;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    hasSeen();
-    return () => clearTimeout(timeoutClear);
-  }, []);
 
   const useItem = useCallback(
     async (itemId: string, itemName: string) => {
@@ -113,10 +60,15 @@ const ItemList = ({ category }: any) => {
     [addActiveBuff]
   );
 
+  //Item usage
+
+  // Use for codePatch++, will increment user Hp
+  const incrementUserHp = userHp((state) => state.incrementUserHp);
+  const currentHealthPoints = userHp((state) => state.userHp);
+
   const useItemActions: Record<string, (userItem: string) => void> = {
     CoinSurge: async (itemId) => {
       if (activeItem.CoinSurge) {
-        console.log("Youve already used this!");
         setToastVisibility("error", "You've already used this!");
         return;
       }
@@ -132,8 +84,6 @@ const ItemList = ({ category }: any) => {
     },
     CodeWhisper: async (itemId) => {
       if (location === "Lesson") {
-        // await playSound("wrongAnswer");
-
         setToastVisibility(
           "error",
           `You cannot use CodeWhisper in ${location}`
@@ -145,25 +95,29 @@ const ItemList = ({ category }: any) => {
       await useItem(itemId, "revealHint");
     },
     CodePatch: async (itemId) => {
-      if (location !== "CodeRush") {
-        // await playSound("wrongAnswer");
-        setToastVisibility(
-          "error",
-          `You cannot use that, you're in ${location}!`
-        );
-        console.log("youre not in code rush");
+      // if (location !== "Lesson") {
+      //   setToastVisibility(
+      //     "error",
+      //     `You cannot use that, you're in ${location}!`
+      //   );
+
+      //   return;
+      // }
+      // If already max, show error
+      if (currentHealthPoints >= 5) {
+        setToastVisibility("error", "Max HP reached!");
         return;
       }
+
       await playSound("success");
-      setToastVisibility("success", `You've used Code Path!`);
-      useItem(itemId, "extraTime");
+      setToastVisibility("success", `You've used Code Patch++!`);
+      incrementUserHp();
     },
     TimeFreeze: async (itemId) => {
       if (location !== "CodeRush") {
         // await playSound("wrongAnswer");
         setToastVisibility("error", `You cannot use TimeFreeze in ${location}`);
 
-        console.log("youre not in code rush");
         return;
       }
       await playSound("success");
@@ -182,7 +136,6 @@ const ItemList = ({ category }: any) => {
         return;
       }
       if (activeItem.ErrorShield) {
-        console.log("Errros shiled already in effect");
         setToastVisibility("error", `Error Shield is already in effect!`);
         return;
       }
@@ -202,7 +155,6 @@ const ItemList = ({ category }: any) => {
           `You cannot use BrainFilter in ${location}`
         );
 
-        console.log("youre not in Brain Bytes");
         return;
       }
       if (activeItem.BrainFilter) {
@@ -218,35 +170,16 @@ const ItemList = ({ category }: any) => {
     },
   };
 
-  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
+  const [toggleInventory, setToggleInventory] = useState<boolean>(false);
   const showInventory = useCallback(() => {
     if (!toggleInventory) {
-      inventoryX.value = withTiming(0, { duration: 1000 });
-      opacity.value = withTiming(0);
     } else {
-      inventoryX.value = withTiming(400, { duration: 1000 });
-      opacity.value = withTiming(1);
     }
     setToggleInventory((prev) => !prev);
-  }, [toggleInventory, inventoryX, opacity]);
+  }, [toggleInventory]);
   return (
     <>
-      <AnimatedPressable
-        onPress={showInventory}
-        disabled={disable}
-        style={moveToRightStyle}
-        className="h-10 w-[30%] bg-button rounded-tl-2xl rounded-bl-2xl absolute bottom-[50%] right-0 z-40 items-center justify-center"
-      >
-        <Text className="text-center font-exoBold text-xs text-white">
-          Your items are in here
-        </Text>
-      </AnimatedPressable>
-      <Animated.View
-        style={[moveToLeftInventoryStyle, { top: height / 3 }]}
-        className="h-80 w-[50%] top-14 absolute right-0 bg-modal border-[#2a3141] border-[1px] border-r-0 shadow-2xl z-50 p-4"
-        pointerEvents="auto"
-      >
+      <View className="  bg-modal border-[#2a3141] p-4" pointerEvents="auto">
         <View>
           <Text className="text-white text-xs xs:text-[9px] text-center font-exoBold">
             Active Items
@@ -273,23 +206,15 @@ const ItemList = ({ category }: any) => {
             </>
           )}
         </View>
-        <View className="justify-center items-center flex-row mb-2">
-          <TouchableOpacity
-            onPress={() => {
-              showInventory();
-            }}
-            className="absolute left-0"
-          >
-            <Ionicons name={"close"} size={15} color={"white"}></Ionicons>
-          </TouchableOpacity>
 
-          <Text className="text-white font-exoBold text-lg">
-            Your Inventory
-          </Text>
-        </View>
+        <Text className="text-white font-exoBold text-lg">Your Inventory</Text>
 
-        <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-          <View className="flex-row flex-wrap justify-center">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          horizontal
+        >
+          <View className="flex-row ">
             {inventory?.map((userInvItems: any) => {
               return (
                 <TouchableOpacity
@@ -311,7 +236,7 @@ const ItemList = ({ category }: any) => {
             })}
           </View>
         </ScrollView>
-      </Animated.View>
+      </View>
     </>
   );
 };

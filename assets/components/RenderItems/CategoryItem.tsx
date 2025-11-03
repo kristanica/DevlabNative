@@ -40,7 +40,9 @@ const CategoryItem = ({
       {stageVisibility[keyId] && (
         <FlashList
           estimatedItemSize={112}
-          data={item.stages}
+          data={item.stages
+            ?.slice() // create a copy so original data isn't mutated
+            .sort((a: any, b: any) => a.order - b.order)} // sort by levelOrder
           className="bg-[#101727] mx-3 rounded-2xl"
           keyExtractor={(stage: any) =>
             `${item.lessonId}-${item.levelId}-${stage.id}`

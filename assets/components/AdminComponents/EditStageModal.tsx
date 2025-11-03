@@ -52,21 +52,26 @@ const EditStageModal = ({
         title: stageData?.title || "",
         description: stageData?.description || "",
         isHidden: stageData?.isHidden || "",
-        type: stageData?.type || "",
+        type: stageData?.type || false,
         instruction: stageData?.instruction || "",
-        codingInterface: stageData?.codingInterface || "",
+        codingInterface: stageData?.codingInterface || {
+          css: "",
+          js: "",
+          html: "",
+          database: "",
+        },
 
         timer: stageData?.timer || "",
-        choices: stageData?.choices || [],
+        choices: stageData?.choices || {
+          a: "",
+          b: "",
+          c: "",
+          d: "",
+          correctAnswer: "",
+        },
         blocks: stageData?.blocks || [],
-        copyCode: stageData?.copyCode || "",
       },
     });
-
-    //FIXME: SHOW IF THERE IS ALREADY A FILE UPLOADAED
-    console.log(stageData?.replicationFile + "ASDHJGASHJDGASHJDGHJASGDJHSA");
-
-    console.log(state);
   }, [stageData]);
 
   const editConfirmationModal = useModal();
@@ -85,6 +90,7 @@ const EditStageModal = ({
     }
   }, [state.type]);
 
+  const category = tracker((state) => state.levelPayload?.category);
   const handleSaveToFirebase = async () => {
     const type = state.type ? state.type : stageData?.type;
     const Promises: Promise<any>[] = [];

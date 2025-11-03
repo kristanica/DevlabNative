@@ -5,13 +5,14 @@ import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Video } from "react-native-compressor";
 
 import tracker from "@/assets/zustand/tracker";
+import FillScreenLoading from "../../global/FillScreenLoading";
 import LoadingCompression from "../../LoadingCompression";
 import CodingInterfaces from "../CodingInterfaces";
 import InputContainer from "../InputContainer";
 import InputSelector from "../InputSelector";
 import TestDropDownMenu from "../TestDropDownMenu";
 type lessonProps = {
-  stageData: any;
+  stageData?: any;
   dispatch: any;
   state: any;
   setVideoPresentation: any;
@@ -84,6 +85,9 @@ const Lesson = ({
 
   const category = tracker((state) => state.levelPayload?.category);
 
+  useEffect(() => {
+    if (!stageData) <FillScreenLoading></FillScreenLoading>;
+  }, [stageData]);
   return (
     <>
       <InputContainer
@@ -152,7 +156,7 @@ const Lesson = ({
           </Text>
         </Pressable>
         <View>
-          {state.blocks.map(
+          {(state.blocks || []).map(
             (
               block: {
                 id: number;

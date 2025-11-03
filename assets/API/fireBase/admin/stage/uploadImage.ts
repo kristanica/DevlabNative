@@ -16,7 +16,6 @@ const uploadImage = async ({
   const imageForm = new FormData();
 
   try {
-    console.log("image on upload call " + image);
     imageForm.append("replicateFile", {
       uri: image,
       type: "image/jpeg",

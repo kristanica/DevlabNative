@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, TextInput, View } from "react-native";
 
 const InputContainer = ({
@@ -8,11 +8,11 @@ const InputContainer = ({
   setValue,
   numeric,
 }: InputContainerForAdminPayload) => {
-  const [localValue, setLocalValue] = useState<string | number>(value);
+  // const [localValue, setLocalValue] = useState<string | number>(value);
 
-  useEffect(() => {
-    setLocalValue(value);
-  }, [value]);
+  // useEffect(() => {
+  //   setLocalValue(value);
+  // }, [value]);
 
   return (
     <View className="bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">
@@ -20,7 +20,7 @@ const InputContainer = ({
       <TextInput
         multiline
         keyboardType={numeric ? "numeric" : "default"}
-        value={String(localValue)}
+        value={String(value)}
         onChangeText={setValue}
         className="rounded-xl p-2 text-white"
         style={{ borderColor: "#a8b3b575", borderWidth: 2 }} // FOR SOME FUCKING REASON, TAILWIND IS NOT WORKING ON BORDERS

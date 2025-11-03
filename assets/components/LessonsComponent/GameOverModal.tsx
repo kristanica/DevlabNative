@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -41,20 +40,6 @@ const GameOverModal = ({
             <TouchableOpacity onPress={onConfirm}>
               <Text className="bg-button font-exoRegular text-white px-2 py-2 text-xs xs:text-[12px] text-center rounded-xl">
                 Go back to first stage
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                router.push({
-                  pathname: "/home/category/[categoryId]",
-                  params: { categoryId: category },
-                });
-                closeModal();
-              }}
-            >
-              <Text className="bg-button text-white font-exoRegular px-2 py-2 text-xs xs:text-[12px] text-center rounded-xl">
-                Back to main
               </Text>
             </TouchableOpacity>
           </View>

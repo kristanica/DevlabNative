@@ -146,7 +146,7 @@ type stageDataPayload = {
   timer?: number | undefined;
   choices?: BrainBytesChoicesPayload;
   blocks?: BlockPayload[];
-  copyCode?: string | undefined;
+
   videoPresentation?: string | undefined;
   replicationFile?: string | undefined;
 };

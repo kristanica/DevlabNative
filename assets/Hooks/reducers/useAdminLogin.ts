@@ -7,12 +7,13 @@ import { useReducer } from "react";
 type State = {
   email: string;
   password: string;
+  isLoggingIn: boolean;
 };
 
 type Action = {
   type: "UPDATE_FIELD_ADMIN";
   field: keyof State;
-  value: string;
+  value: string | boolean;
 };
 
 const reducer = (state: State, action: Action) => {
@@ -25,14 +26,19 @@ const reducer = (state: State, action: Action) => {
     }
   }
 };
-
 const useAdminLogin = () => {
   const [state, dispatch] = useReducer(reducer, {
     email: "",
     password: "",
+    isLoggingIn: false,
   });
 
   const adminLogin = async () => {
+    dispatch({
+      type: "UPDATE_FIELD_ADMIN",
+      field: "isLoggingIn",
+      value: true,
+    });
     try {
       const userCredentials = await signInWithEmailAndPassword(
         auth,
@@ -42,6 +48,7 @@ const useAdminLogin = () => {
       const user = userCredentials.user;
       const userRef = doc(db, "Users", user.uid);
       const userDoc = await getDoc(userRef);
+
       if (!userDoc.data() && !userDoc.exists) {
         return;
       }
@@ -69,6 +76,12 @@ const useAdminLogin = () => {
         default:
           return ["error", authError.message];
       }
+    } finally {
+      dispatch({
+        type: "UPDATE_FIELD_ADMIN",
+        field: "isLoggingIn",
+        value: false,
+      });
     }
   };
 

@@ -5,32 +5,18 @@ import { useBrainBytesStore } from "@/assets/zustand/useBrainBytesStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { Suspense, useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import RenderCounter from "../../global/RenderCounter";
 import SmallLoading from "../../global/SmallLoading";
 
 const BrainBytesModal = React.lazy(() => import("../Modals/BrainBytesModal"));
 const StageBrainBytes = ({
   currentStageData,
-  lessonId,
-  category,
-  levelId,
-  stageId,
-  setCurrentStageIndex,
-  levelFinishedModal,
+
   finalAnswerModal,
   isStageAlreadyCompleted,
 }: any) => {
   const { brainFilterItem, optionsArray } = brainFilter(
-    currentStageData?.choices!,
-    setCurrentStageIndex,
-    lessonId,
-    category,
-    stageId,
-    levelId,
-    levelFinishedModal
+    currentStageData?.choices!
   );
-  const [answer, setAnswer] = useState<string>("");
-  RenderCounter("StageBrainBytes");
 
   const [displayChoices, setDisplayChoices] = useState<any>(optionsArray || []);
   const activeBuff = activeBuffsLocal((state) => state.activeBuff);
@@ -46,6 +32,7 @@ const StageBrainBytes = ({
 
   const brainBytes = useModal();
 
+  //Gets the user choice and correct answer
   const setUserAnswer = useBrainBytesStore((state) => state.setUserAnswer);
   const userAnswer = useBrainBytesStore((state) => state.userAnswer);
   const setCorrectAnswer = useBrainBytesStore(
@@ -120,6 +107,7 @@ const StageBrainBytes = ({
             Stage is already completed
           </Text>
         ) : (
+          // Shows the finalAnswerModal with the collected user answer and correct answer
           <TouchableOpacity
             className="mx-auto bg-button  rounded-xl "
             onPress={() => finalAnswerModal.setVisibility(true)}

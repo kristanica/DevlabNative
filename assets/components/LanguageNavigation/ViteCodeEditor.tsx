@@ -95,40 +95,64 @@ const ViteCodeEditor = ({
               margin: 10,
             }}
             source={{
-              html: `<!DOCTYPE html>
+              html: `
+<!DOCTYPE html>
 <html lang="en">
   <head>
- 
-   <style>
-     ${receivedCode?.css}
-    </style>
-  </head> 
+    <meta charset="UTF-8">
+    <style>${receivedCode?.css || ""}</style>
+  </head>
   <body>
-      ${receivedCode?.html}
-          <script>(function(){
+    ${
+      receivedCode?.html?.replace(/<script[\s\S]*?<\/script>/gi, "") || // remove user scripts from HTML
+      ""
+    }
+    <script>
+      // Override console.log and console.error
+      (function(){
         const oldLog = console.log;
-        console.log = function(...args) {
+        console.log = function(...args){
           oldLog.apply(console, args);
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: "log", data: args }));
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: "log", data: args }));
+          }
         };
         const oldErr = console.error;
-        console.error = function(...args) {
+        console.error = function(...args){
           oldErr.apply(console, args);
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: args }));
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: args }));
+          }
         };
+
+        try {
+          // Execute JS from receivedCode.js
+          ${receivedCode?.js || ""}
+
+          // Execute any scripts that were in receivedCode.html
+          ${(() => {
+            const scripts = (
+              receivedCode?.html?.match(/<script>([\s\S]*?)<\/script>/gi) || []
+            )
+              .map((s) => s.replace(/<\/?script>/gi, ""))
+              .join(";\n");
+            return scripts;
+          })()}
+        } catch(e) {
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
+          }
+        }
       })();
-      try {
-        ${receivedCode?.js || ""}
-      } catch(e) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
-      }</script>
+    </script>
   </body>
-</html>`,
+</html>
+    `,
             }}
             onMessage={(e: WebViewMessageEvent) => {
               try {
                 const msg = JSON.parse(e.nativeEvent.data);
-                setLogs((prev: any) => [...prev, msg]); // ✅ append logs
+                setLogs((prev: any) => [...prev, msg]);
               } catch (err) {
                 console.error("Parse error:", err);
               }

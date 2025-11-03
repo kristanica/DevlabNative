@@ -6,7 +6,11 @@ import LoginForm from "@/assets/components/screen/LOGIN/LoginForm";
 import useLogin from "@/assets/Hooks/reducers/useLogin";
 import useModal from "@/assets/Hooks/useModal";
 import toastHandler from "@/assets/zustand/toastHandler";
-import React, { useCallback } from "react";
+import { auth } from "@/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { signOut } from "firebase/auth";
+import React, { useCallback, useEffect } from "react";
 import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -33,7 +37,25 @@ const Login = () => {
   const setForgotPasswordVisibility = useCallback(() => {
     forgotPassword.setVisibility((prev) => !prev);
   }, [forgotPassword]);
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const currentuser = auth.currentUser;
+        const val = await AsyncStorage.getItem("isLoggin");
+        if (val === "false" && currentuser) {
+          await signOut(auth);
+          return;
+        }
+        if (val === "true" && currentuser) {
+          router.replace("/home/Home");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
+    checkLogin();
+  }, []);
   return (
     <View className="flex-1 bg-background ">
       <Animated.View entering={FadeIn.duration(500)} style={{ flex: 1 }}>

@@ -14,12 +14,13 @@ type State = {
   password: string;
   username: string;
   confirmPassword: string;
+  isLoggingIn: boolean;
 };
 
 type Action = {
   type: "UPDATE_FIELD";
   field: keyof State;
-  value: string;
+  value: string | boolean;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -39,9 +40,15 @@ const useRegister = () => {
     password: "",
     username: "",
     confirmPassword: "",
+    isLoggingIn: false,
   });
 
   const handleRegister = async () => {
+    dispatch({
+      type: "UPDATE_FIELD",
+      field: "isLoggingIn",
+      value: true,
+    });
     try {
       const isEmailValid = validateEmail(state.email);
       if (isEmailValid[0] === "error") {
@@ -183,6 +190,12 @@ const useRegister = () => {
         default:
           return ["error", authError.message];
       }
+    } finally {
+      dispatch({
+        type: "UPDATE_FIELD",
+        field: "isLoggingIn",
+        value: false,
+      });
     }
   };
 

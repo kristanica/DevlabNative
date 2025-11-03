@@ -28,19 +28,9 @@ const editStage = async (state: any, stageType: string) => {
     blocks: normalizedBlocks || state.blocks,
   };
 
-  const hasLocalImages = normalizedState.blocks?.some(
-    (block: any) =>
-      block.type === "Image" &&
-      typeof block.value === "string" &&
-      block.value.startsWith("file://")
-  );
-
-  console.log("Has local images:", hasLocalImages);
-
   try {
     const token = await auth.currentUser?.getIdToken(true);
 
-    console.log("Local images detected, sending as FormData");
     const formData = new FormData();
     formData.append("category", levelPayload?.category);
     formData.append("lessonId", levelPayload.lessonId);
@@ -55,8 +45,6 @@ const editStage = async (state: any, stageType: string) => {
         block.value.startsWith("file://")
       ) {
         const fileType = block.value.split(".").pop();
-
-        console.log(`Appending image_${block.id}:`, block.value);
 
         formData.append(`image_${block.id}`, {
           uri: block.value,

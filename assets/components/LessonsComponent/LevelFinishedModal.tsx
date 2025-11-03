@@ -40,7 +40,10 @@ const LevelFinishedModal = ({
   const levelExpReward = levelRewardStore((state) => state.expReward);
   const { coinSurgeItem } = coinSurge();
   const activeBuffs = activeBuffsLocal((state) => state.activeBuff);
-
+  const [originalRewards] = React.useState({
+    coins: levelCoinsReward,
+    exp: levelExpReward,
+  });
   // Apply doubleCoins buff if active
   useEffect(() => {
     if (!activeBuffs.includes("doubleCoins")) return;
@@ -125,13 +128,13 @@ const LevelFinishedModal = ({
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         DevCoins:{" "}
                         <Text className="text-[#e3be00]">
-                          +{levelCoinsReward}
+                          +{originalRewards.coins} → {levelCoinsReward}
                         </Text>
                       </Text>
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         Experience gained:{" "}
                         <Text className="text-[#21b3cf]">
-                          +{levelExpReward}
+                          + {originalRewards.exp} → {levelExpReward}
                         </Text>
                       </Text>
                     </View>

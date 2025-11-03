@@ -1,5 +1,5 @@
 import CustomGeneralContainer from "@/assets/components/CustomGeneralContainer";
-import Logo from "@/assets/components/screen/LOGIN/Logo";
+import FillScreenLoading from "@/assets/components/global/FillScreenLoading";
 import RegisterForm from "@/assets/components/screen/REGISTER/RegisterForm";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import useRegister from "@/assets/Hooks/reducers/useRegister";
@@ -49,7 +49,9 @@ const Register = () => {
             extraScrollHeight={20}
             keyboardShouldPersistTaps="handled"
           >
-            <Logo></Logo>
+            {state.isLoggingIn && (
+              <FillScreenLoading text="Registering..."></FillScreenLoading>
+            )}
             <RegisterForm
               state={state}
               dispatch={dispatch}

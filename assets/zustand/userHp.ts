@@ -4,6 +4,7 @@ type userHpPayload = {
 
   decrementUserHp: () => void;
   resetUserHp: () => void;
+  incrementUserHp: () => void;
 };
 
 const userHp = create<userHpPayload>((set) => ({
@@ -14,6 +15,10 @@ const userHp = create<userHpPayload>((set) => ({
       userHp: state.userHp > 0 ? state.userHp - 1 : 0,
     })),
   resetUserHp: () => set({ userHp: 3 }),
+  incrementUserHp: () =>
+    set((state) => ({
+      userHp: state.userHp + 1,
+    })),
 }));
 
 export default userHp;

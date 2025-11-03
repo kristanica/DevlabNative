@@ -36,8 +36,6 @@ type State = {
   choices: BrainBytesChoices;
   blocks: Block[];
   //CodeCrafter
-  //This is a picture
-  copyCode?: string;
 };
 const initialState = {
   //general
@@ -66,10 +64,6 @@ const initialState = {
     d: "",
     correctAnswer: "",
   },
-
-  //CodeCrafter
-  //This is a picture
-  copyCode: "",
 
   blocks: [],
 };

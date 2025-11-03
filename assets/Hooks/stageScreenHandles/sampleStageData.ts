@@ -48,10 +48,13 @@ export const sampleStageData = (
     }
   }, [getLevelData, setLevelReward]);
 
-  const getStageData = useMemo(
-    () => getLevelData?.stages ?? [],
-    [getLevelData]
-  );
+  const getStageData = useMemo(() => {
+    if (!getLevelData?.stages) return [];
+    // Sort by order ascending (smallest first)
+    return [...getLevelData.stages].sort(
+      (a: any, b: any) => (a.order ?? 0) - (b.order ?? 0)
+    );
+  }, [getLevelData]);
 
   useEffect(() => {
     if (!getStageData) return;

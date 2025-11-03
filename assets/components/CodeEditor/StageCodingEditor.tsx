@@ -18,19 +18,15 @@ const StageCodingEditor = ({
   terminalRef,
 }: CodeMirrorPayload) => {
   const snapPoints = useMemo(() => ["5%", "50%"], []);
-  const editorHtml = Asset.fromModule(
-    require("@/fontFamily/editor/index.html")
-  ).uri;
 
   useEffect(() => {
     if (!receivedCode) return;
     const { html, css, js } = receivedCode;
     if (html) {
       const usedTags = htmlRegex(html);
-      console.log("HTml ran");
+
       if (usedTags.length > 0) {
         unlockAchievement("Html", "tagUsed", { usedTags, isCorrect: true });
-        console.log("Woah, ran");
       }
     }
     if (css) {
@@ -80,35 +76,69 @@ const StageCodingEditor = ({
               margin: 10,
             }}
             source={{
-              html: `<!DOCTYPE html>
-<html lang="en">
-  <head>
-   
-   <style>
-     ${receivedCode?.css}
-    </style>
-  </head> 
-  <body>
-      ${receivedCode?.html}
-          <script>(function(){
-        const oldLog = console.log;
-        console.log = function(...args) {
-          oldLog.apply(console, args);
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: "log", data: args }));
-        };
-        const oldErr = console.error;
-        console.error = function(...args) {
-          oldErr.apply(console, args);
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: args }));
-        };
-      })();
-      try {
-        ${receivedCode?.js || ""}
-      } catch(e) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
-      }</script>
-  </body>
-</html>`,
+              html: `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <style>${receivedCode?.css || ""}</style>
+          </head>
+          <body>
+            ${
+              receivedCode?.html?.replace(/<script[\s\S]*?<\/script>/gi, "") || // remove user scripts from HTML
+              ""
+            }
+            <script>
+              // Override console.log and console.error
+              (function(){
+                const oldLog = console.log;
+                console.log = function(...args){
+                  oldLog.apply(console, args);
+                  if(window.ReactNativeWebView){
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: "log", data: args }));
+                  }
+                };
+                const oldErr = console.error;
+                console.error = function(...args){
+                  oldErr.apply(console, args);
+                  if(window.ReactNativeWebView){
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: args }));
+                  }
+                };
+        
+                try {
+                  // Execute JS from receivedCode.js
+                  ${receivedCode?.js || ""}
+        
+                  // Execute any scripts that were in receivedCode.html
+                  ${(() => {
+                    const scripts = (
+                      receivedCode?.html?.match(
+                        /<script>([\s\S]*?)<\/script>/gi
+                      ) || []
+                    )
+                      .map((s) => s.replace(/<\/?script>/gi, ""))
+                      .join(";\n");
+                    return scripts;
+                  })()}
+                } catch(e) {
+                  if(window.ReactNativeWebView){
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: "error", data: [e.message] }));
+                  }
+                }
+              })();
+            </script>
+          </body>
+        </html>
+            `,
+            }}
+            onMessage={(e: WebViewMessageEvent) => {
+              try {
+                const msg = JSON.parse(e.nativeEvent.data);
+                setLogs((prev: any) => [...prev, msg]);
+              } catch (err) {
+                console.error("Parse error:", err);
+              }
             }}
             onShouldStartLoadWithRequest={(event) => {
               if (
@@ -120,14 +150,6 @@ const StageCodingEditor = ({
                 return false;
               }
               return true;
-            }}
-            onMessage={(e: WebViewMessageEvent) => {
-              try {
-                const msg = JSON.parse(e.nativeEvent.data);
-                setLogs((prev: any) => [...prev, msg]); // ✅ append logs
-              } catch (err) {
-                console.error("Parse error:", err);
-              }
             }}
           />
         ) : (
