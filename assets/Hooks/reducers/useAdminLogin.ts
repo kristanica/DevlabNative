@@ -57,7 +57,7 @@ const useAdminLogin = () => {
           pathname: "/(admin)/home/UserManagement",
         });
       } else {
-        console.log("error!");
+        return ["error", "You're not an admin!"];
       }
     } catch (error) {
       console.log(error);

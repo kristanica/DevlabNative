@@ -1,5 +1,6 @@
 import React, { BaseSyntheticEvent } from "react";
 import {
+  Animated,
   Keyboard,
   Modal,
   Pressable,
@@ -8,9 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Animated from "react-native-reanimated";
 
-const SaveToFirebaseConfirmation = ({
+const AddNewContentConfirmation = ({
   visibility,
   scaleStyle,
   closeModal,
@@ -32,7 +32,7 @@ const SaveToFirebaseConfirmation = ({
           >
             <View className="py-2">
               <Text className="text-white  text-center px-7  font-exoBold text-sm xs:text-[12px] ">
-                Are you sure you want to save your changes?
+                Are you sure you want to add a new content?
               </Text>
             </View>
 
@@ -55,6 +55,6 @@ const SaveToFirebaseConfirmation = ({
   );
 };
 
-export default SaveToFirebaseConfirmation;
+export default AddNewContentConfirmation;
 
 const styles = StyleSheet.create({});

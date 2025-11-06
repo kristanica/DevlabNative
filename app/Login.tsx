@@ -19,6 +19,7 @@ const Login = () => {
   RenderCounter("login");
   const { state, dispatch, signIn } = useLogin();
   const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+
   const handleLogin = async () => {
     if (state.email === "" || state.password === "") {
       setToastVisibility(

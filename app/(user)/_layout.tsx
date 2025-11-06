@@ -100,7 +100,7 @@ const TabsLayout = () => {
           setIsReady(true);
         }
       };
-      console.log("ASDasdasd");
+
       loadProgress();
     });
     return () => {

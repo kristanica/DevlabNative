@@ -1,6 +1,5 @@
-import LottieView from "lottie-react-native";
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 // Will render when changing user information
@@ -11,45 +10,37 @@ const ConfirmationModal = ({
   onConfirm,
 }: ScaleModalPayload) => {
   return (
-    <Modal visible={visibility} animationType="none" transparent={true}>
-      <Pressable onPress={closeModal} className="flex-1 bg-black/50">
-        <Animated.View
-          style={[scaleStyle]}
-          className="   w-[250px] h-[300px] m-auto  rounded-[10px]"
-        >
-          <View className="justify-center items-center flex-[1] bg-modal rounded-xl border-[#2a3141] border-[1px]">
-            <LottieView
-              source={require("@/assets/Lottie/Loading.json")}
-              loop
-              autoPlay
-              style={{
-                height: 200,
-                width: 200,
-                flex: 3,
-                marginTop: 10,
-              }}
-            />
-            <View className="flex-[1] justify-center items-center">
-              <Text className="text-white text-center font-exoBold text-xs xs:text-[9px]">
-                Do you want to save your changes?
-              </Text>
-            </View>
-            <View className="flex-[1] w-full flex-row  p-2 justify-evenly items-center">
-              <Pressable onPress={onConfirm}>
-                <Text className="text-white py-2 px-7 font-exoBold bg-[#7F5AF0] text-xs xs:text-[9px] rounded-xl">
-                  Continue
-                </Text>
-              </Pressable>
-              <Pressable onPress={closeModal}>
-                <Text className="text-white py-2 px-10 font-exoBold bg-[#FF6166] text-xs xs:text-[9px] rounded-xl">
-                  No
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        </Animated.View>
-      </Pressable>
-    </Modal>
+    <Animated.View
+      style={scaleStyle}
+      className="absolute inset-0 justify-center items-center w-full h-full bg-black/50 z-50"
+    >
+      <View className="  bg-modal w-[90%] border-[#2a3141] border-[1px] py-6 rounded-xl">
+        <View className="py-2">
+          <Text className="text-white  text-center px-7  font-exoBold text-sm xs:text-[12px] ">
+            Are you sure you want to save your changes?
+          </Text>
+        </View>
+
+        <View className="flex-row justify-between px-10">
+          <TouchableOpacity
+            className="self-start bg-green-400 rounded-xl"
+            onPress={onConfirm}
+          >
+            <Text className="text-white  px-7 py-2  font-exoBold text-xs xs:text-[10px]">
+              Confirm
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="self-start bg-red-400 rounded-xl"
+            onPress={closeModal}
+          >
+            <Text className="text-white  px-7 py-2  font-exoBold text-xs xs:text-[10px]">
+              No
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Animated.View>
   );
 };
 

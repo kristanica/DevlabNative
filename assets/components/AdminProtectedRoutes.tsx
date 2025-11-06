@@ -11,6 +11,7 @@ type AdminProtectedRoutesProps = {
 const AdminProtectedRoutes = ({ children }: AdminProtectedRoutesProps) => {
   const user = adminAuthentication((state) => state.user);
   const loaded = adminAuthentication((state) => state.loaded);
+  const isAdmin = adminAuthentication((state) => state.isAdmin);
 
   if (!loaded) {
     return (
@@ -21,10 +22,12 @@ const AdminProtectedRoutes = ({ children }: AdminProtectedRoutesProps) => {
   }
 
   // if not admin, redirect back
-  if (!user) return <Redirect href="/home/Settings" />;
+
+  if (!user || !isAdmin) return <Redirect href="/home/Home" />;
 
   // If user is logged in and loaded, render children
-  if (user && loaded) return <View className="flex-1">{children}</View>;
+  if (user && loaded && isAdmin)
+    return <View className="flex-1">{children}</View>;
   return null;
 };
 

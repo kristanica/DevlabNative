@@ -43,9 +43,7 @@ const Stage = () => {
   const isMutating = useIsMutating();
   return (
     <AdminProtectedRoutes>
-      {isMutating > 0 && (
-        <FillScreenLoading text="reordering..."></FillScreenLoading>
-      )}
+      {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
       <View className="flex-[1] bg-accent">
         <AnimatedViewContainer>
           <CustomGeneralContainer>

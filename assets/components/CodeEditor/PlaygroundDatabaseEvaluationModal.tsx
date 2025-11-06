@@ -16,7 +16,7 @@ const PlaygroundDatabaseEvaluationModal = ({
         <Pressable onPress={(e) => e.stopPropagation()} className="m-auto">
           <Animated.View
             style={[scaleStyle]}
-            className="rounded-[10px] h-[300px] w-[350px] bg-modal px-4 py-4"
+            className="rounded-[10px]  w-[350px] bg-modal px-4 py-4"
           >
             <Text className=" text-center text-2xl text-white font-exoBold mt-2">
               EVALUATION RESULT

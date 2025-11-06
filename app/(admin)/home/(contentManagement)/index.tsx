@@ -1,3 +1,4 @@
+import AddNewContentConfirmation from "@/assets/components/AdminComponents/AddNewContentConfirmation";
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
 import CategorySelector from "@/assets/components/AdminComponents/CategorySelector";
 import DeleteFireBaseConfirmationModal from "@/assets/components/AdminComponents/DeleteFireBaseConfirmationModal";
@@ -182,13 +183,13 @@ const ContentManagement = () => {
           )}
 
           {addLessonModal.visibility && (
-            <SaveToFirebaseConfirmation
+            <AddNewContentConfirmation
               onConfirm={() => {
                 addLessonMutation.mutate();
                 addLessonModal.closeModal();
               }}
               {...addLessonModal}
-            ></SaveToFirebaseConfirmation>
+            ></AddNewContentConfirmation>
           )}
         </CustomGeneralContainer>
       </View>

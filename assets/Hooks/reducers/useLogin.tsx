@@ -53,23 +53,39 @@ const useLogin = () => {
       }
 
       Keyboard.dismiss();
-      // Determine wheter to keep sign in or not
+
       if (state.keepSign) {
         await AsyncStorage.setItem("isLoggin", "true");
       } else {
         await AsyncStorage.removeItem("isLoggin");
       }
 
-      router.replace({
-        pathname: "/(user)/home/(drawer)/(tabs)/Home",
-      });
+      //checks customclaims for admin
+      const tokenResult = await userCredential.user.getIdTokenResult(true);
+      const checkAdmin = tokenResult.claims.role;
+      console.log(checkAdmin);
+
+      if (checkAdmin === "admin") {
+        router.replace({
+          pathname: "/(admin)/home/UserManagement",
+        });
+        return;
+      } else {
+        router.replace({
+          pathname: "/(user)/home/(drawer)/(tabs)/Home",
+        });
+      }
     } catch (error) {
       const e = error as AuthError;
       switch (e.code) {
         case "auth/invalid-credential": {
           return ["error", "Invalid Credentials"];
         }
+        case "auth/user-disabled": {
+          return ["error", "Your account is suspended"];
+        }
         default:
+          console.log(e.code);
           return ["error", e.message];
       }
     } finally {

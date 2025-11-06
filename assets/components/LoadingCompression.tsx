@@ -11,7 +11,7 @@ const LoadingCompression = ({ progress }: LoadingScreen) => {
       className="absolute inset-0 justify-center items-center bg-black/40 z-50"
       style={[StyleSheet.absoluteFillObject]}
     >
-      <View className="w-[50%] h-[30%] bg-modal p-3 border-[#6c37a5] border-[1px] rounded-xl">
+      <View className="w-[50%] h-[30%] bg-modal p-3 border-[#2a3141] border-[1px] rounded-xl">
         <LottieView
           source={require("@/assets/Lottie/Loading.json")}
           autoPlay
@@ -19,7 +19,7 @@ const LoadingCompression = ({ progress }: LoadingScreen) => {
           style={{ width: "100%", aspectRatio: 1 }}
         ></LottieView>
         <Text className="text-white font-exoBold text-xs mx-auto text-center ">
-          123
+          Compressing file
         </Text>
         <Progress.Circle
           style={{ margin: "auto" }}

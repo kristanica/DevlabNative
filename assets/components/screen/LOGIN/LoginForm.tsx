@@ -27,8 +27,8 @@ const LoginForm = ({
         <Ionicons name="person-circle" size={140} color={"#314A70"} />
         <View className="px-2">
           <InputBox
-            icon={"person"}
-            placeHolder={"Username"}
+            icon={"mail"}
+            placeHolder={"Email"}
             value={state.email}
             setValue={(text) =>
               dispatch({

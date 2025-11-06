@@ -82,13 +82,12 @@ const RegisterForm = ({
         />
       </View>
 
-      <View className=" justify-center items-center ">
-        <TouchableOpacity onPress={handleRegister}>
-          <Text className="text-white font-exoBold  bg-button px-7 py-2 xs: text-xs sm:text-base md:lg my-5 rounded-2xl">
-            REGISTER
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={handleRegister} className="w-full">
+        <Text className="text-white font-exoBold  text-center bg-button px-7 py-2 xs: text-sm xs:text-[12px] md:lg my-5 rounded-2xl">
+          REGISTER
+        </Text>
+      </TouchableOpacity>
+
       <View className="justify-center items-center">
         <Text className="color-[#FFFFFE] font-exoRegular text-sm xs:text-[12px]">
           Already have an Account?

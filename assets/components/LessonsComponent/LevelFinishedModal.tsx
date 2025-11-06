@@ -121,9 +121,7 @@ const LevelFinishedModal = ({
                     <View className="bg-[#080c15] m-3 py-3 rounded-lg">
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         Lives Remaining:{" "}
-                        <Text className="text-[#ad3532]">
-                          {userHealth - 1}x
-                        </Text>
+                        <Text className="text-[#ad3532]">{userHealth}x</Text>
                       </Text>
                       <Text className="text-white text-center font-exoBold xs:text-xs">
                         DevCoins:{" "}

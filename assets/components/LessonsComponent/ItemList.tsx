@@ -83,7 +83,7 @@ const ItemList = ({ category }: any) => {
       console.log("AYES");
     },
     CodeWhisper: async (itemId) => {
-      if (location === "Lesson") {
+      if (location === "Lesson" || location === "BrainBytes") {
         setToastVisibility(
           "error",
           `You cannot use CodeWhisper in ${location}`
