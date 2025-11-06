@@ -20,7 +20,7 @@ const AdminUserContainer = ({
 
   return (
     <>
-      <View className="bg-background flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#2a3141] border-[2px]  relative ">
+      <View className="bg-[#1e2a3a] flex-row h-[150px] my-2 mx-3 rounded-2xl border-[#2a3141] border-[2px]  relative ">
         <View className="flex-[1] justify-center items-center ">
           {deleteUserModal.visibility && (
             <DeleteUserConfirmation
@@ -51,7 +51,7 @@ const AdminUserContainer = ({
           style={[
             {
               borderColor: "#C1ADAD",
-              borderLeftWidth: 2,
+              borderLeftWidth: 1,
               marginVertical: 10,
             },
           ]}
@@ -93,7 +93,7 @@ const AdminUserContainer = ({
                       : `opacity-100`
                   }`}
                 >
-                  <Text className="font-exoRegular text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                  <Text className="font-exoRegular text-white bg-[#f34b00] py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                     Suspend
                   </Text>
                 </TouchableOpacity>
@@ -107,7 +107,7 @@ const AdminUserContainer = ({
                       : `opacity-50`
                   }`}
                 >
-                  <Text className="font-exoRegular text-white bg-button py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                  <Text className="font-exoRegular text-white bg-[#f34b00] py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                     Activate
                   </Text>
                 </TouchableOpacity>
@@ -118,7 +118,7 @@ const AdminUserContainer = ({
                   // }}
                   onPress={more}
                 >
-                  <Text className="font-exoRegular text-white bg-green-500 py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
+                  <Text className="font-exoRegular text-white bg-[#1c5afb] py-2 px-3 self-start rounded-2xl text-xs xs:text-[10px]">
                     MORE
                   </Text>
                 </TouchableOpacity>

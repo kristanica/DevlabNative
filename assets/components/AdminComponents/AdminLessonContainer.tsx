@@ -16,7 +16,7 @@ AdminLessonContainerPayload) => {
   return (
     <Animated.View
       // style={onScale}
-      className="bg-[#111827] my-2 rounded-2xl border-2 border-black h-40 p-3 mx-3 relative"
+      className="bg-[#1e2a3a] my-2 rounded-2xl border-[#2a3141] border-[2px]   p-3 mx-3 relative"
     >
       <View>
         <Text className="text-white font-exoBold text-xl xs:text-[12px] ">
@@ -25,7 +25,10 @@ AdminLessonContainerPayload) => {
       </View>
 
       <View className="mt-2">
-        <Text className="text-[#94A1B2]  text-justify font-exoLight text-xs xs:text-[9px]">
+        <Text
+          className="text-[#94A1B2]  text-justify font-exoLight text-xs xs:text-[9px]"
+          numberOfLines={2}
+        >
           {itemContents.description}
         </Text>
       </View>

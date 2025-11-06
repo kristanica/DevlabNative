@@ -1,6 +1,5 @@
 import { useEditUser } from "@/assets/Hooks/reducers/useEditUser";
 import useModal from "@/assets/Hooks/useModal";
-import toastHandler from "@/assets/zustand/toastHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { JSX, useEffect, useMemo, useRef, useState } from "react";
@@ -32,12 +31,11 @@ const EditUserModal = ({
   uid,
   activeLevel,
   deleteProgress,
-  deleteAllProgress,
-  editUser,
+
   deleteAchievement,
 }: EditUserModalPayload) => {
   const queryClient = useQueryClient();
-  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+
   const test: any[] | undefined = queryClient.getQueryData(["allUser"]);
   const userInfo = useMemo(() => {
     return test!.find((item) => item.id === uid);
@@ -82,11 +80,6 @@ const EditUserModal = ({
 
   const deleteConfirmation = useModal();
   const functionToPerfrom = useRef<any>(null);
-  const hasProgress = useMemo(() => {
-    if (!userInfo?.levelCount) return false;
-
-    return Object.values(userInfo.levelCount).some((count: any) => count > 0);
-  }, [userInfo]);
 
   const optionNav = ["About", "Achievement", "Progress"];
   const [navigation, setNavigation] = useState<string>("About");
@@ -148,21 +141,21 @@ const EditUserModal = ({
       <>
         <View className="pb-2 mb-2 border-b-[2px] border-[#2a3340]">
           <Text className="text-sm text-cyan-400 font-exoBold">
-            User Progress
+            User Level Progress
           </Text>
         </View>
 
         {categories.map((category, index) => (
           <React.Fragment key={index}>
             <ProgressBar
-              activeLevel={10}
+              activeLevel={activeLevel[category].levelCounter}
               category={category}
-              userProgress={userInfo.achievements[category]["quantity"]}
+              userProgress={userInfo.levelCount[category]}
               onDeleteSpecific={() => {
                 deleteConfirmation.setVisibility(true);
                 functionToPerfrom.current = () => {
                   deleteProgress.mutate({
-                    category: category,
+                    subject: category,
                     uid: uid,
                   });
                 };
@@ -177,38 +170,26 @@ const EditUserModal = ({
       <>
         <View className="pb-2 mb-2 border-b-[2px] border-[#2a3340]">
           <Text className="text-sm text-cyan-400 font-exoBold">
-            User Achievement progress
+            User Achievement Progress
           </Text>
         </View>
         {categories.map((category, index) => (
           <React.Fragment key={index}>
             <ProgressBar
-              activeLevel={activeLevel[category].levelCounter}
+              activeLevel={10}
               category={category}
-              userProgress={userInfo.levelCount[category]}
+              userProgress={userInfo.achievements[category]["quantity"]}
               onDeleteSpecific={() => {
                 deleteConfirmation.setVisibility(true);
                 functionToPerfrom.current = () =>
                   deleteAchievement.mutate({
                     uid: uid,
-                    subject: category,
+                    category: category,
                   });
               }}
             ></ProgressBar>
           </React.Fragment>
         ))}
-        {/* <TouchableOpacity
-          disabled={!hasProgress}
-          onPress={() => {
-            deleteConfirmation.setVisibility(true);
-            functionToPerfrom.current = () => deleteAllProgress.mutate({ uid });
-          }}
-          className={`mt-5 p-3 rounded-[10px] items-center ${
-            hasProgress ? "bg-red-500" : "bg-gray-600 opacity-50"
-          }`}
-        >
-          <Text className="text-white font-exoBold">DELETE ALL PROGRESS</Text>
-        </TouchableOpacity> */}
       </>
     ),
   };

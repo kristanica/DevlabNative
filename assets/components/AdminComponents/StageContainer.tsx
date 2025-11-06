@@ -14,7 +14,7 @@ StagesContainerPayload) => {
   return (
     <Animated.View
       // style={onScale}
-      className="bg-[#111827] my-2 rounded-2xl border-[2px] border-black h-40 p-3 mx-3"
+      className="bg-[#1e2a3a] my-2 rounded-2xl border-[#2a3141] border-[2px]  p-3 mx-3"
     >
       <View>
         <Text className="text-white font-exoBold text-xl xs:text-[12px]">

@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const deleteSpecificProgress = async (uid: string, subject: string) => {
   const token = await auth?.currentUser?.getIdToken(true);
-
+  console.log(uid, subject);
   const [data, error] = await tryCatch(
     axios.post(
       `${URL}/fireBaseAdmin/progress/reset`,

@@ -10,17 +10,21 @@ export const deleteSpecificAchievement = async ({
   uid: string;
 }) => {
   console.log(category + "!!!!!!!!!!");
+  console.log(uid);
   const token = await auth.currentUser?.getIdToken(true);
   const [data, error] = await tryCatch(
-    axios.delete(`${URL}/fireBaseAdmin/deleteAchievement`, {
-      data: {
+    axios.post(
+      `${URL}/fireBaseAdmin/deleteAchievement`,
+      {
         category: category,
         uid: uid,
       },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
   );
 
   if (error) {

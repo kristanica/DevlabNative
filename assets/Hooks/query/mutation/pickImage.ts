@@ -8,6 +8,7 @@ import {
   StorageReference,
   uploadBytes,
 } from "firebase/storage";
+
 export const pickImage = () => {
   return useMutation({
     mutationFn: async ({ type }: { type: string }) => {

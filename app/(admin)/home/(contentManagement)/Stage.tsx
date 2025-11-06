@@ -74,6 +74,7 @@ const Stage = () => {
                 ) : (
                   <>
                     <FlashList
+                      estimatedItemSize={149}
                       data={stagesData ?? []}
                       showsVerticalScrollIndicator={false}
                       keyExtractor={(item: any) => item.id}
