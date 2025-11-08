@@ -142,7 +142,12 @@ type stageDataPayload = {
   isHidden?: boolean | undefined;
   type?: string | undefined;
   instruction?: string | undefined;
-  codingInterface?: string | undefined;
+  codingInterface?: {
+    html: string | undefined;
+    css: string | undefined;
+    js: string | undefined;
+    database: string | undefined;
+  };
 
   timer?: number | undefined;
   choices?: BrainBytesChoicesPayload;

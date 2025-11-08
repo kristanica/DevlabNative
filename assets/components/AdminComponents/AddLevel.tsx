@@ -2,6 +2,7 @@ import uploadVideo from "@/assets/API/fireBase/admin/stage/uploadVideo";
 import CheckEmptyFields from "@/assets/Hooks/function/CheckEmptyFields";
 import useEditLesson from "@/assets/Hooks/reducers/useEditLesson";
 import useEditStage from "@/assets/Hooks/reducers/useEditStage";
+import toastHandler from "@/assets/zustand/toastHandler";
 import tracker from "@/assets/zustand/tracker";
 import { URL } from "@/constants";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -19,7 +20,7 @@ import FillScreenLoading from "../global/FillScreenLoading";
 import Lesson from "./GameModes/Lesson";
 import InputContainer from "./InputContainer";
 
-const AddLesson = ({
+const AddLevel = ({
   visibility,
   scaleStyle,
   closeModal,
@@ -44,12 +45,15 @@ const AddLesson = ({
 
   const [videoPresentation, setVideoPresentation] = useState<string>("");
   const category = tracker((state) => state.levelPayload?.category);
+  const lessonId = tracker((state) => state.levelPayload?.lessonId);
   const querClient = useQueryClient();
+
   const allinone = useMutation({
     mutationFn: async ({ stateStage, state, category }: any) => {
       const formData = new FormData();
 
       formData.append("category", category);
+      formData.append("lessonId", String(lessonId));
       formData.append("lessonState", JSON.stringify(state));
 
       const processedBlocks = stateStage.blocks?.map((block: any) => {
@@ -71,24 +75,22 @@ const AddLesson = ({
 
       // Send request
       const response = await axios.post(
-        `${URL}/fireBaseAdmin/addNewLesson`,
+        `${URL}/fireBaseAdmin/addNewLevel`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      if (response.status !== 200 || !response.data.nextLessonId) {
-        throw new Error("addNewLesson failed or missing nextLessonId");
+      if (response.status !== 200 || !response.data.newLevelId) {
+        throw new Error("addNewLevel failed or missing nextLevelId");
       }
-
-      console.log("✅ Lesson added successfully:", response.data);
 
       // Upload video if present
       if (videoPresentation) {
         await uploadVideo({
           video: videoPresentation,
           category,
-          lessonId: response.data.nextLessonId,
-          levelId: "Level1",
+          lessonId: String(lessonId),
+          levelId: response.data.newLevelId,
           stageId: "Stage1",
         });
         console.log("🎥 Video uploaded successfully");
@@ -97,15 +99,22 @@ const AddLesson = ({
       return response.data;
     },
     onSuccess: () => {
+      console.log("incalidating queriess");
+
       querClient.invalidateQueries({ queryKey: ["lesson admin", category] });
+    },
+    onSettled: () => {
       closeModal();
     },
   });
   const isMutating = useIsMutating();
 
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
+
   useEffect(() => {
     dispatchStage({ type: "UPDATE_FIELD", field: "type", value: "Lesson" });
   }, []);
+
   return (
     <Modal visible={visibility} transparent={true}>
       {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
@@ -206,8 +215,7 @@ const AddLesson = ({
                       stateStage.type
                     );
                     if (hasEmptyLevelFields || hasEmptyStageField) {
-                      alert("There is an Empty Field");
-
+                      setToastVisibility("error", "Empty field!");
                       return;
                     }
 
@@ -227,4 +235,4 @@ const AddLesson = ({
   );
 };
 
-export default AddLesson;
+export default AddLevel;

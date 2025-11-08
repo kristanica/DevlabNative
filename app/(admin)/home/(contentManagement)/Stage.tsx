@@ -1,3 +1,4 @@
+import { AddStage } from "@/assets/components/AdminComponents/AddStage";
 import EditStageModal from "@/assets/components/AdminComponents/EditStageModal";
 import HowToUseStageEditor from "@/assets/components/AdminComponents/HowToUseStageEditor";
 import StageContainer from "@/assets/components/AdminComponents/StageContainer";
@@ -28,19 +29,10 @@ const Stage = () => {
     useListStage();
   const tutorial = useModal();
   const { visibility, setVisibility, scaleStyle, closeModal } = useModal();
-  // const firstStage = stagesData?.[0];
-  // const draggableStages = stagesData?.slice(1) ?? [];
-  // const onDragEnd = (data: any) => {
-  //   const newOrderedData = [
-  //     firstStage,
-  //     ...data.map((item: any, index: number) => ({
-  //       ...item,
-  //       order: index + 2,
-  //     })),
-  //   ];
-  //   updateOrderMutation.mutate({ newOrder: newOrderedData });
-  // };
+
   const isMutating = useIsMutating();
+
+  const testStage = useModal();
   return (
     <AdminProtectedRoutes>
       {isMutating > 0 && <FillScreenLoading></FillScreenLoading>}
@@ -98,7 +90,10 @@ const Stage = () => {
                       ListFooterComponent={() => (
                         <TouchableOpacity
                           className="mx-auto mt-1"
-                          onPress={() => addNewStageMutation.mutate()}
+                          onPress={() => {
+                            // addNewStageMutation.mutate();
+                            testStage.setVisibility(true);
+                          }}
                         >
                           <Text className="text-white font-exoExtraBold text-3xl bg-green-400 self-start py-2 px-7 rounded-3xl ">
                             +
@@ -109,6 +104,8 @@ const Stage = () => {
                   </>
                 )}
               </View>
+
+              {testStage.visibility && <AddStage {...testStage}></AddStage>}
 
               {tutorial.visibility && (
                 <HowToUseStageEditor {...tutorial}></HowToUseStageEditor>

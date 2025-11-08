@@ -1,3 +1,5 @@
+import AddLesson from "@/assets/components/AdminComponents/AddLesson";
+import AddLevel from "@/assets/components/AdminComponents/AddLevel";
 import AddNewContentConfirmation from "@/assets/components/AdminComponents/AddNewContentConfirmation";
 import AdminLessonContainer from "@/assets/components/AdminComponents/AdminLessonContainer";
 import CategorySelector from "@/assets/components/AdminComponents/CategorySelector";
@@ -46,6 +48,9 @@ const ContentManagement = () => {
 
   const isMutaing = useIsMutating();
 
+  const testLesson = useModal();
+  const testLevel = useModal();
+  const testStage = useModal();
   return (
     <AdminProtectedRoutes>
       {isMutaing > 0 && <FillScreenLoading></FillScreenLoading>}
@@ -60,7 +65,15 @@ const ContentManagement = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => addLessonModal.setVisibility(true)}
+              onPress={() => {
+                setTracker({
+                  category: category,
+                  lessonId: "",
+                  levelId: "",
+                });
+                testLesson.setVisibility(true);
+                // addLessonModal.setVisibility(true)
+              }}
             >
               <Ionicons
                 name={"add"}
@@ -127,7 +140,13 @@ const ContentManagement = () => {
                       <TouchableOpacity
                         onPress={() => {
                           setLessonId(item.lessonid);
-                          addLevelModal.setVisibility(true);
+                          // addLevelModal.setVisibility(true);
+                          setTracker({
+                            category: category,
+                            lessonId: item.lessonid,
+                            levelId: "",
+                          });
+                          testLevel.setVisibility(true);
                         }}
                       >
                         <Ionicons
@@ -157,6 +176,10 @@ const ContentManagement = () => {
               )}
             ></SectionList>
           )}
+
+          {testLesson.visibility && <AddLesson {...testLesson}></AddLesson>}
+          {testLevel.visibility && <AddLevel {...testLevel} />}
+
           {editLevelModal.visibility && (
             <EditLessonModal
               onConfirm={() => {}}
