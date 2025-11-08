@@ -57,7 +57,6 @@ const EditLessonModal = ({
       return data.data;
     },
     enabled: true,
-    staleTime: 2 * (60 * 1000),
   });
 
   useEffect(() => {
@@ -107,6 +106,7 @@ const EditLessonModal = ({
                 });
               }}
               numeric={false}
+              required={true}
             ></InputContainer>
             <InputContainer
               title={"Description"}
@@ -120,6 +120,7 @@ const EditLessonModal = ({
                 });
               }}
               numeric={false}
+              required={true}
             ></InputContainer>
             <InputContainer
               title={"Exp Reward"}
@@ -132,7 +133,8 @@ const EditLessonModal = ({
                   value: text,
                 });
               }}
-              numeric={false}
+              numeric={true}
+              required={true}
             ></InputContainer>
             <InputContainer
               title={"Coins Reward"}
@@ -145,7 +147,8 @@ const EditLessonModal = ({
                   value: text,
                 });
               }}
-              numeric={false}
+              numeric={true}
+              required={true}
             ></InputContainer>
 
             <View className="flex-row my-3">

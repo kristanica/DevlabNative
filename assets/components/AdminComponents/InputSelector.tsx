@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import { JSX } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Image, Pressable, Text, TextInput, View } from "react-native";
 
 type InputSelectorProps = {
   block: any;
@@ -104,39 +104,53 @@ const InputSelector = ({
       </View>
     ),
     Image: (
-      <View
-        key={block.id}
-        className=" flex-row justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3"
-      >
-        {index ? (
-          <Ionicons
-            name="checkbox"
-            size={20}
-            color={"green"}
-            className="mr-5"
-          ></Ionicons>
-        ) : (
-          <Ionicons
-            name="warning"
-            size={20}
-            color={"red"}
-            className="mr-5"
-          ></Ionicons>
-        )}
-        <Pressable
-          className="flex-row"
-          onPress={() => selectImage(block.id, dispatch)}
+      <>
+        <View
+          key={block.id}
+          className="  bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3"
         >
-          <Text className="text-white my-2 mr-5">{block.type}</Text>
-          <Ionicons name="cloud-upload" size={15} color={"white"}></Ionicons>
-        </Pressable>
+          <View className=" flex-row justify-between">
+            {index ? (
+              <Ionicons
+                name="checkbox"
+                size={20}
+                color={"green"}
+                className="mr-5"
+              ></Ionicons>
+            ) : (
+              <Ionicons
+                name="warning"
+                size={20}
+                color={"red"}
+                className="mr-5"
+              ></Ionicons>
+            )}
+            <Pressable
+              className="flex-row"
+              onPress={() => selectImage(block.id, dispatch)}
+            >
+              <Text className="text-white my-2 mr-5">{block.type}</Text>
+              <Ionicons
+                name="cloud-upload"
+                size={15}
+                color={"white"}
+              ></Ionicons>
+            </Pressable>
 
-        <Pressable
-          onPress={() => dispatch({ type: "REMOVE_BLOCK", id: block.id })}
-        >
-          <Ionicons name={"trash-bin"} size={15} color={"red"}></Ionicons>
-        </Pressable>
-      </View>
+            <Pressable
+              onPress={() => dispatch({ type: "REMOVE_BLOCK", id: block.id })}
+            >
+              <Ionicons name={"trash-bin"} size={15} color={"red"}></Ionicons>
+            </Pressable>
+          </View>
+          {index && (
+            <Image
+              source={{ uri: String(index) }}
+              className="w-full h-32"
+            ></Image>
+          )}
+        </View>
+      </>
     ),
     Divider: (
       <View

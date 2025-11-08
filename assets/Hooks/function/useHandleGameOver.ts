@@ -12,6 +12,7 @@ type useHandleGameOverPayload = {
 export const useHandleGameOver = (gameOverModal: any) => {
   const gameOver = useGameOver();
   const resetUserHp = userHp?.getState().resetUserHp;
+  const incrementHp = userHp?.getState().incrementUserHp;
 
   const handleGameOver = async ({
     lessonId,
@@ -25,7 +26,10 @@ export const useHandleGameOver = (gameOverModal: any) => {
       stageId,
       levelId,
     });
+    //Resets the user health to 3
     resetUserHp();
+    //For some reason nag rreset lang sa 2 so  need this to make it 3
+    incrementHp();
 
     setTimeout(() => gameOverModal.setVisibility(true), 50);
   };

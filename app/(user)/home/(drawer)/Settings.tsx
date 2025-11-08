@@ -25,6 +25,7 @@ import editUserInfo from "@/assets/Hooks/query/editUserInfo";
 import { pickImage } from "@/assets/Hooks/query/mutation/pickImage";
 import useModal from "@/assets/Hooks/useModal";
 import useSignOut from "@/assets/Hooks/useSignOut";
+import toastHandler from "@/assets/zustand/toastHandler";
 import { useGetUserInfo } from "@/assets/zustand/useGetUserInfo";
 
 const Settings = () => {
@@ -49,11 +50,12 @@ const Settings = () => {
     (state) => state.userData?.profileImage
   );
 
-  const [bio, setBio] = useState<string>(zustandBio || "");
-  const [userName, setUserName] = useState<string>(zustandUserName || "");
+  const [bio, setBio] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
 
   const isMutating = useIsMutating();
 
+  const setToastVisibility = toastHandler((state) => state.setToastVisibility);
   return (
     <ProtectedRoutes>
       <KeyboardAvoidingView
@@ -122,7 +124,7 @@ const Settings = () => {
                   </Text>
                   <View className="flex-row bg-[#1E212F] rounded-[10px]">
                     <TextInput
-                      value={userName}
+                      // value={userName}
                       onChangeText={setUserName}
                       placeholder={zustandUserName}
                       className="text-[#ffffff9e] bg-[#1E212F] flex-1 xs:text-xs p-4 rounded-[10px]"
@@ -136,7 +138,7 @@ const Settings = () => {
                   </Text>
                   <View className="flex-row bg-[#1E212F] rounded-[10px]">
                     <TextInput
-                      value={bio}
+                      // value={bio}
                       onChangeText={setBio}
                       placeholder={zustandBio}
                       className="text-[#ffffff9e] bg-[#1E212F] flex-1 xs:text-xs p-4 rounded-[10px]"
@@ -159,7 +161,7 @@ const Settings = () => {
                   <TouchableOpacity
                     onPress={() => {
                       if (!userName.trim() && !bio.trim()) {
-                        alert("Empty credentials");
+                        setToastVisibility("error", "Empty Fields");
                         return;
                       }
                       confirmationModal.setVisibility(true);

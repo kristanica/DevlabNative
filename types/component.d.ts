@@ -62,6 +62,7 @@ type InputContainerForAdminPayload = {
   value: string | number;
   setValue: (val: string) => void;
   numeric: boolean;
+  required?: boolean;
 };
 
 type BlockInputSelectorPayload = {
@@ -162,6 +163,7 @@ type gameComponentPayload = StateDispatchPayload & {
   setVideoPresentation: React.Dispatch<
     React.SetStateAction<string | undefined>
   >;
+  videoPresentation: string | undefined;
 };
 
 type CodeCrafterPayload = StateDispatchPayload & {

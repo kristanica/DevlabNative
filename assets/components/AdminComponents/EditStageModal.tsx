@@ -238,6 +238,7 @@ const EditStageModal = ({
                     state={state}
                     stageData={stageData}
                     setReplicateFile={setReplicateFile}
+                    videoPresentation={videoPresentation}
                   ></GameComponent>
 
                   <View className="flex-row my-3 mx-2">

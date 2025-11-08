@@ -36,6 +36,7 @@ const CodeCrafter = ({
           });
         }}
         numeric={false}
+        required={true}
       />
 
       <InputContainer
@@ -49,6 +50,7 @@ const CodeCrafter = ({
           });
         }}
         numeric={false}
+        required={true}
       />
       <InputContainer
         title={"Instruction"}
@@ -61,6 +63,7 @@ const CodeCrafter = ({
           });
         }}
         numeric={false}
+        required={true}
       />
       {/* Renders input containers for coding interfaces */}
       <CodingInterfaces

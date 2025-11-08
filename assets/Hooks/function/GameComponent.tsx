@@ -13,10 +13,12 @@ const GameComponent = ({
   stageData,
   setVideoPresentation,
   setReplicateFile,
+  videoPresentation,
 }: gameComponentPayload) => {
   const gameComponentsMenu: Record<string, JSX.Element> = {
     Lesson: (
       <Lesson
+        videoPresentation={videoPresentation}
         dispatch={dispatch}
         state={state}
         stageData={stageData}

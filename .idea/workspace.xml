@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09a4e8c0-ea33-4103-80de-6134b2ec1f33" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app/(user)/playground/CodingPlayground.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(user)/playground/CodingPlayground.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/API/fireBase/user/purchaseItem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/assets/API/fireBase/user/purchaseItem.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/components/CodeEditor/StageCodingEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/components/CodeEditor/StageCodingEditor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/components/LanguageNavigation/ViteCodeEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/components/LanguageNavigation/ViteCodeEditor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/components/LessonModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/components/LessonModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/components/ShopItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/components/ShopItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/components/screen/SHOP/ShopList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/components/screen/SHOP/ShopList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/deprecated/ViteCodeEditor.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/constants.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,10 +19,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="34awEXvTVp0Rg0tdPEi8548O1F7" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -46,7 +39,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "finalboss",
-    "settings.editor.selected.configurable": "preferences.keymap"
+    "settings.editor.selected.configurable": "configurable.group.tools"
   }
 }]]></component>
   <component name="TaskManager">

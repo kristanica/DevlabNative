@@ -28,6 +28,7 @@ const BrainBytes = ({ dispatch, state }: BrainBytesProps) => {
           });
         }}
         numeric={false}
+        required={true}
       />
 
       <InputContainer
@@ -41,6 +42,7 @@ const BrainBytes = ({ dispatch, state }: BrainBytesProps) => {
           });
         }}
         numeric={false}
+        required={true}
       />
       {/* <CodingInterfaces
         state={state}
@@ -58,9 +60,13 @@ const BrainBytes = ({ dispatch, state }: BrainBytesProps) => {
           });
         }}
         numeric={false}
+        required={true}
       />
       <View className="bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">
-        <Text className="text-white my-2">Choices</Text>
+        <Text className="text-white my-2">
+          Choices{" "}
+          <Text className="text-red-300 text-xs font-exoBold">REQUIRED</Text>
+        </Text>
 
         {[
           { label: "A", key: "a" },

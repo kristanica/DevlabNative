@@ -32,6 +32,7 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
           });
         }}
         numeric={false}
+        required={true}
       />
 
       <InputContainer
@@ -45,6 +46,7 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
           });
         }}
         numeric={false}
+        required={true}
       />
 
       {/* Renders input containers for coding interfaces */}
@@ -64,9 +66,13 @@ const CodeRush = ({ dispatch, state }: StateDispatchPayload) => {
           });
         }}
         numeric={false}
+        required={true}
       />
       <View className="bg-background border-[#90b6bb] border-[1px] p-3 rounded-2xl mt-3">
-        <Text className="text-white my-2 font-exoBold">Timer</Text>
+        <Text className="text-white my-2 font-exoBold">
+          Timer{" "}
+          <Text className="text-red-300 text-xs font-exoBold">REQUIRED</Text>
+        </Text>
         <View className="flex-row justify-between items-center">
           <View className="flex-1 mr-2">
             <Text className="text-white text-sm mb-1 font-exoLight opacity-50">

@@ -102,14 +102,6 @@ const LoginForm = ({
             Register here
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => router.push({ pathname: "/AdminLogin" })}
-          className="mt-5"
-        >
-          <Text className=" color-[#4F80C5] -2 font-exoRegular text-sm xs:text-[10px] ">
-            Login as Administrator
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

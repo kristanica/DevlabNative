@@ -1,10 +1,16 @@
+import tracker from "@/assets/zustand/tracker";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Video as ExpoVideo, ResizeMode } from "expo-av";
 import * as DocumentPicker from "expo-document-picker";
 import React, { useEffect, useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Video } from "react-native-compressor";
-
-import tracker from "@/assets/zustand/tracker";
 import FillScreenLoading from "../../global/FillScreenLoading";
 import LoadingCompression from "../../LoadingCompression";
 import CodingInterfaces from "../CodingInterfaces";
@@ -16,6 +22,7 @@ type lessonProps = {
   dispatch: any;
   state: any;
   setVideoPresentation: any;
+  videoPresentation: string | undefined;
 };
 
 const Lesson = ({
@@ -23,6 +30,7 @@ const Lesson = ({
   dispatch,
   state,
   setVideoPresentation,
+  videoPresentation,
 }: lessonProps) => {
   const lastBlockId = stageData?.blocks?.length
     ? stageData.blocks[stageData.blocks.length - 1].id
@@ -88,6 +96,13 @@ const Lesson = ({
   useEffect(() => {
     if (!stageData) <FillScreenLoading></FillScreenLoading>;
   }, [stageData]);
+
+  const isVideoAvailable = videoPresentation
+    ? { uri: videoPresentation }
+    : stageData?.videoPresentation
+    ? { uri: stageData.videoPresentation }
+    : undefined;
+
   return (
     <>
       <InputContainer
@@ -101,6 +116,7 @@ const Lesson = ({
           });
         }}
         numeric={false}
+        required={true}
       />
 
       <InputContainer
@@ -114,6 +130,7 @@ const Lesson = ({
           });
         }}
         numeric={false}
+        required={true}
       />
       {/* Renders input containers for coding interfaces */}
       <CodingInterfaces
@@ -132,6 +149,7 @@ const Lesson = ({
           });
         }}
         numeric={false}
+        required={true}
       />
       {isCompressing && (
         <LoadingCompression progress={progress}></LoadingCompression>
@@ -141,7 +159,11 @@ const Lesson = ({
         <Text className="text-white font-exoLight text-sm   text-center py-2">
           This is the content that will be shown to the users
         </Text>
-        <View className="flex-row justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl ">
+
+        <View className="flex-col justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl ">
+          <Text className="text-red-300 font-exoBold text-xs mx-auto">
+            REQUIRED
+          </Text>
           <TestDropDownMenu
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
@@ -177,44 +199,67 @@ const Lesson = ({
         </View>
       </View>
 
-      <View className="flex-row  justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3">
-        <View className="flex-row">
-          <Text className="text-white mr-2">Upload a video presentation</Text>
-          {progress === 0.9984151721000671 && (
-            <Ionicons
-              name="checkbox-sharp"
-              size={20}
-              color={"green"}
-            ></Ionicons>
-          )}
+      <View className="flex-col justify-between bg-background border-[#2a3141] border-[1px] p-3 rounded-2xl mt-3">
+        <View className="flex-row ">
+          <View className="flex-row">
+            <Text className="text-white mr-2">Upload a video presentation</Text>
+            {progress === 0.9984151721000671 && (
+              <Ionicons
+                name="checkbox-sharp"
+                size={20}
+                color={"green"}
+              ></Ionicons>
+            )}
+          </View>
+
+          <View className="flex-col w-full">
+            <TouchableOpacity
+              onPress={pickVideo}
+              className="flex-row items-center mb-2"
+            >
+              {stageData?.videoPresentation || videoPresentation ? (
+                <Ionicons
+                  name="checkbox"
+                  size={20}
+                  color={"green"}
+                  className="mr-2"
+                />
+              ) : (
+                <Ionicons
+                  name="warning"
+                  size={20}
+                  color={"red"}
+                  className="mr-2"
+                />
+              )}
+              <Ionicons name="cloud-upload-outline" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <TouchableOpacity onPress={pickVideo} className="flex-row">
-          {stageData?.videoPresentation ? (
-            <Ionicons
-              name="checkbox"
-              size={20}
-              color={"green"}
-              className="mr-5"
-            ></Ionicons>
-          ) : (
-            <Ionicons
-              name="warning"
-              size={20}
-              color={"red"}
-              className="mr-5"
-            ></Ionicons>
-          )}
-
-          <Ionicons
-            name="cloud-upload-outline"
-            size={20}
-            color={"white"}
-          ></Ionicons>
-        </TouchableOpacity>
+        {isVideoAvailable && (
+          <ExpoVideo
+            source={isVideoAvailable}
+            style={styles.video}
+            useNativeControls
+            isLooping
+            resizeMode={ResizeMode.CONTAIN}
+          />
+        )}
       </View>
     </>
   );
 };
 
 export default Lesson;
+const styles = StyleSheet.create({
+  container: {
+    zIndex: 1,
+    width: "100%",
+    height: "50%", // optional if you want video to occupy half the screen
+  },
+  video: {
+    width: "100%",
+    aspectRatio: 16 / 9,
+    borderRadius: 12,
+  },
+});

@@ -20,6 +20,7 @@ const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
           });
         }}
         numeric={false}
+        required={true}
       />
       <InputContainer
         title={"Description"}
@@ -32,6 +33,7 @@ const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
           });
         }}
         numeric={false}
+        required={true}
       />
 
       <InputContainer
@@ -44,6 +46,7 @@ const BugBust = ({ dispatch, state }: StateDispatchPayload) => {
             value: text,
           });
         }}
+        required={true}
         numeric={false}
       />
       {/* Renders input containers for coding interfaces */}

@@ -7,7 +7,7 @@ import {
 } from "@/firebaseConfig";
 
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL = `https://9531ad789d41.ngrok-free.app` as const;
+export const URL = `https://51594b61b0bd.ngrok-free.app` as const;
 //icon for tabs
 // https://devlab-server-railway-production.up.railway.app/
 

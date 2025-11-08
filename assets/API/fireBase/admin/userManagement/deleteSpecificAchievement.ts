@@ -9,8 +9,6 @@ export const deleteSpecificAchievement = async ({
   category: string;
   uid: string;
 }) => {
-  console.log(category + "!!!!!!!!!!");
-  console.log(uid);
   const token = await auth.currentUser?.getIdToken(true);
   const [data, error] = await tryCatch(
     axios.post(
