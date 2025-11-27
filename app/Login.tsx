@@ -43,12 +43,21 @@ const Login = () => {
       try {
         const currentuser = auth.currentUser;
         const val = await AsyncStorage.getItem("isLoggin");
+        if (!currentuser) {
+          return;
+        }
         if (val === "false" && currentuser) {
           await signOut(auth);
           return;
         }
-        if (val === "true" && currentuser) {
+
+        const tokenResult = await currentuser!.getIdTokenResult(true);
+        const checkAdmin = tokenResult.claims.role;
+        if (val === "true" && currentuser && checkAdmin !== "admin") {
           router.replace("/home/Home");
+        }
+        if (val === "true" && currentuser && checkAdmin === "admin") {
+          router.replace("/(admin)/home/UserManagement");
         }
       } catch (error) {
         console.log(error);

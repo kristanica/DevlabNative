@@ -19,6 +19,12 @@ const index = () => {
             loop={true}
             style={{ width: "100%", aspectRatio: 1 }}
           ></LottieView>
+          <LottieView
+            source={require("@/assets/Lottie/was.json")}
+            autoPlay
+            loop={true}
+            style={{ width: "100%", aspectRatio: 1 }}
+          ></LottieView>
           {/* <Image
             source={require("@/assets/images/devlabIcon.png")}
             style={{ width: "100%", height: 500 }}

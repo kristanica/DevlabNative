@@ -3,6 +3,7 @@ import useModal from "@/assets/Hooks/useModal";
 import { auth, navIconAdmin, width } from "@/constants";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -87,6 +88,7 @@ export default function CustomTabBarAdmin({
         <SignOutModal
           {...logOutModal}
           onConfirm={async () => {
+            await AsyncStorage.removeItem("isLoggin");
             await signOut(auth);
             router.replace("/");
           }}

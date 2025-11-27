@@ -7,9 +7,10 @@ import {
 } from "@/firebaseConfig";
 
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL = `https://50428dd6f813.ngrok-free.app` as const;
+export const URL =
+  `https://devlab-server-railway-master-production.up.railway.app` as const;
 //icon for tabs
-// https://devlab-server-railway-production.up.railway.app/
+// https://devlab-server-railway-master-production.up.railway.app
 
 // https://api-soyulx5clq-uc.a.run.app
 export const userIcon = ["home", "cart", "book", "trophy"] as const;

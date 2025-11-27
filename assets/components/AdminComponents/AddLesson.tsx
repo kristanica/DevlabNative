@@ -140,6 +140,7 @@ const AddLesson = ({
                   });
                 }}
                 numeric={false}
+                required={true}
               ></InputContainer>
               <InputContainer
                 title={"Description"}
@@ -152,9 +153,10 @@ const AddLesson = ({
                   });
                 }}
                 numeric={false}
+                required={true}
               ></InputContainer>
 
-              <View className="flex-row ">
+              <View className="flex-row justify-between">
                 <InputContainer
                   title={"Exp Reward"}
                   value={state.expReward}
@@ -166,6 +168,7 @@ const AddLesson = ({
                     });
                   }}
                   numeric={true}
+                  required={true}
                 ></InputContainer>
                 <InputContainer
                   title={"Exp Reward"}
@@ -178,6 +181,7 @@ const AddLesson = ({
                     });
                   }}
                   numeric={true}
+                  required={true}
                 ></InputContainer>
               </View>
 
