@@ -7,8 +7,7 @@ import {
 } from "@/firebaseConfig";
 
 import { Dimensions, ImageSourcePropType } from "react-native";
-export const URL =
-  `https://devlab-server-railway-master-production.up.railway.app` as const;
+export const URL = `https://devlab-server-railway-master.onrender.com` as const;
 //icon for tabs
 // https://devlab-server-railway-master-production.up.railway.app
 

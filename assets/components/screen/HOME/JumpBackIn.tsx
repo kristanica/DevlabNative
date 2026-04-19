@@ -20,7 +20,7 @@ const JumpBackIn = ({ lastOpenedLevel }: JumpBackInPayload) => {
         },
       });
     },
-    [lastOpenedLevel]
+    [lastOpenedLevel],
   );
   const subject = ["Html", "Css", "JavaScript", "Database"];
 
