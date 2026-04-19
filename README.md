@@ -1,50 +1,62 @@
-# Welcome to your Expo app 👋
+# DevLab Native
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+DevLab Native is an interactive, gamified mobile application built with React Native and Expo. It is designed to help users learn programming concepts through engaging step-by-step lessons and hands-on coding challenges.
 
-## Get started
+## ✨ Key Features
 
-1. Install dependencies
+- **AI-Powered Code Evaluation**: Utilizes **GPT-4.1** as an intelligent code checker to evaluate submissions. This ensures users receive personalized, context-aware feedback and allows the app to flexibly accept any creative, non-linear ways of solving a problem.
+- **Gamified Learning**: Earn rewards, utilize power-ups (like CodeWhisper), unlock stages, and learn through various interactive challenges.
 
+## 📚 Covered Technologies
+
+- **HTML**: Build the foundation and structure of the web.
+- **CSS**: Style your digital world and master layouts.
+- **JavaScript**: Bring web pages to life with dynamic interactivity.
+- **SQL (Database)**: Organize, retrieve, and master data management.
+
+## 🎮 Gamemodes
+
+- **Lesson Mode**: Learn essential programming concepts step by step before jumping into challenges. Read, explore, and practice through interactive examples.
+- **BrainBytes**: A multiple-choice quiz mode to test your programming knowledge and logic one byte at a time.
+- **Code Crafter**: A creative coding challenge where users build solutions based on specific requirements, recreate outputs, and execute code.
+- **BugBust**: A debugging challenge where users are tasked to find and fix bugs in a given snippet of code.
+- **CodeRush**: A time-attack mode where users must finish the coding activity before the timer runs out.
+
+## 🛠️ Tech Stack
+
+- **Framework**: React Native & Expo
+- **Styling**: NativeWind (Tailwind CSS)
+- **State Management**: Zustand & React Query
+- **Animations & Gestures**: React Native Reanimated & React Native Gesture Handler
+- **Backend / BaaS**: Firebase (Authentication, Storage, and Admin APIs)
+- **AI Integration**: OpenAI GPT-4.1 (for evaluation, validation, and contextual hints)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js installed on your machine.
+- Expo CLI installed globally.
+- Expo Go app on your iOS/Android device (for physical device testing).
+
+### Installation
+
+1. Clone the repository to your local machine.
+2. Navigate to the project directory:
+   ```bash
+   cd DevlabNative
+   ```
+3. Install the required dependencies:
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-2. Start the app
+### Running the Application
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Start the Expo development server:
 
 ```bash
-npm run reset-project
+npx expo start
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
